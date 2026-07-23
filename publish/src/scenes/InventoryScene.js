@@ -6,6 +6,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
     constructor() {
         super('InventoryScene');
         this.entryObjects = [];
+        this.spiritStoneText = null;
     }
 
     create() {
@@ -27,6 +28,15 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             fontSize: '16px',
             color: '#a9c8bd'
         }).setOrigin(0.5);
+        // 灵石属于常驻货币，不随普通物品列表刷新或为空提示移动。
+        this.add.rectangle(62, 80, 244, 54, 0x14231f, 0.96)
+            .setOrigin(0, 0)
+            .setStrokeStyle(1, 0xd8c38c, 0.86);
+        this.spiritStoneText = this.add.text(80, 96, '灵石　0', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '20px',
+            color: '#f4ead2'
+        });
         const close = this.add.text(1190, 48, '返回', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
@@ -42,6 +52,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
     }
 
     renderItems() {
+        this.spiritStoneText?.setText(`灵石　${window.GameInventory.getSpiritStones()}`);
         this.entryObjects.forEach((object) => object.destroy());
         this.entryObjects = [];
         const items = window.GameInventory.getSnapshot().items

@@ -3,8 +3,9 @@
 
   // 储物袋只保存“物品 ID -> 数量”，名称和说明始终从配置表读取。
   // 这样以后修改物品文案或新增掉落时，不需要迁移玩家存档。
+  const STARTING_SPIRIT_STONES = 100;
   const catalog = new Map();
-  let state = { quantities: {} };
+  let state = { quantities: {}, spiritStones: STARTING_SPIRIT_STONES };
   let storage = null;
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
@@ -19,11 +20,17 @@
       const amount = clampQuantity(item.initial_quantity);
       if (amount > 0) quantities[item.id] = amount;
     });
-    return { quantities };
+    return { quantities, spiritStones: STARTING_SPIRIT_STONES };
   }
 
   function sanitize(value) {
-    const clean = { quantities: {} };
+    const savedStones = Number(value?.spiritStones);
+    const clean = {
+      quantities: {},
+      spiritStones: Number.isFinite(savedStones)
+        ? clampQuantity(savedStones)
+        : STARTING_SPIRIT_STONES
+    };
     Object.entries(value?.quantities || {}).forEach(([id, amount]) => {
       if (!catalog.has(id)) return;
       const quantity = clampQuantity(amount);
@@ -34,6 +41,7 @@
 
   function snapshot() {
     return {
+      spiritStones: state.spiritStones,
       items: [...catalog.values()].map((item) => ({
         ...item,
         quantity: state.quantities[item.id] || 0
@@ -75,11 +83,17 @@
     storage = root.GamefyRecipes.createVersionedStorage({
       namespace: 'hehuan:',
       key: 'inventory',
-      version: 1,
+      version: 2,
       fallback: fallbackState(),
       migrations: {
         0(value) {
           return value && typeof value === 'object' ? value : fallbackState();
+        },
+        1(value) {
+          return {
+            ...(value && typeof value === 'object' ? value : fallbackState()),
+            spiritStones: STARTING_SPIRIT_STONES
+          };
         }
       },
       sanitize
@@ -128,7 +142,19 @@
   }
 
   function exportState() {
-    return { quantities: { ...state.quantities } };
+    return { quantities: { ...state.quantities }, spiritStones: state.spiritStones };
+  }
+
+  function addSpiritStones(amount, source = 'reward') {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      const delta = clampQuantity(amount);
+      if (delta <= 0) return { changed: false, reason: 'invalid_amount' };
+      state.spiritStones = clampQuantity(state.spiritStones + delta);
+      const durable = await persist(false);
+      emitChange('spirit_stones', delta, durable, source);
+      return { changed: true, balance: state.spiritStones, durable };
+    });
   }
 
   function restore(nextState) {
@@ -147,10 +173,12 @@
     getSnapshot: snapshot,
     getItem: (id) => catalog.get(id) || null,
     getQuantity: (id) => state.quantities[id] || 0,
+    getSpiritStones: () => state.spiritStones,
     getGiftableItems: () => snapshot().items
       .filter((item) => item.quantity > 0 && Number(item.gift_affinity) > 0),
     add,
     remove,
+    addSpiritStones,
     exportState,
     restore
   };

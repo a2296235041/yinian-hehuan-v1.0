@@ -31,10 +31,14 @@
 
   function sanitizeInventory(value) {
     const quantities = {};
+    const savedStones = Number(value?.spiritStones);
     Object.entries(value?.quantities || {}).slice(0, 200).forEach(([id, amount]) => {
       if (/^[a-z0-9_-]{1,64}$/i.test(id)) quantities[id] = clamp(amount, 0, 9999);
     });
-    return { quantities };
+    return {
+      quantities,
+      spiritStones: Number.isFinite(savedStones) ? clamp(savedStones, 0, 9999) : 100
+    };
   }
 
   function sanitizePlayer(value, day) {
@@ -83,9 +87,12 @@
   const storage = root.GamefyRecipes.createVersionedStorage({
     namespace: 'hehuan:',
     key: 'manual-save',
-    version: 1,
+    version: 2,
     fallback: EMPTY_SLOT,
-    migrations: { 0: (value) => value || EMPTY_SLOT },
+    migrations: {
+      0: (value) => value || EMPTY_SLOT,
+      1: (value) => value || EMPTY_SLOT
+    },
     sanitize: sanitizeSlot
   });
 

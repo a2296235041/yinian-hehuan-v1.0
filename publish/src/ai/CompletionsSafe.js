@@ -29,6 +29,15 @@ function createCompletionsSafe({
     return error?.code === 'TIMEOUT' || error?.name === 'TimeoutError';
   }
 
+  function isTransientServiceError(error) {
+    const transientCodes = [
+      'NETWORK_ERROR', 'DRAW_TIMEOUT', 'SERVICE_UNAVAILABLE', 'INTERNAL_ERROR'
+    ];
+    if (isTimeoutError(error) || transientCodes.includes(error?.code)) return true;
+    return error?.retryable === true
+      && ['network', 'server', 'unknown'].includes(error?.category);
+  }
+
   function resolveTimeoutFallback(candidate, context) {
     if (candidate === undefined) return null;
     const value = typeof candidate === 'function' ? candidate(context) : candidate;
@@ -103,7 +112,7 @@ function createCompletionsSafe({
       if (seq <= cancelledSeq || seq !== requestSeq) {
         return { ignored: true, text: finalText, error };
       }
-      if (!isTimeoutError(error)) throw error;
+      if (!isTransientServiceError(error)) throw error;
       // 模型选择阶段尚未启动付费 transport 时立即释放锁；迟到的 model
       // 会被 acceptingUpdates / seq 守卫拦住，且旧 promise 不能清掉新锁。
       if (!transportStarted && paidInFlight === lock) paidInFlight = null;
@@ -122,7 +131,7 @@ function createCompletionsSafe({
         ignored: false,
         text: finalText,
         source: 'fallback',
-        reason: 'timeout',
+        reason: isTimeoutError(error) ? 'timeout' : 'service_unavailable',
         error,
       };
     } finally {

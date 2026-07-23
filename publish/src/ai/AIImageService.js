@@ -29,6 +29,13 @@
     if (['SENSITIVE_CONTENT_DETECTED', 'NON_ANIME_IMAGE_DETECTED'].includes(code)) {
       return '当前场景无法绘制，请更换对话内容。';
     }
+    if ([
+      'NETWORK_ERROR', 'TIMEOUT', 'DRAW_TIMEOUT', 'SERVICE_UNAVAILABLE',
+      'INTERNAL_ERROR', 'CREATE_TASK_FAILED', 'NO_OUTPUT_IMAGES'
+    ].includes(code)) return '绘图服务暂时繁忙，请稍后重新点击绘制。';
+    if (error?.retryable && ['network', 'server', 'unknown'].includes(error?.category)) {
+      return '绘图服务暂时繁忙，请稍后重新点击绘制。';
+    }
     return error?.message || 'DZMM 绘图暂时不可用，请稍后再试。';
   }
 

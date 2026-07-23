@@ -33,6 +33,12 @@
       return '登录状态已失效，请重新进入游戏。';
     }
     if (code === 'SENSITIVE_CONTENT_DETECTED') return '请换一种表达后再试。';
+    if (['NETWORK_ERROR', 'TIMEOUT', 'SERVICE_UNAVAILABLE', 'INTERNAL_ERROR'].includes(code)) {
+      return 'AI 服务暂时繁忙，本次交互已保留，请稍后再次尝试。';
+    }
+    if (error?.retryable && ['network', 'server', 'unknown'].includes(error?.category)) {
+      return 'AI 服务暂时繁忙，本次交互已保留，请稍后再次尝试。';
+    }
     return error?.message || 'DZMM 对话暂时不可用，请稍后再试。';
   }
   function applyOpening(session, text) {
