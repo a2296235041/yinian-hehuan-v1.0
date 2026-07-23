@@ -19,7 +19,6 @@
   let currentAffinity = null;
   let chatBusy = false;
   let imageBusy = false;
-  let scrollFrame = 0;
 
   function refreshControls() {
     sendButton.disabled = chatBusy;
@@ -57,10 +56,8 @@
       fragment.append(bubble);
     }
     history.replaceChildren(fragment);
-    cancelAnimationFrame(scrollFrame);
-    scrollFrame = requestAnimationFrame(() => {
-      history.scrollTop = history.scrollHeight;
-    });
+    // DOM 替换后立即滚到底部，避免部分沙箱 WebView 的动画帧回调抛出跨域匿名错误。
+    history.scrollTop = history.scrollHeight;
   }
 
   function updateStatus(data) {
