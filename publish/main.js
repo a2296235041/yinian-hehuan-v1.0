@@ -57,11 +57,6 @@
       else root.GameAudio.resume();
     });
 
-    const refreshScale = () => root.game?.scale?.refresh();
-    root.addEventListener('resize', refreshScale);
-    if (root.ResizeObserver) {
-      new ResizeObserver(refreshScale).observe(document.getElementById('game-shell'));
-    }
     refreshAudioButton();
   } catch (error) {
     console.error('游戏初始化失败:', error.message, error.stack);
