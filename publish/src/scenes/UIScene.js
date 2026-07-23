@@ -46,9 +46,10 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.avatarMaskShape.fillCircle(62, 58, 27);
         const avatarMask = this.avatarMaskShape.createGeometryMask();
         this.avatarImage = this.add.image(62, 58, 'npc-scholar')
-            .setDisplaySize(54, 54)
+            .setDisplaySize(62, 62)
             .setMask(avatarMask)
             .setDepth(22);
+        this.fitAvatarImage();
         const avatarButton = this.add.circle(62, 58, 34, 0xffffff, 0.001)
             .setInteractive({ useHandCursor: true })
             .setDepth(23);
@@ -74,11 +75,12 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         }).setDepth(21).setVisible(false);
     }
     createActionButtons() {
-        this.makeButton(1220, 34, '储物袋', () => this.openOverlay('InventoryScene'));
-        this.makeButton(1145, 34, '出山', () => this.openOverlay('ExplorationScene'));
-        this.makeButton(1050, 34, '修炼', () => this.handleCultivate());
-        this.makeButton(940, 34, '下一时辰', () => this.handleNextPeriod());
-        this.makeButton(830, 34, '下一天', () => this.handleNextDay());
+        const y = 680;
+        this.makeButton(730, y, '下一天', () => this.handleNextDay());
+        this.makeButton(850, y, '下一时辰', () => this.handleNextPeriod());
+        this.makeButton(970, y, '修炼', () => this.handleCultivate());
+        this.makeButton(1065, y, '出山', () => this.openOverlay('ExplorationScene'));
+        this.makeButton(1175, y, '储物袋', () => this.openOverlay('InventoryScene'));
     }
     makeButton(x, y, label, action) {
         const button = this.add.text(x, y, label, {
@@ -87,7 +89,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             color: '#14231f',
             backgroundColor: '#f4ead2',
             padding: { x: 14, y: 9 }
-        }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
         button.on('pointerdown', () => {
             window.GameAudio.sfx('click');
             this.tweens.add({ targets: button, scale: 0.95, duration: 70, yoyo: true });
@@ -232,6 +234,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         const textureKey = 'player-avatar';
         if (this.textures.exists(textureKey)) {
             this.avatarImage.setTexture(textureKey);
+            this.fitAvatarImage();
             return;
         }
         try {
@@ -243,6 +246,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             this.load.once('complete', () => {
                 if (this.avatarImage?.active && this.textures.exists(textureKey)) {
                     this.avatarImage.setTexture(textureKey);
+                    this.fitAvatarImage();
                 }
             });
             this.load.image(textureKey, profile.avatarUrl);
@@ -250,6 +254,14 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         } catch (error) {
             console.error('玩家头像加载失败:', error.code || '', error.message, error.stack);
         }
+    }
+    fitAvatarImage() {
+        if (!this.avatarImage?.active) return;
+        const targetSize = 62;
+        const width = Number(this.avatarImage.width) || targetSize;
+        const height = Number(this.avatarImage.height) || targetSize;
+        const scale = Math.max(targetSize / width, targetSize / height);
+        this.avatarImage.setScale(scale);
     }
     toggleDetails() {
         this.detailVisible = !this.detailVisible;
