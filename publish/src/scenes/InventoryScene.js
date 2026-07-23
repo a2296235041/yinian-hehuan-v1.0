@@ -7,9 +7,11 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         super('InventoryScene');
         this.entryObjects = [];
         this.spiritStoneText = null;
+        this.baseScenesRestored = false;
     }
 
     create() {
+        this.baseScenesRestored = false;
         this.scene.pause('GameScene');
         this.scene.pause('UIScene');
         this.scene.setVisible(false, 'GameScene');
@@ -49,6 +51,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         window.GameInventory.ready().then(() => this.renderItems());
         this.renderItems();
+        Game.SceneTransition.fadeIn(this);
     }
 
     renderItems() {
@@ -93,15 +96,21 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
 
     close() {
         window.GameAudio.sfx('click');
-        this.restoreBaseScenes();
-        this.scene.stop();
+        Game.SceneTransition.fadeOut(this, () => {
+            this.restoreBaseScenes();
+            this.scene.stop();
+        });
     }
 
     restoreBaseScenes() {
+        if (this.baseScenesRestored) return;
+        this.baseScenesRestored = true;
         this.scene.setVisible(true, 'GameScene');
         this.scene.setVisible(true, 'UIScene');
         this.scene.resume('GameScene');
         this.scene.resume('UIScene');
+        Game.SceneTransition.fadeIn(this.scene.get('GameScene'));
+        Game.SceneTransition.fadeIn(this.scene.get('UIScene'));
         window.GameModelUI.setMode('compact');
     }
 

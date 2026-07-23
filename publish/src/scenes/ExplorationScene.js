@@ -9,9 +9,11 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         this.playerInfoText = null;
         this.busy = false;
         this.requestId = 0;
+        this.baseScenesRestored = false;
     }
 
     create() {
+        this.baseScenesRestored = false;
         this.scene.pause('GameScene');
         this.scene.pause('UIScene');
         this.scene.setVisible(false, 'GameScene');
@@ -54,6 +56,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         Game.EventBus.on('player-state-changed', this.refreshView, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.refreshView();
+        Game.SceneTransition.fadeIn(this);
     }
 
     refreshView() {
@@ -133,8 +136,10 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             this.statusText.setText(result.text);
             if (result.type === 'battle') {
                 window.GameAudio.sfx('deny');
-                this.scene.launch('BattleScene', { encounter: result });
-                this.scene.sleep();
+                Game.SceneTransition.fadeOut(this, () => {
+                    this.scene.launch('BattleScene', { encounter: result });
+                    this.scene.sleep();
+                });
                 return;
             }
             window.GameAudio.sfx(['error', 'locked', 'stamina'].includes(result.type)
@@ -154,15 +159,21 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
 
     close() {
         window.GameAudio.sfx('click');
-        this.restoreBaseScenes();
-        this.scene.stop();
+        Game.SceneTransition.fadeOut(this, () => {
+            this.restoreBaseScenes();
+            this.scene.stop();
+        });
     }
 
     restoreBaseScenes() {
+        if (this.baseScenesRestored) return;
+        this.baseScenesRestored = true;
         this.scene.setVisible(true, 'GameScene');
         this.scene.setVisible(true, 'UIScene');
         this.scene.resume('GameScene');
         this.scene.resume('UIScene');
+        Game.SceneTransition.fadeIn(this.scene.get('GameScene'));
+        Game.SceneTransition.fadeIn(this.scene.get('UIScene'));
         window.GameModelUI.setMode('compact');
     }
 

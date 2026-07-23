@@ -47,7 +47,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
                 scale: 0.94,
                 duration: 90,
                 yoyo: true,
-                onComplete: () => this.scene.start('CharacterCreationScene')
+                onComplete: () => Game.SceneTransition.start(this, 'CharacterCreationScene')
             });
         });
 
@@ -60,6 +60,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         }).setOrigin(0.5).setAlpha(0.76);
 
         this.game.canvas.setAttribute('aria-label', '一念逍遥，一念合欢主菜单');
+        Game.SceneTransition.fadeIn(this);
         requestAnimationFrame(() => window.PlatformBridge.ready());
     }
 
@@ -96,7 +97,10 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             const origins = this.cache.json.get('character_origins') || [];
             const origin = origins.find((item) => item.id === snapshot.player.origin.id);
             if (!origin) throw new Error('存档中的玩家身份已失效');
-            this.scene.start('GameScene', { playerOrigin: origin, saveSnapshot: snapshot });
+            Game.SceneTransition.start(this, 'GameScene', {
+                playerOrigin: origin,
+                saveSnapshot: snapshot
+            });
         } catch (error) {
             console.error('开始页读档失败:', error.code || '', error.message, error.stack);
             button.setData('busy', false).setText('读档失败').setInteractive({ useHandCursor: true });

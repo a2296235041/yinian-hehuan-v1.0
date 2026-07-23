@@ -29,6 +29,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         );
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         this.showSectMap();
+        Game.SceneTransition.fadeIn(this);
         this.scene.launch('UIScene');
         if (this.savedSnapshot) {
             Game.systemsReady.then(() => this.showSavedLocation(this.savedSnapshot.location));

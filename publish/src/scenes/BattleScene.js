@@ -39,6 +39,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             console.error('战斗启动失败: 遭遇数据不完整');
             Game.EventBus.emit('exploration-result', { text: '遭遇数据异常，已返回探索界面。' });
             this.scene.wake('ExplorationScene');
+            Game.SceneTransition.fadeIn(this.scene.get('ExplorationScene'));
             this.scene.stop();
             return;
         }
@@ -87,6 +88,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             this, 640, 640, '结束战斗', () => this.closeBattle()
         ).setVisible(false);
         this.render(this.combat.snapshot());
+        Game.SceneTransition.fadeIn(this);
     }
     setActionsEnabled(enabled) {
         this.actionButtons.forEach((button) => {
@@ -178,7 +180,10 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
     }
     closeBattle() {
         this.requestId += 1;
-        this.scene.wake('ExplorationScene');
-        this.scene.stop();
+        Game.SceneTransition.fadeOut(this, () => {
+            this.scene.wake('ExplorationScene');
+            Game.SceneTransition.fadeIn(this.scene.get('ExplorationScene'));
+            this.scene.stop();
+        });
     }
 };

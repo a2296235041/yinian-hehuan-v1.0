@@ -44,7 +44,7 @@ Game.Scenes.BootScene = class BootScene extends Phaser.Scene {
         // 当BootScene创建完成后，它的使命就完成了。
         // 立即启动下一个场景：PreloadScene。
         // 'PreloadScene' 是我们下一个场景的唯一键。
-        this.scene.start('PreloadScene');
+        Game.SceneTransition.start(this, 'PreloadScene', undefined, 120);
     }
 };
 

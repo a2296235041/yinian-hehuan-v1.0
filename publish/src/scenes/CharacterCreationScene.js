@@ -61,6 +61,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
             return;
         }
         this.displayOriginInfo();
+        Game.SceneTransition.fadeIn(this);
     }
 
     makeArrow(x, y, label, action) {
@@ -95,7 +96,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
     confirmSelection(button) {
         button.disableInteractive();
         window.GameAudio.sfx('success');
-        this.scene.start('GameScene', {
+        Game.SceneTransition.start(this, 'GameScene', {
             playerOrigin: this.originsData[this.selectedOriginIndex]
         });
     }

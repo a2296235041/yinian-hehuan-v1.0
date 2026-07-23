@@ -25,6 +25,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         Game.EventBus.on('realm-breakthrough', this.showBreakthrough, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.updateUI();
+        Game.SceneTransition.fadeIn(this);
     }
     createStatusDisplay() {
         this.add.rectangle(18, 16, 278, 160, 0x0d1b17, 0.88)
@@ -177,7 +178,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             `修炼　${player.dailyCultivationCount} / ${player.maxDailyCultivation}`
         );
     }
-
     showLog(message) {
         this.logText.setText(message).setAlpha(1);
         this.tweens.killTweensOf(this.logText);

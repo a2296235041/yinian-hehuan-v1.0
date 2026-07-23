@@ -13,6 +13,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         const totalResources = 11;
 
         this.cameras.main.setBackgroundColor('#09100e');
+        Game.SceneTransition.fadeIn(this, 180);
         const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '24px',
@@ -66,6 +67,6 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
             totalResources: 11,
             message: '正在布置宗门'
         });
-        this.scene.start('MainMenuScene');
+        Game.SceneTransition.start(this, 'MainMenuScene');
     }
 };
