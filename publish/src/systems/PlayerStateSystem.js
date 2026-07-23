@@ -22,7 +22,7 @@
     );
     readyPromise = Promise.all([
       root.GameInventory.initialize(scene.cache.json.get('items') || []),
-      root.GameCultivation.initialize(scene.cache.json.get('cultivation_levels') || {}),
+      root.GameCultivation.initialize(root.Game.Data.cultivationLevels || {}),
       npcSystem.ready()
     ]).then(() => {
       root.Game.player.day = root.GameAffinity.getDay();
