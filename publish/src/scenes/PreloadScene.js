@@ -10,7 +10,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 12;
+        const totalResources = 13;
 
         this.cameras.main.setBackgroundColor('#09100e');
         Game.SceneTransition.fadeIn(this, 180);
@@ -49,6 +49,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.image('npc-scholar', './assets/generated/scholar-disciple.e2aa08f6.webp');
         this.load.image('npc-fox', './assets/generated/fox-princess.6e212211.webp');
         this.load.image('npc-su-meier', './assets/generated/npc-su-meier.png');
+        this.load.image('npc-liu-hanyan', './assets/generated/npc-liu-hanyan.png');
         this.load.json('character_origins', './assets/data/character_origins.json');
         this.load.json('npcs', './assets/data/npcs.json');
         this.load.json('npc_openings', './assets/data/npc_openings.json');
@@ -64,8 +65,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         }
         window.PlatformBridge.progress({
             phase: 'runtime_initializing',
-            loadedResources: 12,
-            totalResources: 12,
+            loadedResources: 13,
+            totalResources: 13,
             message: '正在布置宗门'
         });
         Game.SceneTransition.start(this, 'MainMenuScene');
