@@ -9,6 +9,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.cultivationText = null;
         this.cultivationCountText = null;
         this.logText = null;
+        this.dayAdvancing = false;
     }
 
     create() {
@@ -16,6 +17,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.createActionButtons();
         this.createLogText();
         Game.EventBus.on('affinity-changed', this.showAffinityChange, this);
+        Game.EventBus.on('game-day-changed', this.syncDay, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.updateUI();
     }
@@ -78,14 +80,24 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.updateUI();
     }
 
-    handleNextDay() {
+    async handleNextDay() {
+        if (this.dayAdvancing) return;
+        this.dayAdvancing = true;
         const player = Game.player;
-        player.day += 1;
-        player.stamina = player.maxStamina;
-        player.dailyCultivationCount = player.maxDailyCultivation;
-        window.GameAudio.sfx('success');
-        this.showLog(`第 ${player.day} 天，精力已恢复`);
-        this.updateUI();
+        try {
+            const result = await window.GameAffinity.advanceDay();
+            player.day = result.day;
+            player.stamina = player.maxStamina;
+            player.dailyCultivationCount = player.maxDailyCultivation;
+            window.GameAudio.sfx('success');
+            this.showLog(`第 ${player.day} 天，交谈与赠礼次数已恢复`);
+            this.updateUI();
+        } catch (error) {
+            console.error('推进日期失败:', error.code || '', error.message, error.stack);
+            this.rejectAction('日期推进失败，请稍后重试');
+        } finally {
+            this.dayAdvancing = false;
+        }
     }
 
     rejectAction(message) {
@@ -93,9 +105,16 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.showLog(message);
     }
 
-    showAffinityChange(npcId, affinity) {
+    showAffinityChange(data) {
         window.GameAudio.sfx('success');
-        this.showLog(`交谈有所收获，好感度变为 ${affinity}`);
+        const action = data.source === 'gift' ? '赠礼' : '交谈';
+        this.showLog(`${action}有所收获，好感 +${data.delta}`);
+    }
+
+    syncDay(data) {
+        if (!Game.player || !data?.day) return;
+        Game.player.day = data.day;
+        this.updateUI();
     }
 
     updateUI() {
@@ -122,5 +141,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
 
     cleanup() {
         Game.EventBus.off('affinity-changed', this.showAffinityChange, this);
+        Game.EventBus.off('game-day-changed', this.syncDay, this);
     }
 };

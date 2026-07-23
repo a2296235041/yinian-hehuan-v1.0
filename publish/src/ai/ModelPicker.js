@@ -32,10 +32,14 @@ function createModelPicker({ dzmmRef = () => root.dzmm, storageKey = 'model-choi
     try {
       const data = await dzmm?.models?.list?.();
       const models = Array.isArray(data?.models) ? data.models : [];
-      cached = { models, defaultModel: data?.defaultModel || 'default' };
+      cached = {
+        models,
+        categories: Array.isArray(data?.categories) ? data.categories : [],
+        defaultModel: data?.defaultModel || 'default'
+      };
       return cached;
     } catch {
-      cached = { models: [], defaultModel: 'default' };
+      cached = { models: [], categories: [], defaultModel: 'default' };
       return cached;
     }
   }

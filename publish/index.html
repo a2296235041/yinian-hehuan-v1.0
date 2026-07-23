@@ -21,6 +21,7 @@
         <label>
           <span>对话模型</span>
           <select id="dialogue-model" aria-label="对话模型"></select>
+          <small id="dialogue-model-detail" class="model-detail"></small>
         </label>
         <label>
           <span>绘图模型</span>
@@ -31,9 +32,12 @@
     </section>
     <section id="ai-dialogue-panel" class="ai-dialogue-panel" hidden>
       <header>
-        <div>
-          <strong id="dialogue-npc-name"></strong>
-          <span id="dialogue-npc-title"></span>
+        <div class="dialogue-heading">
+          <div class="dialogue-identity">
+            <strong id="dialogue-npc-name"></strong>
+            <span id="dialogue-npc-title"></span>
+          </div>
+          <span id="dialogue-affinity" class="dialogue-affinity"></span>
         </div>
         <button id="dialogue-close" type="button" aria-label="结束对话">×</button>
       </header>
@@ -43,6 +47,7 @@
         <input id="dialogue-input" type="text" maxlength="500"
                autocomplete="off" placeholder="输入你想说的话">
         <button id="dialogue-send" type="submit">发送</button>
+        <button id="dialogue-gift" type="button">赠礼</button>
         <button id="dialogue-draw" type="button">绘制此刻</button>
       </form>
     </section>
@@ -67,9 +72,14 @@
   <script src="./src/ai/ModelPicker.js"></script>
   <script src="./src/ai/CompletionsSafe.js"></script>
   <script src="./src/ai/ImageWorkflow.js"></script>
+  <script src="./src/storage/VersionedStorageUtils.js"></script>
+  <script src="./src/storage/VersionedStorage.js"></script>
   <script src="./src/data/BuildingData.js"></script>
+  <script src="./src/systems/AffinitySystem.js"></script>
   <script src="./src/ai/AIModels.js"></script>
   <script src="./src/ai/ModelUI.js"></script>
+  <script src="./src/ai/DialoguePrompts.js"></script>
+  <script src="./src/ai/AIImageService.js"></script>
   <script src="./src/ai/AIService.js"></script>
   <script src="./src/ai/DialoguePanel.js"></script>
   <script src="./src/systems/NPCSystem.js"></script>

@@ -17,9 +17,6 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     create() {
         window.GameModelUI.setMode('compact');
-        this.npcSystem = new Game.NPCSystem(this);
-        this.npcSystem.init();
-        this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         Game.player = {
             origin: this.playerData,
             cultivation: 10,
@@ -29,6 +26,13 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             maxDailyCultivation: 5,
             dailyCultivationCount: 5
         };
+        this.npcSystem = new Game.NPCSystem(this);
+        this.npcSystem.init();
+        this.npcSystem.ready().then(() => {
+            Game.player.day = window.GameAffinity.getDay();
+            Game.EventBus.emit('game-day-changed', { day: Game.player.day, durable: true });
+        });
+        this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         this.showSectMap();
         this.scene.launch('UIScene');
     }
@@ -150,6 +154,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     createNpcCard(npc, x) {
+        const affinity = this.npcSystem.getNpcStateById(npc.id);
         const frame = this.addViewObject(this.add.rectangle(x, 360, 226, 388, 0x0d1b17, 0.9)
             .setStrokeStyle(2, 0xd8c38c, 0.75));
         const portrait = this.addViewObject(this.add.image(x, 335, this.getPortraitKey(npc.id)));
@@ -164,11 +169,19 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             fontSize: '16px',
             color: '#d8c38c'
         }).setOrigin(0.5));
-        this.addViewObject(this.add.text(x, 582, '点击交谈', {
+        const affinityText = this.addViewObject(this.add.text(
+            x, 582, `好感 ${affinity.affinity} · 点击交谈`, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
             color: '#cde9df'
         }).setOrigin(0.5));
+        const updateAffinity = (data) => {
+            if (data.npcId === npc.id) affinityText.setText(`好感 ${data.affinity} · 点击交谈`);
+        };
+        Game.EventBus.on('affinity-changed', updateAffinity);
+        affinityText.once(Phaser.GameObjects.Events.DESTROY, () => {
+            Game.EventBus.off('affinity-changed', updateAffinity);
+        });
 
         const hitArea = this.addViewObject(
             this.add.zone(x, 360, 226, 388).setInteractive({ useHandCursor: true })

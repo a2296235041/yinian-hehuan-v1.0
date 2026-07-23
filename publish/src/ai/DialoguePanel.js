@@ -6,13 +6,38 @@
   let history;
   let name;
   let title;
+  let affinityText;
   let status;
   let input;
   let sendButton;
+  let giftButton;
   let drawButton;
   let imageModal;
   let imageStatus;
   let image;
+  let currentNpcId = null;
+  let currentAffinity = null;
+  let chatBusy = false;
+  let imageBusy = false;
+
+  function refreshControls() {
+    sendButton.disabled = chatBusy;
+    input.disabled = chatBusy;
+    drawButton.disabled = chatBusy || imageBusy;
+    giftButton.disabled = chatBusy || !currentAffinity?.canGift;
+  }
+
+  function renderAffinity(snapshot) {
+    if (!snapshot) return;
+    currentAffinity = snapshot;
+    affinityText.textContent = [
+      `好感 ${snapshot.affinity}/100 · ${snapshot.relationship}`,
+      `交谈 ${snapshot.dialogueGain}/5`,
+      `赠礼 ${snapshot.gifts}/1`
+    ].join('　');
+    giftButton.title = snapshot.canGift ? '今日可赠送一次礼物' : '今日已赠礼';
+    refreshControls();
+  }
 
   function renderMessages(data) {
     name.textContent = data.npcName;
@@ -36,27 +61,26 @@
 
   function updateStatus(data) {
     status.textContent = data.message || '';
-    const busy = data.state === 'thinking' || data.state === 'busy';
-    sendButton.disabled = busy;
-    input.disabled = busy;
+    chatBusy = ['opening', 'thinking', 'busy'].includes(data.state);
+    refreshControls();
   }
 
   function updateImageStatus(data) {
     if (data.status === 'cancelled') {
       imageModal.hidden = true;
-      drawButton.disabled = false;
+      imageBusy = false;
+      refreshControls();
       return;
     }
     if (data.status === 'ready') return;
     imageModal.hidden = false;
     image.hidden = true;
     image.removeAttribute('src');
-    drawButton.disabled = data.status === 'generating' || data.status === 'busy';
-    if (data.status === 'generating') {
-      imageStatus.textContent = '正在绘制当前场景，预计约 30 秒…';
-    } else {
-      imageStatus.textContent = data.message || '暂时无法绘制，请稍后再次点击。';
-    }
+    imageBusy = data.status === 'generating' || data.status === 'busy';
+    refreshControls();
+    imageStatus.textContent = data.status === 'generating'
+      ? '正在绘制当前场景，预计约 30 秒…'
+      : (data.message || '暂时无法绘制，请稍后再次点击。');
   }
 
   function showImage(data) {
@@ -69,7 +93,8 @@
     image.src = data.image;
     image.alt = `${data.npcName}的生成场景`;
     image.hidden = false;
-    drawButton.disabled = false;
+    imageBusy = false;
+    refreshControls();
   }
 
   function closeFromGame() {
@@ -83,9 +108,11 @@
     history = document.getElementById('dialogue-history');
     name = document.getElementById('dialogue-npc-name');
     title = document.getElementById('dialogue-npc-title');
+    affinityText = document.getElementById('dialogue-affinity');
     status = document.getElementById('dialogue-status');
     input = document.getElementById('dialogue-input');
     sendButton = document.getElementById('dialogue-send');
+    giftButton = document.getElementById('dialogue-gift');
     drawButton = document.getElementById('dialogue-draw');
     imageModal = document.getElementById('ai-image-modal');
     imageStatus = document.getElementById('ai-image-status');
@@ -100,6 +127,7 @@
       input.value = '';
       root.GameAI.send(text);
     });
+    giftButton.addEventListener('click', () => root.GameAI.giveGift());
     drawButton.addEventListener('click', () => root.GameAI.generateImage());
     document.getElementById('dialogue-close').addEventListener('click', closeFromGame);
     document.getElementById('ai-image-close').addEventListener('click', () => {
@@ -108,16 +136,31 @@
 
     root.Game.EventBus.on('ai-dialogue-open', (data) => {
       panel.hidden = false;
+      currentNpcId = data.npcId;
       name.textContent = data.npcName;
       title.textContent = data.npcTitle;
+      renderAffinity(data.affinity);
     });
     root.Game.EventBus.on('ai-dialogue-render', renderMessages);
     root.Game.EventBus.on('ai-dialogue-status', updateStatus);
+    root.Game.EventBus.on('affinity-changed', (data) => {
+      if (data.npcId === currentNpcId) renderAffinity(data);
+    });
+    root.Game.EventBus.on('affinity-notice', (data) => {
+      if (data.snapshot?.npcId !== currentNpcId) return;
+      renderAffinity(data.snapshot);
+      status.textContent = data.message || '';
+    });
+    root.Game.EventBus.on('game-day-changed', () => {
+      if (currentNpcId) renderAffinity(root.GameAffinity.getSnapshot(currentNpcId));
+    });
     root.Game.EventBus.on('ai-dialogue-close', () => {
       panel.hidden = true;
+      currentNpcId = null;
+      currentAffinity = null;
       status.textContent = '';
-      input.disabled = false;
-      sendButton.disabled = false;
+      chatBusy = false;
+      refreshControls();
     });
     root.Game.EventBus.on('ai-image-status', updateImageStatus);
     root.Game.EventBus.on('ai-image-ready', showImage);

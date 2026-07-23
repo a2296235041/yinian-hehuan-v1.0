@@ -120,6 +120,7 @@ body {
 }
 
 .model-panel[hidden],
+.model-panel-content[hidden],
 .ai-dialogue-panel[hidden],
 .ai-image-modal[hidden] {
   display: none;
@@ -187,6 +188,11 @@ body {
   line-height: 1.4;
 }
 
+.model-panel-content .model-detail {
+  min-height: 36px;
+  color: #d8c38c;
+}
+
 .ai-dialogue-panel {
   position: absolute;
   z-index: 7;
@@ -212,7 +218,13 @@ body {
   gap: 12px;
 }
 
-.ai-dialogue-panel header div {
+.dialogue-heading {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+
+.dialogue-identity {
   display: flex;
   align-items: baseline;
   gap: 10px;
@@ -226,6 +238,12 @@ body {
 .ai-dialogue-panel header span {
   color: #a9c8bd;
   font-size: 14px;
+}
+
+.ai-dialogue-panel header .dialogue-affinity {
+  color: #d8c38c;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .ai-dialogue-panel header button,
@@ -283,7 +301,7 @@ body {
 
 .dialogue-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
   gap: 8px;
 }
 
@@ -370,5 +388,19 @@ body {
   .dialogue-line {
     margin: 5px 0;
     padding: 6px 9px;
+  }
+}
+
+@media (max-width: 720px) {
+  .dialogue-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dialogue-form input {
+    grid-column: 1 / -1;
+  }
+
+  .dialogue-form button {
+    padding: 0 8px;
   }
 }

@@ -6,17 +6,21 @@ Game.Systems.DialogueSystem = class DialogueSystem {
         this.scene = scene;
         this.npcSystem = npcSystem;
         this.currentNpcId = null;
+        this.startSeq = 0;
         this.openings = scene.cache.json.get('npc_openings') || {};
         Game.EventBus.on('ai-dialogue-complete', this.handleDialogueComplete, this);
         scene.events.once(Phaser.Scenes.Events.SHUTDOWN, this.destroy, this);
     }
 
-    startDialogue(npcId) {
+    async startDialogue(npcId) {
         const npc = this.npcSystem.getNpcDataById(npcId);
         if (!npc) {
             console.error('DialogueSystem: 找不到 NPC:', npcId);
             return;
         }
+        const seq = ++this.startSeq;
+        await this.npcSystem.ready();
+        if (seq !== this.startSeq) return;
         this.currentNpcId = npcId;
         window.GameAI.startDialogue({
             npc,
@@ -26,6 +30,7 @@ Game.Systems.DialogueSystem = class DialogueSystem {
     }
 
     endDialogue() {
+        this.startSeq += 1;
         this.currentNpcId = null;
         window.GameAI.closeDialogue();
     }
@@ -34,9 +39,16 @@ Game.Systems.DialogueSystem = class DialogueSystem {
         return window.GameAI.isDialogueActive();
     }
 
-    handleDialogueComplete(npcId) {
+    async handleDialogueComplete(npcId) {
         if (npcId !== this.currentNpcId) return;
-        this.npcSystem.adjustAffinity(npcId, 1);
+        const result = await this.npcSystem.recordDialogue(npcId);
+        if (npcId !== this.currentNpcId) return;
+        Game.EventBus.emit('affinity-notice', {
+            snapshot: result.snapshot,
+            message: result.changed
+                ? `交谈好感 +1${result.durable ? '' : '，本次进度暂未同步'}`
+                : '今日交谈提升已达 5/5'
+        });
     }
 
     destroy() {
