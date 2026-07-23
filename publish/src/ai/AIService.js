@@ -1,6 +1,5 @@
 (function installAIService(root) {
   'use strict';
-  const openingCache = new Map();
   const dialogueSessions = new Map();
   let current = null;
   let draft = '';
@@ -42,13 +41,6 @@
     }
     return error?.message || 'DZMM 对话暂时不可用，请稍后再试。';
   }
-  function applyOpening(session, text) {
-    if (current !== session || session.messages.length) return;
-    const opening = String(text || '').trim() || session.fallbackOpening;
-    session.messages.push({ role: 'assistant', content: opening });
-    draft = '';
-    emitRender();
-  }
   async function startDialogue({ npc, building, opening }) {
     completions.cancel();
     root.GameAIImage.cancel();
@@ -72,47 +64,25 @@
       affinity
     });
     emitRender();
-    if (resumed) {
-      emitStatus('ready', '已继续上次对话');
-      return;
-    }
-    emitStatus('opening', '她正根据与你的关系斟酌如何开口…');
-    const cacheKey = `${npc.id}:${affinity.day}:${affinity.affinity}`;
-    const cached = openingCache.get(cacheKey);
-    if (cached) {
-      applyOpening(session, cached);
-      emitStatus('ready', '');
-      return;
-    }
-    try {
-      const result = await completions.run({
-        messages: [{
-          role: 'user',
-          content: root.GameDialoguePrompts.opening(npc, building, affinity)
-        }],
-        maxTokens: 300,
-        timeoutFallback: session.fallbackOpening,
-        onUpdate(fullText) {
-          if (current !== session) return;
-          draft = fullText || '';
-          emitRender();
-        },
-        onDone: (fullText) => applyOpening(session, fullText)
-      });
-      if (current !== session) return;
-      if (result.reason === 'busy' || !session.messages.length) {
-        applyOpening(session, session.fallbackOpening);
+    emitStatus('opening', resumed ? '她注意到你再次回来，正在重新开口…'
+      : '她正根据与你的关系斟酌如何开口…');
+    const greeting = await root.GameDialogueGreetings.generate({
+      completions,
+      session,
+      affinity,
+      returning: resumed,
+      onUpdate(text) {
+        if (current !== session) return;
+        draft = text;
+        emitRender();
       }
-      if (result.source === 'ai' && session.messages[0]?.content) {
-        openingCache.set(cacheKey, session.messages[0].content);
-      }
-      emitStatus('ready', '');
-    } catch (error) {
-      if (current !== session) return;
-      console.error('AI 开场白生成失败:', error.code || '', error.message, error.stack);
-      applyOpening(session, session.fallbackOpening);
-      emitStatus('error', '动态问候暂不可用，已使用角色原始问候。');
-    }
+    });
+    if (current !== session) return;
+    session.messages.push({ role: 'assistant', content: greeting.text });
+    draft = '';
+    emitRender();
+    emitStatus(greeting.failed ? 'error' : 'ready',
+      greeting.failed ? '动态问候暂不可用，已使用本地回应。' : '');
   }
   async function sendMessage(text, options = {}) {
     const content = String(text || '').trim();
@@ -193,6 +163,7 @@
     giveGift,
     generateImage: () => root.GameAIImage.generate(current),
     closeDialogue,
+    resetSessions: () => { closeDialogue(); dialogueSessions.clear(); },
     isDialogueActive: () => Boolean(current)
   };
 }(window));

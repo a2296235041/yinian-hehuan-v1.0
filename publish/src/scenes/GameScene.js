@@ -10,11 +10,13 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.viewObjects = [];
         this.currentBuilding = null;
         this.savedSnapshot = null;
+        this.newGame = false;
     }
 
     init(data) {
         this.playerData = data.playerOrigin || null;
         this.savedSnapshot = data.saveSnapshot || null;
+        this.newGame = data.newGame === true;
     }
 
     create() {
@@ -25,7 +27,8 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             this,
             this.playerData,
             this.npcSystem,
-            this.savedSnapshot
+            this.savedSnapshot,
+            this.newGame
         );
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         this.showSectMap();
@@ -66,7 +69,6 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             stroke: '#14231f',
             strokeThickness: 4
         }).setOrigin(0.5));
-
         Game.Data.buildings.forEach((building) => this.createBuildingMarker(building));
     }
 
@@ -95,7 +97,6 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
                 padding: { x: 7, y: 3 }
             }
         ).setOrigin(0.5));
-
         marker.on('pointerdown', () => {
             window.GameAudio.sfx('click');
             this.showBuilding(building);
@@ -187,7 +188,6 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         affinityText.once(Phaser.GameObjects.Events.DESTROY, () => {
             Game.EventBus.off('affinity-changed', updateAffinity);
         });
-
         const hitArea = this.addViewObject(
             this.add.zone(x, 360, 226, 388).setInteractive({ useHandCursor: true })
         );

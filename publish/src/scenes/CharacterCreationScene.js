@@ -97,7 +97,8 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         button.disableInteractive();
         window.GameAudio.sfx('success');
         Game.SceneTransition.start(this, 'GameScene', {
-            playerOrigin: this.originsData[this.selectedOriginIndex]
+            playerOrigin: this.originsData[this.selectedOriginIndex],
+            newGame: true
         });
     }
 

@@ -54,21 +54,26 @@
 
   // 玩家会话数值放在 Game.player，长期成长则交给各自的版本化存档系统。
   // 这种拆分避免每次精力变化都进行网络写入。
-  function initialize(scene, origin, npcSystem, savedSnapshot = null) {
+  function initialize(scene, origin, npcSystem, savedSnapshot = null, newGame = false) {
     if (readyPromise) return readyPromise;
     root.Game.player = normalizePlayer(origin);
+    const items = scene.cache.json.get('items') || [];
     root.GameExploration.initialize(
       scene.cache.json.get('exploration_regions') || [],
       scene.cache.json.get('enemies') || [],
       npcSystem
     );
     readyPromise = Promise.all([
-      root.GameInventory.initialize(scene.cache.json.get('items') || []),
+      root.GameInventory.initialize(items),
       root.GameCultivation.initialize(root.Game.Data.cultivationLevels || {}),
       root.GamePlayerGrowth.initialize(),
       npcSystem.ready()
     ]).then(async () => {
+      root.GameAI?.resetSessions?.();
       if (savedSnapshot) return applySnapshot(savedSnapshot);
+      if (newGame) {
+        return applySnapshot(root.GameSaveData.createFreshSnapshot(origin, items));
+      }
       root.Game.player.day = root.GameAffinity.getDay();
       emitReady();
       return root.Game.player;
@@ -83,6 +88,7 @@
     initialize,
     ready: () => readyPromise || Promise.resolve(root.Game.player),
     restore(snapshot) {
+      root.GameAI?.resetSessions?.();
       return (readyPromise || Promise.reject(new Error('玩家状态尚未初始化')))
         .then(() => applySnapshot(snapshot));
     }

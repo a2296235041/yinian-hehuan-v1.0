@@ -102,6 +102,25 @@
   display: none;
 }
 
+.settings-save-slot {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  color: #d8c38c;
+}
+
+.settings-save-slot select {
+  min-width: 0;
+  min-height: 40px;
+  border: 1px solid #42685c;
+  border-radius: 4px;
+  color: #f4ead2;
+  background: #0d1b17;
+  font: inherit;
+}
+
 .settings-save-actions button {
   min-width: 0;
   min-height: 44px;

@@ -56,5 +56,19 @@
     ];
   }
 
-  root.GameDialoguePrompts = { opening, conversation };
+  function reentry(session, snapshot) {
+    return [
+      ...conversation(session, snapshot),
+      {
+        role: 'user',
+        content: [
+          '上一次交谈已经暂告一段落，玩家此刻再次来到你面前。',
+          '请结合此前对话、你的性格、地点和当前关系，主动说一句新的重逢开场白。',
+          '可以表达“还有何事”之意，但不要机械重复；只输出角色说的话，70字以内。'
+        ].join('')
+      }
+    ];
+  }
+
+  root.GameDialoguePrompts = { opening, conversation, reentry };
 }(window));

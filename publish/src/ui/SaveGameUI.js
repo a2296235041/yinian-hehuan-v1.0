@@ -4,9 +4,12 @@
   let initialized = false;
   let busy = false;
   let actions;
+  let slotSelect;
   let saveButton;
   let loadButton;
   let status;
+  let statuses = [];
+  let slotTouched = false;
 
   function formatTime(value) {
     if (!value) return '';
@@ -19,28 +22,57 @@
     }
   }
 
+  function selectedSlotId() {
+    return Math.max(1, Math.min(3, Math.floor(Number(slotSelect.value) || 1)));
+  }
+
+  function selectedInfo() {
+    return statuses.find((item) => item.slotId === selectedSlotId()) || {
+      slotId: selectedSlotId(), hasSave: false
+    };
+  }
+
+  function updateSelection() {
+    const info = selectedInfo();
+    loadButton.dataset.available = String(info.hasSave);
+    loadButton.disabled = busy || !info.hasSave;
+    status.textContent = info.hasSave
+      ? `${info.originName} · 第 ${info.day} 天 · ${formatTime(info.savedAt)}`
+      : `存档 ${info.slotId} 为空`;
+  }
+
+  function renderSlots(nextStatuses) {
+    const selected = slotTouched ? selectedSlotId() : root.GameSave.getActiveSlot();
+    statuses = nextStatuses;
+    slotSelect.replaceChildren();
+    statuses.forEach((info) => {
+      const option = document.createElement('option');
+      option.value = String(info.slotId);
+      option.textContent = info.hasSave
+        ? `存档 ${info.slotId} · 第 ${info.day} 天`
+        : `存档 ${info.slotId} · 空`;
+      slotSelect.append(option);
+    });
+    slotSelect.value = String(selected);
+    updateSelection();
+  }
+
   function setBusy(nextBusy, label) {
     busy = nextBusy;
+    slotSelect.disabled = busy;
     saveButton.disabled = busy;
     loadButton.disabled = busy || loadButton.dataset.available !== 'true';
     if (label) status.textContent = label;
   }
 
-  // 设置面板只在玩家已经进入正式游戏后显示存读档区域。
   async function refresh() {
     if (!initialized) return;
     actions.hidden = !root.Game.player?.origin;
     if (actions.hidden || busy) return;
     status.textContent = '正在读取存档…';
     try {
-      const info = await root.GameSave.getStatus();
-      loadButton.dataset.available = String(info.hasSave);
-      loadButton.disabled = !info.hasSave;
-      status.textContent = info.hasSave
-        ? `第 ${info.day} 天 · ${formatTime(info.savedAt)}`
-        : '暂无手动存档';
+      renderSlots(await root.GameSave.getStatuses());
     } catch (error) {
-      loadButton.dataset.available = 'false';
       loadButton.disabled = true;
       status.textContent = '存档状态读取失败';
       console.error('设置面板读取存档失败:', error.code || '', error.message, error.stack);
@@ -49,11 +81,12 @@
 
   async function saveGame() {
     if (busy) return;
-    setBusy(true, '正在保存到平台…');
+    const info = selectedInfo();
+    if (info.hasSave && !root.confirm(`确定覆盖存档 ${info.slotId} 吗？`)) return;
+    setBusy(true, `正在保存到存档 ${info.slotId}…`);
     try {
-      await root.GameSave.saveCurrent();
+      await root.GameSave.saveCurrent(info.slotId);
       root.GameAudio.sfx('success');
-      status.textContent = '存档成功';
     } catch (error) {
       root.GameAudio.sfx('deny');
       status.textContent = error.message || '存档失败';
@@ -65,17 +98,16 @@
   }
 
   async function loadGame() {
-    if (busy || loadButton.dataset.available !== 'true') return;
-    if (!root.confirm('读档会覆盖当前未保存的进度，确定继续吗？')) return;
-    setBusy(true, '正在恢复存档…');
+    const info = selectedInfo();
+    if (busy || !info.hasSave) return;
+    if (!root.confirm(`读取存档 ${info.slotId} 会覆盖当前未保存进度，确定继续吗？`)) return;
+    setBusy(true, `正在读取存档 ${info.slotId}…`);
     try {
-      const snapshot = await root.GameSave.loadCurrent();
-      // 数值恢复后关闭旧对话，并按存档记录重新绘制所在建筑。
+      const snapshot = await root.GameSave.loadCurrent(info.slotId);
       const scene = root.game?.scene?.getScene('GameScene');
       scene?.dialogueSystem?.endDialogue();
       scene?.showSavedLocation(snapshot.location);
       root.GameAudio.sfx('success');
-      status.textContent = '读档完成';
       root.GameModelUI.close();
     } catch (error) {
       root.GameAudio.sfx('deny');
@@ -91,9 +123,14 @@
     if (initialized) return;
     initialized = true;
     actions = document.getElementById('settings-save-actions');
+    slotSelect = document.getElementById('settings-save-slot');
     saveButton = document.getElementById('settings-save');
     loadButton = document.getElementById('settings-load');
     status = document.getElementById('settings-save-status');
+    slotSelect.addEventListener('change', () => {
+      slotTouched = true;
+      updateSelection();
+    });
     saveButton.addEventListener('click', saveGame);
     loadButton.addEventListener('click', loadGame);
     root.Game.EventBus.on('player-state-ready', refresh);
