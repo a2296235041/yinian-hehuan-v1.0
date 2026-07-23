@@ -37,6 +37,7 @@
     const percent = required > 0 ? Math.min(100, Math.floor(state.progress / required * 100)) : 100;
     let phaseName = percent < 34 ? '初期' : (percent < 67 ? '中期' : '后期');
     if (percent >= 100) phaseName = '圆满';
+    const affinityDiscount = root.Game.player?.origin?.talent?.id === 'hehuan_descendant' ? 5 : 0;
     return {
       realmIndex: state.realmIndex,
       realmName: realm.name,
@@ -48,7 +49,7 @@
       maxRealm,
       canBreakthrough: !maxRealm && required > 0 && state.progress >= required,
       nextRealmName: levels[state.realmIndex + 1]?.name || null,
-      requiredAffinity: Math.min(80, 20 + state.realmIndex * 5)
+      requiredAffinity: Math.max(15, Math.min(80, 20 + state.realmIndex * 5 - affinityDiscount))
     };
   }
 

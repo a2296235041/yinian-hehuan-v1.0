@@ -80,9 +80,13 @@
       }
       const removed = await root.GameInventory.remove(itemId, 1, 'use_item');
       if (!removed.changed) return { changed: false, reason: removed.reason, item };
+      const stats = root.GamePlayerStats.getSnapshot();
       const result = item.type === 'cultivation'
         ? (item.cultivation_percent
-          ? await root.GameCultivation.addCultivationPercent(item.cultivation_percent, 'item')
+          ? await root.GameCultivation.addCultivationPercent(
+            Number(item.cultivation_percent) * (1 + Number(stats.pillGainPercent || 0) / 100),
+            'item'
+          )
           : await root.GameCultivation.addCultivation(item.cultivation_gain, 'item'))
         : await root.GamePlayerGrowth.addBonus(item.attribute, item.attribute_gain, 'item');
       if (!result.changed) {

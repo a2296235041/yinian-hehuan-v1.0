@@ -1,92 +1,97 @@
 [
   {
     "id": "demon_prince",
-    "name": "魔门弃子",
-    "description": "曾为魔门私生子，遭遗弃后挣扎求生，为追求更原始的力量而加入合欢宗。",
+    "name": "天生灵脉者",
+    "description": "幼年便能感知天地灵息，虽然缺少宗门背景，却拥有适合长期修炼与突破的稳定根基。",
     "talent": {
-      "name": "魔心通明",
-      "description": "与“邪派”女子双修时修为加成更高，但攻略“正道”仙子则会困难重重。"
+      "id": "spirit_resonance",
+      "name": "灵息共鸣",
+      "description": "灵气入体更加顺畅，单次修炼获得的修为提高 15%。"
     },
     "attributes": {
-      "strength": "极强",
-      "constitution": "极强",
-      "agility": "中等",
-      "intelligence": "中等",
-      "charisma": "较弱",
-      "wisdom": "较弱",
-      "luck": "较弱"
+      "strength": 52,
+      "constitution": 68,
+      "agility": 48,
+      "intelligence": 76,
+      "charisma": 55,
+      "wisdom": 84,
+      "luck": 58
     }
   },
   {
     "id": "alchemy_boy",
-    "name": "丹宗药童",
-    "description": "原是丹宗的普通药童，偷学禁术发现丹药与双修结合的秘密后，叛逃而来。",
+    "name": "丹火遗徒",
+    "description": "曾在丹房中日夜侍奉丹火，熟悉灵药、修为丹与各种辅助修行的资源。",
     "talent": {
-      "name": "百草亲和",
-      "description": "探险时更容易获得稀有草药，可制作提升情趣、增加好感的“奇药”。"
+      "id": "alchemy_heir",
+      "name": "丹心映道",
+      "description": "善于辨识灵丹与灵材，使用修为丹时额外获得 10% 的当前境界修为。"
     },
     "attributes": {
-      "strength": "较弱",
-      "constitution": "中等",
-      "agility": "较弱",
-      "intelligence": "极强",
-      "charisma": "中等",
-      "wisdom": "极强",
-      "luck": "中等"
+      "strength": 42,
+      "constitution": 58,
+      "agility": 45,
+      "intelligence": 88,
+      "charisma": 62,
+      "wisdom": 82,
+      "luck": 70
     }
   },
   {
     "id": "secret_guard_descendant",
-    "name": "锦衣卫后裔",
-    "description": "凡间密探组织的后人，家道中落，却发现祖传的洞察人心之术，在“攻略仙子心防”方面有奇效。",
+    "name": "合欢旧族后裔",
+    "description": "家族曾与合欢宗有旧，耳濡目染之下懂得如何以真心换真心，最擅长经营长久关系。",
     "talent": {
-      "name": "洞察人心",
-      "description": "对话时有几率看破对方内心真实想法，选对选项可大幅提升好感。"
+      "id": "hehuan_descendant",
+      "name": "善缘入道",
+      "description": "与 NPC 交谈和赠礼时更容易获得好感，双修突破所需的好感度降低 5 点。"
     },
     "attributes": {
-      "strength": "中等",
-      "constitution": "较弱",
-      "agility": "中等",
-      "intelligence": "极强",
-      "charisma": "极强",
-      "wisdom": "中等",
-      "luck": "较弱"
+      "strength": 48,
+      "constitution": 55,
+      "agility": 60,
+      "intelligence": 72,
+      "charisma": 90,
+      "wisdom": 68,
+      "luck": 74
     }
   },
   {
     "id": "reincarnated_immortal",
-    "name": "谪仙转世",
-    "description": "灵魂深处沉睡着天界仙人的记忆，因触犯天条或厌倦清规而被贬下凡，前来体验七情六欲。",
+    "name": "百战猎修",
+    "description": "常年在荒野与秘境中追踪凶兽，懂得观察地势、判断敌情，也更能从战斗中全身而退。",
     "talent": {
-      "name": "仙魂残韵",
-      "description": "修炼无瓶颈，突破境界更容易，且探险时可能因“前世记忆”获得奇遇。"
+      "id": "battle_hunter",
+      "name": "猎迹寻宝",
+      "description": "探险遭遇奇遇或战斗胜利时，更容易获得额外物品，战斗速度属性提高 8 点。"
     },
     "attributes": {
-      "strength": "中等",
-      "constitution": "中等",
-      "agility": "中等",
-      "intelligence": "中等",
-      "charisma": "中等",
-      "wisdom": "极强",
-      "luck": "极强"
+      "strength": 82,
+      "constitution": 76,
+      "agility": 88,
+      "intelligence": 58,
+      "charisma": 46,
+      "wisdom": 55,
+      "luck": 80
     }
   },
   {
     "id": "possessed_old_monster",
-    "name": "夺舍老怪",
-    "description": "本是普通散修，却意外吞噬了一个夺舍失败的元婴老怪残魂，继承了他关于双修的庞杂“经验”。",
+    "name": "问心客卿",
+    "description": "曾以游历客卿的身份旁观百态人心，擅长从细节理解他人的性格与情绪，适合深入剧情互动。",
     "talent": {
-      "name": "老怪的经验",
-      "description": "天生懂得更多双修“技巧”，更容易解锁特殊互动和骚话选项。"
+      "id": "mindful_guest",
+      "name": "观心破妄",
+      "description": "AI 生成的交互更容易触发符合当前好感度的特殊回应，并使神识与魅力各提高 8 点。"
     },
     "attributes": {
-      "strength": "较弱",
-      "constitution": "较弱",
-      "agility": "中等",
-      "intelligence": "中等",
-      "charisma": "极强",
-      "wisdom": "较弱",
-      "luck": "极强"
+      "strength": 50,
+      "constitution": 52,
+      "agility": 66,
+      "intelligence": 80,
+      "charisma": 84,
+      "wisdom": 78,
+      "luck": 72
     }
   }
 ]

@@ -3,6 +3,7 @@
 
   let bootComplete = false;
   let failed = false;
+  let playerProfilePromise = null;
 
   function callLoading(method, ...args) {
     try {
@@ -37,6 +38,37 @@
     if (panel) panel.hidden = false;
   }
 
+  function safeUrl(value) {
+    try {
+      const url = new URL(String(value || ''), root.location.href);
+      return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+    } catch (error) {
+      return '';
+    }
+  }
+
+  // 只暴露界面需要的昵称和头像地址，绝不把平台返回的 token 放入游戏状态或日志。
+  async function getPlayerProfile() {
+    if (playerProfilePromise) return playerProfilePromise;
+    playerProfilePromise = Promise.resolve()
+      .then(async () => {
+        const infoApi = root.dzmm?.user?.info;
+        if (typeof infoApi !== 'function') {
+          return { name: '', avatarUrl: '' };
+        }
+        const info = await infoApi();
+        return {
+          name: typeof info?.name === 'string' ? info.name.trim().slice(0, 24) : '',
+          avatarUrl: safeUrl(info?.avatarUrl)
+        };
+      })
+      .catch((error) => {
+        console.error('读取玩家资料失败:', error.code || '', error.message, error.stack);
+        return { name: '', avatarUrl: '' };
+      });
+    return playerProfilePromise;
+  }
+
   root.addEventListener('error', (event) => {
     const message = event.error?.message || event.message || '未知脚本错误';
     console.error('游戏脚本错误:', message, event.error?.stack || '');
@@ -50,6 +82,6 @@
     fail('UNHANDLED_REJECTION', message);
   });
 
-  root.PlatformBridge = { progress, ready, fail };
+  root.PlatformBridge = { progress, ready, fail, getPlayerProfile };
   progress({ phase: 'start', message: '正在准备游戏' });
 }(window));
