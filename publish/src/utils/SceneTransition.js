@@ -42,8 +42,9 @@ Game.SceneTransition = {
             }
         };
         camera.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, finish);
-        // force=true 可接管尚未结束的淡入，避免玩家快速点击后场景锁无法释放。
-        camera.fadeOut(duration || this.defaultOutDuration, 0, 0, 0, true);
+        // fade() 的第 5 个参数才是 force；fadeOut() 的第 5 个参数是更新回调。
+        // 误把 true 传给 fadeOut() 会让 Phaser 下一帧执行 true.call(...) 并直接崩溃。
+        camera.fade(duration || this.defaultOutDuration, 0, 0, 0, true);
         return true;
     },
 
