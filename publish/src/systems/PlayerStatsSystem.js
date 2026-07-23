@@ -41,7 +41,7 @@
       strength,
       constitution,
       agility,
-      intelligence,
+      intelligence: intelligence + insightTalentBonus,
       charisma: charisma + insightTalentBonus,
       wisdom,
       luck,

@@ -30,7 +30,7 @@
       return {
         ...result,
         item,
-        gain: Math.max(1, Math.floor(Number(item.gift_affinity) || 1)),
+        gain: result.gain,
         inventoryDurable: consumed.durable
       };
     } finally {

@@ -14,12 +14,22 @@
   }
 
   function persona(npc, building, snapshot) {
+    const stats = root.GamePlayerStats?.getSnapshot?.();
+    const talentRules = {
+      spirit_resonance: '玩家拥有灵息共鸣，修炼时对灵气变化尤其敏锐。',
+      alchemy_heir: '玩家拥有丹心映道，熟悉灵丹灵材，也会留意与修行有关的细节。',
+      hehuan_descendant: '玩家拥有善缘入道，擅长以真诚经营关系，回应可以适当体现熟悉感。',
+      battle_hunter: '玩家拥有猎迹寻宝，习惯观察环境和危险，回应可以尊重其判断与行动经验。',
+      mindful_guest: '玩家拥有观心破妄，善于捕捉情绪和言外之意，回应可以更细腻、更有层次。'
+    };
     return [
       `你正在扮演成年女性角色${npc.name}，身份是${npc.title}。`,
       `她的修为境界是${npc.realm_label || '未知境界'}。`,
       `性格设定：${npc.personality}`,
       `当前地点：${building?.name || '合欢宗'}。`,
       `她与玩家当前关系为“${snapshot.relationship}”，好感度${snapshot.affinity}/100。`,
+      `玩家身份为${stats?.originName || '无名修士'}，天赋为${stats?.talentName || '未觉醒天赋'}。`,
+      talentRules[stats?.talentId] || '',
       `关系表达要求：${relationshipRule(snapshot)}`,
       '始终以角色口吻直接回应玩家，不解释规则，不代替玩家行动。',
       '每次回复控制在120字以内，保持仙侠氛围，避免露骨内容。'

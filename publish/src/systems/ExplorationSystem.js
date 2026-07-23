@@ -14,6 +14,10 @@
     return values?.length ? values[Math.floor(Math.random() * values.length)] : null;
   }
 
+  function hasTalent(id) {
+    return root.Game.player?.origin?.talent?.id === id;
+  }
+
   function initialize(regionData, enemyData, npcs) {
     (regionData || []).forEach((region) => regions.set(region.id, { ...region }));
     (enemyData || []).forEach((enemy) => enemies.set(enemy.id, { ...enemy }));
@@ -53,7 +57,8 @@
 
   async function curioEncounter(region) {
     const itemId = pick(region.loot_ids);
-    const quantity = Math.random() < 0.22 ? 2 : 1;
+    const extraLootChance = hasTalent('battle_hunter') ? 0.42 : 0.22;
+    const quantity = Math.random() < extraLootChance ? 2 : 1;
     const cultivation = randomInt(region.cultivation_min, region.cultivation_max);
     const stones = randomInt(region.stone_min, region.stone_max);
     const itemResult = await root.GameInventory.add(itemId, quantity, 'exploration');
@@ -128,13 +133,14 @@
       enemy.cultivation_reward,
       'battle'
     );
-    const loot = await root.GameInventory.add(enemy.loot_id, 1, 'battle');
+    const extraLoot = hasTalent('battle_hunter') && Math.random() < 0.35 ? 1 : 0;
+    const loot = await root.GameInventory.add(enemy.loot_id, 1 + extraLoot, 'battle');
     const stones = Math.max(0, Math.floor(Number(enemy.stone_reward) || 0));
     if (stones > 0) await root.GameInventory.addSpiritStones(stones, 'battle');
     const itemName = loot.item?.name || '战利品';
     const gainText = cultivation.changed ? `修为 +${cultivation.gain}` : '修为已达瓶颈';
     return {
-      text: `战斗胜利！${gainText}，获得${itemName} ×1、灵石 ${stones}。`,
+      text: `战斗胜利！${gainText}，获得${itemName} ×${1 + extraLoot}、灵石 ${stones}。`,
       cultivation,
       loot,
       spiritStones: stones

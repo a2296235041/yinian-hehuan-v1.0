@@ -115,11 +115,13 @@
       if (record.dialogueGain >= DIALOGUE_LIMIT) {
         return { changed: false, reason: 'daily_limit', snapshot: getSnapshot(id) };
       }
-      record.dialogueGain += 1;
-      record.affinity = clamp(record.affinity + 1, -100, MAX_AFFINITY);
+      const talentBonus = root.Game.player?.origin?.talent?.id === 'hehuan_descendant' ? 1 : 0;
+      const appliedGain = Math.min(1 + talentBonus, DIALOGUE_LIMIT - record.dialogueGain);
+      record.dialogueGain += appliedGain;
+      record.affinity = clamp(record.affinity + appliedGain, -100, MAX_AFFINITY);
       const durable = await persist(false);
-      emitChange(id, 1, 'dialogue', durable);
-      return { changed: true, durable, snapshot: getSnapshot(id) };
+      emitChange(id, appliedGain, 'dialogue', durable);
+      return { changed: true, gain: appliedGain, durable, snapshot: getSnapshot(id) };
     });
   }
   // 礼物的好感收益由物品配置决定，但每天一次的限制仍由本系统统一校验。
@@ -127,7 +129,8 @@
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       const record = ensureRecord(id);
-      const affinityGain = clamp(gain, 1, 10);
+      const talentBonus = root.Game.player?.origin?.talent?.id === 'hehuan_descendant' ? 2 : 0;
+      const affinityGain = clamp(Number(gain) + talentBonus, 1, 10);
       if (record.giftDay !== state.day) {
         record.giftDay = state.day;
         record.gifts = 0;

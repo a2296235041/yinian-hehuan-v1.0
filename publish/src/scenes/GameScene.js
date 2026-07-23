@@ -236,7 +236,10 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.titleText = null;
         this.descriptionText = null;
         this.statusText = null;
-        this.inviteObjects = [];
+        this.inviteButton = null;
+        this.inviteMenuPanel = null;
+        this.inviteMenuObjects = [];
+        this.inviteMenuVisible = false;
         this.locationObjects = [];
         this.busy = false;
         this.npcSystem = null;
@@ -253,8 +256,6 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.background = this.add.image(640, 360, 'bg-sect-map')
             .setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.4);
-        this.add.rectangle(70, 125, 1140, 410, 0x0d1b17, 0.58)
-            .setStrokeStyle(1, 0xd8c38c, 0.62);
         this.titleText = this.add.text(640, 54, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '34px',
@@ -271,21 +272,15 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.createLocationArrow(58, 96, '◀', -1);
         this.createLocationArrow(1222, 96, '▶', 1);
-        this.add.text(640, 151, '邀请 NPC 双修', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '20px',
-            color: '#f4ead2'
-        }).setOrigin(0.5);
-        this.statusText = this.add.text(640, 560, '', {
+        this.statusText = this.add.text(640, 535, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
             color: '#f4ead2',
-            backgroundColor: 'rgba(9,16,14,0.88)',
-            padding: { x: 14, y: 8 },
             wordWrap: { width: 900 },
             align: 'center'
         }).setOrigin(0.5).setVisible(false);
         this.createLocationButtons();
+        this.createInviteControl();
         this.createCloseButton();
         Game.EventBus.on('affinity-changed', this.renderInvites, this);
         Game.EventBus.on('cultivation-changed', this.renderInvites, this);
@@ -343,6 +338,28 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         close.on('pointerdown', () => this.close());
     }
 
+    createInviteControl() {
+        this.inviteButton = this.add.text(1080, 575, '邀请伴侣', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '18px',
+            color: '#14231f',
+            backgroundColor: '#f4ead2',
+            padding: { x: 16, y: 9 }
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        this.inviteButton.on('pointerdown', () => {
+            if (this.busy) return;
+            this.inviteMenuVisible = !this.inviteMenuVisible;
+            this.inviteButton.setText(this.inviteMenuVisible ? '收起伴侣' : '邀请伴侣');
+            this.renderInvites();
+            window.GameAudio.sfx('click');
+        });
+        this.inviteMenuPanel = this.add.rectangle(824, 275, 424, 290, 0x0d1b17, 0.94)
+            .setOrigin(0, 0)
+            .setStrokeStyle(1, 0xd8c38c, 0.72)
+            .setDepth(8)
+            .setVisible(false);
+    }
+
     renderLocation() {
         const location = this.locations[this.sceneIndex];
         this.titleText.setText(`私人场景 · ${location.name}`);
@@ -373,27 +390,34 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
 
     renderInvites() {
         if (!this.npcSystem?.getAllNpcs) return;
-        this.inviteObjects.forEach((object) => object.destroy());
-        this.inviteObjects = [];
+        this.inviteMenuObjects.forEach((object) => object.destroy());
+        this.inviteMenuObjects = [];
+        this.inviteMenuPanel?.setVisible(this.inviteMenuVisible);
+        if (!this.inviteMenuVisible) return;
+        this.inviteMenuObjects.push(this.add.text(1036, 296, '选择一位伴侣', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '19px',
+            color: '#f4ead2'
+        }).setOrigin(0.5).setDepth(9));
         [...this.npcSystem.getAllNpcs().values()].forEach((npc, index) => {
             const affinity = window.GameAffinity.getSnapshot(npc.id);
             const available = affinity.affinity >= 80;
             const column = index % 3;
             const row = Math.floor(index / 3);
-            const button = this.add.text(250 + column * 390, 205 + row * 78,
-                `${npc.name} · 好感 ${affinity.affinity}\n${available ? '可邀请双修' : '好感需达到 80'}`, {
+            const button = this.add.text(900 + column * 142, 340 + row * 68,
+                `${npc.name}\n${available ? '可双修' : `好感 ${affinity.affinity}/80`}`, {
                     fontFamily: '"Noto Serif SC", serif',
                     fontSize: '15px',
                     color: available ? '#14231f' : '#789087',
                     backgroundColor: available ? '#d8c38c' : '#14231f',
                     padding: { x: 12, y: 7 },
                     align: 'center'
-                }).setOrigin(0.5);
+                }).setOrigin(0.5).setDepth(9);
             if (available) {
                 button.setInteractive({ useHandCursor: true });
                 button.on('pointerdown', () => this.inviteNpc(npc));
             }
-            this.inviteObjects.push(button);
+            this.inviteMenuObjects.push(button);
         });
     }
 
@@ -404,6 +428,9 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             this.statusText.setText(`${npc.name} 当前还不愿与你进行双修。`).setVisible(true);
             return;
         }
+        this.inviteMenuVisible = false;
+        this.inviteButton.setText('邀请伴侣');
+        this.renderInvites();
         this.busy = true;
         this.statusText.setText(`正在邀请${npc.name}，AI 正在生成双修剧情…`).setVisible(true);
         try {

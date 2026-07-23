@@ -87,7 +87,10 @@
             Number(item.cultivation_percent) * (1 + Number(stats.pillGainPercent || 0) / 100),
             'item'
           )
-          : await root.GameCultivation.addCultivation(item.cultivation_gain, 'item'))
+          : await root.GameCultivation.addCultivation(
+            Number(item.cultivation_gain) * (1 + Number(stats.pillGainPercent || 0) / 100),
+            'item'
+          ))
         : await root.GamePlayerGrowth.addBonus(item.attribute, item.attribute_gain, 'item');
       if (!result.changed) {
         await root.GameInventory.add(itemId, 1, 'item_refund');
