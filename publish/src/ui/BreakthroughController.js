@@ -25,10 +25,6 @@
     }
   }
 
-  function showStatus(message, state = 'ready') {
-    root.Game.EventBus.emit('ai-dialogue-status', { state, message });
-  }
-
   async function breakthrough() {
     if (busy || !currentNpcId || !currentAffinity) return;
     busy = true;
@@ -43,12 +39,23 @@
           ? `好感需达到 ${result.snapshot.requiredAffinity} 才能双修突破。`
           : '修为尚未达到当前境界圆满。';
         root.GameAudio.sfx('deny');
-        showStatus(message, 'error');
+        await root.GameAI.respondToInteraction(
+          `情境：玩家向你提出双修突破，但当前条件不满足，确定原因是“${message}”。` +
+          '请根据你的性格和当前关系，直接回应玩家，不要假装双修已经发生。',
+          `你提出了双修突破的请求，但${message}`,
+          message
+        );
         return;
       }
       root.GameAudio.sfx('success');
-      showStatus(`双修圆满，成功突破至${result.snapshot.realmName}。`);
-      await root.GameAI.send(`我已借你相助突破至${result.snapshot.realmName}，多谢。`);
+      const message = `双修圆满，成功突破至${result.snapshot.realmName}。`;
+      await root.GameAI.respondToInteraction(
+        `情境：你刚与玩家完成双修，已确定帮助玩家突破至${result.snapshot.realmName}。` +
+        `你们当前关系为${currentAffinity.relationship}，好感${currentAffinity.affinity}/100。` +
+        '请结合你的身份和性格，直接说出此刻对玩家的回应。',
+        `你与她双修后突破至${result.snapshot.realmName}。`,
+        message
+      );
     } finally {
       busy = false;
       refresh();

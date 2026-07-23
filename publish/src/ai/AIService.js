@@ -109,7 +109,8 @@
     const session = current;
     session.messages.push({
       role: 'user',
-      content: String(options.displayContent || content).slice(0, 500)
+      content: String(options.displayContent || content).slice(0, 500),
+      promptContent: content.slice(0, 1200)
     });
     draft = '';
     emitRender();
@@ -154,32 +155,11 @@
       return;
     }
     const session = current;
-    const result = await root.GameGift.give(session.npc.id, itemId);
-    if (current !== session) return;
-    const failedMessages = {
-      busy: '赠礼正在处理中，请稍候。',
-      daily_limit: '今日已经赠送过礼物了。',
-      insufficient: '这件物品的数量不足。',
-      invalid_item: '这件物品无法赠送。'
-    };
-    const giftMessage = result.changed
-      ? `赠送${result.item.name}，好感 +${result.gain}${result.durable ? '' : '，本次进度暂未同步'}`
-      : (failedMessages[result.reason] || '赠礼失败，请稍后重试。');
-    if (result.snapshot) {
-      root.Game.EventBus.emit('affinity-notice', {
-        snapshot: result.snapshot,
-        message: giftMessage
-      });
-    }
-    if (!result.changed) {
-      root.GameAudio.sfx('deny');
-      emitStatus('error', giftMessage);
-      return;
-    }
-    await sendMessage(`我送你${result.item.name}，聊表心意。`, {
-      displayContent: `你赠送了${result.item.name}。`,
-      affinityEligible: false,
-      successMessage: giftMessage
+    await root.GameNPCGiftInteraction.handle({
+      session,
+      itemId,
+      isCurrent: () => current === session,
+      sendMessage
     });
   }
   function closeDialogue() {
@@ -192,6 +172,9 @@
   root.GameAI = {
     startDialogue,
     send: (text) => sendMessage(text),
+    respondToInteraction: (prompt, display, status) => sendMessage(prompt, {
+      displayContent: display, affinityEligible: false, successMessage: status
+    }),
     giveGift,
     generateImage: () => root.GameAIImage.generate(current),
     closeDialogue,

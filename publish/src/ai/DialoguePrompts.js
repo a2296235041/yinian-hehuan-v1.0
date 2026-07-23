@@ -37,7 +37,10 @@
   function conversation(session, snapshot) {
     return [
       { role: 'user', content: persona(session.npc, session.building, snapshot) },
-      ...session.messages.slice(-12)
+      ...session.messages.slice(-12).map((message) => ({
+        role: message.role,
+        content: message.promptContent || message.content
+      }))
     ];
   }
 

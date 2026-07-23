@@ -12,6 +12,7 @@
 
   const eventNames = {
     exploration: '出山探索遭遇',
+    npc_encounter: '在野外偶遇熟识的NPC',
     battle_action: '战斗中的一次行动',
     battle_end: '战斗结束与奖励结算',
     cultivation: '宗门内修炼',
@@ -31,12 +32,17 @@
 
   function buildPrompt(kind, context) {
     const facts = JSON.stringify(context || {}).slice(0, 2400);
+    const npcMode = kind === 'npc_encounter';
     return [
-      '你是仙侠养成游戏的叙事导演，只负责补充氛围和动作描写。',
+      npcMode
+        ? '你正在扮演遭遇信息中的成年女性NPC。'
+        : '你是仙侠养成游戏的叙事导演，只负责补充氛围和动作描写。',
       `当前事件：${eventNames[kind] || kind}。`,
       `已经确定的事实与数值：${facts}`,
       '不得修改、虚构或重新计算任何属性、伤害、奖励、好感和修为数值。',
-      '结合人物身份、境界、地点和行动，输出一小段45至90字的中文剧情。',
+      npcMode
+        ? '严格结合NPC身份、性格、地点与当前关系，直接对玩家说一句45至90字的话。'
+        : '结合人物身份、境界、地点和行动，输出一小段45至90字的中文剧情。',
       '保持合欢宗仙侠世界观，不解释规则，不输出标题、列表、引号或选项。'
     ].join('');
   }

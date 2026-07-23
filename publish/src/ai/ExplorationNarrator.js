@@ -4,6 +4,9 @@ Game.ExplorationNarrator = {
     context(region, result) {
         const stats = window.GamePlayerStats.getSnapshot();
         const enemy = result.enemy;
+        const affinity = result.npc
+            ? window.GameAffinity.getSnapshot(result.npc.id)
+            : null;
         return {
             region: {
                 name: region.name,
@@ -26,7 +29,10 @@ Game.ExplorationNarrator = {
                 fixedResult: result.text,
                 npc: result.npc ? {
                     name: result.npc.name,
-                    personality: result.npc.personality
+                    title: result.npc.title,
+                    personality: result.npc.personality,
+                    relationship: affinity.relationship,
+                    affinity: affinity.affinity
                 } : null,
                 enemy: enemy ? {
                     name: enemy.name,
@@ -47,12 +53,20 @@ Game.ExplorationNarrator = {
 
     async generate(region, result, onUpdate) {
         const fact = result.text || '探索结束。';
+        const npcEncounter = result.type === 'npc' && result.npc;
+        const fallback = npcEncounter
+            ? '没想到会在这里遇见你。山路难行，既然同路，便陪我走上一程吧。'
+            : fact;
+        const update = npcEncounter
+            ? (draft) => onUpdate?.(`${result.npc.name}：${draft}`)
+            : onUpdate;
         const story = await window.GameNarrative.generate(
-            'exploration',
+            npcEncounter ? 'npc_encounter' : 'exploration',
             this.context(region, result),
-            fact,
-            onUpdate
+            fallback,
+            update
         );
+        if (npcEncounter) return `${result.npc.name}：${story}\n${fact}`;
         return window.GameNarrative.compose(story, fact);
     }
 };
