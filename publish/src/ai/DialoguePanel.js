@@ -15,6 +15,10 @@
   let imageModal;
   let imageStatus;
   let image;
+  let portraitButton;
+  let portraitModal;
+  let portraitStatus;
+  let portraitImage;
   let currentNpcId = null;
   let currentAffinity = null;
   let chatBusy = false;
@@ -122,6 +126,25 @@
     refreshControls();
   }
 
+  function isAllowedImageSource(source) {
+    return /^(?:\.\/assets\/|https?:|data:image\/|blob:)/.test(String(source || ''));
+  }
+
+  function showPortrait(npcName, source) {
+    if (!isAllowedImageSource(source)) {
+      portraitStatus.textContent = '当前 NPC 暂无可查看的高清立绘。';
+      portraitImage.hidden = true;
+      portraitImage.removeAttribute('src');
+      portraitModal.hidden = false;
+      return;
+    }
+    portraitStatus.textContent = `${npcName} · 高清立绘`;
+    portraitImage.src = source;
+    portraitImage.alt = `${npcName}的高清立绘`;
+    portraitImage.hidden = false;
+    portraitModal.hidden = false;
+  }
+
   function closeFromGame() {
     root.game?.scene?.getScene('GameScene')?.dialogueSystem?.endDialogue();
   }
@@ -142,9 +165,14 @@
     imageModal = document.getElementById('ai-image-modal');
     imageStatus = document.getElementById('ai-image-status');
     image = document.getElementById('ai-image');
+    portraitButton = document.getElementById('dialogue-portrait');
+    portraitModal = document.getElementById('portrait-modal');
+    portraitStatus = document.getElementById('portrait-status');
+    portraitImage = document.getElementById('portrait-image');
 
     panel.addEventListener('pointerdown', (event) => event.stopPropagation());
     imageModal.addEventListener('pointerdown', (event) => event.stopPropagation());
+    portraitModal.addEventListener('pointerdown', (event) => event.stopPropagation());
     document.getElementById('dialogue-form').addEventListener('submit', (event) => {
       event.preventDefault();
       const text = input.value.trim();
@@ -158,9 +186,17 @@
     document.getElementById('ai-image-close').addEventListener('click', () => {
       imageModal.hidden = true;
     });
+    document.getElementById('portrait-close').addEventListener('click', () => {
+      portraitModal.hidden = true;
+    });
+    portraitButton.addEventListener('click', () => {
+      const source = portraitButton.dataset.source || '';
+      showPortrait(name.textContent || 'NPC', source);
+    });
 
     root.Game.EventBus.on('ai-dialogue-open', (data) => {
       panel.hidden = false;
+      portraitModal.hidden = true;
       currentNpcId = data.npcId;
       if (renderedNpcId !== data.npcId) {
         history.replaceChildren(); renderedMessageCount = 0; draftBubble = null;
@@ -168,6 +204,9 @@
       }
       name.textContent = data.npcName;
       title.textContent = data.npcTitle;
+      const portraitPath = root.Game.NpcCardRenderer?.portraitPath?.(data.npcId) || '';
+      portraitButton.dataset.source = portraitPath;
+      portraitButton.hidden = !isAllowedImageSource(portraitPath);
       renderAffinity(data.affinity);
     });
     root.Game.EventBus.on('ai-dialogue-render', renderMessages);
@@ -185,6 +224,7 @@
     });
     root.Game.EventBus.on('ai-dialogue-close', () => {
       panel.hidden = true;
+      portraitModal.hidden = true;
       currentNpcId = null;
       currentAffinity = null;
       status.textContent = '';

@@ -5,6 +5,15 @@ var Game = window.Game || {};
  * 卡片高度固定，角色图、身份、境界和好感不会因文字变化互相遮挡。
  */
 Game.NpcCardRenderer = {
+    portraitPath(npcId) {
+        if (npcId === 'su_meier') return './assets/generated/npc-su-meier.png';
+        if (npcId === 'hu_jiuer') return './assets/generated/fox-princess.6e212211.webp';
+        if (['liu_hanyan', 'han_yueshuang', 'xiao_qingxuan'].includes(npcId)) {
+            return './assets/generated/sect-master.b9883f28.webp';
+        }
+        return './assets/generated/scholar-disciple.e2aa08f6.webp';
+    },
+
     portraitKey(npcId) {
         if (npcId === 'su_meier') return 'npc-su-meier';
         if (npcId === 'hu_jiuer') return 'npc-fox';

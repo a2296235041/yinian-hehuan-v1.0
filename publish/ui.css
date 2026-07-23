@@ -243,6 +243,13 @@
     font-size: 26px;
   }
 
+  .ai-dialogue-panel header .dialogue-portrait-button {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+    font-size: 12px;
+  }
+
   .dialogue-history {
     margin: 3px 0;
   }

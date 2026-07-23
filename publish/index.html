@@ -61,6 +61,8 @@
           </div>
           <span id="dialogue-affinity" class="dialogue-affinity"></span>
         </div>
+        <button id="dialogue-portrait" class="dialogue-portrait-button"
+                type="button" aria-label="查看高清立绘" title="查看高清立绘">图</button>
         <button id="dialogue-close" type="button" aria-label="结束对话">×</button>
       </header>
       <div id="dialogue-history" class="dialogue-history"></div>
@@ -79,6 +81,13 @@
         <button id="ai-image-close" type="button" aria-label="关闭图片">×</button>
         <p id="ai-image-status" aria-live="polite"></p>
         <img id="ai-image" alt="" hidden>
+      </div>
+    </section>
+    <section id="portrait-modal" class="ai-image-modal" hidden>
+      <div class="ai-image-content">
+        <button id="portrait-close" type="button" aria-label="关闭立绘">×</button>
+        <p id="portrait-status" aria-live="polite"></p>
+        <img id="portrait-image" alt="" hidden>
       </div>
     </section>
     <section id="gift-modal" class="gift-modal" hidden>

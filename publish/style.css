@@ -306,6 +306,17 @@ body {
   cursor: pointer;
 }
 
+.ai-dialogue-panel header .dialogue-portrait-button {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border: 1px solid rgba(216, 195, 140, 0.72);
+  border-radius: 4px;
+  color: #d8c38c;
+  font-size: 12px;
+  line-height: 1;
+}
+
 .dialogue-history {
   flex: 1;
   min-height: 0;
