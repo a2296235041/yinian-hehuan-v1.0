@@ -19,6 +19,8 @@
   let currentAffinity = null;
   let chatBusy = false;
   let imageBusy = false;
+  let renderedMessageCount = 0;
+  let draftBubble = null;
 
   function refreshControls() {
     sendButton.disabled = chatBusy;
@@ -42,22 +44,43 @@
   function renderMessages(data) {
     name.textContent = data.npcName;
     title.textContent = data.npcTitle;
-    const fragment = document.createDocumentFragment();
-    data.messages.forEach((message) => {
-      const bubble = document.createElement('p');
-      bubble.className = `dialogue-line dialogue-line--${message.role}`;
-      bubble.textContent = message.content;
-      fragment.append(bubble);
-    });
-    if (data.draft) {
-      const bubble = document.createElement('p');
-      bubble.className = 'dialogue-line dialogue-line--assistant is-streaming';
-      bubble.textContent = data.draft;
-      fragment.append(bubble);
+    const pinnedToBottom = history.scrollHeight - history.scrollTop - history.clientHeight < 80;
+    if (data.messages.length < renderedMessageCount) {
+      history.replaceChildren();
+      renderedMessageCount = 0;
+      draftBubble = null;
     }
-    history.replaceChildren(fragment);
-    // DOM 替换后立即滚到底部，避免部分沙箱 WebView 的动画帧回调抛出跨域匿名错误。
-    history.scrollTop = history.scrollHeight;
+    const newMessages = data.messages.slice(renderedMessageCount);
+    if (draftBubble && newMessages.length === 1 && newMessages[0].role === 'assistant') {
+      draftBubble.className = 'dialogue-line dialogue-line--assistant';
+      draftBubble.textContent = newMessages[0].content;
+      draftBubble = null;
+    } else if (newMessages.length) {
+      draftBubble?.remove();
+      draftBubble = null;
+      const fragment = document.createDocumentFragment();
+      newMessages.forEach((message) => {
+        const bubble = document.createElement('p');
+        bubble.className = `dialogue-line dialogue-line--${message.role}`;
+        bubble.textContent = message.content;
+        fragment.append(bubble);
+      });
+      history.append(fragment);
+    }
+    renderedMessageCount = data.messages.length;
+    if (data.draft) {
+      if (!draftBubble) {
+        draftBubble = document.createElement('p');
+        draftBubble.className = 'dialogue-line dialogue-line--assistant is-streaming';
+        history.append(draftBubble);
+      }
+      draftBubble.textContent = data.draft;
+    } else if (draftBubble && !newMessages.length) {
+      draftBubble.remove();
+      draftBubble = null;
+    }
+    // 玩家阅读旧消息时保持当前位置；停留底部时才跟随新回复。
+    if (pinnedToBottom || renderedMessageCount <= 1) history.scrollTop = history.scrollHeight;
   }
 
   function updateStatus(data) {
@@ -138,6 +161,9 @@
     root.Game.EventBus.on('ai-dialogue-open', (data) => {
       panel.hidden = false;
       currentNpcId = data.npcId;
+      renderedMessageCount = 0;
+      draftBubble = null;
+      history.replaceChildren();
       name.textContent = data.npcName;
       title.textContent = data.npcTitle;
       renderAffinity(data.affinity);

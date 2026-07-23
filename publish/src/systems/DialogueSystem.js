@@ -13,6 +13,8 @@ Game.Systems.DialogueSystem = class DialogueSystem {
     }
 
     async startDialogue(npcId) {
+        // 同一面板内重复点到当前 NPC 时继续原会话，避免重新生成开场白和清空历史。
+        if (this.currentNpcId === npcId && window.GameAI.isDialogueActive()) return;
         const npc = this.npcSystem.getNpcDataById(npcId);
         if (!npc) {
             console.error('DialogueSystem: 找不到 NPC:', npcId);

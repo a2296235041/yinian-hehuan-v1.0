@@ -35,12 +35,24 @@
   }
 
   function conversation(session, snapshot) {
+    const history = session.messages.map((message) => ({
+      role: message.role,
+      content: String(message.promptContent || message.content || '').slice(0, 1200)
+    }));
+    const recent = [];
+    let remainingCharacters = 14000;
+    for (let index = history.length - 1; index >= 0 && recent.length < 48; index -= 1) {
+      const message = history[index];
+      if (!message.content || message.content.length > remainingCharacters) break;
+      recent.push(message);
+      remainingCharacters -= message.content.length;
+    }
+    recent.reverse();
+    const opening = history[0]?.role === 'assistant' ? history[0] : null;
+    if (opening && recent[0] !== opening) recent.unshift(opening);
     return [
       { role: 'user', content: persona(session.npc, session.building, snapshot) },
-      ...session.messages.slice(-12).map((message) => ({
-        role: message.role,
-        content: message.promptContent || message.content
-      }))
+      ...recent
     ];
   }
 
