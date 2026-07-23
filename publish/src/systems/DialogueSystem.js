@@ -12,7 +12,7 @@ Game.Systems.DialogueSystem = class DialogueSystem {
         scene.events.once(Phaser.Scenes.Events.SHUTDOWN, this.destroy, this);
     }
 
-    async startDialogue(npcId) {
+    async startDialogue(npcId, context = {}) {
         // 同一面板内重复点到当前 NPC 时继续原会话，避免重新生成开场白和清空历史。
         if (this.currentNpcId === npcId && window.GameAI.isDialogueActive()) return;
         const npc = this.npcSystem.getNpcDataById(npcId);
@@ -26,7 +26,7 @@ Game.Systems.DialogueSystem = class DialogueSystem {
         this.currentNpcId = npcId;
         window.GameAI.startDialogue({
             npc,
-            building: this.scene.currentBuilding,
+            building: context.building || this.scene.currentBuilding,
             opening: this.openings[npcId] || '……'
         });
     }

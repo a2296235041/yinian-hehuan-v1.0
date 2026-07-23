@@ -236,10 +236,17 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.titleText = null;
         this.descriptionText = null;
         this.statusText = null;
+        this.storyText = null;
         this.inviteButton = null;
         this.inviteMenuPanel = null;
         this.inviteMenuObjects = [];
         this.inviteMenuVisible = false;
+        this.selectedInviteIds = new Set();
+        this.invitedNpcs = [];
+        this.talkButton = null;
+        this.talkMenuPanel = null;
+        this.talkMenuObjects = [];
+        this.talkMenuVisible = false;
         this.locationObjects = [];
         this.busy = false;
         this.npcSystem = null;
@@ -279,6 +286,14 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             wordWrap: { width: 900 },
             align: 'center'
         }).setOrigin(0.5).setVisible(false);
+        this.storyText = this.add.text(640, 385, '', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '20px',
+            color: '#f4ead2',
+            lineSpacing: 10,
+            wordWrap: { width: 900, useAdvancedWrap: true },
+            align: 'center'
+        }).setOrigin(0.5).setVisible(false).setDepth(4);
         this.createLocationButtons();
         this.createInviteControl();
         this.createCloseButton();
@@ -287,6 +302,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.renderLocation();
         this.renderInvites();
+        this.renderTalkMenu();
         this.loadLocationBackgrounds();
         Game.SceneTransition.fadeIn(this);
     }
@@ -349,11 +365,34 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.inviteButton.on('pointerdown', () => {
             if (this.busy) return;
             this.inviteMenuVisible = !this.inviteMenuVisible;
+            this.talkMenuVisible = false;
             this.inviteButton.setText(this.inviteMenuVisible ? '收起伴侣' : '邀请伴侣');
             this.renderInvites();
+            this.renderTalkMenu();
             window.GameAudio.sfx('click');
         });
         this.inviteMenuPanel = this.add.rectangle(824, 275, 424, 290, 0x0d1b17, 0.94)
+            .setOrigin(0, 0)
+            .setStrokeStyle(1, 0xd8c38c, 0.72)
+            .setDepth(8)
+            .setVisible(false);
+        this.talkButton = this.add.text(930, 575, '伴侣交谈', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '18px',
+            color: '#14231f',
+            backgroundColor: '#d8c38c',
+            padding: { x: 16, y: 9 }
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false);
+        this.talkButton.on('pointerdown', () => {
+            if (this.busy || !this.invitedNpcs.length) return;
+            this.talkMenuVisible = !this.talkMenuVisible;
+            this.inviteMenuVisible = false;
+            this.inviteButton.setText('邀请伴侣');
+            this.renderTalkMenu();
+            this.renderInvites();
+            window.GameAudio.sfx('click');
+        });
+        this.talkMenuPanel = this.add.rectangle(824, 275, 424, 290, 0x0d1b17, 0.94)
             .setOrigin(0, 0)
             .setStrokeStyle(1, 0xd8c38c, 0.72)
             .setDepth(8)
@@ -364,6 +403,8 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         const location = this.locations[this.sceneIndex];
         this.titleText.setText(`私人场景 · ${location.name}`);
         this.descriptionText.setText(location.description);
+        this.storyText?.setVisible(false);
+        this.statusText?.setVisible(false);
         this.locationObjects.forEach((button, index) => {
             button.setAlpha(index === this.sceneIndex ? 1 : 0.62);
         });
@@ -402,75 +443,204 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         [...this.npcSystem.getAllNpcs().values()].forEach((npc, index) => {
             const affinity = window.GameAffinity.getSnapshot(npc.id);
             const available = affinity.affinity >= 80;
+            const selected = this.selectedInviteIds.has(npc.id);
             const column = index % 3;
             const row = Math.floor(index / 3);
             const button = this.add.text(900 + column * 142, 340 + row * 68,
-                `${npc.name}\n${available ? '可双修' : `好感 ${affinity.affinity}/80`}`, {
+                `${npc.name}\n${available
+                    ? (selected ? '已选择' : '可选择')
+                    : `好感 ${affinity.affinity}/80`}`, {
                     fontFamily: '"Noto Serif SC", serif',
                     fontSize: '15px',
                     color: available ? '#14231f' : '#789087',
-                    backgroundColor: available ? '#d8c38c' : '#14231f',
+                    backgroundColor: selected ? '#f4ead2'
+                        : (available ? '#d8c38c' : '#14231f'),
                     padding: { x: 12, y: 7 },
                     align: 'center'
                 }).setOrigin(0.5).setDepth(9);
             if (available) {
                 button.setInteractive({ useHandCursor: true });
-                button.on('pointerdown', () => this.inviteNpc(npc));
+                button.on('pointerdown', () => {
+                    if (this.selectedInviteIds.has(npc.id)) {
+                        this.selectedInviteIds.delete(npc.id);
+                    } else {
+                        this.selectedInviteIds.add(npc.id);
+                    }
+                    this.renderInvites();
+                    window.GameAudio.sfx('click');
+                });
             }
             this.inviteMenuObjects.push(button);
         });
+        const selectedCount = this.selectedInviteIds.size;
+        const confirm = this.add.text(
+            1036,
+            535,
+            selectedCount ? `邀请 ${selectedCount} 位伴侣双修` : '请选择伴侣',
+            {
+                fontFamily: '"Noto Serif SC", serif',
+                fontSize: '16px',
+                color: selectedCount ? '#14231f' : '#789087',
+                backgroundColor: selectedCount ? '#d8c38c' : '#14231f',
+                padding: { x: 14, y: 7 },
+                align: 'center'
+            }
+        ).setOrigin(0.5).setDepth(9);
+        if (selectedCount) {
+            confirm.setInteractive({ useHandCursor: true });
+            confirm.on('pointerdown', () => {
+                const selectedNpcs = [...this.npcSystem.getAllNpcs().values()]
+                    .filter((npc) => this.selectedInviteIds.has(npc.id));
+                this.inviteNpcs(selectedNpcs);
+            });
+        }
+        this.inviteMenuObjects.push(confirm);
     }
 
-    async inviteNpc(npc) {
+    buildDualCultivationFallback(companions, result, cultivationBefore) {
+        const names = companions.map((npc) => npc.name).join('、');
+        if (!result.changed) {
+            const reason = result.reason === 'stamina'
+                ? '精力不足，灵台难以维持稳定'
+                : '修为已经接近瓶颈，灵气无法继续沉淀';
+            return [
+                `你与${names}在私人场景中盘膝相对，尝试引导灵息汇入经脉。`,
+                `可惜当前${reason}，几人的气息只在周身缓缓回旋，最终化作一阵清风散去。`,
+                `虽然这次未能取得修为进展，但彼此之间的默契并未消退，`,
+                `${names}也约定待你准备妥当后再继续这场修行。`
+            ].join('');
+        }
+        const resultText = cultivationBefore.canBreakthrough
+            ? `在灵息交汇到最深处时，你的境界壁垒应声而裂，终于踏入${result.snapshot.realmName}。`
+            : `一轮周天运行结束，你的经脉被温和的灵力洗涤，当前境界修为增加了${result.gain}点。`;
+        return [
+            `你带着${names}来到${this.locations[this.sceneIndex].name}，`,
+            '四周的灵花、竹影与水雾都在合修气机的牵引下缓慢改变。',
+            '众人没有急于催动灵力，而是先以神识确认彼此的节奏，',
+            '再让各自的真元沿着既定的周天交替流转。',
+            `${names}的气息一一融入阵势，时而如春水相逢，时而如月光映雪，`,
+            '原本散乱的灵息逐渐被整理成稳定而清澈的回路。',
+            '你在其中感受到同伴的信任，也察觉到自己的心境比独自修炼时更加澄明。',
+            resultText,
+            '余韵散去后，场景重新归于安静，几位伴侣仍在身旁调息，',
+            '彼此之间多了一份只有共同经历过这场修行才懂的默契。'
+        ].join('');
+    }
+
+    async inviteNpcs(npcs) {
         if (this.busy) return;
-        const affinity = window.GameAffinity.getSnapshot(npc.id);
-        if (affinity.affinity < 80) {
-            this.statusText.setText(`${npc.name} 当前还不愿与你进行双修。`).setVisible(true);
+        const companions = (npcs || []).filter(Boolean);
+        if (!companions.length) return;
+        const affinities = companions.map((npc) => window.GameAffinity.getSnapshot(npc.id));
+        const unavailable = affinities.find((affinity) => affinity.affinity < 80);
+        if (unavailable) {
+            this.statusText.setText('所选伴侣的好感度都需要达到 80 才能一同双修。')
+                .setVisible(true);
             return;
         }
+        this.selectedInviteIds.clear();
         this.inviteMenuVisible = false;
         this.inviteButton.setText('邀请伴侣');
         this.renderInvites();
         this.busy = true;
-        this.statusText.setText(`正在邀请${npc.name}，AI 正在生成双修剧情…`).setVisible(true);
+        const companionNames = companions.map((npc) => npc.name).join('、');
+        this.statusText.setText(
+            `正在邀请${companionNames}，AI 正在生成长篇双修剧情…`
+        ).setVisible(true);
         try {
             const cultivation = window.GameCultivation.getSnapshot();
             let result;
             if (cultivation.canBreakthrough) {
-                result = await window.GameCultivation.breakthrough(npc.id, affinity.affinity);
+                const lowestAffinity = Math.min(...affinities.map((item) => item.affinity));
+                result = await window.GameCultivation.breakthrough(
+                    companions[0].id,
+                    lowestAffinity
+                );
             } else if (Game.player.stamina > 0) {
                 Game.player.stamina -= 1;
                 result = await window.GameCultivation.addCultivationPercent(
-                    3, 'dual_cultivation'
+                    3 + Math.max(0, companions.length - 1),
+                    'dual_cultivation'
                 );
                 Game.EventBus.emit('player-state-changed', { player: { ...Game.player } });
             } else {
                 result = { changed: false, reason: 'stamina' };
             }
-            const fallback = result.changed
-                ? (cultivation.canBreakthrough
-                    ? `你与${npc.name}完成双修，成功突破至${result.snapshot.realmName}。`
-                    : `你与${npc.name}静心双修，当前境界修为增加 ${result.gain}。`)
-                : (result.reason === 'stamina'
-                    ? '精力不足，暂时无法维持双修。'
-                    : '当前修为状态暂时不适合继续双修。');
+            if (result.changed) {
+                this.invitedNpcs = companions.slice();
+                this.talkButton.setVisible(true);
+                this.talkMenuVisible = false;
+                this.renderTalkMenu();
+            }
+            const fallback = this.buildDualCultivationFallback(
+                companions,
+                result,
+                cultivation
+            );
+            this.storyText.setText('灵息正在交汇，AI 正在续写这场合修…').setVisible(true);
             const story = await window.GameNarrative.generateDetailed('dual_cultivation', {
-                npc: npc.name,
-                npcTitle: npc.title,
-                npcRealm: npc.realm_label,
-                affinity: affinity.affinity,
+                companions: companions.map((npc, index) => ({
+                    name: npc.name,
+                    title: npc.title,
+                    realm: npc.realm_label,
+                    affinity: affinities[index].affinity,
+                    personality: npc.personality
+                })),
                 playerRealm: window.GameCultivation.getSnapshot().label,
+                playerStamina: `${Game.player.stamina}/${Game.player.maxStamina}`,
+                companionCount: companions.length,
                 result: fallback
-            }, fallback);
+            }, fallback, (text) => {
+                if (this.storyText?.active) this.storyText.setText(text);
+            });
             window.GameAudio.sfx(result.changed ? 'success' : 'deny');
-            this.statusText.setText(`${npc.name}：${story}`).setVisible(true);
+            this.statusText.setVisible(false);
+            this.storyText.setText(story).setVisible(true);
         } catch (error) {
-            console.error('私人场景双修失败:', error.code || '', error.message, error.stack);
+            console.error('私人场景合修失败:', error.code || '', error.message, error.stack);
             this.statusText.setText('双修暂时无法完成，请稍后再试。').setVisible(true);
         } finally {
             this.busy = false;
             this.renderInvites();
         }
+    }
+
+    renderTalkMenu() {
+        this.talkMenuObjects.forEach((object) => object.destroy());
+        this.talkMenuObjects = [];
+        this.talkMenuPanel?.setVisible(this.talkMenuVisible && this.invitedNpcs.length > 0);
+        if (!this.talkMenuVisible || !this.invitedNpcs.length) return;
+        this.talkMenuObjects.push(this.add.text(1036, 300, '选择交谈对象', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '19px',
+            color: '#f4ead2'
+        }).setOrigin(0.5).setDepth(9));
+        this.invitedNpcs.forEach((npc, index) => {
+            const affinity = window.GameAffinity.getSnapshot(npc.id);
+            const button = this.add.text(900 + (index % 3) * 142, 355 + Math.floor(index / 3) * 58,
+                `${npc.name}\n好感 ${affinity.affinity}`, {
+                    fontFamily: '"Noto Serif SC", serif',
+                    fontSize: '16px',
+                    color: '#14231f',
+                    backgroundColor: '#d8c38c',
+                    padding: { x: 12, y: 7 },
+                    align: 'center'
+                }).setOrigin(0.5).setDepth(9).setInteractive({ useHandCursor: true });
+            button.on('pointerdown', () => this.talkToCompanion(npc));
+            this.talkMenuObjects.push(button);
+        });
+    }
+
+    talkToCompanion(npc) {
+        if (!npc || this.busy) return;
+        this.talkMenuVisible = false;
+        this.renderTalkMenu();
+        window.GameAudio.sfx('click');
+        window.GameModelUI.setMode('compact');
+        const gameScene = this.scene.get('GameScene');
+        gameScene.dialogueSystem?.startDialogue(npc.id, {
+            building: { name: this.locations[this.sceneIndex].name }
+        });
     }
 
     close() {

@@ -37,6 +37,7 @@
   function buildPrompt(kind, context) {
     const facts = JSON.stringify(context || {}).slice(0, 2400);
     const npcMode = kind === 'npc_encounter';
+    const longMode = kind === 'dual_cultivation';
     return [
       npcMode
         ? '你正在扮演遭遇信息中的成年女性NPC。'
@@ -44,7 +45,9 @@
       `当前事件：${eventNames[kind] || kind}。`,
       `已经确定的事实与数值：${facts}`,
       '不得修改、虚构或重新计算任何属性、伤害、奖励、好感和修为数值。',
-      npcMode
+      longMode
+        ? '请输出一段260至420字的完整剧情，描写灵气运转、场景氛围、人物配合、情绪变化和双修后的余韵。双修是仙侠修行仪式，保持含蓄克制，不描写露骨内容，不替玩家做出选择。'
+        : npcMode
         ? '严格结合NPC身份、性格、地点与当前关系，直接对玩家说一句45至90字的话。'
         : '结合人物身份、境界、地点和行动，输出一小段45至90字的中文剧情。',
       '保持合欢宗仙侠世界观，不解释规则，不输出标题、列表、引号或选项。'
@@ -58,7 +61,7 @@
     try {
       const result = await completions.run({
         messages: [{ role: 'user', content: buildPrompt(kind, context) }],
-        maxTokens: 220,
+        maxTokens: kind === 'dual_cultivation' ? 720 : 220,
         timeoutFallback: localText,
         onUpdate(fullText) {
           finalText = clean(fullText, localText);
@@ -79,8 +82,8 @@
 
   root.GameNarrative = {
     generate,
-    generateDetailed: async (kind, context, fact) => compose(
-      await generate(kind, context, fact),
+    generateDetailed: async (kind, context, fact, onUpdate) => compose(
+      await generate(kind, context, fact, onUpdate),
       fact
     ),
     compose,
