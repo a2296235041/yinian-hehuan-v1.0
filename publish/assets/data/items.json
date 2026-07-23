@@ -1,0 +1,74 @@
+[
+  {
+    "id": "spirit_herb",
+    "name": "凝露灵草",
+    "type": "gift",
+    "rarity": "普通",
+    "description": "带着清晨露水的温和灵草，可入药也可赠人。",
+    "gift_affinity": 2,
+    "initial_quantity": 4
+  },
+  {
+    "id": "fragrant_jade",
+    "name": "凝香玉佩",
+    "type": "gift",
+    "rarity": "精良",
+    "description": "温润玉佩中封存着淡雅花香，是稳妥的见面礼。",
+    "gift_affinity": 3,
+    "initial_quantity": 2
+  },
+  {
+    "id": "peach_wine",
+    "name": "百年桃花酿",
+    "type": "gift",
+    "rarity": "精良",
+    "description": "入口绵甜、灵气悠长，适合与知己共饮。",
+    "gift_affinity": 4,
+    "initial_quantity": 1
+  },
+  {
+    "id": "moon_silk",
+    "name": "月华灵绸",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "月下才会泛起银辉的轻柔灵绸。",
+    "gift_affinity": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "frost_lotus",
+    "name": "玄霜莲",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "生于极寒之地，莲心蕴含澄澈灵力。",
+    "gift_affinity": 6,
+    "initial_quantity": 0
+  },
+  {
+    "id": "beast_core",
+    "name": "凶兽内丹",
+    "type": "material",
+    "rarity": "精良",
+    "description": "凶兽体内凝成的灵力结晶，可用于炼丹与炼器。",
+    "gift_affinity": 2,
+    "initial_quantity": 0
+  },
+  {
+    "id": "star_fragment",
+    "name": "星陨残片",
+    "type": "material",
+    "rarity": "珍稀",
+    "description": "从天外坠落的奇异矿石，触碰时仍有微光流转。",
+    "gift_affinity": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "void_orchid",
+    "name": "太虚幽兰",
+    "type": "gift",
+    "rarity": "传说",
+    "description": "只在空间裂隙附近短暂开放的罕见灵花。",
+    "gift_affinity": 8,
+    "initial_quantity": 0
+  }
+]

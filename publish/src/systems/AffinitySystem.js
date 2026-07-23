@@ -4,12 +4,11 @@
   const MAX_AFFINITY = 100;
   const DIALOGUE_LIMIT = 5;
   const GIFT_LIMIT = 1;
-  const GIFT_GAIN = 3;
+  const DEFAULT_GIFT_GAIN = 3;
   const initialAffinity = new Map();
   let state = { day: 1, records: {} };
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
-
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, Number(value) || 0));
   }
@@ -138,10 +137,12 @@
     });
   }
 
-  function giveGift(id) {
+  // 礼物的好感收益由物品配置决定，但每天一次的限制仍由本系统统一校验。
+  function giveGift(id, gain = DEFAULT_GIFT_GAIN) {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       const record = ensureRecord(id);
+      const affinityGain = clamp(gain, 1, 10);
       if (record.giftDay !== state.day) {
         record.giftDay = state.day;
         record.gifts = 0;
@@ -151,10 +152,23 @@
       }
       record.giftDay = state.day;
       record.gifts = 1;
-      record.affinity = clamp(record.affinity + GIFT_GAIN, -100, MAX_AFFINITY);
+      record.affinity = clamp(record.affinity + affinityGain, -100, MAX_AFFINITY);
       const durable = await persist(true);
-      emitChange(id, GIFT_GAIN, 'gift', durable);
-      return { changed: true, durable, snapshot: getSnapshot(id) };
+      emitChange(id, affinityGain, 'gift', durable);
+      return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
+    });
+  }
+
+  // 探险偶遇属于额外奖励，不占用每天 5 次交谈或 1 次赠礼额度。
+  function addBonus(id, gain, source = 'exploration') {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      const affinityGain = clamp(gain, 1, 10);
+      const record = ensureRecord(id);
+      record.affinity = clamp(record.affinity + affinityGain, -100, MAX_AFFINITY);
+      const durable = await persist(false);
+      emitChange(id, affinityGain, source, durable);
+      return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
     });
   }
 
@@ -175,11 +189,12 @@
     getSnapshot,
     recordDialogue,
     giveGift,
+    addBonus,
     advanceDay,
     limits: Object.freeze({
       dialogue: DIALOGUE_LIMIT,
       gifts: GIFT_LIMIT,
-      giftGain: GIFT_GAIN
+      giftGain: DEFAULT_GIFT_GAIN
     })
   };
 }(window));

@@ -7,6 +7,7 @@
                  interactive-widget=resizes-content, user-scalable=no">
   <title>一念逍遥，一念合欢</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./ui.css">
 </head>
 <body>
   <main id="game-shell">
@@ -66,6 +67,14 @@
         <img id="ai-image" alt="" hidden>
       </div>
     </section>
+    <section id="gift-modal" class="gift-modal" hidden>
+      <div class="gift-content">
+        <button id="gift-close" class="gift-close" type="button" aria-label="关闭赠礼">×</button>
+        <h2>选择赠礼</h2>
+        <div id="gift-list" class="gift-list"></div>
+        <p id="gift-empty" class="gift-empty" hidden>储物袋中暂无可赠送的物品。</p>
+      </div>
+    </section>
     <section id="boot-error" class="boot-error" hidden>
       <h1>游戏未能启动</h1>
       <p id="boot-error-message">请刷新后重试。</p>
@@ -84,12 +93,15 @@
   <script src="./src/storage/VersionedStorage.js"></script>
   <script src="./src/data/BuildingData.js"></script>
   <script src="./src/systems/AffinitySystem.js"></script>
+  <script src="./src/systems/InventorySystem.js"></script>
+  <script src="./src/systems/GiftSystem.js"></script>
   <script src="./src/ai/AIModels.js"></script>
   <script src="./src/ai/ModelUI.js"></script>
   <script src="./src/ai/DialoguePrompts.js"></script>
   <script src="./src/ai/AIImageService.js"></script>
   <script src="./src/ai/AIService.js"></script>
   <script src="./src/ai/DialoguePanel.js"></script>
+  <script src="./src/ui/GiftPanel.js"></script>
   <script src="./src/systems/NPCSystem.js"></script>
   <script src="./src/systems/DialogueSystem.js"></script>
   <script src="./src/scenes/BootScene.js"></script>

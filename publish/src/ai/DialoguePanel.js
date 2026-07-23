@@ -127,7 +127,7 @@
       input.value = '';
       root.GameAI.send(text);
     });
-    giftButton.addEventListener('click', () => root.GameAI.giveGift());
+    giftButton.addEventListener('click', () => root.GameGiftPanel.open(currentNpcId));
     drawButton.addEventListener('click', () => root.GameAI.generateImage());
     document.getElementById('dialogue-close').addEventListener('click', closeFromGame);
     document.getElementById('ai-image-close').addEventListener('click', () => {

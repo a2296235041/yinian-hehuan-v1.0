@@ -26,6 +26,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             maxDailyCultivation: 5,
             dailyCultivationCount: 5
         };
+        Game.inventoryReady = window.GameInventory.initialize(this.cache.json.get('items') || []);
         this.npcSystem = new Game.NPCSystem(this);
         this.npcSystem.init();
         this.npcSystem.ready().then(() => {

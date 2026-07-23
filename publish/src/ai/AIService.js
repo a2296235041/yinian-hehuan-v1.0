@@ -11,9 +11,7 @@
     timeoutMs: 60_000,
     timeoutFallback: '她沉默片刻，似乎正在斟酌接下来该说什么。'
   });
-  function affinityFor(session) {
-    return root.GameAffinity.getSnapshot(session.npc.id);
-  }
+  function affinityFor(session) { return root.GameAffinity.getSnapshot(session.npc.id); }
   function emitRender() {
     if (!current) return;
     root.Game.EventBus.emit('ai-dialogue-render', {
@@ -149,34 +147,41 @@
       emitStatus('error', errorMessage(error));
     }
   }
-
-  async function giveGift() {
-    if (!current) return;
+  async function giveGift(itemId, npcId) {
+    if (!current || current.npc.id !== npcId) return;
     if (completions.isBusy()) {
       emitStatus('busy', '请等当前回复结束后再赠礼。');
       return;
     }
     const session = current;
-    const result = await root.GameAffinity.giveGift(session.npc.id);
+    const result = await root.GameGift.give(session.npc.id, itemId);
     if (current !== session) return;
+    const failedMessages = {
+      busy: '赠礼正在处理中，请稍候。',
+      daily_limit: '今日已经赠送过礼物了。',
+      insufficient: '这件物品的数量不足。',
+      invalid_item: '这件物品无法赠送。'
+    };
     const giftMessage = result.changed
-      ? `赠礼好感 +${root.GameAffinity.limits.giftGain}${result.durable ? '' : '，本次进度暂未同步'}`
-      : '今日已经赠送过礼物了';
-    root.Game.EventBus.emit('affinity-notice', {
-      snapshot: result.snapshot,
-      message: giftMessage
-    });
+      ? `赠送${result.item.name}，好感 +${result.gain}${result.durable ? '' : '，本次进度暂未同步'}`
+      : (failedMessages[result.reason] || '赠礼失败，请稍后重试。');
+    if (result.snapshot) {
+      root.Game.EventBus.emit('affinity-notice', {
+        snapshot: result.snapshot,
+        message: giftMessage
+      });
+    }
     if (!result.changed) {
       root.GameAudio.sfx('deny');
+      emitStatus('error', giftMessage);
       return;
     }
-    await sendMessage('我送你一枚凝香玉佩，聊表心意。', {
-      displayContent: '你赠送了一枚凝香玉佩。',
+    await sendMessage(`我送你${result.item.name}，聊表心意。`, {
+      displayContent: `你赠送了${result.item.name}。`,
       affinityEligible: false,
       successMessage: giftMessage
     });
   }
-
   function closeDialogue() {
     completions.cancel();
     root.GameAIImage.cancel();
@@ -184,7 +189,6 @@
     draft = '';
     root.Game.EventBus.emit('ai-dialogue-close');
   }
-
   root.GameAI = {
     startDialogue,
     send: (text) => sendMessage(text),

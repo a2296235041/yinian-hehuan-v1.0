@@ -4,6 +4,7 @@
   try {
     root.GameModelUI.init();
     root.GameDialoguePanel.init();
+    root.GameGiftPanel.init();
     root.GameAIModels.initialize().catch((error) => {
       console.error('AI 模型初始化失败:', error.code || '', error.message, error.stack);
     });
