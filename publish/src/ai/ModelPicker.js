@@ -13,7 +13,7 @@ function createModelPicker({ dzmmRef = () => root.dzmm, storageKey = 'model-choi
   }
 
   function localStore() {
-    try { return root.localStorage || null; } catch { return null; }
+    return root.PlatformBridge?.getLocalStorage?.() || null;
   }
 
   function unwrap(value) {

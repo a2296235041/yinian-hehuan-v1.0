@@ -13,7 +13,7 @@
     const migrations = isPlainRecord(options.migrations) ? options.migrations : {};
     const sanitize = typeof options.sanitize === 'function' ? options.sanitize : value => value;
     const dzmmRef = typeof options.dzmmRef === 'function' ? options.dzmmRef : () => root.dzmm;
-    const localStorageRef = typeof options.localStorageRef === 'function' ? options.localStorageRef : () => root.localStorage;
+    const localStorageRef = typeof options.localStorageRef === 'function' ? options.localStorageRef : () => root.PlatformBridge?.getLocalStorage?.();
     const readTimeoutMs = Math.max(100, Math.min(5000, Number(options.readTimeoutMs) || 1200));
     const writeTimeoutMs = Math.max(100, Math.min(5000, Number(options.writeTimeoutMs) || 1500));
     const maxBytes = Math.min(PLATFORM_MAX_KV_BYTES, Math.max(1024, Number(options.maxBytes) || 512 * 1024));

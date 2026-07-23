@@ -6,24 +6,37 @@
   let status;
   let buttons = [];
   let resizeFrame = 0;
+  let resizeTimer = 0;
+  let resizeObserver;
+  let orientationQuery;
+  let selecting = false;
 
   function currentOrientation() {
-    const type = root.screen?.orientation?.type || '';
-    if (type.startsWith('portrait')) return 'portrait';
-    if (type.startsWith('landscape')) return 'landscape';
-    return root.innerWidth >= root.innerHeight ? 'landscape' : 'portrait';
+    const viewport = root.visualViewport;
+    const width = Math.max(1, Number(viewport?.width) || root.innerWidth || 1);
+    const height = Math.max(1, Number(viewport?.height) || root.innerHeight || 1);
+    return width >= height ? 'landscape' : 'portrait';
   }
 
   /**
-   * Phaser 使用 FIT 缩放。手机旋转后主动刷新 ScaleManager，
-   * 避免画布继续沿用旋转前的尺寸而出现留白、裁切或点击坐标偏移。
+   * 手机旋转和进入全屏时，浏览器可能分几次更新可视区域。
+   * 先在下一帧刷新，再延迟补一次，避免 Phaser 读到旧尺寸。
    */
   function refreshGameScale() {
     if (resizeFrame) root.cancelAnimationFrame(resizeFrame);
+    if (resizeTimer) root.clearTimeout(resizeTimer);
     resizeFrame = root.requestAnimationFrame(() => {
       resizeFrame = 0;
-      root.game?.scale?.refresh?.();
+      const scale = root.game?.scale;
+      scale?.updateBounds?.();
+      scale?.refresh?.();
     });
+    resizeTimer = root.setTimeout(() => {
+      resizeTimer = 0;
+      const scale = root.game?.scale;
+      scale?.updateBounds?.();
+      scale?.refresh?.();
+    }, 240);
   }
 
   function render(message = '') {
@@ -32,33 +45,58 @@
     buttons.forEach((button) => {
       const selected = button.dataset.orientation === preferred;
       button.setAttribute('aria-pressed', String(selected));
+      button.disabled = selecting;
     });
+    if (!status) return;
     if (message) {
       status.textContent = message;
     } else if (actual === preferred) {
-      status.textContent = preferred === 'landscape' ? '当前为横屏布局' : '当前为竖屏布局';
+      status.textContent = preferred === 'landscape' ? '横屏已适配' : '竖屏已适配';
     } else {
       status.textContent = preferred === 'landscape'
-        ? '请将手机横向旋转'
-        : '请将手机竖向旋转';
+        ? '请横向旋转手机'
+        : '请竖向旋转手机';
     }
     refreshGameScale();
   }
 
   /**
-   * 屏幕锁定接口在部分 iframe 或非全屏浏览器中会被拒绝。
-   * 失败时保留响应式布局并提示手动旋转，不让设置操作导致脚本异常。
+   * Android 浏览器通常要求先进入全屏，才能锁定屏幕方向。
+   * 平台或 iOS 不支持时退回手动旋转，所有受限 API 都在 try-catch 内执行。
    */
   async function select(next) {
+    if (selecting) return;
     preferred = next === 'portrait' ? 'portrait' : 'landscape';
     render();
-    const orientation = root.screen?.orientation;
-    if (typeof orientation?.lock !== 'function') return;
+    if (currentOrientation() === preferred) return;
+    selecting = true;
+    render(preferred === 'landscape' ? '正在切换横屏…' : '正在切换竖屏…');
+    let locked = false;
     try {
-      await orientation.lock(preferred);
-      render();
-    } catch (_) {
-      render(preferred === 'landscape' ? '请手动横向旋转手机' : '请手动竖向旋转手机');
+      const page = document.documentElement;
+      if (!document.fullscreenElement && typeof page.requestFullscreen === 'function') {
+        try {
+          await page.requestFullscreen({ navigationUI: 'hide' });
+        } catch (error) {
+          console.info('平台未允许子页面进入全屏:', error.message || '权限受限');
+        }
+      }
+      const orientation = root.screen && root.screen.orientation;
+      if (typeof orientation?.lock === 'function') {
+        await orientation.lock(preferred);
+        locked = true;
+      }
+    } catch (error) {
+      console.info('浏览器未允许自动切换方向:', error.message || '权限受限');
+    } finally {
+      selecting = false;
+      if (locked || currentOrientation() === preferred) {
+        render();
+      } else {
+        render(preferred === 'landscape'
+          ? '请进入全屏并横向旋转'
+          : '请进入全屏并竖向旋转');
+      }
     }
   }
 
@@ -73,11 +111,24 @@
     buttons = Array.from(document.querySelectorAll('.orientation-segment [data-orientation]'));
     preferred = currentOrientation();
     buttons.forEach((button) => {
-      button.addEventListener('click', () => select(button.dataset.orientation));
+      button.addEventListener('click', () => {
+        select(button.dataset.orientation).catch((error) => {
+          selecting = false;
+          console.error('切换显示方向失败:', error.message, error.stack);
+          render('方向切换失败，请手动旋转');
+        });
+      });
     });
     root.addEventListener('resize', handleResize);
     root.addEventListener('orientationchange', handleResize);
-    root.screen?.orientation?.addEventListener?.('change', handleResize);
+    root.visualViewport?.addEventListener?.('resize', handleResize);
+    document.addEventListener('fullscreenchange', handleResize);
+    orientationQuery = root.matchMedia?.('(orientation: landscape)');
+    orientationQuery?.addEventListener?.('change', handleResize);
+    if (typeof root.ResizeObserver === 'function') {
+      resizeObserver = new root.ResizeObserver(handleResize);
+      resizeObserver.observe(document.getElementById('game-shell'));
+    }
     render();
   }
 
