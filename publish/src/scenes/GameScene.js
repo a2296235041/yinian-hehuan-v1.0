@@ -77,7 +77,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
             portrait.on('pointerdown', () => {
                 window.GameAudio.sfx('click');
-                this.tweens.add({ targets: [portrait, frame], scale: 0.96, duration: 80, yoyo: true });
+                this.tweens.add({ targets: frame, alpha: 0.5, duration: 80, yoyo: true });
                 this.dialogueSystem.startDialogue(npc.id);
             });
         });
