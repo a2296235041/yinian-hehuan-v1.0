@@ -1,0 +1,46 @@
+{
+  "start_node": "greeting_1",
+  "nodes": {
+    "greeting_1": {
+      "npc_text": "站住。新来的？宗门规矩可曾熟读？若有半分懈怠，休怪我手中的戒律鞭不认人。",
+      "player_options": [
+        {
+          "text": "弟子不敢懈怠，定将宗规牢记于心。",
+          "next_node": "response_compliant",
+          "affinity_change": 5
+        },
+        {
+          "text": "规矩是死的，人是活的，长老何必如此严苛？",
+          "next_node": "response_rebellious",
+          "affinity_change": -10
+        },
+        {
+          "text": "……",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_compliant": {
+      "npc_text": "最好如此。我的眼睛会一直盯着你们这些新人。别犯错。",
+      "player_options": [
+        {
+          "text": "是，长老。",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_rebellious": {
+      "npc_text": "放肆！看来你需要先尝尝戒律鞭的滋味，才能学会什么叫规矩！",
+      "player_options": [
+        {
+          "text": "（看来暂时还是不要惹她为好）",
+          "next_node": "end"
+        }
+      ]
+    },
+    "end": {
+      "npc_text": null,
+      "end_dialogue": true
+    }
+  }
+}

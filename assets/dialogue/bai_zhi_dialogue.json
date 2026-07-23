@@ -1,0 +1,53 @@
+{
+  "start_node": "greeting_1",
+  "nodes": {
+    "greeting_1": {
+      "npc_text": "……",
+      "player_options": [
+        {
+          "text": "前辈，弟子无意打扰，只是误入此地。",
+          "next_node": "response_apologize"
+        },
+        {
+          "text": "前辈为何在此独居？",
+          "next_node": "response_question"
+        },
+        {
+          "text": "（静静地看着她）",
+          "next_node": "response_silent"
+        }
+      ]
+    },
+    "response_apologize": {
+      "npc_text": "……出去。",
+      "player_options": [
+        {
+          "text": "是。",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_question": {
+      "npc_text": "与你无关。",
+      "player_options": [
+        {
+          "text": "……",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_silent": {
+      "npc_text": "（她似乎看了你一眼，但又好像没有）",
+      "player_options": [
+        {
+          "text": "（还是先离开吧）",
+          "next_node": "end"
+        }
+      ]
+    },
+    "end": {
+      "npc_text": null,
+      "end_dialogue": true
+    }
+  }
+}
