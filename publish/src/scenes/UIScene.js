@@ -105,7 +105,13 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             padding: { x: 20, y: 12 },
             align: 'center',
             wordWrap: { width: 820 }
-        }).setOrigin(0.5).setAlpha(0);
+        }).setOrigin(0.5).setAlpha(0).setVisible(false)
+            .setInteractive({ useHandCursor: true });
+        this.logText.on('pointerdown', (pointer, localX, localY, event) => {
+            event?.stopPropagation?.();
+            this.tweens.killTweensOf(this.logText);
+            this.logText.setAlpha(0).setVisible(false);
+        });
     }
     async openOverlay(sceneKey) {
         if (this.overlayOpening || this.scene.isActive(sceneKey)) return;
@@ -295,14 +301,16 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.detailText.setText(lines.join('\n'));
     }
     showLog(message) {
-        this.logText.setText(message).setAlpha(1);
+        this.logText.setText(message).setAlpha(1).setVisible(true);
+        this.logText.input?.hitArea?.setTo?.(0, 0, this.logText.width, this.logText.height);
         this.tweens.killTweensOf(this.logText);
         this.tweens.add({
             targets: this.logText,
             alpha: 0,
-            delay: 1300,
+            delay: 2300,
             duration: 450,
-            ease: 'Power2'
+            ease: 'Power2',
+            onComplete: () => this.logText?.setVisible(false)
         });
     }
 
