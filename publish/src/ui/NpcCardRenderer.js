@@ -13,6 +13,7 @@ Game.NpcCardRenderer = {
         if (npcId === 'yun_shuiyao') return './assets/generated/npc-yun-shuiyao.png';
         if (npcId === 'mo_qiaoer') return './assets/generated/npc-mo-qiaoer.png';
         if (npcId === 'bai_zhi') return './assets/generated/npc-bai-zhi.png';
+        if (npcId === 'qin_wanqing') return './assets/generated/npc-qin-wanqing.png';
         if (npcId === 'xiao_qingxuan') {
             return './assets/generated/npc-xiao-qingxuan.png';
         }
@@ -27,6 +28,7 @@ Game.NpcCardRenderer = {
         if (npcId === 'yun_shuiyao') return 'npc-yun-shuiyao';
         if (npcId === 'mo_qiaoer') return 'npc-mo-qiaoer';
         if (npcId === 'bai_zhi') return 'npc-bai-zhi';
+        if (npcId === 'qin_wanqing') return 'npc-qin-wanqing';
         if (npcId === 'xiao_qingxuan') {
             return 'npc-xiao-qingxuan';
         }
