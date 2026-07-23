@@ -265,6 +265,8 @@ body {
   z-index: 6;
   inset: 0;
   background: transparent;
+  pointer-events: auto;
+  touch-action: none;
 }
 
 .dialogue-blocker[hidden] {

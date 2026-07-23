@@ -179,6 +179,8 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             padding: { x: 15, y: 9 }
         }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
         button.on('pointerdown', () => {
+            // 对话层打开时禁止处理地图按钮，防止移动端同一触摸事件点穿。
+            if (window.GameAI.isDialogueActive()) return;
             window.GameAudio.sfx('click');
             this.showSectMap();
         });

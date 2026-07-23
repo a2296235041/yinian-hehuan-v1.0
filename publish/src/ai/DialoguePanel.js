@@ -24,9 +24,43 @@
   let currentAffinity = null;
   let chatBusy = false;
   let imageBusy = false;
+  let gameInputEnabled = null;
+  const sceneInputStates = new Map();
   let renderedMessageCount = 0;
   let draftBubble = null;
   let renderedNpcId = null;
+
+  /**
+   * DOM 对话框位于 Phaser 画布上方，但移动端浏览器仍可能把同一次触摸
+   * 交给 Phaser 的画布输入。对话期间直接停用 Phaser 输入，彻底避免点穿。
+   */
+  function lockGameInput() {
+    const game = root.game;
+    if (!game) return;
+    if (game.input && gameInputEnabled === null) {
+      gameInputEnabled = game.input.enabled;
+      game.input.enabled = false;
+    }
+    const scenes = game.scene?.getScenes?.(false) || [];
+    scenes.forEach((scene) => {
+      if (!scene?.input || sceneInputStates.has(scene)) return;
+      sceneInputStates.set(scene, scene.input.enabled);
+      scene.input.enabled = false;
+    });
+  }
+
+  /**
+   * 恢复各场景在打开对话前的输入状态，避免把原本暂停的场景错误启用。
+   */
+  function unlockGameInput() {
+    const game = root.game;
+    sceneInputStates.forEach((enabled, scene) => {
+      if (scene?.input) scene.input.enabled = enabled;
+    });
+    sceneInputStates.clear();
+    if (game?.input && gameInputEnabled !== null) game.input.enabled = gameInputEnabled;
+    gameInputEnabled = null;
+  }
 
   function refreshControls() {
     sendButton.disabled = chatBusy;
@@ -198,6 +232,7 @@
     });
 
     root.Game.EventBus.on('ai-dialogue-open', (data) => {
+      lockGameInput();
       panel.hidden = false;
       dialogueBlocker.hidden = false;
       portraitModal.hidden = true;
@@ -227,6 +262,7 @@
       if (currentNpcId) renderAffinity(root.GameAffinity.getSnapshot(currentNpcId));
     });
     root.Game.EventBus.on('ai-dialogue-close', () => {
+      unlockGameInput();
       panel.hidden = true;
       dialogueBlocker.hidden = true;
       portraitModal.hidden = true;
