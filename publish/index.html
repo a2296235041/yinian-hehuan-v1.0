@@ -37,6 +37,11 @@
           <select id="draw-model" aria-label="绘图模型"></select>
         </label>
         <small id="model-status">正在读取可用模型…</small>
+        <div id="settings-save-actions" class="settings-save-actions" hidden>
+          <button id="settings-save" type="button">存档</button>
+          <button id="settings-load" type="button">读档</button>
+          <small id="settings-save-status" aria-live="polite">正在读取存档…</small>
+        </div>
       </div>
     </section>
     <section id="ai-dialogue-panel" class="ai-dialogue-panel" hidden>
@@ -94,6 +99,7 @@
   <script src="./src/storage/VersionedStorage.js"></script>
   <script src="./src/data/BuildingData.js"></script>
   <script src="./src/data/CultivationData.js"></script>
+  <script src="./src/systems/AffinityState.js"></script>
   <script src="./src/systems/AffinitySystem.js"></script>
   <script src="./src/systems/InventorySystem.js"></script>
   <script src="./src/systems/GiftSystem.js"></script>
@@ -102,6 +108,7 @@
   <script src="./src/systems/CombatSystem.js"></script>
   <script src="./src/systems/ExplorationSystem.js"></script>
   <script src="./src/systems/PlayerStateSystem.js"></script>
+  <script src="./src/systems/SaveGameSystem.js"></script>
   <script src="./src/ai/AIModels.js"></script>
   <script src="./src/ai/NarrativeService.js"></script>
   <script src="./src/ai/BattleNarrator.js"></script>
@@ -114,6 +121,7 @@
   <script src="./src/ai/DialoguePanel.js"></script>
   <script src="./src/ui/GiftPanel.js"></script>
   <script src="./src/ui/BreakthroughController.js"></script>
+  <script src="./src/ui/SaveGameUI.js"></script>
   <script src="./src/ui/BattleUI.js"></script>
   <script src="./src/systems/NPCSystem.js"></script>
   <script src="./src/systems/DialogueSystem.js"></script>

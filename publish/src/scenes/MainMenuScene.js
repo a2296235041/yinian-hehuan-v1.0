@@ -51,6 +51,8 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             });
         });
 
+        this.createLoadButton(width, height);
+
         this.add.text(width / 2, height - 44, '点击人物交谈，修炼并推进时日', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
@@ -59,5 +61,45 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
 
         this.game.canvas.setAttribute('aria-label', '一念逍遥，一念合欢主菜单');
         requestAnimationFrame(() => window.PlatformBridge.ready());
+    }
+
+    createLoadButton(width, height) {
+        const button = this.add.text(width / 2, height / 2 + 142, '读档', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '22px',
+            color: '#f4ead2',
+            backgroundColor: '#14231f',
+            padding: { x: 26, y: 11 }
+        }).setOrigin(0.5).setAlpha(0.5);
+        window.GameSave.getStatus().then((status) => {
+            if (!button.active) return;
+            if (!status.hasSave) {
+                button.setText('暂无存档');
+                return;
+            }
+            button.setText(`读档 · 第 ${status.day} 天`);
+            button.setAlpha(1).setInteractive({ useHandCursor: true });
+            button.on('pointerdown', () => this.loadGame(button));
+        }).catch((error) => {
+            console.error('读取存档状态失败:', error.code || '', error.message, error.stack);
+            if (button.active) button.setText('读档不可用');
+        });
+    }
+
+    async loadGame(button) {
+        if (button.getData('busy')) return;
+        button.setData('busy', true).disableInteractive().setText('读档中…');
+        window.GameAudio.start();
+        window.GameAudio.sfx('click');
+        try {
+            const snapshot = await window.GameSave.loadSlot();
+            const origins = this.cache.json.get('character_origins') || [];
+            const origin = origins.find((item) => item.id === snapshot.player.origin.id);
+            if (!origin) throw new Error('存档中的玩家身份已失效');
+            this.scene.start('GameScene', { playerOrigin: origin, saveSnapshot: snapshot });
+        } catch (error) {
+            console.error('开始页读档失败:', error.code || '', error.message, error.stack);
+            button.setData('busy', false).setText('读档失败').setInteractive({ useHandCursor: true });
+        }
     }
 };

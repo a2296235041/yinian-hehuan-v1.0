@@ -9,10 +9,12 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.dialogueSystem = null;
         this.viewObjects = [];
         this.currentBuilding = null;
+        this.savedSnapshot = null;
     }
 
     init(data) {
         this.playerData = data.playerOrigin || null;
+        this.savedSnapshot = data.saveSnapshot || null;
     }
 
     create() {
@@ -22,11 +24,15 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         Game.systemsReady = window.GamePlayerState.initialize(
             this,
             this.playerData,
-            this.npcSystem
+            this.npcSystem,
+            this.savedSnapshot
         );
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         this.showSectMap();
         this.scene.launch('UIScene');
+        if (this.savedSnapshot) {
+            Game.systemsReady.then(() => this.showSavedLocation(this.savedSnapshot.location));
+        }
     }
 
     addViewObject(object) {
@@ -121,6 +127,12 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         const gap = 270;
         const startX = 640 - ((npcs.length - 1) * gap) / 2;
         npcs.forEach((npc, index) => this.createNpcCard(npc, startX + index * gap));
+    }
+
+    showSavedLocation(location) {
+        const building = Game.Data.buildings.find((item) => item.id === location?.buildingId);
+        if (building) this.showBuilding(building);
+        else this.showSectMap();
     }
 
     createBackButton() {

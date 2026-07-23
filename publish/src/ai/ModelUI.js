@@ -85,6 +85,7 @@
     toggle.addEventListener('click', () => {
       open = !open;
       refreshMode();
+      if (open) root.GameSaveUI?.refresh();
     });
     dialogueSelect.addEventListener('change', () => {
       root.GameAIModels.selectDialogueModel(dialogueSelect.value);
@@ -115,6 +116,11 @@
       mode = nextMode === 'hidden' ? 'hidden' : 'compact';
       open = false;
       refreshMode();
+    },
+    close() {
+      open = false;
+      refreshMode();
+      toggle?.focus();
     }
   };
 }(window));

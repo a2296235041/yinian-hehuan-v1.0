@@ -128,12 +128,28 @@
     });
   }
 
+  function exportState() {
+    return { realmIndex: state.realmIndex, progress: state.progress };
+  }
+
+  function restore(nextState) {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      state = sanitize(nextState);
+      const durable = await persist(true);
+      emitChange(0, 'load', durable);
+      return { durable, snapshot: snapshot() };
+    });
+  }
+
   root.GameCultivation = {
     initialize,
     ready: () => readyPromise || Promise.resolve(snapshot()),
     getSnapshot: snapshot,
     getRealmName: (index) => levels[index]?.name || '未知境界',
     addCultivation,
-    breakthrough
+    breakthrough,
+    exportState,
+    restore
   };
 }(window));

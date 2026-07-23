@@ -127,6 +127,20 @@
     });
   }
 
+  function exportState() {
+    return { quantities: { ...state.quantities } };
+  }
+
+  function restore(nextState) {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      state = sanitize(nextState);
+      const durable = await persist(true);
+      emitChange(null, 0, durable, 'load');
+      return { durable, snapshot: snapshot() };
+    });
+  }
+
   root.GameInventory = {
     initialize,
     ready: () => readyPromise || Promise.resolve(snapshot()),
@@ -136,6 +150,8 @@
     getGiftableItems: () => snapshot().items
       .filter((item) => item.quantity > 0 && Number(item.gift_affinity) > 0),
     add,
-    remove
+    remove,
+    exportState,
+    restore
   };
 }(window));

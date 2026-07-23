@@ -12,7 +12,13 @@
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, Number(value) || 0));
   }
-
+  function sanitizeState(value) {
+    return root.GameAffinityState.sanitize(value, {
+      maxAffinity: MAX_AFFINITY,
+      dialogueLimit: DIALOGUE_LIMIT,
+      giftLimit: GIFT_LIMIT
+    });
+  }
   const storage = root.GamefyRecipes.createVersionedStorage({
     namespace: 'hehuan:',
     key: 'affection',
@@ -23,21 +29,8 @@
         return value && typeof value === 'object' ? value : { day: 1, records: {} };
       }
     },
-    sanitize(value) {
-      const clean = { day: Math.max(1, Math.floor(Number(value?.day) || 1)), records: {} };
-      Object.entries(value?.records || {}).slice(0, 50).forEach(([id, record]) => {
-        clean.records[id] = {
-          affinity: clamp(record?.affinity, -100, MAX_AFFINITY),
-          dialogueDay: Math.max(0, Math.floor(Number(record?.dialogueDay) || 0)),
-          dialogueGain: clamp(record?.dialogueGain, 0, DIALOGUE_LIMIT),
-          giftDay: Math.max(0, Math.floor(Number(record?.giftDay) || 0)),
-          gifts: clamp(record?.gifts, 0, GIFT_LIMIT)
-        };
-      });
-      return clean;
-    }
+    sanitize: sanitizeState
   });
-
   function ensureRecord(id) {
     if (!state.records[id]) {
       state.records[id] = {
@@ -50,7 +43,6 @@
     }
     return state.records[id];
   }
-
   function relationship(affinity) {
     if (affinity < 0) return '戒备';
     if (affinity < 20) return '初识';
@@ -59,7 +51,6 @@
     if (affinity < 85) return '信赖';
     return '倾心';
   }
-
   function getSnapshot(id) {
     const record = ensureRecord(id);
     const dialogueGain = record.dialogueDay === state.day ? record.dialogueGain : 0;
@@ -75,7 +66,6 @@
       canGift: gifts < GIFT_LIMIT
     };
   }
-
   async function persist(flush) {
     try {
       const result = await storage.save(state, { flush });
@@ -85,7 +75,6 @@
       return false;
     }
   }
-
   function emitChange(id, delta, source, durable) {
     root.Game.EventBus.emit('affinity-changed', {
       ...getSnapshot(id),
@@ -94,13 +83,11 @@
       durable
     });
   }
-
   function queueMutation(action) {
     const task = mutationQueue.then(action, action);
     mutationQueue = task.then(() => undefined, () => undefined);
     return task;
   }
-
   function initialize(npcs) {
     (npcs || []).forEach((npc) => {
       initialAffinity.set(npc.id, clamp(npc.initial_affinity, -100, MAX_AFFINITY));
@@ -114,10 +101,9 @@
       .then(() => {
         initialAffinity.forEach((_, id) => ensureRecord(id));
         return state;
-      });
+    });
     return readyPromise;
   }
-
   function recordDialogue(id) {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
@@ -136,7 +122,6 @@
       return { changed: true, durable, snapshot: getSnapshot(id) };
     });
   }
-
   // 礼物的好感收益由物品配置决定，但每天一次的限制仍由本系统统一校验。
   function giveGift(id, gain = DEFAULT_GIFT_GAIN) {
     return queueMutation(async () => {
@@ -158,7 +143,6 @@
       return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
     });
   }
-
   // 探险偶遇属于额外奖励，不占用每天 5 次交谈或 1 次赠礼额度。
   function addBonus(id, gain, source = 'exploration') {
     return queueMutation(async () => {
@@ -171,7 +155,6 @@
       return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
     });
   }
-
   function advanceDay() {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
@@ -181,7 +164,20 @@
       return { day: state.day, durable };
     });
   }
-
+  function exportState() {
+    return root.GameAffinityState.clone(state);
+  }
+  function restore(nextState) {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      state = sanitizeState(nextState);
+      initialAffinity.forEach((_, id) => ensureRecord(id));
+      const durable = await persist(true);
+      root.Game.EventBus.emit('game-day-changed', { day: state.day, durable });
+      initialAffinity.forEach((_, id) => emitChange(id, 0, 'load', durable));
+      return { durable, state: exportState() };
+    });
+  }
   root.GameAffinity = {
     initialize,
     ready: () => readyPromise || Promise.resolve(state),
@@ -191,6 +187,8 @@
     giveGift,
     addBonus,
     advanceDay,
+    exportState,
+    restore,
     limits: Object.freeze({
       dialogue: DIALOGUE_LIMIT,
       gifts: GIFT_LIMIT,

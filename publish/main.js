@@ -6,6 +6,7 @@
     root.GameDialoguePanel.init();
     root.GameGiftPanel.init();
     root.GameBreakthrough.init();
+    root.GameSaveUI.init();
     root.GameAIModels.initialize().catch((error) => {
       console.error('AI 模型初始化失败:', error.code || '', error.message, error.stack);
     });
