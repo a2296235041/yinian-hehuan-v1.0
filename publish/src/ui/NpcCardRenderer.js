@@ -8,8 +8,9 @@ Game.NpcCardRenderer = {
     portraitPath(npcId) {
         if (npcId === 'su_meier') return './assets/generated/npc-su-meier.png';
         if (npcId === 'liu_hanyan') return './assets/generated/npc-liu-hanyan.png';
+        if (npcId === 'han_yueshuang') return './assets/generated/npc-han-yueshuang.png';
         if (npcId === 'hu_jiuer') return './assets/generated/fox-princess.6e212211.webp';
-        if (['han_yueshuang', 'xiao_qingxuan'].includes(npcId)) {
+        if (npcId === 'xiao_qingxuan') {
             return './assets/generated/sect-master.b9883f28.webp';
         }
         return './assets/generated/scholar-disciple.e2aa08f6.webp';
@@ -18,8 +19,9 @@ Game.NpcCardRenderer = {
     portraitKey(npcId) {
         if (npcId === 'su_meier') return 'npc-su-meier';
         if (npcId === 'liu_hanyan') return 'npc-liu-hanyan';
+        if (npcId === 'han_yueshuang') return 'npc-han-yueshuang';
         if (npcId === 'hu_jiuer') return 'npc-fox';
-        if (['han_yueshuang', 'xiao_qingxuan'].includes(npcId)) {
+        if (npcId === 'xiao_qingxuan') {
             return 'npc-master';
         }
         return 'npc-scholar';
