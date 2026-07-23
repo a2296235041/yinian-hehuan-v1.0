@@ -34,10 +34,30 @@
     return narrative === fixed ? fixed : `${narrative}\n${fixed}`;
   }
 
+  function ensureCompanionResponses(text, context) {
+    const companions = Array.isArray(context?.companions) ? context.companions : [];
+    if (!companions.length) return text;
+    let result = String(text || '').trim();
+    companions.forEach((companion) => {
+      const name = String(companion?.name || '').trim();
+      if (!name) return;
+      const responsePattern = new RegExp(`${name}\\s*[：:]`);
+      if (responsePattern.test(result)) return;
+      result += `\n${name}：灵息已经稳住，继续随我调息，不要急着收功。`;
+    });
+    return result;
+  }
+
   function buildPrompt(kind, context) {
     const facts = JSON.stringify(context || {}).slice(0, 2400);
     const npcMode = kind === 'npc_encounter';
     const longMode = kind === 'dual_cultivation';
+    const companions = Array.isArray(context?.companions)
+      ? context.companions.map((item) => item?.name).filter(Boolean)
+      : [];
+    const companionInstruction = longMode && companions.length
+      ? `本次参与合修的角色有：${companions.join('、')}。必须让每一位角色都至少有一句直接回应，使用“角色名：台词”的形式逐一写出，不能只描写其中一人。`
+      : '';
     return [
       npcMode
         ? '你正在扮演遭遇信息中的成年女性NPC。'
@@ -45,6 +65,7 @@
       `当前事件：${eventNames[kind] || kind}。`,
       `已经确定的事实与数值：${facts}`,
       '不得修改、虚构或重新计算任何属性、伤害、奖励、好感和修为数值。',
+      companionInstruction,
       longMode
         ? '请输出一段260至420字的完整剧情，描写灵气运转、场景氛围、人物配合、情绪变化和双修后的余韵。双修是仙侠修行仪式，保持含蓄克制，不描写露骨内容，不替玩家做出选择。'
         : npcMode
@@ -82,10 +103,13 @@
 
   root.GameNarrative = {
     generate,
-    generateDetailed: async (kind, context, fact, onUpdate) => compose(
-      await generate(kind, context, fact, onUpdate),
-      fact
-    ),
+    generateDetailed: async (kind, context, fact, onUpdate) => {
+      const generated = await generate(kind, context, fact, onUpdate);
+      const complete = kind === 'dual_cultivation'
+        ? ensureCompanionResponses(generated, context)
+        : generated;
+      return compose(complete, fact);
+    },
     compose,
     cancel: () => completions.cancel(),
     isBusy: () => completions.isBusy()
