@@ -1,4 +1,4 @@
-var Game = window.Game || {};
+var Game = window.Game = window.Game || {};
 Game.Data = Game.Data || {};
 
 // 境界配置直接随游戏脚本加载，避免平台静态资源代理偶发阻断小型 JSON 文件。
