@@ -89,3 +89,136 @@
   color: #a9c8bd;
   text-align: center;
 }
+
+/* 手机横屏 iframe 较矮时，将输入区固定为两行，给实际对话保留空间。 */
+@media (max-width: 720px) {
+  .dialogue-form {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .dialogue-form input {
+    grid-column: 1 / 4;
+  }
+
+  #dialogue-send {
+    grid-column: 4;
+  }
+
+  #dialogue-gift {
+    grid-column: 1;
+  }
+
+  #dialogue-breakthrough {
+    grid-column: 2 / 4;
+  }
+
+  #dialogue-draw {
+    grid-column: 4;
+  }
+
+  .dialogue-form button {
+    min-width: 0;
+    padding: 0 5px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
+/* 普通手机预览常只有约 200px 高，取消固定最小高度并压缩非消息区域。 */
+@media (max-height: 520px) {
+  .ai-dialogue-panel {
+    top: max(4px, env(safe-area-inset-top));
+    right: max(4px, env(safe-area-inset-right));
+    bottom: max(4px, env(safe-area-inset-bottom));
+    left: max(4px, env(safe-area-inset-left));
+    min-height: 0;
+    max-height: none;
+    padding: 5px 7px;
+  }
+
+  .ai-dialogue-panel header {
+    min-height: 44px;
+    gap: 6px;
+  }
+
+  .dialogue-heading {
+    gap: 1px;
+    overflow: hidden;
+  }
+
+  .dialogue-identity {
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .dialogue-identity strong,
+  .dialogue-identity span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ai-dialogue-panel header strong {
+    font-size: 17px;
+  }
+
+  .ai-dialogue-panel header span {
+    font-size: 11px;
+  }
+
+  .ai-dialogue-panel header .dialogue-affinity {
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ai-dialogue-panel header button {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    font-size: 26px;
+  }
+
+  .dialogue-history {
+    margin: 3px 0;
+  }
+
+  .dialogue-line {
+    max-width: 92%;
+    margin: 3px 0;
+    padding: 5px 8px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .dialogue-status {
+    position: absolute;
+    z-index: 1;
+    top: 49px;
+    right: 7px;
+    left: 7px;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    padding: 2px 6px;
+    color: #d8c38c;
+    background: rgba(9, 16, 14, 0.88);
+    font-size: 10px;
+    line-height: 1.2;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dialogue-status:empty {
+    display: none;
+  }
+
+  .dialogue-form input,
+  .dialogue-form button {
+    min-height: 44px;
+    font-size: 12px;
+  }
+}

@@ -19,6 +19,7 @@
   let currentAffinity = null;
   let chatBusy = false;
   let imageBusy = false;
+  let scrollFrame = 0;
 
   function refreshControls() {
     sendButton.disabled = chatBusy;
@@ -56,7 +57,10 @@
       fragment.append(bubble);
     }
     history.replaceChildren(fragment);
-    history.scrollTop = history.scrollHeight;
+    cancelAnimationFrame(scrollFrame);
+    scrollFrame = requestAnimationFrame(() => {
+      history.scrollTop = history.scrollHeight;
+    });
   }
 
   function updateStatus(data) {
