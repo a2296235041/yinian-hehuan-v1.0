@@ -30,6 +30,7 @@ Game.ExplorationNarrator = {
                 npc: result.npc ? {
                     name: result.npc.name,
                     title: result.npc.title,
+                    realm: result.npc.realm_label,
                     personality: result.npc.personality,
                     relationship: affinity.relationship,
                     affinity: affinity.affinity

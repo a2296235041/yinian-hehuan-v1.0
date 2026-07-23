@@ -7,7 +7,8 @@
       return [
         'Painterly Chinese fantasy game scene, cinematic wide composition.',
         `Inside ${options.building.name}, show the adult woman ${options.npc.name},`,
-        `${options.npc.title}, personality: ${options.npc.personality}.`,
+        `${options.npc.title}, cultivation realm: ${options.npc.realm_label},`,
+        `personality: ${options.npc.personality}.`,
         `Current moment: ${line}`,
         'Tasteful fully covered traditional fantasy clothing, expressive pose,',
         'environment details matching the building, no UI, no text, no logo, no watermark.'

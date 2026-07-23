@@ -19,7 +19,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.createActionButtons();
         this.createLogText();
         Game.EventBus.on('affinity-changed', this.showAffinityChange, this);
-        Game.EventBus.on('game-day-changed', this.syncDay, this);
+        Game.EventBus.on('time-period-changed', this.updateUI, this);
         Game.EventBus.on('player-state-changed', this.updateUI, this);
         Game.EventBus.on('cultivation-changed', this.updateUI, this);
         Game.EventBus.on('realm-breakthrough', this.showBreakthrough, this);
@@ -46,7 +46,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.makeButton(920, 34, '储物袋', () => this.openOverlay('InventoryScene'));
         this.makeButton(995, 34, '出山', () => this.openOverlay('ExplorationScene'));
         this.makeButton(1070, 34, '修炼', () => this.handleCultivate());
-        this.makeButton(1180, 34, '下一天', () => this.handleNextDay());
+        this.makeButton(1180, 34, '下一时辰', () => this.handleNextPeriod());
     }
     makeButton(x, y, label, action) {
         const button = this.add.text(x, y, label, {
@@ -118,28 +118,29 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             this.cultivating = false;
         }
     }
-    async handleNextDay() {
+    async handleNextPeriod() {
         if (this.dayAdvancing) return;
         this.dayAdvancing = true;
         const player = Game.player;
         try {
-            const result = await window.GameAffinity.advanceDay();
-            player.day = result.day;
-            player.stamina = player.maxStamina;
-            player.dailyCultivationCount = player.maxDailyCultivation;
+            const result = await window.GameTime.advance();
             window.GameAudio.sfx('success');
-            const fallback = `第 ${player.day} 天，交谈与赠礼次数已恢复`;
-            this.showLog('晨光初现，AI 正在续写新一天…');
-            this.showLog(await window.GameNarrative.generateDetailed('new_day', {
+            const fallback = result.newDay
+                ? `第 ${player.day} 天清晨，交谈、赠礼、修炼与精力均已恢复`
+                : `时辰推进至${result.name}，${result.atmosphere}`;
+            this.showLog(`${result.name}时已至，AI 正在续写宗门光景…`);
+            this.showLog(await window.GameNarrative.generateDetailed('time_shift', {
                 day: player.day,
+                period: result.name,
+                atmosphere: result.atmosphere,
                 identity: player.origin?.name,
                 realm: window.GameCultivation.getSnapshot().label,
                 stamina: `${player.stamina}/${player.maxStamina}`
             }, fallback));
             this.updateUI();
         } catch (error) {
-            console.error('推进日期失败:', error.code || '', error.message, error.stack);
-            this.rejectAction('日期推进失败，请稍后重试');
+            console.error('推进时辰失败:', error.code || '', error.message, error.stack);
+            this.rejectAction('时辰推进失败，请稍后重试');
         } finally {
             this.dayAdvancing = false;
         }
@@ -158,15 +159,10 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.showLog(`双修圆满，突破至${data.realmName}！`);
         this.updateUI();
     }
-    syncDay(data) {
-        if (!Game.player || !data?.day) return;
-        Game.player.day = data.day;
-        this.updateUI();
-    }
     updateUI() {
         const player = Game.player;
         const cultivation = window.GameCultivation.getSnapshot();
-        this.dayText.setText(`第 ${player.day} 天`);
+        this.dayText.setText(window.GameTime.getSnapshot(player).label);
         this.staminaText.setText(`精力　${player.stamina} / ${player.maxStamina}`);
         this.realmText.setText(`境界　${cultivation.label}`);
         this.cultivationText.setText(
@@ -192,7 +188,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
 
     cleanup() {
         Game.EventBus.off('affinity-changed', this.showAffinityChange, this);
-        Game.EventBus.off('game-day-changed', this.syncDay, this);
+        Game.EventBus.off('time-period-changed', this.updateUI, this);
         Game.EventBus.off('player-state-changed', this.updateUI, this);
         Game.EventBus.off('cultivation-changed', this.updateUI, this);
         Game.EventBus.off('realm-breakthrough', this.showBreakthrough, this);

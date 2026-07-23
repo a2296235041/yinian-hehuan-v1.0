@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-23T16:51:32Z",
+  "updatedAt": "2026-07-23T18:36:57Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -330,6 +330,126 @@
       },
       "traceId": "trace_mrxqyryy_up24jl0k",
       "createdAt": "2026-07-23T16:51:32Z"
+    },
+    {
+      "name": "bg-welcome-pavilion",
+      "status": "success",
+      "path": "publish/assets/generated/bg-welcome-pavilion.98ecba18.webp",
+      "contentHash": "98ecba18",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect interior: the Welcome Pavilion of a refined cultivation sect. Spacious reception hall with an elegant disciple registration counter, neatly arranged jade slips and handwritten ledgers, translucent silk curtains, warm welcoming lanterns, carved dark wood screens, open mountain-facing veranda, drifting pale mist, restrained gold accents. Landscape gameplay background for a 2D narrative game, readable layered depth, clear central floor space for character portraits and UI, detailed architecture, no foreground characters, no UI overlay. Wide composition. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1738x905",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2273384,
+      "finalBytes": 145232,
+      "usage": {
+        "inputTokens": 120,
+        "outputImageTokens": 1072
+      },
+      "traceId": "trace_mrxuj1tf_j0uqp5fh",
+      "createdAt": "2026-07-23T18:30:42Z"
+    },
+    {
+      "name": "bg-master-palace",
+      "status": "success",
+      "path": "publish/assets/generated/bg-master-palace.02e6fa03.webp",
+      "contentHash": "02e6fa03",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect interior, the grand Sect Master's Palace, an imposing audience and council hall with a raised black-jade dais, restrained crimson and gold folding screens, tall dark pillars, bronze incense burners releasing thin spiritual smoke, ceremonial floor patterns and distant mountain light entering through high windows, dignified and powerful rather than gaudy. Landscape gameplay background for a 2D narrative game, readable layered depth, clear central floor space for character portraits and UI, richly detailed architecture, no foreground characters, no UI overlay. Wide composition. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1672x941",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2485367,
+      "finalBytes": 192788,
+      "usage": {
+        "inputTokens": 126,
+        "outputImageTokens": 1158
+      },
+      "traceId": "trace_mrxukg5m_wy98hyu8",
+      "createdAt": "2026-07-23T18:31:53Z"
+    },
+    {
+      "name": "bg-discipline-hall",
+      "status": "success",
+      "path": "publish/assets/generated/bg-discipline-hall.da2025ff.webp",
+      "contentHash": "da2025ff",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash interior of an immortal sect’s Discipline Hall, a severe judgment chamber with dark timber beams, cold gray stone floor, tall engraved stone tablets recording sect laws, restrained glowing talisman seals, an elevated inquiry desk, orderly weapon racks, and narrow shafts of pale daylight. Solemn, uncompromising atmosphere. Landscape gameplay background for a 2D narrative game with readable layered depth and a clear central floor space for character portraits and UI. Detailed architecture, no foreground characters, no UI overlay, wide composition. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2576038,
+      "finalBytes": 151310,
+      "usage": {
+        "inputTokens": 123,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxulz7a_gfcbxem1",
+      "createdAt": "2026-07-23T18:33:02Z"
+    },
+    {
+      "name": "bg-archive-tower",
+      "status": "success",
+      "path": "publish/assets/generated/bg-archive-tower.4610c08f.webp",
+      "contentHash": "4610c08f",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect interior, a towering Archive Pavilion filled with cultivation scriptures, many levels of dark wooden bookshelves, rolling ladders and curved stairs, floating sealed scrolls and jade slips, warm reading lamps, fine dust visible in soft beams of light, quiet alcoves and mysterious locked cabinets, scholarly and serene. Landscape gameplay background for a 2D narrative game, readable layered depth, clear central floor space for character portraits and UI, richly detailed architecture, no foreground characters, no UI overlay. Wide composition. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2600415,
+      "finalBytes": 176294,
+      "usage": {
+        "inputTokens": 123,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxungrl_8gjmdwbn",
+      "createdAt": "2026-07-23T18:34:19Z"
+    },
+    {
+      "name": "bg-craft-workshop",
+      "status": "success",
+      "path": "publish/assets/generated/bg-craft-workshop.89c3e161.webp",
+      "contentHash": "89c3e161",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect interior, a combined Alchemy and Artifact Workshop inside a grand sect hall, visibly divided into two harmonious work zones. Left side: a large bronze pill furnace, herb cabinets with neatly organized drawers, drying spiritual plants hanging from rafters, porcelain medicine vessels and measured alchemy tools. Right side: an enchanted forge with anvil, tool racks, half-finished magical artifacts, glowing rune fire, copper and stone work surfaces, subtle mechanical and mystical details. Busy but orderly, controlled warm sparks and spiritual smoke, copper wood and stone materials, richly detailed architecture with layered depth, elegant beams, screens, shelves, and lanterns. Landscape gameplay background for a 2D narrative game, readable composition, clear central floor space for character portraits and UI, no foreground characters, no UI overlay, wide composition, highly detailed, atmospheric, painterly, ink wash fantasy aesthetic, no text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1819x865",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2452685,
+      "finalBytes": 194788,
+      "usage": {
+        "inputTokens": 198,
+        "outputImageTokens": 987
+      },
+      "traceId": "trace_mrxup4cg_xxnnrmtg",
+      "createdAt": "2026-07-23T18:35:31Z"
+    },
+    {
+      "name": "bg-rear-sanctuary",
+      "status": "success",
+      "path": "publish/assets/generated/bg-rear-sanctuary.0abf97c6.webp",
+      "contentHash": "0abf97c6",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect landscape, the secluded Rear Mountain Spirit Sanctuary: a hidden cultivation valley with a silver waterfall cascading into a calm moon-reflecting pool, ancient cave dwelling entrances carved into the cliffs, rare luminous spirit plants glowing softly among rocks, subtle blue foxfire flickering near stone edges, old stone paths leading through the scene, bamboo groves and layered mountain mist, mysterious yet peaceful atmosphere. Wide composition for a 2D narrative game background, readable layered depth, clear central terrace/open space for character portraits and UI, richly detailed environment, no foreground characters, no UI overlay, no text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2785321,
+      "finalBytes": 206854,
+      "usage": {
+        "inputTokens": 138,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxuqpjn_n6xzf8vl",
+      "createdAt": "2026-07-23T18:36:57Z"
     }
   ]
 }

@@ -59,6 +59,7 @@
       maxStamina,
       stamina: clamp(value?.stamina, 0, maxStamina),
       day,
+      periodIndex: clamp(value?.periodIndex, 0, 3),
       maxDailyCultivation,
       dailyCultivationCount: clamp(value?.dailyCultivationCount, 0, maxDailyCultivation)
     };
@@ -99,7 +100,7 @@
     });
     return sanitizeSnapshot({
       player: {
-        origin, maxStamina: 12, stamina: 12, day: 1,
+        origin, maxStamina: 12, stamina: 12, day: 1, periodIndex: 0,
         maxDailyCultivation: 5, dailyCultivationCount: 5
       },
       affinity: { day: 1, records: {} },

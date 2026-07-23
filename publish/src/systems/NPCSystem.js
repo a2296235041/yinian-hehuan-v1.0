@@ -14,7 +14,15 @@ Game.Systems.NPCSystem = class NPCSystem {
             console.error('NPCSystem: 未能从缓存中加载NPC数据！');
             return;
         }
-        npcData.forEach((npc) => this.npcs.set(npc.id, npc));
+        // NPC 境界使用与玩家相同的境界表，JSON 只保存索引和阶段，避免名称不一致。
+        const levels = Game.Data.cultivationLevels?.levels || [];
+        npcData.forEach((npc) => {
+            const realmName = levels[npc.realm_index]?.name || '未知境界';
+            this.npcs.set(npc.id, {
+                ...npc,
+                realm_label: `${realmName}·${npc.realm_phase || '初期'}`
+            });
+        });
         this.readyPromise = window.GameAffinity.initialize(npcData);
         console.log('NPC系统已初始化，加载了', this.npcs.size, '个NPC。');
     }

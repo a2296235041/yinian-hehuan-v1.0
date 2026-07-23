@@ -16,6 +16,7 @@
       maxStamina,
       stamina: Math.max(0, Math.min(maxStamina, Math.floor(numberOr(saved.stamina, maxStamina)))),
       day: Math.max(1, Math.floor(Number(saved.day) || 1)),
+      periodIndex: root.GameTime.normalizeIndex(saved.periodIndex),
       maxDailyCultivation,
       dailyCultivationCount: Math.max(0, Math.min(
         maxDailyCultivation,
@@ -35,6 +36,7 @@
       day: root.Game.player.day,
       durable: true
     });
+    root.GameTime.emitCurrent('player-state-ready');
     root.Game.EventBus.emit('player-state-changed', { player: { ...root.Game.player } });
   }
 

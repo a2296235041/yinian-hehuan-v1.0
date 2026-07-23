@@ -16,7 +16,7 @@
     if (!current) return;
     root.Game.EventBus.emit('ai-dialogue-render', {
       npcName: current.npc.name,
-      npcTitle: current.npc.title,
+      npcTitle: `${current.npc.title} · ${current.npc.realm_label}`,
       messages: current.messages.slice(),
       draft
     });
@@ -60,7 +60,7 @@
     root.Game.EventBus.emit('ai-dialogue-open', {
       npcId: npc.id,
       npcName: npc.name,
-      npcTitle: npc.title,
+      npcTitle: `${npc.title} · ${npc.realm_label}`,
       affinity
     });
     emitRender();

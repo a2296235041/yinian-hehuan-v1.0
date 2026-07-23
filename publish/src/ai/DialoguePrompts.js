@@ -16,6 +16,7 @@
   function persona(npc, building, snapshot) {
     return [
       `你正在扮演成年女性角色${npc.name}，身份是${npc.title}。`,
+      `她的修为境界是${npc.realm_label || '未知境界'}。`,
       `性格设定：${npc.personality}`,
       `当前地点：${building?.name || '合欢宗'}。`,
       `她与玩家当前关系为“${snapshot.relationship}”，好感度${snapshot.affinity}/100。`,
