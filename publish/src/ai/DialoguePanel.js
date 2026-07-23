@@ -21,6 +21,7 @@
   let imageBusy = false;
   let renderedMessageCount = 0;
   let draftBubble = null;
+  let renderedNpcId = null;
 
   function refreshControls() {
     sendButton.disabled = chatBusy;
@@ -161,9 +162,10 @@
     root.Game.EventBus.on('ai-dialogue-open', (data) => {
       panel.hidden = false;
       currentNpcId = data.npcId;
-      renderedMessageCount = 0;
-      draftBubble = null;
-      history.replaceChildren();
+      if (renderedNpcId !== data.npcId) {
+        history.replaceChildren(); renderedMessageCount = 0; draftBubble = null;
+        renderedNpcId = data.npcId;
+      }
       name.textContent = data.npcName;
       title.textContent = data.npcTitle;
       renderAffinity(data.affinity);

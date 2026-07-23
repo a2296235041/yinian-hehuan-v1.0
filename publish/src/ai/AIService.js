@@ -1,6 +1,7 @@
 (function installAIService(root) {
   'use strict';
   const openingCache = new Map();
+  const dialogueSessions = new Map();
   let current = null;
   let draft = '';
   const completions = root.GamefyRecipes.createCompletionsSafe({
@@ -51,12 +52,16 @@
   async function startDialogue({ npc, building, opening }) {
     completions.cancel();
     root.GameAIImage.cancel();
-    const session = {
-      npc,
-      building,
-      fallbackOpening: opening || '……',
-      messages: []
-    };
+    let session = dialogueSessions.get(npc.id);
+    const resumed = Boolean(session?.messages.length);
+    if (!session) {
+      session = { npc, building, fallbackOpening: opening || '……', messages: [] };
+      dialogueSessions.set(npc.id, session);
+    } else {
+      session.npc = npc;
+      session.building = building;
+      session.fallbackOpening = opening || session.fallbackOpening;
+    }
     current = session;
     draft = '';
     const affinity = affinityFor(session);
@@ -67,6 +72,10 @@
       affinity
     });
     emitRender();
+    if (resumed) {
+      emitStatus('ready', '已继续上次对话');
+      return;
+    }
     emitStatus('opening', '她正根据与你的关系斟酌如何开口…');
     const cacheKey = `${npc.id}:${affinity.day}:${affinity.affinity}`;
     const cached = openingCache.get(cacheKey);
