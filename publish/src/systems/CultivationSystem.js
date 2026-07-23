@@ -16,6 +16,12 @@
     return value > 0 ? Math.floor(value) : 0;
   }
 
+  // 境界越高，玩家每天需要投入的修炼次数越多。
+  // 该数值只负责每日次数上限，真正的修为增幅由 UIScene 的修炼动作计算。
+  function dailyCultivationLimit(index = state.realmIndex) {
+    return Math.max(5, 5 + Math.floor(Number(index) || 0) * 2);
+  }
+
   function sanitize(value) {
     const realmIndex = clamp(value?.realmIndex, 0, Math.max(0, levels.length - 1));
     return {
@@ -110,6 +116,30 @@
     });
   }
 
+  // 百分比丹药以“当前境界所需总修为”为基准，不受跨境界影响。
+  function addCultivationPercent(percent, source = 'item') {
+    const snapshotBefore = snapshot();
+    if (snapshotBefore.maxRealm || snapshotBefore.canBreakthrough) {
+      return Promise.resolve({
+        changed: false,
+        reason: snapshotBefore.maxRealm ? 'max_realm' : 'bottleneck',
+        snapshot: snapshotBefore
+      });
+    }
+    const safePercent = Math.max(1, Math.min(100, Number(percent) || 0));
+    const amount = Math.max(1, Math.ceil(snapshotBefore.required * safePercent / 100));
+    return addCultivation(amount, source);
+  }
+
+  function syncPlayerDailyLimit(player = root.Game.player) {
+    if (!player) return;
+    player.maxDailyCultivation = dailyCultivationLimit(state.realmIndex);
+    player.dailyCultivationCount = Math.min(
+      Math.max(0, Math.floor(Number(player.dailyCultivationCount) || 0)),
+      player.maxDailyCultivation
+    );
+  }
+
   function breakthrough(npcId, affinity) {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
@@ -120,6 +150,7 @@
       }
       state.realmIndex += 1;
       state.progress = 0;
+      syncPlayerDailyLimit();
       const durable = await persist(true);
       const next = snapshot();
       root.Game.EventBus.emit('realm-breakthrough', { ...next, npcId, durable });
@@ -136,6 +167,7 @@
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       state = sanitize(nextState);
+      syncPlayerDailyLimit();
       const durable = await persist(true);
       emitChange(0, 'load', durable);
       return { durable, snapshot: snapshot() };
@@ -147,7 +179,10 @@
     ready: () => readyPromise || Promise.resolve(snapshot()),
     getSnapshot: snapshot,
     getRealmName: (index) => levels[index]?.name || '未知境界',
+    getDailyCultivationLimit: dailyCultivationLimit,
     addCultivation,
+    addCultivationPercent,
+    syncPlayerDailyLimit,
     breakthrough,
     exportState,
     restore

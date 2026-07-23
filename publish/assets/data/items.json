@@ -297,5 +297,23 @@
     "description": "后山深处成熟的千年灵果，蕴含极为充沛的修为。",
     "cultivation_gain": 220,
     "initial_quantity": 0
+  },
+  {
+    "id": "holy_cultivation_pill",
+    "name": "圣品修为丹",
+    "type": "cultivation",
+    "rarity": "圣品",
+    "description": "探险中偶然获得的圣品丹药，服下后直接增加当前境界的 1% 修为。",
+    "cultivation_percent": 1,
+    "initial_quantity": 0
+  },
+  {
+    "id": "divine_cultivation_pill",
+    "name": "神级修为丹",
+    "type": "cultivation",
+    "rarity": "神级",
+    "description": "蕴含浓郁天地道韵的神级丹药，服下后直接增加当前境界的 10% 修为。",
+    "cultivation_percent": 10,
+    "initial_quantity": 0
   }
 ]

@@ -50,6 +50,7 @@
     const origin = snapshot?.player?.origin || root.Game.player?.origin;
     root.Game.player = normalizePlayer(origin, snapshot?.player);
     root.Game.player.day = root.GameAffinity.getDay();
+    root.GameCultivation.syncPlayerDailyLimit(root.Game.player);
     emitReady();
     return root.Game.player;
   }
@@ -77,6 +78,7 @@
         return applySnapshot(root.GameSaveData.createFreshSnapshot(origin, items));
       }
       root.Game.player.day = root.GameAffinity.getDay();
+      root.GameCultivation.syncPlayerDailyLimit(root.Game.player);
       emitReady();
       return root.Game.player;
     }).catch((error) => {

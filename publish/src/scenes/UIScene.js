@@ -43,10 +43,11 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.cultivationCountText = this.add.text(32, 140, '', style);
     }
     createActionButtons() {
-        this.makeButton(920, 34, '储物袋', () => this.openOverlay('InventoryScene'));
-        this.makeButton(995, 34, '出山', () => this.openOverlay('ExplorationScene'));
-        this.makeButton(1070, 34, '修炼', () => this.handleCultivate());
-        this.makeButton(1180, 34, '下一时辰', () => this.handleNextPeriod());
+        this.makeButton(1220, 34, '储物袋', () => this.openOverlay('InventoryScene'));
+        this.makeButton(1145, 34, '出山', () => this.openOverlay('ExplorationScene'));
+        this.makeButton(1050, 34, '修炼', () => this.handleCultivate());
+        this.makeButton(940, 34, '下一时辰', () => this.handleNextPeriod());
+        this.makeButton(830, 34, '下一天', () => this.handleNextDay());
     }
     makeButton(x, y, label, action) {
         const button = this.add.text(x, y, label, {
@@ -98,7 +99,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.cultivating = true;
         player.stamina -= 1;
         player.dailyCultivationCount -= 1;
-        const gain = 6 + cultivation.realmIndex * 4 + Math.floor(Math.random() * 6);
+        const gain = 8 + cultivation.realmIndex * 8 + Math.floor(Math.random() * 5);
         try {
             const result = await window.GameCultivation.addCultivation(gain, 'cultivate');
             window.GameAudio.sfx('score');
@@ -141,6 +142,30 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         } catch (error) {
             console.error('推进时辰失败:', error.code || '', error.message, error.stack);
             this.rejectAction('时辰推进失败，请稍后重试');
+        } finally {
+            this.dayAdvancing = false;
+        }
+    }
+    async handleNextDay() {
+        if (this.dayAdvancing) return;
+        this.dayAdvancing = true;
+        const player = Game.player;
+        try {
+            const result = await window.GameTime.advanceDay();
+            window.GameAudio.sfx('success');
+            const fallback = `直接进入第 ${player.day} 天清晨，交谈、赠礼、修炼与精力均已恢复`;
+            this.showLog('新的一天开始，AI 正在续写宗门晨景…');
+            this.showLog(await window.GameNarrative.generateDetailed('new_day', {
+                day: player.day,
+                period: result.name,
+                identity: player.origin?.name,
+                realm: window.GameCultivation.getSnapshot().label,
+                stamina: `${player.stamina}/${player.maxStamina}`
+            }, fallback));
+            this.updateUI();
+        } catch (error) {
+            console.error('推进下一天失败:', error.code || '', error.message, error.stack);
+            this.rejectAction('推进下一天失败，请稍后重试');
         } finally {
             this.dayAdvancing = false;
         }

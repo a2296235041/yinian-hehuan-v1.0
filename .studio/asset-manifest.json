@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-23T18:36:57Z",
+  "updatedAt": "2026-07-23T19:16:22Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -450,6 +450,126 @@
       },
       "traceId": "trace_mrxuqpjn_n6xzf8vl",
       "createdAt": "2026-07-23T18:36:57Z"
+    },
+    {
+      "name": "bg-private-cave",
+      "status": "success",
+      "path": "publish/assets/generated/bg-private-cave.07089792.webp",
+      "contentHash": "07089792",
+      "revisedPrompt": "Painterly Chinese fantasy ink-wash scene of an immortal sect private sanctuary: a secluded personal cultivation cave dwelling carved into a jade-green cliff, elegant and peaceful, intimate but non-sensual. Include a low stone meditation platform inside/near the cave entrance, warm hanging lanterns, a small tea table with subtle tea set, quiet glowing spiritual crystals, and flowing water channels that guide the eye through the space. Composition should be wide, with a large open foreground reserved for character interaction, clear layered depth for gameplay background, no foreground characters, no UI overlay. Atmospheric mist, soft brushlike textures, refined fantasy lighting, serene mountain sanctum, no text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2547759,
+      "finalBytes": 155466,
+      "usage": {
+        "inputTokens": 145,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxvx1fc_v4xs5ecv",
+      "createdAt": "2026-07-23T19:09:46Z"
+    },
+    {
+      "name": "bg-private-bamboo",
+      "status": "success",
+      "path": "publish/assets/generated/bg-private-bamboo.ab733237.webp",
+      "contentHash": "ab733237",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect private sanctuary, a secluded bamboo forest retreat belonging to a cultivator, tall slender bamboo forming layered depth, a winding stone path, a simple pavilion with a low table, drifting leaves, soft filtered sunlight and faint spiritual fireflies, a broad quiet clearing in the foreground for character interaction. Serene and elegant, landscape gameplay background, no foreground characters, no UI overlay. Wide composition. No text, no logo, no watermark. Painterly, atmospheric, elegant brushwork, ink wash + fantasy concept art, detailed environment, wide cinematic landscape.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 3110066,
+      "finalBytes": 271750,
+      "usage": {
+        "inputTokens": 124,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxvyv58_86zge1z9",
+      "createdAt": "2026-07-23T19:11:10Z"
+    },
+    {
+      "name": "bg-private-hot-spring",
+      "status": "success",
+      "path": "publish/assets/generated/bg-private-hot-spring.adae3403.webp",
+      "contentHash": "adae3403",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect private sanctuary, a secluded hot spring terrace high in the mountains, clear jade water pools surrounded by carved pale stones, gentle rising mist, small waterfalls, lanterns under a wooden eave, flowering shrubs and distant cloud sea, a dry stone platform in the foreground for character interaction. Tasteful tranquil cultivation atmosphere, landscape gameplay background, no foreground characters, no UI overlay. Wide composition. No text, no logo, no watermark. Highly detailed, elegant composition, soft atmospheric lighting, traditional Chinese fantasy art style, ink wash + painterly fusion.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 3180930,
+      "finalBytes": 260992,
+      "usage": {
+        "inputTokens": 124,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxw0lpo_t6xxqes7",
+      "createdAt": "2026-07-23T19:12:28Z"
+    },
+    {
+      "name": "bg-private-flower-terrace",
+      "status": "success",
+      "path": "publish/assets/generated/bg-private-flower-terrace.8c4921b4.webp",
+      "contentHash": "8c4921b4",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect private sanctuary, an elevated flower spirit terrace overlooking layered mountains, a circular stone platform, elegant railings, terraces of luminous spiritual flowers in restrained pink, white and violet, small streams, hanging silk ribbons and warm lanterns, sunset haze, wide open foreground for character interaction. Refined romantic cultivation atmosphere without people, landscape gameplay background, no UI overlay. Wide composition. No text, no logo, no watermark. Cinematic concept art, highly detailed, soft brushwork mixed with delicate ink-wash texture, atmospheric perspective, serene and elegant.",
+      "model": "gpt-image-2",
+      "size": "1718x915",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2890773,
+      "finalBytes": 261472,
+      "usage": {
+        "inputTokens": 124,
+        "outputImageTokens": 1115
+      },
+      "traceId": "trace_mrxw28rh_dwi6rm6v",
+      "createdAt": "2026-07-23T19:13:42Z"
+    },
+    {
+      "name": "bg-private-moon-pavilion",
+      "status": "success",
+      "path": "publish/assets/generated/bg-private-moon-pavilion.d9418dfc.webp",
+      "contentHash": "d9418dfc",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash immortal sect private sanctuary, an elegant moon-viewing waterside pavilion in a hidden valley, dark polished wood, pale jade railings, a calm pond reflecting the moon, lotus leaves, distant mountain silhouettes, a low tea table and hanging lanterns, cool silver-blue night light, broad foreground terrace for character interaction. Serene and sophisticated, no people, landscape gameplay background, no UI overlay. Wide composition. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2442116,
+      "finalBytes": 134032,
+      "usage": {
+        "inputTokens": 104,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxw3vqy_pj0755q3",
+      "createdAt": "2026-07-23T19:14:54Z"
+    },
+    {
+      "name": "bg-private-spirit-garden",
+      "status": "success",
+      "path": "publish/assets/generated/bg-private-spirit-garden.6a80bf37.webp",
+      "contentHash": "6a80bf37",
+      "revisedPrompt": "Painterly Chinese fantasy and ink wash style scene of an immortal sect private sanctuary behind a cultivator's residence. Wide composition, landscape gameplay background. A carefully tended spirit herb garden with raised stone planting beds filled with luminous medicinal plants, subtle glowing leaves and blossoms, a small wooden greenhouse, flowing water channels, a covered rest pavilion, jade plant labels with no readable writing, and a broad central stone path designed for character interaction. Distant misty mountain peaks, tranquil clouds, soft atmospheric perspective, calm restorative cultivation atmosphere. No people. No UI overlay. No text, no logo, no watermark. Highly detailed environment art, elegant brush-and-ink texture blended with painterly fantasy rendering.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 3274555,
+      "finalBytes": 302572,
+      "usage": {
+        "inputTokens": 144,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxw5ff3_m8p36y89",
+      "createdAt": "2026-07-23T19:16:22Z"
     }
   ]
 }

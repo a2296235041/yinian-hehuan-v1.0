@@ -31,6 +31,9 @@
   }
 
   function effectLabel(item) {
+    if (item.type === 'cultivation' && item.cultivation_percent) {
+      return `使用后当前境界修为 +${item.cultivation_percent}%`;
+    }
     if (item.type === 'cultivation') return `使用后修为 +${item.cultivation_gain}`;
     if (item.type === 'attribute') {
       return `使用后${attributeNames[item.attribute] || item.attribute} +${item.attribute_gain}`;
@@ -78,7 +81,9 @@
       const removed = await root.GameInventory.remove(itemId, 1, 'use_item');
       if (!removed.changed) return { changed: false, reason: removed.reason, item };
       const result = item.type === 'cultivation'
-        ? await root.GameCultivation.addCultivation(item.cultivation_gain, 'item')
+        ? (item.cultivation_percent
+          ? await root.GameCultivation.addCultivationPercent(item.cultivation_percent, 'item')
+          : await root.GameCultivation.addCultivation(item.cultivation_gain, 'item'))
         : await root.GamePlayerGrowth.addBonus(item.attribute, item.attribute_gain, 'item');
       if (!result.changed) {
         await root.GameInventory.add(itemId, 1, 'item_refund');

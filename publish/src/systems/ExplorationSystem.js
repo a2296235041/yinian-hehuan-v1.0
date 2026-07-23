@@ -71,6 +71,20 @@
     };
   }
 
+  // 稀有修为丹独立于普通遭遇判定：
+  // 神级丹 5%，圣品丹 15%，二者互斥，剩余概率继续走普通遭遇。
+  async function rarePillEncounter(itemId) {
+    const added = await root.GameInventory.add(itemId, 1, 'exploration');
+    const itemName = added.item?.name || '稀有修为丹';
+    const percent = added.item?.cultivation_percent || 0;
+    return {
+      type: 'pill',
+      item: added.item,
+      quantity: 1,
+      text: `探险途中发现${itemName} ×1，使用后可直接增加当前境界 ${percent}% 修为。`
+    };
+  }
+
   function battleEncounter(region) {
     const enemy = enemies.get(pick(region.enemy_ids));
     if (!enemy) return { type: 'nothing', text: '附近似有异动，但最终什么也没有出现。' };
@@ -94,10 +108,13 @@
         return { type: 'locked', text: '当前境界尚不足以进入此地。' };
       }
       if (!consumeStamina(region)) return { type: 'stamina', text: '精力不足，无法继续出山。' };
-      const roll = Math.random();
-      if (roll < 0.24) return await npcEncounter(region);
-      if (roll < 0.58) return battleEncounter(region);
-      if (roll < 0.98) return await curioEncounter(region);
+      const rareRoll = Math.random();
+      if (rareRoll < 0.05) return await rarePillEncounter('divine_cultivation_pill');
+      if (rareRoll < 0.20) return await rarePillEncounter('holy_cultivation_pill');
+      const encounterRoll = Math.random();
+      if (encounterRoll < 0.24) return await npcEncounter(region);
+      if (encounterRoll < 0.58) return battleEncounter(region);
+      if (encounterRoll < 0.98) return await curioEncounter(region);
       return { type: 'nothing', text: '一路风平浪静，无事发生。' };
     } finally {
       busy = false;

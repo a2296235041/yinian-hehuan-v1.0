@@ -43,24 +43,19 @@
     return snapshot;
   }
 
-  // 只有从深夜跨入次日清晨时才推进日期并刷新每日次数。
-  async function advance() {
+  async function startNewDay() {
     const player = root.Game?.player;
     if (!player) throw new Error('玩家状态尚未初始化');
-    const previous = getSnapshot(player);
-    let newDay = false;
-    let durable = null;
-    if (previous.periodIndex < PERIODS.length - 1) {
-      player.periodIndex = previous.periodIndex + 1;
-    } else {
-      const result = await root.GameAffinity.advanceDay();
-      player.day = result.day;
-      player.periodIndex = 0;
-      player.stamina = player.maxStamina;
-      player.dailyCultivationCount = player.maxDailyCultivation;
-      newDay = true;
-      durable = result.durable;
-    }
+    const result = await root.GameAffinity.advanceDay();
+    player.day = result.day;
+    player.periodIndex = 0;
+    player.stamina = player.maxStamina;
+    player.dailyCultivationCount = player.maxDailyCultivation;
+    return result;
+  }
+
+  function emitAdvance(previous, newDay, durable) {
+    const player = root.Game.player;
     const snapshot = emitCurrent('advance', {
       newDay,
       durable,
@@ -70,11 +65,34 @@
     return snapshot;
   }
 
+  // 下一时辰正常循环；从深夜进入早晨时才自动跨日。
+  async function advance() {
+    const player = root.Game?.player;
+    if (!player) throw new Error('玩家状态尚未初始化');
+    const previous = getSnapshot(player);
+    if (previous.periodIndex < PERIODS.length - 1) {
+      player.periodIndex = previous.periodIndex + 1;
+      return emitAdvance(previous, false, null);
+    }
+    const result = await startNewDay();
+    return emitAdvance(previous, true, result.durable);
+  }
+
+  // “下一天”按钮无论当前处于哪个时段，都会直接进入次日早晨。
+  async function advanceDay() {
+    const player = root.Game?.player;
+    if (!player) throw new Error('玩家状态尚未初始化');
+    const previous = getSnapshot(player);
+    const result = await startNewDay();
+    return emitAdvance(previous, true, result.durable);
+  }
+
   root.GameTime = Object.freeze({
     periods: PERIODS,
     normalizeIndex,
     getSnapshot,
     emitCurrent,
-    advance
+    advance,
+    advanceDay
   });
 }(window));
