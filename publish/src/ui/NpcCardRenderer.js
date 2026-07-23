@@ -14,7 +14,7 @@ Game.NpcCardRenderer = {
         if (npcId === 'mo_qiaoer') return './assets/generated/npc-mo-qiaoer.png';
         if (npcId === 'bai_zhi') return './assets/generated/npc-bai-zhi.png';
         if (npcId === 'xiao_qingxuan') {
-            return './assets/generated/sect-master.b9883f28.webp';
+            return './assets/generated/npc-xiao-qingxuan.png';
         }
         return './assets/generated/scholar-disciple.e2aa08f6.webp';
     },
@@ -28,7 +28,7 @@ Game.NpcCardRenderer = {
         if (npcId === 'mo_qiaoer') return 'npc-mo-qiaoer';
         if (npcId === 'bai_zhi') return 'npc-bai-zhi';
         if (npcId === 'xiao_qingxuan') {
-            return 'npc-master';
+            return 'npc-xiao-qingxuan';
         }
         return 'npc-scholar';
     },
