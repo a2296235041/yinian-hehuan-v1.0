@@ -16,7 +16,9 @@
     battle_action: '战斗中的一次行动',
     battle_end: '战斗结束与奖励结算',
     cultivation: '宗门内修炼',
-    new_day: '新一天开始'
+    new_day: '新一天开始',
+    shop_purchase: '在宗门商店购买物品',
+    use_item: '在储物袋中使用修炼物品'
   };
 
   function clean(text, fallback) {

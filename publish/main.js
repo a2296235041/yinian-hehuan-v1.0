@@ -33,6 +33,7 @@
         Game.Scenes.MainMenuScene,
         Game.Scenes.CharacterCreationScene,
         Game.Scenes.GameScene,
+        Game.Scenes.ShopScene,
         Game.Scenes.InventoryScene,
         Game.Scenes.ExplorationScene,
         Game.Scenes.BattleScene,

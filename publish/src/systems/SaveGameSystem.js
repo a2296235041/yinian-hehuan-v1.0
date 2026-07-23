@@ -41,6 +41,16 @@
     };
   }
 
+  function sanitizeGrowth(value) {
+    const bonuses = {};
+    const allowed = ['strength', 'constitution', 'agility', 'intelligence', 'wisdom', 'luck'];
+    allowed.forEach((key) => {
+      const amount = clamp(value?.bonuses?.[key], 0, 999);
+      if (amount > 0) bonuses[key] = amount;
+    });
+    return { bonuses };
+  }
+
   function sanitizePlayer(value, day) {
     const origin = isRecord(value?.origin) && typeof value.origin.id === 'string'
       ? JSON.parse(JSON.stringify(value.origin))
@@ -70,6 +80,7 @@
         progress: clamp(value?.cultivation?.progress, 0, 100000000)
       },
       inventory: sanitizeInventory(value?.inventory),
+      growth: sanitizeGrowth(value?.growth),
       location: { buildingId }
     };
   }
@@ -87,11 +98,12 @@
   const storage = root.GamefyRecipes.createVersionedStorage({
     namespace: 'hehuan:',
     key: 'manual-save',
-    version: 2,
+    version: 3,
     fallback: EMPTY_SLOT,
     migrations: {
       0: (value) => value || EMPTY_SLOT,
-      1: (value) => value || EMPTY_SLOT
+      1: (value) => value || EMPTY_SLOT,
+      2: (value) => value || EMPTY_SLOT
     },
     sanitize: sanitizeSlot
   });
@@ -125,6 +137,7 @@
       affinity: root.GameAffinity.exportState(),
       cultivation: root.GameCultivation.exportState(),
       inventory: root.GameInventory.exportState(),
+      growth: root.GamePlayerGrowth.exportState(),
       location: currentLocation()
     });
   }

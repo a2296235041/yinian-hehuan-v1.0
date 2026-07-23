@@ -10,6 +10,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         this.busy = false;
         this.requestId = 0;
         this.baseScenesRestored = false;
+        this.assetsReady = false;
     }
 
     create() {
@@ -56,6 +57,16 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         Game.EventBus.on('player-state-changed', this.refreshView, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.refreshView();
+        Game.EnemyAssets.ensureLoaded(this).then(() => {
+            if (!this.statusText?.active) return;
+            this.assetsReady = true;
+            this.statusText.setVisible(false);
+            this.refreshView();
+        }).catch((error) => {
+            if (error.code === 'LOAD_CANCELLED') return;
+            console.error('敌人素材加载失败:', error.message, error.stack);
+            if (this.statusText?.active) this.statusText.setText('敌人图鉴加载失败，请返回后重试。').setVisible(true);
+        });
         Game.SceneTransition.fadeIn(this);
     }
 
@@ -117,6 +128,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
     }
 
     async chooseRegion(region, frame) {
+        if (!this.assetsReady) return this.statusText.setText('敌人图鉴正在加载，请稍候…').setVisible(true);
         if (this.busy) return;
         this.busy = true;
         frame.setAlpha(0.55);

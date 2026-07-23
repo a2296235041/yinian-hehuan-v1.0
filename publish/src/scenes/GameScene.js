@@ -121,7 +121,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             align: 'center'
         }).setOrigin(0.5));
         this.createBackButton();
-
+        Game.ShopEntry.create(this, building);
         const npcs = building.npcIds
             .map((id) => this.npcSystem.getNpcDataById(id))
             .filter(Boolean);

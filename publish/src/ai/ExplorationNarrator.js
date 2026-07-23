@@ -46,6 +46,7 @@ Game.ExplorationNarrator = {
                 } : null,
                 item: result.item?.name || null,
                 quantity: result.quantity || 0,
+                spiritStones: result.spiritStones || 0,
                 cultivationGain: result.cultivation || 0
             }
         };

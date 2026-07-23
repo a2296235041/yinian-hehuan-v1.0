@@ -55,7 +55,9 @@
     const itemId = pick(region.loot_ids);
     const quantity = Math.random() < 0.22 ? 2 : 1;
     const cultivation = randomInt(region.cultivation_min, region.cultivation_max);
+    const stones = randomInt(region.stone_min, region.stone_max);
     const itemResult = await root.GameInventory.add(itemId, quantity, 'exploration');
+    await root.GameInventory.addSpiritStones(stones, 'exploration');
     const cultivationResult = await root.GameCultivation.addCultivation(cultivation, 'exploration');
     const itemName = itemResult.item?.name || '未知物品';
     const gainText = cultivationResult.changed ? `，修为 +${cultivationResult.gain}` : '，修为已达瓶颈';
@@ -63,8 +65,9 @@
       type: 'curio',
       item: itemResult.item,
       quantity,
+      spiritStones: stones,
       cultivation: cultivationResult.gain || 0,
-      text: `你发现一处隐秘机缘，获得${itemName} ×${quantity}${gainText}。`
+      text: `你发现一处隐秘机缘，获得${itemName} ×${quantity}、灵石 ${stones}${gainText}。`
     };
   }
 
@@ -109,9 +112,16 @@
       'battle'
     );
     const loot = await root.GameInventory.add(enemy.loot_id, 1, 'battle');
+    const stones = Math.max(0, Math.floor(Number(enemy.stone_reward) || 0));
+    if (stones > 0) await root.GameInventory.addSpiritStones(stones, 'battle');
     const itemName = loot.item?.name || '战利品';
     const gainText = cultivation.changed ? `修为 +${cultivation.gain}` : '修为已达瓶颈';
-    return { text: `战斗胜利！${gainText}，获得${itemName} ×1。`, cultivation, loot };
+    return {
+      text: `战斗胜利！${gainText}，获得${itemName} ×1、灵石 ${stones}。`,
+      cultivation,
+      loot,
+      spiritStones: stones
+    };
   }
 
   root.GameExploration = {

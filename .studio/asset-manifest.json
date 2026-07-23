@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-23T13:14:26Z",
+  "updatedAt": "2026-07-23T16:51:32Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -122,6 +122,214 @@
       },
       "traceId": "trace_mrxj7ug7_wawetc0c",
       "createdAt": "2026-07-23T13:14:26Z"
+    },
+    {
+      "name": "enemy-sheet-cloud-foothills",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-cloud-foothills.59f0e13a.webp",
+      "contentHash": "59f0e13a",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet matching an elegant ink-wash immortal cultivation game. Square composition with exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, one enemy centered wholly inside each quadrant, generous empty spacing, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left: a lean mist-veiled gray wolf with pale glowing eyes. Top-right: an adult rogue cultivator bandit in weathered dark robes carrying a short saber. Bottom-left: a broad-winged cloud hawk with silver feathers and sharp talons. Bottom-right: a stocky stonehide wild boar with rock-like armor plates. Distinct silhouettes, threatening poses, restrained Chinese fantasy palette, soft dark painted edges. Strictly placed on a SOLID UNIFORM #00B140 chroma key flat color background. The background is a single uniform shade of #00B140 chroma key green that fills 100% of pixels not occupied by the characters. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a green screen used for VFX compositing. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 66.5,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1917685,
+      "finalBytes": 188424,
+      "usage": {
+        "inputTokens": 264,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxqikl2_3uw3adv8",
+      "createdAt": "2026-07-23T16:38:52Z"
+    },
+    {
+      "name": "enemy-sheet-sunset-valley",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-sunset-valley.48117510.webp",
+      "contentHash": "48117510",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet, elegant ink-wash immortal cultivation aesthetic. Square canvas, strict 2x2 grid composition with exactly four isolated full-body enemy characters, each centered wholly inside its own quadrant, generous empty spacing, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left quadrant: a muscular crimson flame ape with ember-red fur and glowing fists. Top-right quadrant: an adult foreign raider in layered red desert robes wielding a curved blade. Bottom-left quadrant: a low ember-backed lizard with black volcanic scales and orange cracks. Bottom-right quadrant: a large scarlet needle wasp queen with translucent wings and a sharp stinger. Distinct silhouettes, threatening poses, restrained Chinese fantasy palette, soft dark painted edges. Background must be a single solid uniform chroma key green #00B140 filling all empty space exactly, pure flat color, no gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 68.5,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1940002,
+      "finalBytes": 217038,
+      "usage": {
+        "inputTokens": 226,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxql98g_kga04y9q",
+      "createdAt": "2026-07-23T16:40:56Z"
+    },
+    {
+      "name": "enemy-sheet-frost-moon-marsh",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-frost-moon-marsh.ebb2dd2c.webp",
+      "contentHash": "ebb2dd2c",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet, elegant ink-wash immortal cultivation aesthetic. Square canvas, exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, one enemy centered wholly inside each quadrant, generous empty spacing, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left quadrant: a long black-and-ice frost serpent with crystalline horns. Top-right quadrant: an adult marsh witch in fully covered dark blue ritual robes carrying a bone staff. Bottom-left quadrant: a squat ice-armored giant toad with pale blue crystal plates. Bottom-right quadrant: a broad moon-shadow crocodile with silver-black scales and cold mist around its jaws. Distinct silhouettes, threatening poses, restrained Chinese fantasy palette, soft dark painted edges. Strictly placed on a SOLID UNIFORM #00B140 chroma key flat color background. The background is a single uniform shade of #00B140 chroma key green that fills 100% of pixels not occupied by the characters. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a green screen used for VFX compositing. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 60.4,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2181134,
+      "finalBytes": 256886,
+      "usage": {
+        "inputTokens": 268,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxqnfwf_yb6qjlgk",
+      "createdAt": "2026-07-23T16:42:49Z"
+    },
+    {
+      "name": "enemy-sheet-myriad-beast",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-myriad-beast.e55d3a84.webp",
+      "contentHash": "e55d3a84",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet matching an elegant ink-wash immortal cultivation game. Square composition with exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, one enemy centered wholly inside each quadrant, generous empty spacing, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left: a massive mountain-shaking rhinoceros with gray stone armor and a cracked horn. Top-right: an adult fox-clan guard in fully covered ivory and dark red armor with subtle fox ears, wielding a spear. Bottom-left: a sleek thunder-marked leopard with blue-white lightning patterns. Bottom-right: an ancient twisted vine demon with dark bark limbs and muted crimson leaves. Distinct silhouettes, threatening poses, restrained Chinese fantasy palette, soft dark painted edges. Strictly placed on a SOLID UNIFORM #FF00FF chroma key flat color background. The background is a single uniform shade of #FF00FF chroma key magenta that fills 100% of pixels not occupied by the characters. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a magenta screen used for VFX compositing. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 67.5,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2042007,
+      "finalBytes": 251956,
+      "usage": {
+        "inputTokens": 275,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxqpuz1_bfhhetad",
+      "createdAt": "2026-07-23T16:44:32Z"
+    },
+    {
+      "name": "enemy-sheet-endless-sandsea",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-endless-sandsea.99cdfdea.webp",
+      "contentHash": "99cdfdea",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet in an elegant ink-wash immortal cultivation game style. Square composition, exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, one enemy centered wholly inside each quadrant, generous empty spacing, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left quadrant: a heavy sand-burrowing drake with ochre scales and shovel-like claws, threatening pose. Top-right quadrant: an adult bone shaman in fully covered pale ritual robes with a skull-topped staff, threatening pose. Bottom-left quadrant: a giant mirage scorpion with translucent amber armor and raised pincers, threatening pose. Bottom-right quadrant: an adult sun-scarred desert bandit in layered tan and black robes wielding twin crescent knives, threatening pose. Distinct silhouettes, restrained Chinese fantasy palette, soft dark painted edges, painterly ink-wash rendering, crisp readable character isolation. Strictly placed on a SOLID UNIFORM #00B140 chroma key flat color background filling all non-character pixels, no gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background exactly like a green screen used for VFX compositing. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 61.8,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2236347,
+      "finalBytes": 280000,
+      "usage": {
+        "inputTokens": 279,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxqs1ov_t2cpxpo2",
+      "createdAt": "2026-07-23T16:46:17Z"
+    },
+    {
+      "name": "enemy-sheet-sky-rift",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-sky-rift.67386be4.webp",
+      "contentHash": "67386be4",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet in the style of an elegant ink-wash immortal cultivation game. Square composition. Exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, one enemy centered wholly inside each quadrant, generous empty spacing between them, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left: an adult armored rift warrior in cracked black plate carrying a long spear. Top-right: a spectral ancient battle spirit in weathered ceremonial armor with a translucent blade. Bottom-left: a predatory void-wing harrier with torn dark wings and violet fissure light. Bottom-right: a heavy bronze war puppet with four arms, engraved talismans, and blunt weapons. Distinct silhouettes, threatening poses, restrained Chinese fantasy palette, soft dark painted edges. Strictly placed on a SOLID UNIFORM #00B140 chroma key flat color background. The background is a single uniform shade of #00B140 chroma key green that fills 100% of pixels not occupied by the characters. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a green screen used for VFX compositing. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 67.4,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2022301,
+      "finalBytes": 223328,
+      "usage": {
+        "inputTokens": 276,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxquc2i_8s6iiads",
+      "createdAt": "2026-07-23T16:48:00Z"
+    },
+    {
+      "name": "enemy-sheet-starfall-sea",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-starfall-sea.7f2aed35.webp",
+      "contentHash": "7f2aed35",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet in an elegant ink-wash immortal cultivation aesthetic. Square composition, exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, one enemy centered wholly inside each quadrant, generous empty spacing between them, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left: a huge star-tide sea beast with dark blue scales, fins, and constellations glowing across its body. Top-right: an adult deep-sea alien warrior in fully covered shell armor holding a coral trident. Bottom-left: a floating astral jellyfish with a luminous silver-blue bell and long stinging tendrils. Bottom-right: a broad abyss crab general with black shell armor, one massive claw, and a ceremonial helm. Distinct silhouettes, threatening poses, restrained Chinese fantasy palette, soft dark painted edges. Background must be a solid uniform chroma key flat color #00B140 filling all negative space, 100% flat and even, no gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat green screen background exactly #00B140. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 64,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2155908,
+      "finalBytes": 267840,
+      "usage": {
+        "inputTokens": 260,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxqwkrf_12fs84cz",
+      "createdAt": "2026-07-23T16:49:46Z"
+    },
+    {
+      "name": "enemy-sheet-great-void",
+      "status": "success",
+      "path": "publish/assets/generated/enemy-sheet-great-void.9c23e091.webp",
+      "contentHash": "9c23e091",
+      "revisedPrompt": "Painterly Chinese fantasy 2D game enemy sprite sheet, elegant ink-wash immortal cultivation game aesthetic. Square composition, exactly four isolated full-body enemy characters arranged in a strict 2 by 2 grid, each centered wholly inside its own quadrant, generous empty spacing, no overlap across quadrant boundaries, consistent readable battle-token scale, all facing slightly left. Top-left quadrant: a massive void devourer beast with a circular maw, black-violet armor, fractured space around its body, threatening pose. Top-right quadrant: a fallen immortal remnant in torn fully covered white and dark robes, floating with a broken sword and a dim halo. Bottom-left quadrant: a timeworn celestial puppet with porcelain armor, brass joints, and an hourglass core. Bottom-right quadrant: a hovering rift-eye demon formed from dark crystal petals around one luminous eye. Distinct silhouettes, restrained Chinese fantasy palette, soft dark painted edges. STRICTLY on a SOLID UNIFORM #00B140 chroma key flat color background filling 100% of pixels not occupied by the characters; no gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background exactly like a green screen for VFX compositing. No text, no labels, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 70.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1969079,
+      "finalBytes": 233610,
+      "usage": {
+        "inputTokens": 271,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mrxqyryy_up24jl0k",
+      "createdAt": "2026-07-23T16:51:32Z"
     }
   ]
 }

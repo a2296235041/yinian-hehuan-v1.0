@@ -28,7 +28,8 @@
     root.Game.EventBus.emit('player-state-ready', {
       player: { ...root.Game.player },
       cultivation: root.GameCultivation.getSnapshot(),
-      inventory: root.GameInventory.getSnapshot()
+      inventory: root.GameInventory.getSnapshot(),
+      growth: root.GamePlayerGrowth.getSnapshot()
     });
     root.Game.EventBus.emit('game-day-changed', {
       day: root.Game.player.day,
@@ -41,6 +42,7 @@
     await Promise.all([
       root.GameInventory.restore(snapshot?.inventory),
       root.GameCultivation.restore(snapshot?.cultivation),
+      root.GamePlayerGrowth.restore(snapshot?.growth),
       root.GameAffinity.restore(snapshot?.affinity)
     ]);
     const origin = snapshot?.player?.origin || root.Game.player?.origin;
@@ -63,6 +65,7 @@
     readyPromise = Promise.all([
       root.GameInventory.initialize(scene.cache.json.get('items') || []),
       root.GameCultivation.initialize(root.Game.Data.cultivationLevels || {}),
+      root.GamePlayerGrowth.initialize(),
       npcSystem.ready()
     ]).then(async () => {
       if (savedSnapshot) return applySnapshot(savedSnapshot);

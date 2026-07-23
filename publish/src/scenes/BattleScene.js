@@ -64,7 +64,8 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         const enemyView = Game.BattleUI.createFighter(
             this, 920, this.encounter.enemy.name, this.encounter.enemy.image_key, false,
             `${enemyRealm}\n攻击 ${this.encounter.enemy.attack}　防御 ${this.encounter.enemy.defense}` +
-            `　速度 ${this.encounter.enemy.speed}`
+            `　速度 ${this.encounter.enemy.speed}`,
+            this.encounter.enemy.image_frame
         );
         this.playerBar = playerView.bar;
         this.playerHpText = playerView.text;

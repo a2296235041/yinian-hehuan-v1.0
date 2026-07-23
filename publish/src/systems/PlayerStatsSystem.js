@@ -8,7 +8,8 @@
   };
 
   function valueOf(attributes, key) {
-    return attributeScale[attributes?.[key]] || 50;
+    const base = attributeScale[attributes?.[key]] || 50;
+    return base + (root.GamePlayerGrowth?.getBonus(key) || 0);
   }
 
   // 身份属性是稳定的基础值，境界则同步提高实战属性。

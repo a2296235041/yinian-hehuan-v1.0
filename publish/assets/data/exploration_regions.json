@@ -8,9 +8,11 @@
     "stamina_cost": 2,
     "cultivation_min": 12,
     "cultivation_max": 22,
+    "stone_min": 5,
+    "stone_max": 12,
     "loot_ids": ["spirit_herb", "fragrant_jade"],
     "npc_ids": ["su_meier", "mo_qiaoer"],
-    "enemy_ids": ["mist_wolf", "rogue_cultivator"]
+    "enemy_ids": ["mist_wolf", "rogue_cultivator", "cloud_hawk", "stonehide_boar"]
   },
   {
     "id": "sunset_valley",
@@ -21,9 +23,11 @@
     "stamina_cost": 2,
     "cultivation_min": 28,
     "cultivation_max": 45,
+    "stone_min": 12,
+    "stone_max": 26,
     "loot_ids": ["peach_wine", "spirit_herb"],
     "npc_ids": ["qin_wanqing", "su_meier"],
-    "enemy_ids": ["flame_ape", "red_cloak_raider"]
+    "enemy_ids": ["flame_ape", "red_cloak_raider", "ember_lizard", "scarlet_wasp_queen"]
   },
   {
     "id": "frost_moon_marsh",
@@ -34,9 +38,11 @@
     "stamina_cost": 3,
     "cultivation_min": 60,
     "cultivation_max": 90,
+    "stone_min": 24,
+    "stone_max": 48,
     "loot_ids": ["frost_lotus", "beast_core"],
     "npc_ids": ["han_yueshuang", "yun_shuiyao"],
-    "enemy_ids": ["frost_serpent", "marsh_witch"]
+    "enemy_ids": ["frost_serpent", "marsh_witch", "ice_armor_toad", "moonshade_crocodile"]
   },
   {
     "id": "myriad_beast_range",
@@ -47,9 +53,11 @@
     "stamina_cost": 3,
     "cultivation_min": 120,
     "cultivation_max": 180,
+    "stone_min": 45,
+    "stone_max": 90,
     "loot_ids": ["beast_core", "moon_silk"],
     "npc_ids": ["hu_jiuer", "bai_zhi"],
-    "enemy_ids": ["stone_rhino", "fox_guard"]
+    "enemy_ids": ["stone_rhino", "fox_guard", "thunder_leopard", "ancient_vine_demon"]
   },
   {
     "id": "endless_sandsea",
@@ -60,9 +68,11 @@
     "stamina_cost": 4,
     "cultivation_min": 260,
     "cultivation_max": 380,
+    "stone_min": 90,
+    "stone_max": 180,
     "loot_ids": ["star_fragment", "fragrant_jade"],
     "npc_ids": ["xiao_qingxuan", "liu_hanyan"],
-    "enemy_ids": ["sand_drake", "bone_shaman"]
+    "enemy_ids": ["sand_drake", "bone_shaman", "mirage_scorpion", "sunscar_bandit"]
   },
   {
     "id": "sky_rift_battlefield",
@@ -73,9 +83,11 @@
     "stamina_cost": 4,
     "cultivation_min": 550,
     "cultivation_max": 800,
+    "stone_min": 180,
+    "stone_max": 340,
     "loot_ids": ["star_fragment", "moon_silk"],
     "npc_ids": ["liu_hanyan", "han_yueshuang"],
-    "enemy_ids": ["rift_warrior", "ancient_battle_spirit"]
+    "enemy_ids": ["rift_warrior", "ancient_battle_spirit", "voidwing_harrier", "bronze_war_puppet"]
   },
   {
     "id": "starfall_sea",
@@ -86,9 +98,11 @@
     "stamina_cost": 5,
     "cultivation_min": 1100,
     "cultivation_max": 1600,
+    "stone_min": 360,
+    "stone_max": 700,
     "loot_ids": ["star_fragment", "frost_lotus"],
     "npc_ids": ["bai_zhi", "yun_shuiyao"],
-    "enemy_ids": ["star_tide_beast", "deep_sea_alien"]
+    "enemy_ids": ["star_tide_beast", "deep_sea_alien", "astral_jellyfish", "abyss_crab_general"]
   },
   {
     "id": "great_void_relic",
@@ -99,8 +113,10 @@
     "stamina_cost": 5,
     "cultivation_min": 2200,
     "cultivation_max": 3200,
+    "stone_min": 720,
+    "stone_max": 1400,
     "loot_ids": ["void_orchid", "star_fragment"],
     "npc_ids": ["hu_jiuer", "xiao_qingxuan"],
-    "enemy_ids": ["void_devourer", "fallen_immortal"]
+    "enemy_ids": ["void_devourer", "fallen_immortal", "timeworn_puppet", "rift_eye_demon"]
   }
 ]

@@ -157,6 +157,21 @@
     });
   }
 
+  function removeSpiritStones(amount, source = 'purchase') {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      const delta = clampQuantity(amount);
+      if (delta <= 0) return { changed: false, reason: 'invalid_amount' };
+      if (state.spiritStones < delta) {
+        return { changed: false, reason: 'insufficient', balance: state.spiritStones };
+      }
+      state.spiritStones -= delta;
+      const durable = await persist(true);
+      emitChange('spirit_stones', -delta, durable, source);
+      return { changed: true, balance: state.spiritStones, durable };
+    });
+  }
+
   function restore(nextState) {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
@@ -166,7 +181,6 @@
       return { durable, snapshot: snapshot() };
     });
   }
-
   root.GameInventory = {
     initialize,
     ready: () => readyPromise || Promise.resolve(snapshot()),
@@ -179,6 +193,7 @@
     add,
     remove,
     addSpiritStones,
+    removeSpiritStones,
     exportState,
     restore
   };

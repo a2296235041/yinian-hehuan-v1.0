@@ -1,6 +1,5 @@
 var Game = window.Game || {};
 Game.Scenes = Game.Scenes || {};
-
 // 储物袋采用独立覆盖场景，底层地图暂停，避免玩家查看物品时误点建筑。
 Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
     constructor() {
@@ -8,10 +7,15 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.entryObjects = [];
         this.spiritStoneText = null;
         this.baseScenesRestored = false;
+        this.page = 0;
+        this.pageText = null;
+        this.useStatusText = null;
+        this.busyItemId = null;
+        this.requestId = 0;
     }
-
     create() {
         this.baseScenesRestored = false;
+        this.busyItemId = null;
         this.scene.pause('GameScene');
         this.scene.pause('UIScene');
         this.scene.setVisible(false, 'GameScene');
@@ -47,19 +51,33 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             padding: { x: 16, y: 9 }
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
         close.on('pointerdown', () => this.close());
+        this.useStatusText = this.add.text(640, 606, '', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '16px',
+            color: '#d8c38c'
+        }).setOrigin(0.5);
+        this.makePageButton(555, '<', -1);
+        this.pageText = this.add.text(640, 660, '', {
+            fontFamily: 'serif',
+            fontSize: '17px',
+            color: '#f4ead2'
+        }).setOrigin(0.5);
+        this.makePageButton(725, '>', 1);
         Game.EventBus.on('inventory-changed', this.renderItems, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         window.GameInventory.ready().then(() => this.renderItems());
         this.renderItems();
         Game.SceneTransition.fadeIn(this);
     }
-
     renderItems() {
         this.spiritStoneText?.setText(`灵石　${window.GameInventory.getSpiritStones()}`);
         this.entryObjects.forEach((object) => object.destroy());
         this.entryObjects = [];
         const items = window.GameInventory.getSnapshot().items
             .filter((item) => item.quantity > 0);
+        const pageCount = Math.max(1, Math.ceil(items.length / 8));
+        this.page = Math.min(this.page, pageCount - 1);
+        this.pageText?.setText(`${this.page + 1} / ${pageCount}`);
         if (!items.length) {
             this.entryObjects.push(this.add.text(640, 340, '储物袋空空如也', {
                 fontFamily: '"Noto Serif SC", serif',
@@ -68,12 +86,12 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             }).setOrigin(0.5));
             return;
         }
-        items.slice(0, 10).forEach((item, index) => {
+        items.slice(this.page * 8, this.page * 8 + 8).forEach((item, index) => {
             const column = index % 2;
             const row = Math.floor(index / 2);
             const x = column === 0 ? 360 : 920;
-            const y = 150 + row * 96;
-            this.entryObjects.push(this.add.rectangle(x, y + 34, 500, 78, 0x14231f, 0.92)
+            const y = 150 + row * 108;
+            this.entryObjects.push(this.add.rectangle(x, y + 38, 500, 88, 0x14231f, 0.92)
                 .setStrokeStyle(1, 0x42685c, 0.9));
             this.entryObjects.push(this.add.text(x - 225, y + 10, item.name, {
                 fontFamily: '"Noto Serif SC", serif',
@@ -89,19 +107,81 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '14px',
                 color: '#a9c8bd',
-                wordWrap: { width: 430 }
+                wordWrap: { width: 350 }
             }));
+            if (['cultivation', 'attribute'].includes(item.type)) {
+                const use = this.add.text(x + 205, y + 59, '使用', {
+                    fontFamily: '"Noto Serif SC", serif',
+                    fontSize: '15px',
+                    color: '#14231f',
+                    backgroundColor: '#d8c38c',
+                    padding: { x: 10, y: 5 }
+                }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+                use.on('pointerdown', () => this.useItem(item));
+                this.entryObjects.push(use);
+            }
         });
     }
-
+    makePageButton(x, label, offset) {
+        const button = this.add.text(x, 660, label, {
+            fontFamily: 'serif',
+            fontSize: '26px',
+            color: '#14231f',
+            backgroundColor: '#f4ead2',
+            padding: { x: 14, y: 5 }
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        button.on('pointerdown', () => {
+            const count = Math.max(1, Math.ceil(
+                window.GameInventory.getSnapshot().items.filter((item) => item.quantity > 0).length / 8
+            ));
+            this.page = (this.page + offset + count) % count;
+            window.GameAudio.sfx('click');
+            this.renderItems();
+        });
+    }
+    async useItem(item) {
+        if (this.busyItemId) return;
+        this.busyItemId = item.id;
+        const requestId = ++this.requestId;
+        this.useStatusText.setText(`正在使用${item.name}…`);
+        try {
+            const result = await window.GameShop.useItem(item.id);
+            if (requestId !== this.requestId || !this.useStatusText?.active) return;
+            if (!result.changed) {
+                window.GameAudio.sfx('deny');
+                const messages = {
+                    bottleneck: '修为已达瓶颈，请先找 NPC 双修突破。',
+                    max_realm: '当前修炼体系已达最高境界。',
+                    insufficient: '物品数量不足。'
+                };
+                this.useStatusText.setText(messages[result.reason] || '此物暂时无法使用。');
+                return;
+            }
+            window.GameAudio.sfx('success');
+            this.useStatusText.setText('物品生效，AI 正在补全这一幕…');
+            const story = await window.GameNarrative.generateDetailed('use_item', {
+                item: item.name,
+                effect: window.GameShop.effectLabel(item),
+                realm: window.GameCultivation.getSnapshot().label,
+                attributes: window.GamePlayerStats.getSnapshot()
+            }, result.text);
+            if (requestId === this.requestId && this.useStatusText.active) {
+                this.useStatusText.setText(story);
+            }
+        } finally {
+            if (requestId === this.requestId) this.busyItemId = null;
+            if (this.sys.isActive()) this.renderItems();
+        }
+    }
     close() {
+        this.requestId += 1;
+        window.GameNarrative.cancel();
         window.GameAudio.sfx('click');
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
             this.scene.stop();
         });
     }
-
     restoreBaseScenes() {
         if (this.baseScenesRestored) return;
         this.baseScenesRestored = true;
@@ -113,7 +193,6 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         Game.SceneTransition.fadeIn(this.scene.get('UIScene'));
         window.GameModelUI.setMode('compact');
     }
-
     cleanup() {
         Game.EventBus.off('inventory-changed', this.renderItems, this);
         this.restoreBaseScenes();
