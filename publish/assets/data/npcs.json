@@ -5,8 +5,7 @@
     "title": "接引师姐",
     "personality": "温柔体贴，善解人意，带着一丝若有若无的媚意。",
     "physique": "丰腴性感，曲线玲珑",
-    "initial_affinity": 20,
-    "dialogue_file": "su_meier_dialogue.json"
+    "initial_affinity": 20
   },
   {
     "id": "liu_hanyan",
@@ -14,8 +13,7 @@
     "title": "冷艳宗主",
     "personality": "高贵冷艳，威严与妩媚并存，心思深沉。",
     "physique": "高挑匀称，女王气场",
-    "initial_affinity": 0,
-    "dialogue_file": "liu_hanyan_dialogue.json"
+    "initial_affinity": 0
   },
   {
     "id": "han_yueshuang",
@@ -23,8 +21,7 @@
     "title": "执法长老",
     "personality": "铁面无私，严厉刻板，似乎有着不为人知的过去。",
     "physique": "健美修长，充满力量感",
-    "initial_affinity": -10,
-    "dialogue_file": "han_yueshuang_dialogue.json"
+    "initial_affinity": -10
   },
   {
     "id": "yun_shuiyao",
@@ -32,8 +29,7 @@
     "title": "书阁阁主",
     "personality": "知性优雅，慵懒恬静，对有趣的人和事抱有好奇。",
     "physique": "娇小玲珑，书卷气十足",
-    "initial_affinity": 5,
-    "dialogue_file": "yun_shuiyao_dialogue.json"
+    "initial_affinity": 5
   },
   {
     "id": "qin_wanqing",
@@ -41,8 +37,7 @@
     "title": "首席炼丹师",
     "personality": "火爆直率，敢爱敢恨，像一团烈火。",
     "physique": "火辣劲爆，前凸后翘",
-    "initial_affinity": 10,
-    "dialogue_file": "qin_wanqing_dialogue.json"
+    "initial_affinity": 10
   },
   {
     "id": "mo_qiaoer",
@@ -50,8 +45,7 @@
     "title": "首席炼器师",
     "personality": "天真烂漫，古灵精怪，是个技术宅。",
     "physique": "萝莉体型，平胸但可爱",
-    "initial_affinity": 15,
-    "dialogue_file": "mo_qiaoer_dialogue.json"
+    "initial_affinity": 15
   },
   {
     "id": "bai_zhi",
@@ -59,8 +53,7 @@
     "title": "后山隐士",
     "personality": "清冷脱俗，不食人间烟火，身上充满了秘密。",
     "physique": "纤细柔弱，我见犹怜",
-    "initial_affinity": 0,
-    "dialogue_file": "bai_zhi_dialogue.json"
+    "initial_affinity": 0
   },
   {
     "id": "hu_jiuer",
@@ -68,8 +61,7 @@
     "title": "妖族公主",
     "personality": "妖媚入骨，狡黠顽皮，充满了野性的诱惑。",
     "physique": "极度妖娆，有狐狸尾巴",
-    "initial_affinity": 5,
-    "dialogue_file": "hu_jiuer_dialogue.json"
+    "initial_affinity": 5
   },
   {
     "id": "xiao_qingxuan",
@@ -77,7 +69,6 @@
     "title": "正道卧底",
     "personality": "正气凛然，意志坚定，但内心在不断动摇。",
     "physique": "标准的仙子体型，清丽出尘",
-    "initial_affinity": -5,
-    "dialogue_file": "xiao_qingxuan_dialogue.json"
+    "initial_affinity": -5
   }
 ]

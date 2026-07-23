@@ -9,25 +9,19 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.cultivationText = null;
         this.cultivationCountText = null;
         this.logText = null;
-        this.dialogueBox = null;
-        this.playerOptionsGroup = null;
     }
 
     create() {
         this.createStatusDisplay();
         this.createActionButtons();
         this.createLogText();
-        this.createDialogueBox();
-
-        Game.EventBus.on('update-dialogue-ui', this.showDialogue, this);
-        Game.EventBus.on('hide-dialogue-ui', this.hideDialogue, this);
         Game.EventBus.on('affinity-changed', this.showAffinityChange, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.updateUI();
     }
 
     createStatusDisplay() {
-        const panel = this.add.rectangle(18, 16, 238, 132, 0x0d1b17, 0.88)
+        this.add.rectangle(18, 16, 238, 132, 0x0d1b17, 0.88)
             .setOrigin(0, 0)
             .setStrokeStyle(1, 0xd8c38c, 0.65);
         const style = {
@@ -39,7 +33,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.staminaText = this.add.text(32, 57, '', style);
         this.cultivationText = this.add.text(32, 86, '', style);
         this.cultivationCountText = this.add.text(32, 115, '', style);
-        panel.setDepth(-1);
     }
 
     createActionButtons() {
@@ -60,7 +53,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             this.tweens.add({ targets: button, scale: 0.95, duration: 70, yoyo: true });
             action();
         });
-        return button;
     }
 
     createLogText() {
@@ -71,42 +63,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             backgroundColor: 'rgba(13,27,23,0.92)',
             padding: { x: 20, y: 12 }
         }).setOrigin(0.5).setAlpha(0);
-    }
-
-    createDialogueBox() {
-        const width = this.cameras.main.width;
-        const height = this.cameras.main.height;
-        this.dialogueBox = this.add.container(width / 2, height - 126);
-        const background = this.add.graphics()
-            .fillStyle(0x09100e, 0.96)
-            .fillRoundedRect(-width / 2 + 38, -108, width - 76, 220, 6)
-            .lineStyle(2, 0xd8c38c, 0.75)
-            .strokeRoundedRect(-width / 2 + 38, -108, width - 76, 220, 6);
-        const name = this.add.text(-width / 2 + 62, -92, '', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '21px',
-            color: '#d8c38c'
-        });
-        const dialogue = this.add.text(-width / 2 + 62, -56, '', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#f4ead2',
-            wordWrap: { width: width - 150 }
-        });
-        const close = this.add.text(width / 2 - 64, -92, '×', {
-            fontFamily: 'sans-serif',
-            fontSize: '30px',
-            color: '#f4ead2',
-            padding: { x: 10, y: 4 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        close.on('pointerdown', () => {
-            const gameScene = this.scene.get('GameScene');
-            gameScene?.dialogueSystem?.endDialogue();
-        });
-
-        this.playerOptionsGroup = this.add.group();
-        this.dialogueBox.add([background, name, dialogue, close]);
-        this.dialogueBox.setVisible(false);
     }
 
     handleCultivate() {
@@ -137,37 +93,9 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.showLog(message);
     }
 
-    showDialogue(data) {
-        this.playerOptionsGroup.clear(true, true);
-        this.dialogueBox.getAt(1).setText(data.npcName);
-        this.dialogueBox.getAt(2).setText(data.npcText);
-        let y = 4;
-        data.playerOptions.forEach((option, index) => {
-            const text = this.add.text(-560, y, `> ${option.text}`, {
-                fontFamily: '"Noto Serif SC", serif',
-                fontSize: '17px',
-                color: '#cde9df',
-                padding: { y: 5 }
-            }).setInteractive({ useHandCursor: true });
-            text.on('pointerdown', () => {
-                window.GameAudio.sfx('click');
-                this.scene.get('GameScene')?.dialogueSystem?.chooseOption(index);
-            });
-            this.playerOptionsGroup.add(text);
-            this.dialogueBox.add(text);
-            y += 31;
-        });
-        this.dialogueBox.setVisible(true);
-    }
-
-    hideDialogue() {
-        this.playerOptionsGroup.clear(true, true);
-        this.dialogueBox.setVisible(false);
-    }
-
     showAffinityChange(npcId, affinity) {
-        window.GameAudio.sfx(affinity >= 0 ? 'success' : 'deny');
-        this.showLog(`好感度变为 ${affinity}`);
+        window.GameAudio.sfx('success');
+        this.showLog(`交谈有所收获，好感度变为 ${affinity}`);
     }
 
     updateUI() {
@@ -193,8 +121,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     }
 
     cleanup() {
-        Game.EventBus.off('update-dialogue-ui', this.showDialogue, this);
-        Game.EventBus.off('hide-dialogue-ui', this.hideDialogue, this);
         Game.EventBus.off('affinity-changed', this.showAffinityChange, this);
     }
 };

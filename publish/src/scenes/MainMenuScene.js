@@ -7,6 +7,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
+        window.GameModelUI.setMode('menu');
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
         const background = this.add.image(width / 2, height / 2, 'bg-sect');

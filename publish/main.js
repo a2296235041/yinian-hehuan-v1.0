@@ -2,6 +2,12 @@
   'use strict';
 
   try {
+    root.GameModelUI.init();
+    root.GameDialoguePanel.init();
+    root.GameAIModels.initialize().catch((error) => {
+      console.error('AI 模型初始化失败:', error.code || '', error.message, error.stack);
+    });
+
     const config = {
       type: Phaser.AUTO,
       parent: 'game-container',

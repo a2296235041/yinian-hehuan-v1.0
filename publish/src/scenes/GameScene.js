@@ -8,6 +8,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.npcSystem = null;
         this.dialogueSystem = null;
         this.viewObjects = [];
+        this.currentBuilding = null;
     }
 
     init(data) {
@@ -15,6 +16,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     create() {
+        window.GameModelUI.setMode('compact');
         this.npcSystem = new Game.NPCSystem(this);
         this.npcSystem.init();
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
@@ -37,7 +39,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     clearView() {
-        if (this.dialogueSystem?.currentNode) this.dialogueSystem.endDialogue();
+        if (this.dialogueSystem?.isActive()) this.dialogueSystem.endDialogue();
         this.viewObjects.forEach((object) => object.destroy());
         this.viewObjects = [];
     }
@@ -52,6 +54,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     showSectMap() {
         this.clearView();
+        this.currentBuilding = null;
         this.addCoverBackground('bg-sect-map', 0.18);
         this.addViewObject(this.add.text(640, 38, '合欢宗 · 山门总览', {
             fontFamily: '"Noto Serif SC", serif',
@@ -98,6 +101,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     showBuilding(building) {
         this.clearView();
+        this.currentBuilding = building;
         this.addCoverBackground('bg-sect', 0.52);
         this.addViewObject(this.add.text(640, 58, building.name, {
             fontFamily: '"Noto Serif SC", serif',

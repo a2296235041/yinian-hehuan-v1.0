@@ -10,7 +10,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 17;
+        const totalResources = 9;
 
         this.cameras.main.setBackgroundColor('#09100e');
         const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
@@ -50,13 +50,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.json('character_origins', './assets/data/character_origins.json');
         this.load.json('cultivation_levels', './assets/data/cultivation_levels.json');
         this.load.json('npcs', './assets/data/npcs.json');
-
-        [
-            'su_meier', 'liu_hanyan', 'han_yueshuang', 'yun_shuiyao',
-            'qin_wanqing', 'mo_qiaoer', 'bai_zhi', 'hu_jiuer', 'xiao_qingxuan'
-        ].forEach((id) => {
-            this.load.json(`${id}_dialogue`, `./assets/dialogue/${id}_dialogue.json`);
-        });
+        this.load.json('npc_openings', './assets/data/npc_openings.json');
     }
 
     create() {
@@ -66,8 +60,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         }
         window.PlatformBridge.progress({
             phase: 'runtime_initializing',
-            loadedResources: 17,
-            totalResources: 17,
+            loadedResources: 9,
+            totalResources: 9,
             message: '正在布置宗门'
         });
         this.scene.start('MainMenuScene');

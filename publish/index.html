@@ -13,6 +13,46 @@
     <div id="game-container" aria-label="游戏画面"></div>
     <button id="audio-toggle" class="audio-toggle" type="button"
             aria-label="切换声音" title="切换声音">&#128266;</button>
+    <section id="model-panel" class="model-panel" hidden>
+      <button id="model-panel-toggle" class="model-panel-toggle" type="button"
+              aria-label="选择 AI 模型" title="选择 AI 模型">&#9881;</button>
+      <div id="model-panel-content" class="model-panel-content">
+        <strong>AI 模型</strong>
+        <label>
+          <span>对话模型</span>
+          <select id="dialogue-model" aria-label="对话模型"></select>
+        </label>
+        <label>
+          <span>绘图模型</span>
+          <select id="draw-model" aria-label="绘图模型"></select>
+        </label>
+        <small id="model-status">正在读取可用模型…</small>
+      </div>
+    </section>
+    <section id="ai-dialogue-panel" class="ai-dialogue-panel" hidden>
+      <header>
+        <div>
+          <strong id="dialogue-npc-name"></strong>
+          <span id="dialogue-npc-title"></span>
+        </div>
+        <button id="dialogue-close" type="button" aria-label="结束对话">×</button>
+      </header>
+      <div id="dialogue-history" class="dialogue-history"></div>
+      <p id="dialogue-status" class="dialogue-status" aria-live="polite"></p>
+      <form id="dialogue-form" class="dialogue-form">
+        <input id="dialogue-input" type="text" maxlength="500"
+               autocomplete="off" placeholder="输入你想说的话">
+        <button id="dialogue-send" type="submit">发送</button>
+        <button id="dialogue-draw" type="button">绘制此刻</button>
+      </form>
+    </section>
+    <section id="ai-image-modal" class="ai-image-modal" hidden>
+      <div class="ai-image-content">
+        <button id="ai-image-close" type="button" aria-label="关闭图片">×</button>
+        <p id="ai-image-status" aria-live="polite"></p>
+        <img id="ai-image" alt="" hidden>
+      </div>
+    </section>
     <section id="boot-error" class="boot-error" hidden>
       <h1>游戏未能启动</h1>
       <p id="boot-error-message">请刷新后重试。</p>
@@ -24,7 +64,14 @@
   <script src="./src/platform/AudioManager.js"></script>
   <script src="./vendor/phaser.min.js"></script>
   <script src="./src/utils/EventBus.js"></script>
+  <script src="./src/ai/ModelPicker.js"></script>
+  <script src="./src/ai/CompletionsSafe.js"></script>
+  <script src="./src/ai/ImageWorkflow.js"></script>
   <script src="./src/data/BuildingData.js"></script>
+  <script src="./src/ai/AIModels.js"></script>
+  <script src="./src/ai/ModelUI.js"></script>
+  <script src="./src/ai/AIService.js"></script>
+  <script src="./src/ai/DialoguePanel.js"></script>
   <script src="./src/systems/NPCSystem.js"></script>
   <script src="./src/systems/DialogueSystem.js"></script>
   <script src="./src/scenes/BootScene.js"></script>
