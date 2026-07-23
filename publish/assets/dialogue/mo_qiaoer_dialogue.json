@@ -1,0 +1,56 @@
+{
+  "start_node": "greeting_1",
+  "nodes": {
+    "greeting_1": {
+      "npc_text": "哇！新来的师弟！你身上有什么好玩的东西吗？或者，你见过什么有趣的机关法宝吗？快告诉我！",
+      "player_options": [
+        {
+          "text": "我这里有一块奇特的矿石，不知师姐是否认得？",
+          "next_node": "response_item",
+          "affinity_change": 10
+        },
+        {
+          "text": "我刚来，身上没什么稀奇的东西。",
+          "next_node": "response_nothing",
+          "affinity_change": 0
+        },
+        {
+          "text": "小屁孩，别烦我。",
+          "next_node": "response_rude",
+          "affinity_change": -10
+        }
+      ]
+    },
+    "response_item": {
+      "npc_text": "这是……天外陨铁！太棒了！把它给我，我帮你打造一个超——厉害的法宝！",
+      "player_options": [
+        {
+          "text": "那就多谢师姐了！",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_nothing": {
+      "npc_text": "诶……真无聊。那你快去冒险，找到了好玩的东西再来找我！",
+      "player_options": [
+        {
+          "text": "好的。",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_rude": {
+      "npc_text": "（嘟起嘴）你才是小屁孩！不理你了！哼！",
+      "player_options": [
+        {
+          "text": "（她好像生气了）",
+          "next_node": "end"
+        }
+      ]
+    },
+    "end": {
+      "npc_text": null,
+      "end_dialogue": true
+    }
+  }
+}

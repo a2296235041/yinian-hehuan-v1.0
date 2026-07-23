@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "createdAt": "2026-07-23T12:36:05Z",
+  "updatedAt": "2026-07-23T12:40:09Z",
+  "assets": [
+    {
+      "name": "sect-courtyard",
+      "status": "success",
+      "path": "publish/assets/generated/sect-courtyard.c4be5633.webp",
+      "contentHash": "c4be5633",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation sect courtyard background for a 2D game, wide composition. Ancient timber halls with traditional curved roofs and carved wooden details, stone terraces and steps, flowering trees in bloom, distant misty mountains, subtle warm lanterns glowing softly at dawn, tranquil atmosphere, layered depth from foreground to background, clear open central area reserved for character placement, no foreground characters, no UI overlay, no text, no logo, no watermark. High-detail environment art, soft brushwork, cinematic lighting, harmonious colors, serene and elegant.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 3052820,
+      "finalBytes": 279424,
+      "usage": {
+        "inputTokens": 116,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxhulek_jce1p5l7",
+      "createdAt": "2026-07-23T12:36:05Z"
+    },
+    {
+      "name": "sect-master",
+      "status": "success",
+      "path": "publish/assets/generated/sect-master.b9883f28.webp",
+      "contentHash": "b9883f28",
+      "revisedPrompt": "A painterly Chinese fantasy game character: an adult woman immortal sect master in elegant layered black, ivory, and muted red robes, dignified confident expression, tasteful fully covered clothing, full body, isolated single character, centered, neutral commanding pose, facing slightly to the right. Strictly placed on a SOLID UNIFORM #00B140 chroma key flat color background. The background is a single uniform shade of #00B140 chroma key green that fills 100% of pixels not occupied by the character. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a green screen used for VFX compositing. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "941x1672",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 53.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1806519,
+      "finalBytes": 155172,
+      "usage": {
+        "inputTokens": 158,
+        "outputImageTokens": 1158
+      },
+      "traceId": "trace_mrxhwskl_drizzya1",
+      "createdAt": "2026-07-23T12:37:34Z"
+    },
+    {
+      "name": "scholar-disciple",
+      "status": "success",
+      "path": "publish/assets/generated/scholar-disciple.e2aa08f6.webp",
+      "contentHash": "e2aa08f6",
+      "revisedPrompt": "Painterly Chinese fantasy game character, an adult woman scholar cultivator carrying a closed book and a small alchemy pouch, elegant cream, dusty blue, and gold layered robes, calm intelligent expression, tasteful fully covered clothing, full body, isolated single character, centered, welcoming neutral pose, facing slightly to the right. Strictly placed on a SOLID UNIFORM #00B140 chroma key flat color background. The background is a single uniform shade of #00B140 chroma key green that fills 100% of pixels not occupied by the character. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a green screen used for VFX compositing. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1024x1536",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 67.5,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1808615,
+      "finalBytes": 133070,
+      "usage": {
+        "inputTokens": 166,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxhyecl_546skfcs",
+      "createdAt": "2026-07-23T12:38:50Z"
+    },
+    {
+      "name": "fox-princess",
+      "status": "success",
+      "path": "publish/assets/generated/fox-princess.6e212211.webp",
+      "contentHash": "6e212211",
+      "revisedPrompt": "A painterly Chinese fantasy game character, adult fox spirit princess with subtle fox ears and one flowing tail, ornate plum, ivory, and gold ceremonial robes, clever warm expression, tasteful fully covered clothing, full body, isolated single character, centered composition, playful poised stance, facing slightly to the right. Strictly on a SOLID UNIFORM #00B140 chroma key flat color background filling the entire image behind the character. No gradient, no shadow, no texture, no scenery, no ground, no decoration, no environmental elements. Pure flat color background, exactly like a green screen used for VFX compositing. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1024x1536",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 59.2,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1971873,
+      "finalBytes": 163572,
+      "usage": {
+        "inputTokens": 140,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxhzzy8_auu94q55",
+      "createdAt": "2026-07-23T12:40:09Z"
+    }
+  ]
+}

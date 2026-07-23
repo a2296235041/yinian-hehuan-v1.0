@@ -1,0 +1,114 @@
+:root {
+  color-scheme: dark;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  background: #09100e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background:
+    linear-gradient(rgba(6, 14, 12, 0.42), rgba(6, 14, 12, 0.72)),
+    url("./assets/generated/sect-courtyard.c4be5633.webp") center / cover no-repeat;
+}
+
+#game-shell,
+#game-container {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+#game-shell {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+#game-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#game-container canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  touch-action: none;
+}
+
+.audio-toggle {
+  position: absolute;
+  z-index: 5;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(244, 234, 210, 0.62);
+  border-radius: 6px;
+  color: #f4ead2;
+  background: rgba(13, 27, 23, 0.82);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.audio-toggle:active {
+  transform: scale(0.94);
+}
+
+.boot-error {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 24px;
+  text-align: center;
+  color: #f4ead2;
+  background: rgba(8, 15, 13, 0.96);
+}
+
+.boot-error[hidden] {
+  display: none;
+}
+
+.boot-error h1 {
+  margin: 0 0 12px;
+  font-size: 28px;
+}
+
+.boot-error p {
+  margin: 0 0 20px;
+  color: #d8c38c;
+}
+
+.boot-error button {
+  min-width: 132px;
+  min-height: 44px;
+  border: 1px solid #d8c38c;
+  border-radius: 4px;
+  color: #14231f;
+  background: #f4ead2;
+  font: inherit;
+  cursor: pointer;
+}

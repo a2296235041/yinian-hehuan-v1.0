@@ -1,0 +1,92 @@
+[
+  {
+    "id": "demon_prince",
+    "name": "魔门弃子",
+    "description": "曾为魔门私生子，遭遗弃后挣扎求生，为追求更原始的力量而加入合欢宗。",
+    "talent": {
+      "name": "魔心通明",
+      "description": "与“邪派”女子双修时修为加成更高，但攻略“正道”仙子则会困难重重。"
+    },
+    "attributes": {
+      "strength": "极强",
+      "constitution": "极强",
+      "agility": "中等",
+      "intelligence": "中等",
+      "charisma": "较弱",
+      "wisdom": "较弱",
+      "luck": "较弱"
+    }
+  },
+  {
+    "id": "alchemy_boy",
+    "name": "丹宗药童",
+    "description": "原是丹宗的普通药童，偷学禁术发现丹药与双修结合的秘密后，叛逃而来。",
+    "talent": {
+      "name": "百草亲和",
+      "description": "探险时更容易获得稀有草药，可制作提升情趣、增加好感的“奇药”。"
+    },
+    "attributes": {
+      "strength": "较弱",
+      "constitution": "中等",
+      "agility": "较弱",
+      "intelligence": "极强",
+      "charisma": "中等",
+      "wisdom": "极强",
+      "luck": "中等"
+    }
+  },
+  {
+    "id": "secret_guard_descendant",
+    "name": "锦衣卫后裔",
+    "description": "凡间密探组织的后人，家道中落，却发现祖传的洞察人心之术，在“攻略仙子心防”方面有奇效。",
+    "talent": {
+      "name": "洞察人心",
+      "description": "对话时有几率看破对方内心真实想法，选对选项可大幅提升好感。"
+    },
+    "attributes": {
+      "strength": "中等",
+      "constitution": "较弱",
+      "agility": "中等",
+      "intelligence": "极强",
+      "charisma": "极强",
+      "wisdom": "中等",
+      "luck": "较弱"
+    }
+  },
+  {
+    "id": "reincarnated_immortal",
+    "name": "谪仙转世",
+    "description": "灵魂深处沉睡着天界仙人的记忆，因触犯天条或厌倦清规而被贬下凡，前来体验七情六欲。",
+    "talent": {
+      "name": "仙魂残韵",
+      "description": "修炼无瓶颈，突破境界更容易，且探险时可能因“前世记忆”获得奇遇。"
+    },
+    "attributes": {
+      "strength": "中等",
+      "constitution": "中等",
+      "agility": "中等",
+      "intelligence": "中等",
+      "charisma": "中等",
+      "wisdom": "极强",
+      "luck": "极强"
+    }
+  },
+  {
+    "id": "possessed_old_monster",
+    "name": "夺舍老怪",
+    "description": "本是普通散修，却意外吞噬了一个夺舍失败的元婴老怪残魂，继承了他关于双修的庞杂“经验”。",
+    "talent": {
+      "name": "老怪的经验",
+      "description": "天生懂得更多双修“技巧”，更容易解锁特殊互动和骚话选项。"
+    },
+    "attributes": {
+      "strength": "较弱",
+      "constitution": "较弱",
+      "agility": "中等",
+      "intelligence": "中等",
+      "charisma": "极强",
+      "wisdom": "较弱",
+      "luck": "极强"
+    }
+  }
+]

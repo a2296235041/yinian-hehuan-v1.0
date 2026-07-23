@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover,
+                 interactive-widget=resizes-content, user-scalable=no">
+  <title>一念逍遥，一念合欢</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main id="game-shell">
+    <div id="game-container" aria-label="游戏画面"></div>
+    <button id="audio-toggle" class="audio-toggle" type="button"
+            aria-label="切换声音" title="切换声音">&#128266;</button>
+    <section id="boot-error" class="boot-error" hidden>
+      <h1>游戏未能启动</h1>
+      <p id="boot-error-message">请刷新后重试。</p>
+      <button id="boot-retry" type="button">重新加载</button>
+    </section>
+  </main>
+
+  <script src="./src/platform/PlatformBridge.js"></script>
+  <script src="./src/platform/AudioManager.js"></script>
+  <script src="./vendor/phaser.min.js"></script>
+  <script src="./src/utils/EventBus.js"></script>
+  <script src="./src/systems/NPCSystem.js"></script>
+  <script src="./src/systems/DialogueSystem.js"></script>
+  <script src="./src/scenes/BootScene.js"></script>
+  <script src="./src/scenes/PreloadScene.js"></script>
+  <script src="./src/scenes/MainMenuScene.js"></script>
+  <script src="./src/scenes/CharacterCreationScene.js"></script>
+  <script src="./src/scenes/GameScene.js"></script>
+  <script src="./src/scenes/UIScene.js"></script>
+  <script src="./main.js"></script>
+</body>
+</html>
