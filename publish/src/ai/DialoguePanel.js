@@ -19,6 +19,7 @@
   let portraitModal;
   let portraitStatus;
   let portraitImage;
+  let dialogueBlocker;
   let currentNpcId = null;
   let currentAffinity = null;
   let chatBusy = false;
@@ -153,6 +154,7 @@
     if (initialized) return;
     initialized = true;
     panel = document.getElementById('ai-dialogue-panel');
+    dialogueBlocker = document.getElementById('dialogue-blocker');
     history = document.getElementById('dialogue-history');
     name = document.getElementById('dialogue-npc-name');
     title = document.getElementById('dialogue-npc-title');
@@ -171,6 +173,7 @@
     portraitImage = document.getElementById('portrait-image');
 
     panel.addEventListener('pointerdown', (event) => event.stopPropagation());
+    dialogueBlocker.addEventListener('pointerdown', (event) => event.stopPropagation());
     imageModal.addEventListener('pointerdown', (event) => event.stopPropagation());
     portraitModal.addEventListener('pointerdown', (event) => event.stopPropagation());
     document.getElementById('dialogue-form').addEventListener('submit', (event) => {
@@ -196,6 +199,7 @@
 
     root.Game.EventBus.on('ai-dialogue-open', (data) => {
       panel.hidden = false;
+      dialogueBlocker.hidden = false;
       portraitModal.hidden = true;
       currentNpcId = data.npcId;
       if (renderedNpcId !== data.npcId) {
@@ -224,6 +228,7 @@
     });
     root.Game.EventBus.on('ai-dialogue-close', () => {
       panel.hidden = true;
+      dialogueBlocker.hidden = true;
       portraitModal.hidden = true;
       currentNpcId = null;
       currentAffinity = null;

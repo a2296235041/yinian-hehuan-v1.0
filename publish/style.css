@@ -260,6 +260,17 @@ body {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42);
 }
 
+.dialogue-blocker {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  background: transparent;
+}
+
+.dialogue-blocker[hidden] {
+  display: none;
+}
+
 .ai-dialogue-panel header {
   display: flex;
   align-items: center;
