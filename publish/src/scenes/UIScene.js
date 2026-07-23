@@ -38,8 +38,8 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     }
 
     createActionButtons() {
-        this.makeButton(1265, 92, '修炼', () => this.handleCultivate());
-        this.makeButton(1265, 150, '下一天', () => this.handleNextDay());
+        this.makeButton(1055, 34, '修炼', () => this.handleCultivate());
+        this.makeButton(1180, 34, '下一天', () => this.handleNextDay());
     }
 
     makeButton(x, y, label, action) {

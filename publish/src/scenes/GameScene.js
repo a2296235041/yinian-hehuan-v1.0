@@ -132,7 +132,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     createBackButton() {
-        const button = this.addViewObject(this.add.text(1110, 58, '返回地图', {
+        const button = this.addViewObject(this.add.text(900, 58, '返回地图', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
             color: '#14231f',

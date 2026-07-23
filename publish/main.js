@@ -37,20 +37,21 @@
     root.game = new Phaser.Game(config);
 
     const audioButton = document.getElementById('audio-toggle');
+    const audioState = document.getElementById('audio-state');
     function refreshAudioButton() {
       const muted = root.GameAudio.isMuted();
-      audioButton.innerHTML = muted ? '&#128263;' : '&#128266;';
-      audioButton.setAttribute('aria-pressed', String(muted));
+      audioButton.checked = !muted;
+      audioState.textContent = muted ? '已静音' : '已开启';
     }
 
     document.addEventListener('pointerdown', () => root.GameAudio.start(), {
       once: true,
       capture: true
     });
-    audioButton.addEventListener('pointerdown', (event) => {
+    audioButton.addEventListener('change', (event) => {
       event.stopPropagation();
       root.GameAudio.start().then(() => {
-        root.GameAudio.toggle();
+        if (audioButton.checked === root.GameAudio.isMuted()) root.GameAudio.toggle();
         refreshAudioButton();
       });
     });

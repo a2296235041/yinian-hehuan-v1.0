@@ -9,16 +9,14 @@
   let content;
   let dialogueSelect;
   let drawSelect;
-  let detail;
   let status;
-  let latestState = null;
 
   function optionLabel(model, recommended) {
     const parts = [];
-    if (model.internalName === recommended) parts.push(model.isXL ? 'XL 推荐' : '推荐');
+    if (model.internalName === recommended) parts.push(model.isXL ? '★ XL' : '★');
     parts.push(model.displayName || model.internalName);
     if (model.maxContext) parts.push(`${Math.round(model.maxContext / 1024)}K`);
-    if (model.price !== undefined && model.price !== null) parts.push(`消耗 ${model.price}`);
+    if (model.price !== undefined && model.price !== null) parts.push(`${model.price} 点`);
     return parts.join(' · ');
   }
 
@@ -55,43 +53,22 @@
     drawSelect.value = state.drawModel;
   }
 
-  function renderDetail() {
-    if (!latestState) return;
-    const model = latestState.dialogueModels
-      .find((item) => item.internalName === dialogueSelect.value);
-    if (!model) {
-      detail.textContent = '';
-      return;
-    }
-    const parts = [];
-    if (model.internalName === latestState.recommendedModel) {
-      parts.push(model.isXL ? '推荐 XL' : '推荐');
-    }
-    if (model.seriesName) parts.push(model.seriesName);
-    if (model.maxContext) parts.push(`${Math.round(model.maxContext / 1024)}K 上下文`);
-    if (model.price !== undefined && model.price !== null) parts.push(`消耗 ${model.price}`);
-    if (model.description) parts.push(model.description);
-    detail.textContent = parts.join(' · ');
-  }
-
   function render(state) {
-    latestState = state;
     fillDialogueSelect(state);
     fillDrawSelect(state);
     dialogueSelect.disabled = state.loading;
     drawSelect.disabled = state.loading;
     status.textContent = state.loading
       ? '正在读取可用模型…'
-      : '默认优先推荐 XL，选择会用于下一次请求';
-    renderDetail();
+      : '★ 为推荐模型，优先选择 XL';
   }
 
   function refreshMode() {
     if (!initialized) return;
     panel.hidden = mode === 'hidden';
-    panel.dataset.mode = mode;
-    toggle.hidden = mode !== 'compact';
-    content.hidden = mode === 'compact' && !open;
+    panel.dataset.mode = 'compact';
+    toggle.hidden = mode === 'hidden';
+    content.hidden = mode === 'hidden' || !open;
     toggle.setAttribute('aria-expanded', String(open));
   }
 
@@ -103,20 +80,30 @@
     content = document.getElementById('model-panel-content');
     dialogueSelect = document.getElementById('dialogue-model');
     drawSelect = document.getElementById('draw-model');
-    detail = document.getElementById('dialogue-model-detail');
     status = document.getElementById('model-status');
 
-    panel.addEventListener('pointerdown', (event) => event.stopPropagation());
     toggle.addEventListener('click', () => {
       open = !open;
       refreshMode();
     });
     dialogueSelect.addEventListener('change', () => {
       root.GameAIModels.selectDialogueModel(dialogueSelect.value);
-      renderDetail();
     });
     drawSelect.addEventListener('change', () => {
       root.GameAIModels.selectDrawModel(drawSelect.value);
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (open && !panel.contains(event.target)) {
+        open = false;
+        refreshMode();
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (open && event.key === 'Escape') {
+        open = false;
+        refreshMode();
+        toggle.focus();
+      }
     });
     root.GameAIModels.subscribe(render);
     refreshMode();
@@ -125,8 +112,8 @@
   root.GameModelUI = {
     init,
     setMode(nextMode) {
-      mode = nextMode;
-      open = nextMode === 'menu';
+      mode = nextMode === 'hidden' ? 'hidden' : 'compact';
+      open = false;
       refreshMode();
     }
   };

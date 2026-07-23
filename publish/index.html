@@ -11,19 +11,27 @@
 <body>
   <main id="game-shell">
     <div id="game-container" aria-label="游戏画面"></div>
-    <button id="audio-toggle" class="audio-toggle" type="button"
-            aria-label="切换声音" title="切换声音">&#128266;</button>
     <section id="model-panel" class="model-panel" hidden>
       <button id="model-panel-toggle" class="model-panel-toggle" type="button"
-              aria-label="选择 AI 模型" title="选择 AI 模型">&#9881;</button>
-      <div id="model-panel-content" class="model-panel-content">
-        <strong>AI 模型</strong>
-        <label>
+              aria-label="打开设置" aria-controls="model-panel-content"
+              title="设置">&#9881;</button>
+      <div id="model-panel-content" class="model-panel-content" hidden>
+        <strong>设置</strong>
+        <div class="settings-row">
+          <span>
+            <b>声音</b>
+            <small id="audio-state">已开启</small>
+          </span>
+          <label class="settings-switch" title="切换声音">
+            <input id="audio-toggle" type="checkbox" checked aria-label="启用游戏声音">
+            <span class="settings-switch-track" aria-hidden="true"></span>
+          </label>
+        </div>
+        <label class="settings-field">
           <span>对话模型</span>
           <select id="dialogue-model" aria-label="对话模型"></select>
-          <small id="dialogue-model-detail" class="model-detail"></small>
         </label>
-        <label>
+        <label class="settings-field">
           <span>绘图模型</span>
           <select id="draw-model" aria-label="绘图模型"></select>
         </label>
