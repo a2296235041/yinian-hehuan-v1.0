@@ -28,6 +28,16 @@
             <span class="settings-switch-track" aria-hidden="true"></span>
           </label>
         </div>
+        <div class="settings-orientation">
+          <span>
+            <b>显示方向</b>
+            <small id="orientation-status" aria-live="polite">跟随当前屏幕</small>
+          </span>
+          <div class="orientation-segment" role="group" aria-label="切换显示方向">
+            <button type="button" data-orientation="landscape" aria-pressed="false">横屏</button>
+            <button type="button" data-orientation="portrait" aria-pressed="false">竖屏</button>
+          </div>
+        </div>
         <label class="settings-field">
           <span>对话模型</span>
           <select id="dialogue-model" aria-label="对话模型"></select>
@@ -108,6 +118,7 @@
 
   <script src="./src/platform/PlatformBridge.js"></script>
   <script src="./src/platform/AudioManager.js"></script>
+  <script src="./src/platform/OrientationManager.js"></script>
   <script src="./vendor/phaser.min.js"></script>
   <script src="./src/utils/EventBus.js"></script>
   <script src="./src/utils/SceneTransition.js"></script>

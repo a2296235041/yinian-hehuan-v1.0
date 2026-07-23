@@ -146,6 +146,58 @@
   min-height: 18px;
 }
 
+.settings-orientation {
+  display: grid;
+  gap: 7px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(66, 104, 92, 0.55);
+}
+
+.settings-orientation > span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.settings-orientation b {
+  color: #d8c38c;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.orientation-segment {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 44px;
+  border: 1px solid #42685c;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.orientation-segment button {
+  min-width: 0;
+  min-height: 42px;
+  border: 0;
+  color: #a9c8bd;
+  background: #0d1b17;
+  font: inherit;
+  cursor: pointer;
+}
+
+.orientation-segment button + button {
+  border-left: 1px solid #42685c;
+}
+
+.orientation-segment button[aria-pressed="true"] {
+  color: #14231f;
+  background: #d8c38c;
+}
+
+.orientation-segment button:active {
+  filter: brightness(0.9);
+}
+
 .model-panel-content {
   max-height: min(620px, calc(100dvh - 76px));
   overflow-y: auto;
@@ -189,6 +241,38 @@
 
 /* 普通手机预览常只有约 200px 高，取消固定最小高度并压缩非消息区域。 */
 @media (max-height: 520px) {
+  .model-panel {
+    top: max(4px, env(safe-area-inset-top));
+    right: max(4px, env(safe-area-inset-right));
+  }
+
+  .model-panel-content {
+    top: 48px;
+    width: min(310px, calc(100vw - 12px));
+    max-height: calc(100dvh - 56px);
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .settings-row,
+  .settings-orientation {
+    min-height: 40px;
+    padding-bottom: 5px;
+  }
+
+  .orientation-segment,
+  .orientation-segment button {
+    min-height: 38px;
+  }
+
+  .settings-field {
+    gap: 3px;
+  }
+
+  .model-panel-content select {
+    min-height: 38px;
+  }
+
   .ai-dialogue-panel {
     top: max(4px, env(safe-area-inset-top));
     right: max(4px, env(safe-area-inset-right));

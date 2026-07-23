@@ -43,6 +43,7 @@
     };
 
     root.game = new Phaser.Game(config);
+    root.GameOrientation.init();
 
     const audioButton = document.getElementById('audio-toggle');
     const audioState = document.getElementById('audio-state');
