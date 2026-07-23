@@ -6,6 +6,7 @@ var Game = window.Game || {};
  */
 Game.NpcCardRenderer = {
     portraitKey(npcId) {
+        if (npcId === 'su_meier') return 'npc-su-meier';
         if (npcId === 'hu_jiuer') return 'npc-fox';
         if (['liu_hanyan', 'han_yueshuang', 'xiao_qingxuan'].includes(npcId)) {
             return 'npc-master';
