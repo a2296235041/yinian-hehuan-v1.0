@@ -350,7 +350,7 @@ body {
 
 .dialogue-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto auto auto;
   gap: 8px;
 }
 
@@ -442,7 +442,7 @@ body {
 
 @media (max-width: 720px) {
   .dialogue-form {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .dialogue-form input {

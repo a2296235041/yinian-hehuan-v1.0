@@ -1,0 +1,139 @@
+(function installCultivationSystem(root) {
+  'use strict';
+
+  const levels = [];
+  let state = { realmIndex: 0, progress: 10 };
+  let storage = null;
+  let readyPromise = null;
+  let mutationQueue = Promise.resolve();
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, Math.floor(Number(value) || 0)));
+  }
+
+  function requiredAt(index) {
+    const value = Number(levels[index]?.exp_needed);
+    return value > 0 ? Math.floor(value) : 0;
+  }
+
+  function sanitize(value) {
+    const realmIndex = clamp(value?.realmIndex, 0, Math.max(0, levels.length - 1));
+    return {
+      realmIndex,
+      progress: clamp(value?.progress, 0, requiredAt(realmIndex) || 0)
+    };
+  }
+
+  function snapshot() {
+    const realm = levels[state.realmIndex] || { name: '炼气', exp_needed: 100 };
+    const required = requiredAt(state.realmIndex);
+    const maxRealm = state.realmIndex >= levels.length - 1 || required <= 0;
+    const percent = required > 0 ? Math.min(100, Math.floor(state.progress / required * 100)) : 100;
+    let phaseName = percent < 34 ? '初期' : (percent < 67 ? '中期' : '后期');
+    if (percent >= 100) phaseName = '圆满';
+    return {
+      realmIndex: state.realmIndex,
+      realmName: realm.name,
+      phaseName,
+      label: `${realm.name}·${phaseName}`,
+      progress: state.progress,
+      required,
+      percent,
+      maxRealm,
+      canBreakthrough: !maxRealm && required > 0 && state.progress >= required,
+      nextRealmName: levels[state.realmIndex + 1]?.name || null,
+      requiredAffinity: Math.min(80, 20 + state.realmIndex * 5)
+    };
+  }
+
+  async function persist(flush) {
+    try {
+      const result = await storage.save(state, { flush });
+      return result.remote === true;
+    } catch (error) {
+      console.error('修为进度保存失败:', error.code || '', error.message, error.stack);
+      return false;
+    }
+  }
+
+  function queueMutation(action) {
+    const task = mutationQueue.then(action, action);
+    mutationQueue = task.then(() => undefined, () => undefined);
+    return task;
+  }
+
+  function emitChange(delta, source, durable) {
+    root.Game.EventBus.emit('cultivation-changed', {
+      ...snapshot(),
+      delta,
+      source,
+      durable
+    });
+  }
+
+  function initialize(config) {
+    if (readyPromise) return readyPromise;
+    (config?.levels || []).forEach((level) => levels.push({ ...level }));
+    storage = root.GamefyRecipes.createVersionedStorage({
+      namespace: 'hehuan:',
+      key: 'cultivation',
+      version: 1,
+      fallback: state,
+      migrations: { 0: (value) => value || state },
+      sanitize
+    });
+    readyPromise = storage.load()
+      .then((saved) => { state = saved; })
+      .catch((error) => {
+        console.error('修为进度读取失败:', error.code || '', error.message, error.stack);
+      })
+      .then(() => {
+        emitChange(0, 'load', true);
+        return snapshot();
+      });
+    return readyPromise;
+  }
+
+  function addCultivation(amount, source = 'cultivate') {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      const before = snapshot();
+      if (before.maxRealm) return { changed: false, reason: 'max_realm', snapshot: before };
+      if (before.canBreakthrough) return { changed: false, reason: 'bottleneck', snapshot: before };
+      const gain = clamp(amount, 1, 100000000);
+      const next = Math.min(before.required, state.progress + gain);
+      const applied = next - state.progress;
+      state.progress = next;
+      const durable = await persist(false);
+      emitChange(applied, source, durable);
+      return { changed: applied > 0, gain: applied, durable, snapshot: snapshot() };
+    });
+  }
+
+  function breakthrough(npcId, affinity) {
+    return queueMutation(async () => {
+      await (readyPromise || Promise.resolve());
+      const before = snapshot();
+      if (!before.canBreakthrough) return { changed: false, reason: 'not_ready', snapshot: before };
+      if (Number(affinity) < before.requiredAffinity) {
+        return { changed: false, reason: 'affinity_low', snapshot: before };
+      }
+      state.realmIndex += 1;
+      state.progress = 0;
+      const durable = await persist(true);
+      const next = snapshot();
+      root.Game.EventBus.emit('realm-breakthrough', { ...next, npcId, durable });
+      emitChange(0, 'breakthrough', durable);
+      return { changed: true, durable, snapshot: next };
+    });
+  }
+
+  root.GameCultivation = {
+    initialize,
+    ready: () => readyPromise || Promise.resolve(snapshot()),
+    getSnapshot: snapshot,
+    getRealmName: (index) => levels[index]?.name || '未知境界',
+    addCultivation,
+    breakthrough
+  };
+}(window));

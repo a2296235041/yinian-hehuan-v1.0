@@ -5,6 +5,7 @@
     root.GameModelUI.init();
     root.GameDialoguePanel.init();
     root.GameGiftPanel.init();
+    root.GameBreakthrough.init();
     root.GameAIModels.initialize().catch((error) => {
       console.error('AI 模型初始化失败:', error.code || '', error.message, error.stack);
     });
@@ -31,6 +32,9 @@
         Game.Scenes.MainMenuScene,
         Game.Scenes.CharacterCreationScene,
         Game.Scenes.GameScene,
+        Game.Scenes.InventoryScene,
+        Game.Scenes.ExplorationScene,
+        Game.Scenes.BattleScene,
         Game.Scenes.UIScene
       ]
     };

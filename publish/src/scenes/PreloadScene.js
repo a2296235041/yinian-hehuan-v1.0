@@ -10,7 +10,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 10;
+        const totalResources = 12;
 
         this.cameras.main.setBackgroundColor('#09100e');
         const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
@@ -52,6 +52,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.json('npcs', './assets/data/npcs.json');
         this.load.json('npc_openings', './assets/data/npc_openings.json');
         this.load.json('items', './assets/data/items.json');
+        this.load.json('exploration_regions', './assets/data/exploration_regions.json');
+        this.load.json('enemies', './assets/data/enemies.json');
     }
 
     create() {
@@ -61,8 +63,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         }
         window.PlatformBridge.progress({
             phase: 'runtime_initializing',
-            loadedResources: 10,
-            totalResources: 10,
+            loadedResources: 12,
+            totalResources: 12,
             message: '正在布置宗门'
         });
         this.scene.start('MainMenuScene');

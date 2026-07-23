@@ -17,22 +17,13 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     create() {
         window.GameModelUI.setMode('compact');
-        Game.player = {
-            origin: this.playerData,
-            cultivation: 10,
-            maxStamina: 12,
-            stamina: 12,
-            day: 1,
-            maxDailyCultivation: 5,
-            dailyCultivationCount: 5
-        };
-        Game.inventoryReady = window.GameInventory.initialize(this.cache.json.get('items') || []);
         this.npcSystem = new Game.NPCSystem(this);
         this.npcSystem.init();
-        this.npcSystem.ready().then(() => {
-            Game.player.day = window.GameAffinity.getDay();
-            Game.EventBus.emit('game-day-changed', { day: Game.player.day, durable: true });
-        });
+        Game.systemsReady = window.GamePlayerState.initialize(
+            this,
+            this.playerData,
+            this.npcSystem
+        );
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         this.showSectMap();
         this.scene.launch('UIScene');
@@ -133,7 +124,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     createBackButton() {
-        const button = this.addViewObject(this.add.text(900, 58, '返回地图', {
+        const button = this.addViewObject(this.add.text(780, 58, '返回地图', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
             color: '#14231f',
