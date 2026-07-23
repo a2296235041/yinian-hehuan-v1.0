@@ -16,11 +16,28 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.busy = false;
     }
 
-    init(data) {
-        this.encounter = data.encounter;
+    init(data = {}) {
+        // Phaser 停止场景后会复用同一个实例，因此每场战斗都必须重置临时状态。
+        this.encounter = data.encounter || null;
+        this.combat = null;
+        this.playerHpText = null;
+        this.enemyHpText = null;
+        this.playerBar = null;
+        this.enemyBar = null;
+        this.logText = null;
+        this.actionButtons = [];
+        this.finishButton = null;
+        this.busy = false;
     }
 
     create() {
+        if (!this.encounter?.enemy || !this.encounter?.region) {
+            console.error('战斗启动失败: 遭遇数据不完整');
+            Game.EventBus.emit('exploration-result', { text: '遭遇数据异常，已返回探索界面。' });
+            this.scene.wake('ExplorationScene');
+            this.scene.stop();
+            return;
+        }
         const cultivation = window.GameCultivation.getSnapshot();
         this.combat = new Game.CombatSystem(cultivation.realmIndex, this.encounter.enemy);
         this.add.image(640, 360, 'bg-sect-map').setDisplaySize(1280, 720);
