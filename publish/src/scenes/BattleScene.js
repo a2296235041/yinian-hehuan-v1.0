@@ -14,8 +14,10 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.actionButtons = [];
         this.finishButton = null;
         this.busy = false;
+        this.ending = false;
+        this.requestId = 0;
+        this.playerStats = null;
     }
-
     init(data = {}) {
         // Phaser 停止场景后会复用同一个实例，因此每场战斗都必须重置临时状态。
         this.encounter = data.encounter || null;
@@ -28,8 +30,10 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.actionButtons = [];
         this.finishButton = null;
         this.busy = false;
+        this.ending = false;
+        this.requestId += 1;
+        this.playerStats = null;
     }
-
     create() {
         if (!this.encounter?.enemy || !this.encounter?.region) {
             console.error('战斗启动失败: 遭遇数据不完整');
@@ -39,7 +43,8 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             return;
         }
         const cultivation = window.GameCultivation.getSnapshot();
-        this.combat = new Game.CombatSystem(cultivation.realmIndex, this.encounter.enemy);
+        this.playerStats = window.GamePlayerStats.getSnapshot();
+        this.combat = new Game.CombatSystem(this.playerStats, this.encounter.enemy);
         this.add.image(640, 360, 'bg-sect-map').setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.78).setInteractive();
         this.add.text(640, 46, `${this.encounter.region.name} · 遭遇战`, {
@@ -47,8 +52,23 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             fontSize: '34px',
             color: '#f4ead2'
         }).setOrigin(0.5);
-        this.createFighter(360, '你', 'npc-scholar', true);
-        this.createFighter(920, this.encounter.enemy.name, this.encounter.enemy.image_key, false);
+        const enemyRealm = `${window.GameCultivation.getRealmName(
+            this.encounter.enemy.realm_index
+        )}·${this.encounter.enemy.realm_phase}`;
+        const playerView = Game.BattleUI.createFighter(
+            this, 360, '你', 'npc-scholar', true,
+            `${cultivation.label}\n攻击 ${this.playerStats.attack}　防御 ${this.playerStats.defense}` +
+            `　速度 ${this.playerStats.speed}`
+        );
+        const enemyView = Game.BattleUI.createFighter(
+            this, 920, this.encounter.enemy.name, this.encounter.enemy.image_key, false,
+            `${enemyRealm}\n攻击 ${this.encounter.enemy.attack}　防御 ${this.encounter.enemy.defense}` +
+            `　速度 ${this.encounter.enemy.speed}`
+        );
+        this.playerBar = playerView.bar;
+        this.playerHpText = playerView.text;
+        this.enemyBar = enemyView.bar;
+        this.enemyHpText = enemyView.text;
         this.logText = this.add.text(640, 535, this.encounter.text, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
@@ -59,98 +79,105 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             wordWrap: { width: 800 }
         }).setOrigin(0.5);
         this.actionButtons = [
-            this.makeButton(500, 640, '攻击', () => this.act('attack')),
-            this.makeButton(640, 640, '防御', () => this.act('defend')),
-            this.makeButton(780, 640, '撤退', () => this.escape())
+            Game.BattleUI.makeButton(this, 500, 640, '攻击', () => this.act('attack')),
+            Game.BattleUI.makeButton(this, 640, 640, '防御', () => this.act('defend')),
+            Game.BattleUI.makeButton(this, 780, 640, '撤退', () => this.escape())
         ];
-        this.finishButton = this.makeButton(640, 640, '结束战斗', () => this.closeBattle())
-            .setVisible(false);
+        this.finishButton = Game.BattleUI.makeButton(
+            this, 640, 640, '结束战斗', () => this.closeBattle()
+        ).setVisible(false);
         this.render(this.combat.snapshot());
     }
-
-    createFighter(x, label, imageKey, playerSide) {
-        this.add.text(x, 116, label, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '25px',
-            color: playerSide ? '#d8c38c' : '#f0a5a5'
-        }).setOrigin(0.5);
-        const image = this.add.image(x, 310, imageKey);
-        image.setScale(Math.min(190 / image.width, 300 / image.height));
-        this.add.rectangle(x - 150, 478, 300, 18, 0x10201b).setOrigin(0, 0.5);
-        const bar = this.add.rectangle(x - 150, 478, 300, 14,
-            playerSide ? 0x6bb79e : 0xb96060).setOrigin(0, 0.5);
-        const text = this.add.text(x, 501, '', {
-            fontFamily: 'serif',
-            fontSize: '16px',
-            color: '#f4ead2'
-        }).setOrigin(0.5);
-        if (playerSide) {
-            this.playerBar = bar;
-            this.playerHpText = text;
-        } else {
-            this.enemyBar = bar;
-            this.enemyHpText = text;
-        }
+    setActionsEnabled(enabled) {
+        this.actionButtons.forEach((button) => {
+            if (enabled) button.setInteractive({ useHandCursor: true });
+            else button.disableInteractive();
+        });
     }
-
-    makeButton(x, y, label, action) {
-        const button = this.add.text(x, y, label, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '22px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 24, y: 11 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        button.on('pointerdown', action);
-        return button;
-    }
-
     render(state) {
         this.playerBar.displayWidth = 300 * state.playerHp / state.playerMaxHp;
         this.enemyBar.displayWidth = 300 * state.enemyHp / state.enemyMaxHp;
         this.playerHpText.setText(`气血 ${state.playerHp} / ${state.playerMaxHp}`);
         this.enemyHpText.setText(`气血 ${state.enemyHp} / ${state.enemyMaxHp}`);
         if (state.log) this.logText.setText(state.log);
-        if (state.lost) this.resolveEnd(false);
-        if (state.won) this.resolveEnd(true);
     }
-
-    act(type) {
+    async act(type) {
         if (this.busy || this.combat.over) return;
+        this.busy = true;
+        this.setActionsEnabled(false);
         window.GameAudio.sfx(type === 'attack' ? 'score' : 'click');
         this.cameras.main.shake(90, 0.002);
-        this.render(this.combat.act(type));
+        const state = this.combat.act(type);
+        this.render(state);
+        if (state.over) return this.resolveEnd(state.won, false, state);
+        const requestId = ++this.requestId;
+        this.logText.setText(`${state.log}\n\nAI 正在补全这一幕…`);
+        const text = await Game.BattleNarrator.generate(
+            this,
+            'battle_action',
+            type,
+            state,
+            state.log,
+            {},
+            (draft) => {
+                if (requestId === this.requestId && this.logText?.active) {
+                    this.logText.setText(draft);
+                }
+            }
+        );
+        if (requestId !== this.requestId) return;
+        this.logText.setText(window.GameNarrative.compose(text, state.log));
+        this.busy = false;
+        this.setActionsEnabled(true);
     }
-
-    escape() {
+    async escape() {
         if (this.busy || this.combat.over) return;
+        this.busy = true;
+        this.setActionsEnabled(false);
         const result = this.combat.tryEscape();
         this.render(result);
-        if (result.escaped) this.resolveEnd(false, true);
+        if (result.escaped || result.lost) return this.resolveEnd(false, result.escaped, result);
+        const requestId = ++this.requestId;
+        const text = await Game.BattleNarrator.generate(
+            this,
+            'battle_action',
+            'escape_failed',
+            result,
+            result.log,
+            {},
+            (draft) => {
+                if (requestId === this.requestId && this.logText?.active) {
+                    this.logText.setText(draft);
+                }
+            }
+        );
+        if (requestId !== this.requestId) return;
+        this.logText.setText(window.GameNarrative.compose(text, result.log));
+        this.busy = false;
+        this.setActionsEnabled(true);
     }
-
-    async resolveEnd(won, escaped = false) {
-        if (this.busy) return;
+    async resolveEnd(won, escaped, state) {
+        if (this.ending) return;
+        this.ending = true;
         this.busy = true;
         this.actionButtons.forEach((button) => button.disableInteractive().setVisible(false));
-        if (won) {
-            window.GameAudio.sfx('success');
-            const reward = await window.GameExploration.completeBattle(this.encounter);
-            this.logText.setText(reward.text);
-            Game.EventBus.emit('exploration-result', reward);
-        } else {
-            window.GameAudio.sfx(escaped ? 'click' : 'deny');
-            const result = {
-                text: escaped ? '你成功脱离战场，本次没有获得战利品。'
-                    : '你负伤退回宗门，本次没有获得战利品。'
-            };
-            this.logText.setText(result.text);
-            Game.EventBus.emit('exploration-result', result);
-        }
+        window.GameAudio.sfx(won ? 'success' : (escaped ? 'click' : 'deny'));
+        const requestId = ++this.requestId;
+        const result = await Game.BattleNarrator.settle(
+            this, won, escaped, state,
+            (draft) => {
+                if (requestId === this.requestId && this.logText?.active) {
+                    this.logText.setText(draft);
+                }
+            }
+        );
+        if (requestId !== this.requestId) return;
+        this.logText.setText(result.text);
+        Game.EventBus.emit('exploration-result', result);
         this.finishButton.setVisible(true).setInteractive({ useHandCursor: true });
     }
-
     closeBattle() {
+        this.requestId += 1;
         this.scene.wake('ExplorationScene');
         this.scene.stop();
     }

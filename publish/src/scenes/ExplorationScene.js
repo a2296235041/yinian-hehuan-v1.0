@@ -6,7 +6,9 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         super('ExplorationScene');
         this.regionObjects = [];
         this.statusText = null;
+        this.playerInfoText = null;
         this.busy = false;
+        this.requestId = 0;
     }
 
     create() {
@@ -22,6 +24,15 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             fontSize: '36px',
             color: '#f4ead2'
         }).setOrigin(0.5);
+        this.add.rectangle(18, 18, 320, 120, 0x0d1b17, 0.9)
+            .setOrigin(0, 0)
+            .setStrokeStyle(1, 0xd8c38c, 0.65);
+        this.playerInfoText = this.add.text(32, 29, '', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '14px',
+            color: '#f4ead2',
+            lineSpacing: 5
+        });
         const close = this.add.text(1200, 42, '返回宗门', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
@@ -39,9 +50,26 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             wordWrap: { width: 1040 }
         }).setOrigin(0.5).setVisible(false);
         Game.EventBus.on('exploration-result', this.handleBattleResult, this);
-        Game.EventBus.on('cultivation-changed', this.renderRegions, this);
+        Game.EventBus.on('cultivation-changed', this.refreshView, this);
+        Game.EventBus.on('player-state-changed', this.refreshView, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
-        this.renderRegions();
+        this.refreshView();
+    }
+
+    refreshView() {
+        this.renderPlayerInfo();
+        if (!this.busy) this.renderRegions();
+    }
+
+    renderPlayerInfo() {
+        const stats = window.GamePlayerStats.getSnapshot();
+        const player = Game.player;
+        this.playerInfoText.setText(
+            `${stats.originName}　${stats.realmLabel}\n` +
+            `精力 ${player.stamina}/${player.maxStamina}　气血 ${stats.maxHp}　攻击 ${stats.attack}\n` +
+            `力量 ${stats.strength}　根骨 ${stats.constitution}　身法 ${stats.agility}\n` +
+            `神识 ${stats.intelligence}　悟性 ${stats.wisdom}　气运 ${stats.luck}`
+        );
     }
 
     renderRegions() {
@@ -50,7 +78,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         window.GameExploration.getRegions().forEach((region, index) => {
             const column = index % 4;
             const row = Math.floor(index / 4);
-            this.createRegionCard(region, 175 + column * 310, 205 + row * 285);
+            this.createRegionCard(region, 175 + column * 310, 260 + row * 255);
         });
     }
 
@@ -93,7 +121,16 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         this.statusText.setVisible(true);
         try {
             const result = await window.GameExploration.explore(region.id);
-            this.statusText.setText(result.text || '探索结束。');
+            this.renderPlayerInfo();
+            const requestId = ++this.requestId;
+            this.statusText.setText(`${result.text || '探索结束。'}\nAI 正在补全遭遇…`);
+            result.text = await Game.ExplorationNarrator.generate(region, result, (draft) => {
+                if (requestId === this.requestId && this.statusText?.active) {
+                    this.statusText.setText(draft);
+                }
+            });
+            if (requestId !== this.requestId) return;
+            this.statusText.setText(result.text);
             if (result.type === 'battle') {
                 window.GameAudio.sfx('deny');
                 this.scene.launch('BattleScene', { encounter: result });
@@ -103,13 +140,15 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             window.GameAudio.sfx(['error', 'locked', 'stamina'].includes(result.type)
                 ? 'deny' : 'success');
         } finally {
-            frame.setAlpha(1);
+            if (frame.active) frame.setAlpha(1);
             this.busy = false;
+            this.renderRegions();
         }
     }
 
     handleBattleResult(result) {
         this.statusText.setText(result?.text || '战斗结束。').setVisible(true);
+        this.renderPlayerInfo();
         this.renderRegions();
     }
 
@@ -128,8 +167,11 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
     }
 
     cleanup() {
+        this.requestId += 1;
+        window.GameNarrative.cancel();
         Game.EventBus.off('exploration-result', this.handleBattleResult, this);
-        Game.EventBus.off('cultivation-changed', this.renderRegions, this);
+        Game.EventBus.off('cultivation-changed', this.refreshView, this);
+        Game.EventBus.off('player-state-changed', this.refreshView, this);
         this.restoreBaseScenes();
     }
 };

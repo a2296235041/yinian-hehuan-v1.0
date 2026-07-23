@@ -14,7 +14,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.cultivating = false;
         this.overlayOpening = false;
     }
-
     create() {
         this.createStatusDisplay();
         this.createActionButtons();
@@ -27,7 +26,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.updateUI();
     }
-
     createStatusDisplay() {
         this.add.rectangle(18, 16, 278, 160, 0x0d1b17, 0.88)
             .setOrigin(0, 0)
@@ -43,14 +41,12 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.cultivationText = this.add.text(32, 112, '', style);
         this.cultivationCountText = this.add.text(32, 140, '', style);
     }
-
     createActionButtons() {
         this.makeButton(920, 34, '储物袋', () => this.openOverlay('InventoryScene'));
         this.makeButton(995, 34, '出山', () => this.openOverlay('ExplorationScene'));
         this.makeButton(1070, 34, '修炼', () => this.handleCultivate());
         this.makeButton(1180, 34, '下一天', () => this.handleNextDay());
     }
-
     makeButton(x, y, label, action) {
         const button = this.add.text(x, y, label, {
             fontFamily: '"Noto Serif SC", serif',
@@ -65,17 +61,17 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             action();
         });
     }
-
     createLogText() {
         this.logText = this.add.text(640, 328, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '23px',
             color: '#f4ead2',
             backgroundColor: 'rgba(13,27,23,0.92)',
-            padding: { x: 20, y: 12 }
+            padding: { x: 20, y: 12 },
+            align: 'center',
+            wordWrap: { width: 820 }
         }).setOrigin(0.5).setAlpha(0);
     }
-
     async openOverlay(sceneKey) {
         if (this.overlayOpening || this.scene.isActive(sceneKey)) return;
         this.overlayOpening = true;
@@ -86,7 +82,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             this.overlayOpening = false;
         }
     }
-
     async handleCultivate() {
         if (this.cultivating) return;
         const player = Game.player;
@@ -106,15 +101,22 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         try {
             const result = await window.GameCultivation.addCultivation(gain, 'cultivate');
             window.GameAudio.sfx('score');
-            this.showLog(result.snapshot.canBreakthrough
+            const fallback = result.snapshot.canBreakthrough
                 ? `修为 +${result.gain}，已达${result.snapshot.realmName}圆满`
-                : `静心吐纳，修为 +${result.gain}`);
+                : `静心吐纳，修为 +${result.gain}`;
+            this.showLog('灵气正在汇聚，AI 正在补全修炼片段…');
+            const stats = window.GamePlayerStats.getSnapshot();
+            this.showLog(await window.GameNarrative.generateDetailed('cultivation', {
+                identity: stats.originName,
+                realm: result.snapshot.label,
+                cultivationGain: result.gain,
+                progress: `${result.snapshot.progress}/${result.snapshot.required}`
+            }, fallback));
             this.updateUI();
         } finally {
             this.cultivating = false;
         }
     }
-
     async handleNextDay() {
         if (this.dayAdvancing) return;
         this.dayAdvancing = true;
@@ -125,7 +127,14 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             player.stamina = player.maxStamina;
             player.dailyCultivationCount = player.maxDailyCultivation;
             window.GameAudio.sfx('success');
-            this.showLog(`第 ${player.day} 天，交谈与赠礼次数已恢复`);
+            const fallback = `第 ${player.day} 天，交谈与赠礼次数已恢复`;
+            this.showLog('晨光初现，AI 正在续写新一天…');
+            this.showLog(await window.GameNarrative.generateDetailed('new_day', {
+                day: player.day,
+                identity: player.origin?.name,
+                realm: window.GameCultivation.getSnapshot().label,
+                stamina: `${player.stamina}/${player.maxStamina}`
+            }, fallback));
             this.updateUI();
         } catch (error) {
             console.error('推进日期失败:', error.code || '', error.message, error.stack);
@@ -134,30 +143,25 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             this.dayAdvancing = false;
         }
     }
-
     rejectAction(message) {
         window.GameAudio.sfx('deny');
         this.showLog(message);
     }
-
     showAffinityChange(data) {
         window.GameAudio.sfx('success');
         const actions = { gift: '赠礼', exploration: '偶遇', dialogue: '交谈' };
         const action = actions[data.source] || '相处';
         this.showLog(`${action}有所收获，好感 +${data.delta}`);
     }
-
     showBreakthrough(data) {
         this.showLog(`双修圆满，突破至${data.realmName}！`);
         this.updateUI();
     }
-
     syncDay(data) {
         if (!Game.player || !data?.day) return;
         Game.player.day = data.day;
         this.updateUI();
     }
-
     updateUI() {
         const player = Game.player;
         const cultivation = window.GameCultivation.getSnapshot();
