@@ -7,7 +7,6 @@
   let buttons = [];
   let resizeFrame = 0;
   let resizeTimer = 0;
-  let resizeObserver;
   let orientationQuery;
   let selecting = false;
 
@@ -22,20 +21,26 @@
    * 手机旋转和进入全屏时，浏览器可能分几次更新可视区域。
    * 先在下一帧刷新，再延迟补一次，避免 Phaser 读到旧尺寸。
    */
+  function runScaleRefresh() {
+    const game = root.game;
+    if (!game?.isBooted || !game.canvas || !game.scale) return;
+    try {
+      game.scale.refresh();
+    } catch (error) {
+      console.error('刷新游戏画布尺寸失败:', error.message, error.stack);
+    }
+  }
+
   function refreshGameScale() {
     if (resizeFrame) root.cancelAnimationFrame(resizeFrame);
     if (resizeTimer) root.clearTimeout(resizeTimer);
     resizeFrame = root.requestAnimationFrame(() => {
       resizeFrame = 0;
-      const scale = root.game?.scale;
-      scale?.updateBounds?.();
-      scale?.refresh?.();
+      runScaleRefresh();
     });
     resizeTimer = root.setTimeout(() => {
       resizeTimer = 0;
-      const scale = root.game?.scale;
-      scale?.updateBounds?.();
-      scale?.refresh?.();
+      runScaleRefresh();
     }, 240);
   }
 
@@ -125,10 +130,7 @@
     document.addEventListener('fullscreenchange', handleResize);
     orientationQuery = root.matchMedia?.('(orientation: landscape)');
     orientationQuery?.addEventListener?.('change', handleResize);
-    if (typeof root.ResizeObserver === 'function') {
-      resizeObserver = new root.ResizeObserver(handleResize);
-      resizeObserver.observe(document.getElementById('game-shell'));
-    }
+    root.game?.events?.once?.('ready', handleResize);
     render();
   }
 

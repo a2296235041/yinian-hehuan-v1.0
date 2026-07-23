@@ -88,10 +88,7 @@
       && Number(event.lineno || 0) === 0
       && Number(event.colno || 0) === 0
       && String(event.message || '').toLowerCase() === 'script error.';
-    if (opaqueCrossOriginError) {
-      console.warn('已忽略浏览器隐藏详情的跨域脚本占位错误。');
-      return;
-    }
+    if (opaqueCrossOriginError) return;
     const message = event.error?.message || event.message || '未知脚本错误';
     console.error('游戏脚本错误:', message, event.error?.stack || '');
     fail('SCRIPT_ERROR', message);
