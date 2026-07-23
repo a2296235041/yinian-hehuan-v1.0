@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-23T12:40:09Z",
+  "updatedAt": "2026-07-23T13:14:26Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -101,6 +101,27 @@
       },
       "traceId": "trace_mrxhzzy8_auu94q55",
       "createdAt": "2026-07-23T12:40:09Z"
+    },
+    {
+      "name": "sect-map",
+      "status": "success",
+      "path": "publish/assets/generated/sect-map.2a28a8cb.webp",
+      "contentHash": "2a28a8cb",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation sect navigation map for a 2D game, elevated three-quarter aerial view, wide composition. Exactly six visually distinct building compounds arranged clearly in two rows of three, with generous visual separation and open space around each compound for clickable UI labels, all connected by stone paths. Top row: a welcoming guest pavilion, a grand sect master palace, a stern discipline hall. Bottom row: a tall library archive, a combined alchemy and crafting workshop, and a secluded rear mountain sanctuary with a waterfall and cave. Traditional Chinese architecture with fantasy cultivation details, misty mountains in the background, flowering trees, warm lantern accents, readable composition, no characters, no UI overlay, no text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 3324916,
+      "finalBytes": 312340,
+      "usage": {
+        "inputTokens": 154,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrxj7ug7_wawetc0c",
+      "createdAt": "2026-07-23T13:14:26Z"
     }
   ]
 }

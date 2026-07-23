@@ -10,7 +10,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 16;
+        const totalResources = 17;
 
         this.cameras.main.setBackgroundColor('#09100e');
         const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
@@ -43,6 +43,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         });
 
         this.load.image('bg-sect', './assets/generated/sect-courtyard.c4be5633.webp');
+        this.load.image('bg-sect-map', './assets/generated/sect-map.2a28a8cb.webp');
         this.load.image('npc-master', './assets/generated/sect-master.b9883f28.webp');
         this.load.image('npc-scholar', './assets/generated/scholar-disciple.e2aa08f6.webp');
         this.load.image('npc-fox', './assets/generated/fox-princess.6e212211.webp');
@@ -65,8 +66,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         }
         window.PlatformBridge.progress({
             phase: 'runtime_initializing',
-            loadedResources: 16,
-            totalResources: 16,
+            loadedResources: 17,
+            totalResources: 17,
             message: '正在布置宗门'
         });
         this.scene.start('MainMenuScene');
