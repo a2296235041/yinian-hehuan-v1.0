@@ -23,34 +23,11 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         Game.SceneTransition.fadeIn(this);
     }
     loadEnemyAssets() {
-        let timer = null;
-        const timeout = new Promise((resolve) => {
-            timer = window.setTimeout(() => resolve(false), 8000);
-        });
-        Promise.race([Game.EnemyAssets.ensureLoaded(this), timeout])
-            .then((loaded) => {
-                if (timer !== null) window.clearTimeout(timer);
-                this.assetsReady = true;
-                if (loaded === false && this.view?.status?.active) {
-                    Game.ExplorationView.setStatus(
-                        this.view,
-                        '敌人图鉴加载较慢，仍可继续探索。',
-                        true
-                    );
-                }
-            })
+        Game.EnemyAssets.ensureLoadedSafe(this)
+            .then((loaded) => { this.assetsReady = true; Game.EnemyAssets.reportLoadStatus(this.view, loaded); })
             .catch((error) => {
-                if (timer !== null) window.clearTimeout(timer);
                 if (error.code === 'LOAD_CANCELLED') return;
-                console.error('敌人素材加载失败:', error.message, error.stack);
-                this.assetsReady = true;
-                if (this.view?.status?.active) {
-                    Game.ExplorationView.setStatus(
-                        this.view,
-                        '部分敌人图鉴暂不可用，但仍可继续探索。',
-                        true
-                    );
-                }
+                this.assetsReady = true; Game.EnemyAssets.reportLoadStatus(this.view, false, error);
             });
     }
     refreshView() {
@@ -86,17 +63,18 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             onBack: () => this.showOverview()
         });
         GameExplorationPanel.setBusy(true, `正在进入${region.name}…`);
-        Game.ExplorationAssets.ensureLoaded(this, region.id).then(() => {
-            if (this.currentRegion?.id !== region.id || !this.sys.isActive()) return;
-            Game.ExplorationView.setBackground(
-                this, this.view, Game.ExplorationAssets.key(region.id)
-            );
-            GameExplorationPanel.setBusy(false, '山风已定，四周灵机清晰可察。');
-        }).catch((error) => {
-            if (this.currentRegion?.id !== region.id || !this.sys.isActive()) return;
-            console.error('探险场景加载失败:', error.message, error.stack);
-            GameExplorationPanel.setBusy(false, '背景加载失败，但仍可继续探索。');
-        });
+        Promise.resolve()
+            .then(() => Game.ExplorationAssets.ensureLoaded(this, region.id))
+            .then(() => {
+                if (this.currentRegion?.id !== region.id || !this.sys.isActive()) return;
+                Game.ExplorationView.setBackground(this, this.view, Game.ExplorationAssets.key(region.id));
+                GameExplorationPanel.setBusy(false, '山风已定，四周灵机清晰可察。');
+            })
+            .catch((error) => {
+                if (this.currentRegion?.id !== region.id || !this.sys.isActive()) return;
+                console.error('探险场景加载失败:', error.message, error.stack);
+                GameExplorationPanel.setBusy(false, '背景加载失败，但仍可继续探索。');
+            });
     }
     handleSubmit(text) {
         if (this.session?.result) this.continueConversation(text);

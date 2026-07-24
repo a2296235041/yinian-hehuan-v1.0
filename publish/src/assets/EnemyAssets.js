@@ -48,5 +48,26 @@ Game.EnemyAssets = {
             scene.load.start();
         });
         return this.loadingPromise;
+    },
+
+    ensureLoadedSafe(scene, timeoutMs = 8000) {
+        let timer = null;
+        const timeout = new Promise((resolve) => {
+            timer = window.setTimeout(() => resolve(false), timeoutMs);
+        });
+        const loading = Promise.resolve().then(() => this.ensureLoaded(scene));
+        return Promise.race([loading, timeout]).finally(() => {
+            if (timer !== null) window.clearTimeout(timer);
+        });
+    },
+
+    reportLoadStatus(view, loaded, error = null) {
+        if (error) console.error('敌人素材加载失败:', error.message, error.stack);
+        if (!view?.status?.active || (!error && loaded !== false)) return;
+        Game.ExplorationView.setStatus(
+            view,
+            error ? '部分敌人图鉴暂不可用，但仍可继续探索。' : '敌人图鉴加载较慢，仍可继续探索。',
+            true
+        );
     }
 };

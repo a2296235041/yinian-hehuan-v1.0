@@ -9,10 +9,11 @@ Game.BattleUI = {
             color: playerSide ? '#f0a8bb' : '#f3b0c0'
         }).setOrigin(0.5);
         let image;
-        if (Number.isInteger(imageFrame)) {
+        const texture = scene.textures.get(imageKey);
+        const usableTexture = texture && texture.getSourceImage?.();
+        if (Number.isInteger(imageFrame) && usableTexture) {
             // 把 2×2 图集切成真实纹理帧，避免 setCrop 仍按整张图原点渲染而导致偏位。
-            const texture = scene.textures.get(imageKey);
-            const source = texture.getSourceImage();
+            const source = usableTexture;
             const cellWidth = source.width / 2;
             const cellHeight = source.height / 2;
             const column = imageFrame % 2;
@@ -28,7 +29,8 @@ Game.BattleUI = {
             image = scene.add.image(x, 255, imageKey, frameName);
             image.setScale(Math.min(240 / cellWidth, 250 / cellHeight));
         } else {
-            image = scene.add.image(x, 255, imageKey);
+            const fallbackKey = usableTexture ? imageKey : 'npc-scholar';
+            image = scene.add.image(x, 255, fallbackKey);
             image.setScale(Math.min(190 / image.width, 230 / image.height));
         }
         scene.add.text(x, 405, stats, {
