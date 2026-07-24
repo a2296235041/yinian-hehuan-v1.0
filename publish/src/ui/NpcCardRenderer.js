@@ -27,7 +27,9 @@ Game.NpcCardRenderer = {
         if (npcId === 'han_yueshuang') {
             return './assets/generated/npc-standee-han-yueshuang.352ae25d.webp';
         }
-        if (npcId === 'hu_jiuer') return './assets/generated/npc-hu-jiuer.png';
+        if (npcId === 'hu_jiuer') {
+            return './assets/generated/npc-standee-hu-jiuer.a10661ad.webp';
+        }
         if (npcId === 'yun_shuiyao') {
             return './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp';
         }

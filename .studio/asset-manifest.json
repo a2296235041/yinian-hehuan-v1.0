@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T10:45:36Z",
+  "updatedAt": "2026-07-24T10:56:35Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -982,6 +982,22 @@
         "quality": 85
       },
       "createdAt": "2026-07-24T10:45:36Z"
+    },
+    {
+      "name": "npc-standee-hu-jiuer",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-hu-jiuer.a10661ad.webp",
+      "contentHash": "a10661ad",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 84942,
+      "postProcessing": {
+        "trimmed": false,
+        "optimized": true,
+        "dimensions": "640x960",
+        "quality": 85
+      },
+      "createdAt": "2026-07-24T10:56:35Z"
     }
   ]
 }
