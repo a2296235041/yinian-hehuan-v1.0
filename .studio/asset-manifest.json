@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T10:56:35Z",
+  "updatedAt": "2026-07-24T11:09:01Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -998,6 +998,22 @@
         "quality": 85
       },
       "createdAt": "2026-07-24T10:56:35Z"
+    },
+    {
+      "name": "npc-standee-xiao-qingxuan",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-xiao-qingxuan.fab0d8ee.webp",
+      "contentHash": "fab0d8ee",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 56904,
+      "postProcessing": {
+        "trimmed": false,
+        "optimized": true,
+        "dimensions": "640x960",
+        "quality": 85
+      },
+      "createdAt": "2026-07-24T11:09:01Z"
     }
   ]
 }

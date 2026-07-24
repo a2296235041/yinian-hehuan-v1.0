@@ -43,7 +43,7 @@ Game.NpcCardRenderer = {
             return './assets/generated/npc-standee-qin-wanqing.6ccb7e14.webp';
         }
         if (npcId === 'xiao_qingxuan') {
-            return './assets/generated/npc-xiao-qingxuan.png';
+            return './assets/generated/npc-standee-xiao-qingxuan.fab0d8ee.webp';
         }
         return './assets/generated/scholar-disciple.e2aa08f6.webp';
     },
