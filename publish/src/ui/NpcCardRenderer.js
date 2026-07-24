@@ -24,7 +24,9 @@ Game.NpcCardRenderer = {
         if (npcId === 'liu_hanyan') {
             return './assets/generated/npc-standee-liu-hanyan.340893ff.webp';
         }
-        if (npcId === 'han_yueshuang') return './assets/generated/npc-han-yueshuang.png';
+        if (npcId === 'han_yueshuang') {
+            return './assets/generated/npc-standee-han-yueshuang.352ae25d.webp';
+        }
         if (npcId === 'hu_jiuer') return './assets/generated/npc-hu-jiuer.png';
         if (npcId === 'yun_shuiyao') return './assets/generated/npc-yun-shuiyao.png';
         if (npcId === 'mo_qiaoer') return './assets/generated/npc-mo-qiaoer.png';

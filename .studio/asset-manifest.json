@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T10:14:31Z",
+  "updatedAt": "2026-07-24T10:19:05Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -902,6 +902,22 @@
         "quality": 88
       },
       "createdAt": "2026-07-24T10:14:31Z"
+    },
+    {
+      "name": "npc-standee-han-yueshuang",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-han-yueshuang.352ae25d.webp",
+      "contentHash": "352ae25d",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 85426,
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "dimensions": "640x947",
+        "quality": 88
+      },
+      "createdAt": "2026-07-24T10:19:05Z"
     }
   ]
 }
