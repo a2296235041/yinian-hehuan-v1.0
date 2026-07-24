@@ -23,13 +23,35 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         Game.SceneTransition.fadeIn(this);
     }
     loadEnemyAssets() {
-        Game.EnemyAssets.ensureLoaded(this).then(() => {
-            this.assetsReady = true;
-        }).catch((error) => {
-            if (error.code === 'LOAD_CANCELLED') return;
-            console.error('敌人素材加载失败:', error.message, error.stack);
-            Game.ExplorationView.setStatus(this.view, '敌人图鉴加载失败，请返回后重试。');
+        let timer = null;
+        const timeout = new Promise((resolve) => {
+            timer = window.setTimeout(() => resolve(false), 8000);
         });
+        Promise.race([Game.EnemyAssets.ensureLoaded(this), timeout])
+            .then((loaded) => {
+                if (timer !== null) window.clearTimeout(timer);
+                this.assetsReady = true;
+                if (loaded === false && this.view?.status?.active) {
+                    Game.ExplorationView.setStatus(
+                        this.view,
+                        '敌人图鉴加载较慢，仍可继续探索。',
+                        true
+                    );
+                }
+            })
+            .catch((error) => {
+                if (timer !== null) window.clearTimeout(timer);
+                if (error.code === 'LOAD_CANCELLED') return;
+                console.error('敌人素材加载失败:', error.message, error.stack);
+                this.assetsReady = true;
+                if (this.view?.status?.active) {
+                    Game.ExplorationView.setStatus(
+                        this.view,
+                        '部分敌人图鉴暂不可用，但仍可继续探索。',
+                        true
+                    );
+                }
+            });
     }
     refreshView() {
         if (!this.view) return;
