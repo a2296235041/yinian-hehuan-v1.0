@@ -77,17 +77,20 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     createBuildingMarker(building) {
+        const halo = this.addViewObject(
+            this.add.ellipse(building.mapX, building.mapY + 30, 252, 184, 0x0d1b17, 0.14)
+                .setBlendMode(Phaser.BlendModes.MULTIPLY)
+        );
         const marker = this.addViewObject(
-            this.add.rectangle(building.mapX, building.mapY, 210, 142, 0x0d1b17, 0.28)
-                .setStrokeStyle(2, 0xf4ead2, 0.82)
+            this.add.ellipse(building.mapX, building.mapY + 30, 270, 198, 0x0d1b17, 0)
                 .setInteractive({ useHandCursor: true })
         );
         this.addViewObject(this.add.text(building.mapX, building.mapY + 48, building.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '22px',
             color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.88)',
-            padding: { x: 12, y: 6 }
+            stroke: '#14231f',
+            strokeThickness: 3
         }).setOrigin(0.5));
         this.addViewObject(this.add.text(
             building.mapX,
@@ -97,10 +100,18 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '14px',
                 color: '#d8c38c',
-                backgroundColor: 'rgba(13,27,23,0.78)',
-                padding: { x: 7, y: 3 }
+                stroke: '#14231f',
+                strokeThickness: 2
             }
         ).setOrigin(0.5));
+        marker.on('pointerover', () => {
+            halo.setAlpha(0.23);
+            halo.setScale(1.03);
+        });
+        marker.on('pointerout', () => {
+            halo.setAlpha(0.14);
+            halo.setScale(1);
+        });
         marker.on('pointerdown', () => {
             window.GameAudio.sfx('click');
             this.showBuilding(building);
@@ -109,14 +120,25 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     createPrivateSceneArrow() {
         // 箭头放在山门总览右侧中部，避开顶部操作栏和右上角设置按钮。
+        const arrowHalo = this.addViewObject(
+            this.add.circle(1244, 360, 34, 0x0d1b17, 0.18)
+                .setBlendMode(Phaser.BlendModes.MULTIPLY)
+        );
         const arrow = this.addViewObject(this.add.text(1244, 360, '▶', {
             fontFamily: 'serif',
             fontSize: '42px',
             color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.72)',
-            padding: { x: 9, y: 8 }
+            stroke: '#14231f',
+            strokeThickness: 3
         }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
-        arrow.setStroke('#14231f', 2);
+        arrow.on('pointerover', () => {
+            arrowHalo.setAlpha(0.28);
+            arrowHalo.setScale(1.08);
+        });
+        arrow.on('pointerout', () => {
+            arrowHalo.setAlpha(0.18);
+            arrowHalo.setScale(1);
+        });
         arrow.on('pointerdown', () => this.openPrivateScene());
     }
 
