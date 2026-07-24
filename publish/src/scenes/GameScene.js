@@ -193,14 +193,27 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     createBackButton() {
+        const isRearSanctuary = this.currentBuilding?.id === 'rear-sanctuary';
         const button = this.addViewObject(Game.UISkin.makeButton(
-            this, 780, 58, '返回地图', () => {
+            this,
+            isRearSanctuary ? 1060 : 780,
+            58,
+            '返回地图',
+            () => {
             // 对话层打开时禁止处理地图按钮，防止移动端同一触摸事件点穿。
             if (window.GameAI.isDialogueActive()) return;
             window.GameAudio.sfx('click');
             this.showSectMap();
-            }, { width: 150, height: 46, fontSize: 17, variant: 'secondary' }
+            },
+            {
+                width: isRearSanctuary ? 136 : 150,
+                height: 46,
+                fontSize: 17,
+                variant: 'secondary',
+                stopPropagation: isRearSanctuary
+            }
         ));
+        if (isRearSanctuary) button.setDepth(30);
     }
 
 };

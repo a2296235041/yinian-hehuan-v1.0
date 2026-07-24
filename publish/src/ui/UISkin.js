@@ -49,7 +49,11 @@ Game.UISkin = {
         };
         button.labelText = text;
         button.setInteractive({ useHandCursor: true });
-        button.on('pointerdown', () => {
+        button.on('pointerdown', (pointer, localX, localY, event) => {
+            if (options.stopPropagation) {
+                event?.stopPropagation?.();
+                pointer?.event?.stopPropagation?.();
+            }
             scene.tweens.add({ targets: button, scale: 0.95, duration: 70, yoyo: true });
             if (action) action(button);
         });
