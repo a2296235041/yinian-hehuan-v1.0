@@ -34,7 +34,7 @@ Game.NpcCardRenderer = {
             return './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp';
         }
         if (npcId === 'mo_qiaoer') {
-            return './assets/generated/npc-standee-mo-qiaoer.64f6011d.webp';
+            return './assets/generated/npc-standee-mo-qiaoer.webp';
         }
         if (npcId === 'bai_zhi') {
             return './assets/generated/npc-standee-bai-zhi.79c8c1df.webp';
