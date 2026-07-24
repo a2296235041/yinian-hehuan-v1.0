@@ -327,6 +327,15 @@
     font-size: 26px;
   }
 
+  .ai-dialogue-panel header .dialogue-close-button {
+    width: 84px;
+    min-width: 84px;
+    height: 40px;
+    flex-basis: 84px;
+    padding: 0 6px;
+    font-size: 12px;
+  }
+
   .ai-dialogue-panel header .dialogue-portrait-button {
     width: 28px;
     height: 28px;

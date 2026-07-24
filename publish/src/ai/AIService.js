@@ -56,6 +56,8 @@
     }
     current = session;
     draft = '';
+    // 先显示本地开场白，避免动态问候等待期间对话区完全空白。
+    if (!resumed) draft = session.fallbackOpening;
     const affinity = affinityFor(session);
     root.Game.EventBus.emit('ai-dialogue-open', {
       npcId: npc.id,
