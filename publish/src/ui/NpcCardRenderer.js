@@ -7,7 +7,7 @@ var Game = window.Game || {};
 Game.NpcCardRenderer = {
     layouts: {
         su_meier: { x: 390, groundY: 590, height: 480 },
-        liu_hanyan: { x: 640, groundY: 590, height: 500 },
+        liu_hanyan: { x: 820, groundY: 590, height: 470 },
         han_yueshuang: { x: 390, groundY: 590, height: 450 },
         xiao_qingxuan: { x: 890, groundY: 590, height: 450 },
         yun_shuiyao: { x: 850, groundY: 590, height: 440 },
@@ -21,7 +21,9 @@ Game.NpcCardRenderer = {
         if (npcId === 'su_meier') {
             return './assets/generated/npc-standee-su-meier.a9f08237.webp';
         }
-        if (npcId === 'liu_hanyan') return './assets/generated/npc-liu-hanyan.png';
+        if (npcId === 'liu_hanyan') {
+            return './assets/generated/npc-standee-liu-hanyan.340893ff.webp';
+        }
         if (npcId === 'han_yueshuang') return './assets/generated/npc-han-yueshuang.png';
         if (npcId === 'hu_jiuer') return './assets/generated/npc-hu-jiuer.png';
         if (npcId === 'yun_shuiyao') return './assets/generated/npc-yun-shuiyao.png';
