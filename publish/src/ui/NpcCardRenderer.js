@@ -6,15 +6,15 @@ var Game = window.Game || {};
  */
 Game.NpcCardRenderer = {
     layouts: {
-        su_meier: { x: 390, groundY: 590, height: 480 },
-        liu_hanyan: { x: 820, groundY: 590, height: 470 },
-        han_yueshuang: { x: 390, groundY: 590, height: 450 },
-        xiao_qingxuan: { x: 890, groundY: 590, height: 450 },
-        yun_shuiyao: { x: 760, groundY: 590, height: 440 },
-        qin_wanqing: { x: 390, groundY: 590, height: 460 },
-        mo_qiaoer: { x: 870, groundY: 590, height: 430 },
-        bai_zhi: { x: 390, groundY: 590, height: 450 },
-        hu_jiuer: { x: 890, groundY: 590, height: 470 }
+        su_meier: { x: 320, groundY: 590, height: 400 },
+        liu_hanyan: { x: 820, groundY: 580, height: 400 },
+        han_yueshuang: { x: 350, groundY: 590, height: 395 },
+        xiao_qingxuan: { x: 930, groundY: 575, height: 360 },
+        yun_shuiyao: { x: 350, groundY: 590, height: 380 },
+        qin_wanqing: { x: 330, groundY: 600, height: 400 },
+        mo_qiaoer: { x: 950, groundY: 600, height: 370 },
+        bai_zhi: { x: 310, groundY: 600, height: 390 },
+        hu_jiuer: { x: 950, groundY: 575, height: 400 }
     },
 
     portraitPath(npcId) {
@@ -34,16 +34,16 @@ Game.NpcCardRenderer = {
             return './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp';
         }
         if (npcId === 'mo_qiaoer') {
-            return './assets/generated/npc-standee-mo-qiaoer.b7bd9287.webp';
+            return './assets/generated/npc-standee-mo-qiaoer.64f6011d.webp';
         }
         if (npcId === 'bai_zhi') {
-            return './assets/generated/npc-standee-bai-zhi.2901ae46.webp';
+            return './assets/generated/npc-standee-bai-zhi.79c8c1df.webp';
         }
         if (npcId === 'qin_wanqing') {
-            return './assets/generated/npc-standee-qin-wanqing.6ccb7e14.webp';
+            return './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp';
         }
         if (npcId === 'xiao_qingxuan') {
-            return './assets/generated/npc-standee-xiao-qingxuan.fab0d8ee.webp';
+            return './assets/generated/npc-standee-xiao-qingxuan.7a93f059.webp';
         }
         return './assets/generated/scholar-disciple.e2aa08f6.webp';
     },

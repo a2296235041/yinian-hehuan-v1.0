@@ -45,16 +45,16 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
 
         this.load.image('bg-sect', './assets/generated/sect-courtyard.c4be5633.webp');
         this.load.image('bg-sect-map', './assets/generated/sect-map.2a28a8cb.webp');
-        this.load.image('npc-xiao-qingxuan', './assets/generated/npc-standee-xiao-qingxuan.fab0d8ee.webp');
+        this.load.image('npc-xiao-qingxuan', './assets/generated/npc-standee-xiao-qingxuan.7a93f059.webp');
         this.load.image('npc-scholar', './assets/generated/scholar-disciple.e2aa08f6.webp');
         this.load.image('npc-hu-jiuer', './assets/generated/npc-standee-hu-jiuer.a10661ad.webp');
         this.load.image('npc-su-meier', './assets/generated/npc-standee-su-meier.a9f08237.webp');
         this.load.image('npc-liu-hanyan', './assets/generated/npc-standee-liu-hanyan.340893ff.webp');
         this.load.image('npc-han-yueshuang', './assets/generated/npc-standee-han-yueshuang.352ae25d.webp');
         this.load.image('npc-yun-shuiyao', './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp');
-        this.load.image('npc-mo-qiaoer', './assets/generated/npc-standee-mo-qiaoer.b7bd9287.webp');
-        this.load.image('npc-bai-zhi', './assets/generated/npc-standee-bai-zhi.2901ae46.webp');
-        this.load.image('npc-qin-wanqing', './assets/generated/npc-standee-qin-wanqing.6ccb7e14.webp');
+        this.load.image('npc-mo-qiaoer', './assets/generated/npc-standee-mo-qiaoer.64f6011d.webp');
+        this.load.image('npc-bai-zhi', './assets/generated/npc-standee-bai-zhi.79c8c1df.webp');
+        this.load.image('npc-qin-wanqing', './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp');
         this.load.image('ui-panel-wide', './assets/generated/ui-panel-wide.dec95d3d.webp');
         this.load.image('ui-panel-card', './assets/generated/ui-panel-card.4fed57b2.webp');
         this.load.image('ui-button-primary', './assets/generated/ui-button-primary.791dc14d.webp');

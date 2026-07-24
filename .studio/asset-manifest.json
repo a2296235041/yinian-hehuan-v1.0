@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T11:09:01Z",
+  "updatedAt": "2026-07-24T11:18:42Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -938,50 +938,50 @@
     {
       "name": "npc-standee-qin-wanqing",
       "status": "success",
-      "path": "publish/assets/generated/npc-standee-qin-wanqing.6ccb7e14.webp",
-      "contentHash": "6ccb7e14",
+      "path": "publish/assets/generated/npc-standee-qin-wanqing.f515aa6e.webp",
+      "contentHash": "f515aa6e",
       "source": "user-upload",
       "outputFormat": "webp",
-      "finalBytes": 47848,
+      "finalBytes": 55944,
       "postProcessing": {
-        "trimmed": false,
+        "trimmed": true,
         "optimized": true,
-        "dimensions": "640x960",
-        "quality": 85
+        "dimensions": "343x960",
+        "quality": 88
       },
-      "createdAt": "2026-07-24T10:38:00Z"
+      "createdAt": "2026-07-24T11:18:42Z"
     },
     {
       "name": "npc-standee-mo-qiaoer",
       "status": "success",
-      "path": "publish/assets/generated/npc-standee-mo-qiaoer.b7bd9287.webp",
-      "contentHash": "b7bd9287",
+      "path": "publish/assets/generated/npc-standee-mo-qiaoer.64f6011d.webp",
+      "contentHash": "64f6011d",
       "source": "user-upload",
       "outputFormat": "webp",
-      "finalBytes": 56070,
+      "finalBytes": 72524,
       "postProcessing": {
-        "trimmed": false,
+        "trimmed": true,
         "optimized": true,
-        "dimensions": "640x960",
-        "quality": 85
+        "dimensions": "490x960",
+        "quality": 88
       },
-      "createdAt": "2026-07-24T10:40:59Z"
+      "createdAt": "2026-07-24T11:18:42Z"
     },
     {
       "name": "npc-standee-bai-zhi",
       "status": "success",
-      "path": "publish/assets/generated/npc-standee-bai-zhi.2901ae46.webp",
-      "contentHash": "2901ae46",
+      "path": "publish/assets/generated/npc-standee-bai-zhi.79c8c1df.webp",
+      "contentHash": "79c8c1df",
       "source": "user-upload",
       "outputFormat": "webp",
-      "finalBytes": 50104,
+      "finalBytes": 57240,
       "postProcessing": {
-        "trimmed": false,
+        "trimmed": true,
         "optimized": true,
-        "dimensions": "640x960",
-        "quality": 85
+        "dimensions": "424x960",
+        "quality": 88
       },
-      "createdAt": "2026-07-24T10:45:36Z"
+      "createdAt": "2026-07-24T11:18:42Z"
     },
     {
       "name": "npc-standee-hu-jiuer",
@@ -1002,18 +1002,18 @@
     {
       "name": "npc-standee-xiao-qingxuan",
       "status": "success",
-      "path": "publish/assets/generated/npc-standee-xiao-qingxuan.fab0d8ee.webp",
-      "contentHash": "fab0d8ee",
+      "path": "publish/assets/generated/npc-standee-xiao-qingxuan.7a93f059.webp",
+      "contentHash": "7a93f059",
       "source": "user-upload",
       "outputFormat": "webp",
-      "finalBytes": 56904,
+      "finalBytes": 64674,
       "postProcessing": {
-        "trimmed": false,
+        "trimmed": true,
         "optimized": true,
-        "dimensions": "640x960",
-        "quality": 85
+        "dimensions": "640x775",
+        "quality": 88
       },
-      "createdAt": "2026-07-24T11:09:01Z"
+      "createdAt": "2026-07-24T11:18:42Z"
     }
   ]
 }
