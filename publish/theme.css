@@ -20,6 +20,156 @@ body {
   background: #170b12;
 }
 
+.settings-blocker {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  background: rgba(27, 13, 21, 0.2);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.settings-blocker[hidden] {
+  display: none;
+}
+
+.model-panel {
+  z-index: 11;
+  top: max(8px, env(safe-area-inset-top));
+  right: max(8px, env(safe-area-inset-right));
+}
+
+.model-panel-toggle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 232, 238, 0.78);
+  border-radius: 8px;
+  color: var(--rose-pale);
+  background: rgba(50, 21, 34, 0.9);
+  box-shadow: 0 5px 15px rgba(27, 13, 21, 0.34);
+  font-size: 18px;
+}
+
+.model-panel-toggle:hover,
+.model-panel-toggle:focus-visible {
+  border-color: var(--white);
+  color: var(--white);
+  background: rgba(157, 61, 92, 0.94);
+  outline: 0;
+}
+
+.model-panel-content {
+  top: 46px;
+  width: min(264px, calc(100vw - 16px));
+  max-height: calc(100dvh - 58px);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(240, 168, 187, 0.72);
+  border-top: 3px solid var(--rose);
+  border-radius: 8px;
+  color: var(--white);
+  background: rgba(50, 21, 34, 0.98);
+  background-image: none;
+  box-shadow: 0 16px 40px rgba(14, 4, 10, 0.52);
+  scrollbar-color: var(--rose) var(--plum-deep);
+}
+
+.settings-heading {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-heading strong {
+  color: var(--rose-pale);
+  font-size: 16px;
+}
+
+.settings-heading button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 0;
+  color: var(--rose-pale);
+  background: transparent;
+  font: 24px/1 sans-serif;
+  cursor: pointer;
+}
+
+.settings-heading button:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 1px;
+}
+
+.settings-row {
+  border-bottom-color: rgba(240, 168, 187, 0.28);
+}
+
+.settings-row b,
+.settings-field,
+.settings-save-slot {
+  color: var(--rose-pale);
+}
+
+.settings-switch-track {
+  border-color: rgba(240, 168, 187, 0.62);
+  background: rgba(27, 13, 21, 0.9);
+}
+
+.settings-switch-track::after {
+  background: var(--muted-rose);
+}
+
+.settings-switch input:checked + .settings-switch-track {
+  background: var(--rose);
+}
+
+.settings-switch input:checked + .settings-switch-track::after {
+  background: var(--white);
+}
+
+.settings-switch input:focus-visible + .settings-switch-track {
+  outline-color: var(--rose-pale);
+}
+
+.model-panel-content select,
+.settings-save-slot select {
+  border: 1px solid rgba(240, 168, 187, 0.54);
+  border-radius: 7px;
+  color: var(--white);
+  background: var(--plum-deep);
+}
+
+.model-panel-content small {
+  color: var(--muted-white);
+}
+
+.settings-save-actions {
+  border-top-color: rgba(240, 168, 187, 0.28);
+}
+
+.settings-save-actions button {
+  min-height: 40px;
+  border: 1px solid var(--rose-soft);
+  border-radius: 7px;
+  color: var(--plum);
+  background: var(--rose-pale);
+  background-image: none;
+  box-shadow: 0 4px 12px rgba(157, 61, 92, 0.2);
+  text-shadow: none;
+}
+
+.settings-save-actions button:active:not(:disabled) {
+  background: var(--rose);
+}
+
+.settings-save-actions button:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 1px;
+}
+
 .boot-error {
   color: var(--white);
   background: rgba(27, 13, 21, 0.98);

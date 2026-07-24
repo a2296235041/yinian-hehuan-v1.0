@@ -14,6 +14,50 @@
 <body>
   <main id="game-shell">
     <div id="game-container" aria-label="游戏画面"></div>
+    <div id="settings-blocker" class="settings-blocker" hidden aria-hidden="true"></div>
+    <section id="model-panel" class="model-panel" hidden>
+      <button id="model-panel-toggle" class="model-panel-toggle" type="button"
+              aria-label="打开设置" aria-controls="model-panel-content"
+              aria-expanded="false" title="设置">&#9881;</button>
+      <div id="model-panel-content" class="model-panel-content" hidden>
+        <header class="settings-heading">
+          <strong>设置</strong>
+          <button id="settings-close" type="button" aria-label="关闭设置" title="关闭">×</button>
+        </header>
+        <div class="settings-row">
+          <span>
+            <b>音乐</b>
+            <small id="audio-state">已开启</small>
+          </span>
+          <label class="settings-switch" title="切换音乐">
+            <input id="audio-toggle" type="checkbox" checked aria-label="启用游戏音乐">
+            <span class="settings-switch-track" aria-hidden="true"></span>
+          </label>
+        </div>
+        <label class="settings-field">
+          <span>对话模型</span>
+          <select id="dialogue-model" aria-label="对话模型"></select>
+        </label>
+        <label class="settings-field">
+          <span>画图模型</span>
+          <select id="draw-model" aria-label="画图模型"></select>
+        </label>
+        <small id="model-status" aria-live="polite">正在读取可用模型…</small>
+        <div id="settings-save-actions" class="settings-save-actions" hidden>
+          <label class="settings-save-slot">
+            <span>存档位</span>
+            <select id="settings-save-slot" aria-label="选择存档位">
+              <option value="1">存档 1</option>
+              <option value="2">存档 2</option>
+              <option value="3">存档 3</option>
+            </select>
+          </label>
+          <button id="settings-save" type="button">存档</button>
+          <button id="settings-load" type="button">读档</button>
+          <small id="settings-save-status" aria-live="polite">正在读取存档…</small>
+        </div>
+      </div>
+    </section>
     <div id="dialogue-blocker" class="dialogue-blocker" hidden aria-hidden="true"></div>
     <section id="ai-dialogue-panel" class="ai-dialogue-panel" hidden>
       <header>
@@ -132,6 +176,7 @@
   <script src="./src/ui/ExplorationPanel.js"></script>
   <script src="./src/ui/GiftPanel.js"></script>
   <script src="./src/ui/BreakthroughController.js"></script>
+  <script src="./src/ui/SaveGameUI.js"></script>
   <script src="./src/ui/BattleUI.js"></script>
   <script src="./src/ui/ExplorationView.js"></script>
   <script src="./src/ui/ShopEntry.js"></script>
