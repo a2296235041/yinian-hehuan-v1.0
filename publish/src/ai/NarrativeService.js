@@ -24,8 +24,7 @@
   };
 
   function clean(text, fallback) {
-    const value = String(text || '').trim().replace(/^["“]|["”]$/g, '');
-    return value || fallback;
+    return root.GameAIText.clean(text, fallback);
   }
 
   function compose(story, fact) {

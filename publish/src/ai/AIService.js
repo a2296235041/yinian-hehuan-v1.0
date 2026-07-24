@@ -102,7 +102,10 @@
     emitStatus('thinking', '对方正在回应…');
     let completed = false;
     function finish(fullText) {
-      const reply = String(fullText || '').trim();
+      const reply = root.GameAIText.clean(
+        fullText,
+        '她略作沉吟，换了一种更直接的说法。'
+      );
       if (completed || current !== session || !reply) return;
       completed = true;
       session.messages.push({ role: 'assistant', content: reply });
@@ -116,7 +119,7 @@
         maxTokens: 500,
         onUpdate(fullText) {
           if (current !== session) return;
-          draft = fullText || '';
+          draft = root.GameAIText.clean(fullText);
           emitRender();
         },
         onDone: finish

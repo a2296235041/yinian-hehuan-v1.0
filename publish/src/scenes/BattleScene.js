@@ -192,7 +192,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         Game.SceneTransition.fadeOut(this, () => {
             this.scene.wake('ExplorationScene');
             const exploration = this.scene.get('ExplorationScene');
-            exploration.setCommandVisible(exploration.mode === 'detail');
+            exploration.restorePanel();
             Game.SceneTransition.fadeIn(exploration);
             this.scene.stop();
         });
