@@ -388,7 +388,6 @@
   background-size: 100% 100%;
 }
 
-.ai-dialogue-panel,
 .exploration-dialogue-panel {
   border: 0;
   background-color: transparent;
@@ -408,7 +407,6 @@
 }
 
 .boot-error button,
-.dialogue-form button,
 .exploration-command-panel button,
 .settings-save-actions button {
   border: 0;
@@ -423,19 +421,29 @@
   text-shadow: 0 1px rgba(255, 255, 255, 0.4);
 }
 
-#dialogue-gift,
-#dialogue-draw,
-#exploration-back,
 .settings-save-actions button {
   color: #f4ead2;
   background-image: url("./assets/generated/ui-button-secondary.a33b3384.webp");
   text-shadow: 0 1px 2px #14231f;
 }
 
-.dialogue-form button:active:not(:disabled),
 .exploration-command-panel button:active:not(:disabled),
 .settings-save-actions button:active:not(:disabled),
 .boot-error button:active:not(:disabled) {
   filter: brightness(0.9);
   transform: scale(0.96);
+}
+
+#exploration-back {
+  border: 1px solid #42685c;
+  border-radius: 4px;
+  color: #f4ead2;
+  background: #14231f;
+  font-weight: 400;
+  text-shadow: none;
+}
+
+#exploration-back:active:not(:disabled) {
+  filter: none;
+  transform: none;
 }
