@@ -101,26 +101,60 @@
     };
   }
 
+  function withIntent(result, intent) {
+    return {
+      ...result,
+      intent: String(intent || '').trim().slice(0, 120)
+    };
+  }
+
   // 每次点击只结算一次探索，不设置自动重试或定时循环，避免重复扣除精力。
-  async function explore(regionId) {
+  async function explore(regionId, intent = '') {
     if (busy) return { type: 'error', text: '上一次探索仍在结算。' };
     busy = true;
     try {
       await Promise.all([root.GameInventory.ready(), root.GameCultivation.ready(), root.GameAffinity.ready()]);
       const region = regions.get(regionId);
-      if (!region) return { type: 'error', text: '未找到该探索区域。' };
+      if (!region) return withIntent(
+        { type: 'error', text: '未找到该探索区域。' },
+        intent
+      );
       if (root.GameCultivation.getSnapshot().realmIndex < Number(region.required_realm)) {
-        return { type: 'locked', text: '当前境界尚不足以进入此地。' };
+        return withIntent(
+          { type: 'locked', text: '当前境界尚不足以进入此地。' },
+          intent
+        );
       }
-      if (!consumeStamina(region)) return { type: 'stamina', text: '精力不足，无法继续出山。' };
+      if (!consumeStamina(region)) {
+        return withIntent(
+          { type: 'stamina', text: '精力不足，无法继续出山。' },
+          intent
+        );
+      }
       const rareRoll = Math.random();
-      if (rareRoll < 0.05) return await rarePillEncounter('divine_cultivation_pill');
-      if (rareRoll < 0.20) return await rarePillEncounter('holy_cultivation_pill');
+      if (rareRoll < 0.05) {
+        return withIntent(
+          await rarePillEncounter('divine_cultivation_pill'),
+          intent
+        );
+      }
+      if (rareRoll < 0.20) {
+        return withIntent(
+          await rarePillEncounter('holy_cultivation_pill'),
+          intent
+        );
+      }
       const encounterRoll = Math.random();
-      if (encounterRoll < 0.24) return await npcEncounter(region);
-      if (encounterRoll < 0.58) return battleEncounter(region);
-      if (encounterRoll < 0.98) return await curioEncounter(region);
-      return { type: 'nothing', text: '一路风平浪静，无事发生。' };
+      if (encounterRoll < 0.24) {
+        return withIntent(await npcEncounter(region), intent);
+      }
+      if (encounterRoll < 0.58) {
+        return withIntent(battleEncounter(region), intent);
+      }
+      if (encounterRoll < 0.98) {
+        return withIntent(await curioEncounter(region), intent);
+      }
+      return withIntent({ type: 'nothing', text: '一路风平浪静，无事发生。' }, intent);
     } finally {
       busy = false;
     }

@@ -8,6 +8,7 @@
   <title>一念逍遥，一念合欢</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./ui.css">
+  <link rel="stylesheet" href="./exploration.css">
 </head>
 <body>
   <main id="game-shell">
@@ -109,6 +110,13 @@
         <p id="gift-empty" class="gift-empty" hidden>储物袋中暂无可赠送的物品。</p>
       </div>
     </section>
+    <form id="exploration-command-panel" class="exploration-command-panel" hidden>
+      <input id="exploration-input" type="text" maxlength="120"
+             autocomplete="off" placeholder="输入你想如何探索">
+      <button id="exploration-submit" type="submit">按意图探索</button>
+      <button id="exploration-quick" type="button">一键探索</button>
+      <button id="exploration-back" type="button" aria-label="返回区域">返回区域</button>
+    </form>
     <section id="boot-error" class="boot-error" hidden>
       <h1>游戏未能启动</h1>
       <p id="boot-error-message">请刷新后重试。</p>
@@ -122,9 +130,11 @@
   <script src="./vendor/phaser.min.js"></script>
   <script src="./src/utils/EventBus.js"></script>
   <script src="./src/utils/SceneTransition.js"></script>
+  <script src="./src/ui/TextBoxUtils.js"></script>
   <script src="./src/systems/TimeSystem.js"></script>
   <script src="./src/ui/SceneBackdrop.js"></script>
   <script src="./src/assets/BuildingAssets.js"></script>
+  <script src="./src/assets/ExplorationAssets.js"></script>
   <script src="./src/assets/EnemyAssets.js"></script>
   <script src="./src/ai/ModelPicker.js"></script>
   <script src="./src/ai/CompletionsSafe.js"></script>
@@ -162,6 +172,7 @@
   <script src="./src/ui/BreakthroughController.js"></script>
   <script src="./src/ui/SaveGameUI.js"></script>
   <script src="./src/ui/BattleUI.js"></script>
+  <script src="./src/ui/ExplorationView.js"></script>
   <script src="./src/ui/ShopEntry.js"></script>
   <script src="./src/ui/NpcCardRenderer.js"></script>
   <script src="./src/systems/NPCSystem.js"></script>

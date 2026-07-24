@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-23T19:16:22Z",
+  "updatedAt": "2026-07-24T06:38:47Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -570,6 +570,174 @@
       },
       "traceId": "trace_mrxw5ff3_m8p36y89",
       "createdAt": "2026-07-23T19:16:22Z"
+    },
+    {
+      "name": "explore-cloud-foothills",
+      "status": "success",
+      "path": "publish/assets/generated/explore-cloud-foothills.e418e212.webp",
+      "contentHash": "e418e212",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 云梦山麓, wide 2D landscape environment. Misty foothills with layered blue-green mountains, a winding stone trail through tall grasses and medicinal herbs, scattered ancient pines, distant waterfall, soft morning fog, a clear open foreground and central path reserved for player exploration, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting, restrained jade green and warm gold palette, readable game background. Wide composition, cinematic environmental concept art, high detail, atmospheric depth, soft brushwork, clean navigable space in foreground.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 3255865,
+      "finalBytes": 305554,
+      "usage": {
+        "inputTokens": 136,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mryk64r8_ovjmuc43",
+      "createdAt": "2026-07-24T06:29:03Z"
+    },
+    {
+      "name": "explore-sunset-valley",
+      "status": "success",
+      "path": "publish/assets/generated/explore-sunset-valley.470ef07a.webp",
+      "contentHash": "470ef07a",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 赤霞谷, wide 2D landscape environment. A red-rock canyon glowing under a late sunset, warm crimson clouds, terraces of fire herbs and a narrow bridge over a glowing stream, open foreground path reserved for player exploration, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting, cinematic warm light, readable game background.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2875750,
+      "finalBytes": 227882,
+      "usage": {
+        "inputTokens": 95,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mryk7vzi_8954mrsl",
+      "createdAt": "2026-07-24T06:32:30Z"
+    },
+    {
+      "name": "explore-frost-moon-marsh",
+      "status": "success",
+      "path": "publish/assets/generated/explore-frost-moon-marsh.0b351851.webp",
+      "contentHash": "0b351851",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 寒月泽, wide 2D landscape environment. Moonlit frozen marsh with pale blue water, frost lotus, thin mist, dark reeds and distant snow mountains, a safe stone bank and open foreground reserved for player exploration, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting, cool blue jade palette with subtle silver moonlight, readable game background. Wide composition, side-scrolling/game environment layout, atmospheric depth, clean navigable foreground, detailed but uncluttered.",
+      "model": "gpt-image-2",
+      "size": "1774x887",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2555775,
+      "finalBytes": 198268,
+      "usage": {
+        "inputTokens": 125,
+        "outputImageTokens": 1030
+      },
+      "traceId": "trace_mrykcc16_gs0nnfyr",
+      "createdAt": "2026-07-24T06:33:27Z"
+    },
+    {
+      "name": "explore-myriad-beast-range",
+      "status": "success",
+      "path": "publish/assets/generated/explore-myriad-beast-range.9f438e56.webp",
+      "contentHash": "9f438e56",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 万妖岭, wide 2D landscape environment. Vast ancient mountain forest with towering roots, mossy cliffs, distant beast-carved stones and drifting violet spirit mist, a broad clearing and winding trail reserved for player exploration, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting, deep forest green with restrained amber accents, readable game background.",
+      "model": "gpt-image-2",
+      "size": "1536x1024",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2710778,
+      "finalBytes": 198480,
+      "usage": {
+        "inputTokens": 98,
+        "outputImageTokens": 1372
+      },
+      "traceId": "trace_mrykdjxh_p7qboibf",
+      "createdAt": "2026-07-24T06:34:46Z"
+    },
+    {
+      "name": "explore-endless-sandsea",
+      "status": "success",
+      "path": "publish/assets/generated/explore-endless-sandsea.ce456158.webp",
+      "contentHash": "ce456158",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 无尽沙海, wide 2D landscape environment. Endless golden dunes under a dramatic pale sky, half-buried ancient cultivation ruins, wind-carved stone pillars and a faint storm on the horizon, open sandy foreground reserved for player exploration, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting, muted ochre, dusty red and dark jade accents, readable game background.",
+      "model": "gpt-image-2",
+      "size": "1813x868",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2245166,
+      "finalBytes": 137198,
+      "usage": {
+        "inputTokens": 106,
+        "outputImageTokens": 987
+      },
+      "traceId": "trace_mrykf8q3_ut04g53y",
+      "createdAt": "2026-07-24T06:35:42Z"
+    },
+    {
+      "name": "explore-sky-rift-battlefield",
+      "status": "success",
+      "path": "publish/assets/generated/explore-sky-rift-battlefield.ca97e69d.webp",
+      "contentHash": "ca97e69d",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 天裂战场, wide 2D landscape environment. A ruined ancient battlefield beneath a torn sky, floating rock fragments, distant broken banners, glowing fissures and scattered weapons, a broad empty combat ground reserved for player exploration, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting, dark teal, ember red and muted gold, readable game background, cinematic composition, atmospheric depth, high detail environment art.",
+      "model": "gpt-image-2",
+      "size": "1647x955",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2511440,
+      "finalBytes": 177804,
+      "usage": {
+        "inputTokens": 111,
+        "outputImageTokens": 1201
+      },
+      "traceId": "trace_mrykgg82_2dvm8tb1",
+      "createdAt": "2026-07-24T06:36:51Z"
+    },
+    {
+      "name": "explore-starfall-sea",
+      "status": "success",
+      "path": "publish/assets/generated/explore-starfall-sea.0b1ed7f8.webp",
+      "contentHash": "0b1ed7f8",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 星陨海, wide 2D landscape environment. A vast night sea with star fragments falling into luminous waves, dark cliffs framing the scene, a quiet shore platform and open foreground for player exploration, subtle constellations reflected in the water. No characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting style, deep blue-green palette with silver and restrained violet highlights, readable game background composition, cinematic but uncluttered, atmospheric, high detail, concept art for a 2D exploration map.",
+      "model": "gpt-image-2",
+      "size": "1919x820",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2396803,
+      "finalBytes": 142488,
+      "usage": {
+        "inputTokens": 129,
+        "outputImageTokens": 858
+      },
+      "traceId": "trace_mrykhwy1_mzihw8xy",
+      "createdAt": "2026-07-24T06:37:47Z"
+    },
+    {
+      "name": "explore-great-void-relic",
+      "status": "success",
+      "path": "publish/assets/generated/explore-great-void-relic.e6d47622.webp",
+      "contentHash": "e6d47622",
+      "revisedPrompt": "Painterly Chinese fantasy immortal cultivation game exploration background for 太虚遗境, wide 2D landscape environment. Ancient floating ruins suspended in a calm violet void, broken gates, distant rings of time, and a stable stone platform with a clear central path reserved for player exploration. Mysterious but readable composition, no characters, no enemies, no UI, no text, no logo, no watermark. Elegant ink-wash fantasy painting style, dark jade, violet-black, and pale gold accents, atmospheric depth, highly readable game background, cinematic horizontal composition.",
+      "model": "gpt-image-2",
+      "size": "1828x860",
+      "wantsTransparent": false,
+      "chromaKey": null,
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q80_opaque",
+      "originalBytes": 2541678,
+      "finalBytes": 191578,
+      "usage": {
+        "inputTokens": 117,
+        "outputImageTokens": 986
+      },
+      "traceId": "trace_mrykj4kk_v8re1ntr",
+      "createdAt": "2026-07-24T06:38:47Z"
     }
   ]
 }

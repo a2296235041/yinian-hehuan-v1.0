@@ -54,7 +54,10 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
             color: '#f4ead2',
             backgroundColor: 'rgba(13,27,23,0.94)',
             padding: { x: 18, y: 9 },
-            wordWrap: { width: 1000 }
+            wordWrap: { width: 1000, useAdvancedWrap: true },
+            fixedWidth: 1050,
+            fixedHeight: 58,
+            align: 'center'
         }).setOrigin(0.5);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         Game.EventBus.on('inventory-changed', this.refreshBalance, this);
@@ -135,7 +138,9 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
                 effect: window.GameShop.effectLabel(result.item),
                 balance: result.balance
             }, fact);
-            if (requestId === this.requestId && this.statusText?.active) this.statusText.setText(story);
+            if (requestId === this.requestId && this.statusText?.active) {
+                this.statusText.setText(Game.TextBoxUtils.fit(story, 56, 2));
+            }
         } finally {
             this.busy = false;
             if (button.active) button.setText(`购买 · ${offer.price} 灵石`)

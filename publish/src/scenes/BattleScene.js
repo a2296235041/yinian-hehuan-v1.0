@@ -72,14 +72,16 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.playerHpText = playerView.text;
         this.enemyBar = enemyView.bar;
         this.enemyHpText = enemyView.text;
-        this.logText = this.add.text(640, 535, this.encounter.text, {
+        this.logText = this.add.text(640, 535, Game.TextBoxUtils.fit(this.encounter.text, 36, 4), {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
             color: '#f4ead2',
             backgroundColor: 'rgba(13,27,23,0.94)',
             padding: { x: 20, y: 12 },
             align: 'center',
-            wordWrap: { width: 800 }
+            wordWrap: { width: 760, useAdvancedWrap: true },
+            fixedWidth: 840,
+            fixedHeight: 112
         }).setOrigin(0.5);
         this.actionButtons = [
             Game.BattleUI.makeButton(this, 500, 640, '攻击', () => this.act('attack')),
@@ -103,7 +105,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.enemyBar.displayWidth = 300 * state.enemyHp / state.enemyMaxHp;
         this.playerHpText.setText(`气血 ${state.playerHp} / ${state.playerMaxHp}`);
         this.enemyHpText.setText(`气血 ${state.enemyHp} / ${state.enemyMaxHp}`);
-        if (state.log) this.logText.setText(state.log);
+        if (state.log) this.logText.setText(Game.TextBoxUtils.fit(state.log, 36, 4));
     }
     async act(type) {
         if (this.busy || this.combat.over) return;
@@ -115,7 +117,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.render(state);
         if (state.over) return this.resolveEnd(state.won, false, state);
         const requestId = ++this.requestId;
-        this.logText.setText(`${state.log}\n\nAI 正在补全这一幕…`);
+        this.logText.setText(Game.TextBoxUtils.fit(`${state.log}\n\nAI 正在补全这一幕…`, 36, 4));
         const text = await Game.BattleNarrator.generate(
             this,
             'battle_action',
@@ -125,12 +127,14 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             {},
             (draft) => {
                 if (requestId === this.requestId && this.logText?.active) {
-                    this.logText.setText(draft);
+                    this.logText.setText(Game.TextBoxUtils.fit(draft, 36, 4));
                 }
             }
         );
         if (requestId !== this.requestId) return;
-        this.logText.setText(window.GameNarrative.compose(text, state.log));
+        this.logText.setText(Game.TextBoxUtils.fit(
+            window.GameNarrative.compose(text, state.log), 36, 4
+        ));
         this.busy = false;
         this.setActionsEnabled(true);
     }
@@ -151,12 +155,14 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             {},
             (draft) => {
                 if (requestId === this.requestId && this.logText?.active) {
-                    this.logText.setText(draft);
+                    this.logText.setText(Game.TextBoxUtils.fit(draft, 36, 4));
                 }
             }
         );
         if (requestId !== this.requestId) return;
-        this.logText.setText(window.GameNarrative.compose(text, result.log));
+        this.logText.setText(Game.TextBoxUtils.fit(
+            window.GameNarrative.compose(text, result.log), 36, 4
+        ));
         this.busy = false;
         this.setActionsEnabled(true);
     }
@@ -171,12 +177,12 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             this, won, escaped, state,
             (draft) => {
                 if (requestId === this.requestId && this.logText?.active) {
-                    this.logText.setText(draft);
+                    this.logText.setText(Game.TextBoxUtils.fit(draft, 36, 4));
                 }
             }
         );
         if (requestId !== this.requestId) return;
-        this.logText.setText(result.text);
+        this.logText.setText(Game.TextBoxUtils.fit(result.text, 36, 4));
         Game.EventBus.emit('exploration-result', result);
         this.finishButton.setVisible(true).setInteractive({ useHandCursor: true });
     }
@@ -185,7 +191,9 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         window.GameAudio.playMusic('global');
         Game.SceneTransition.fadeOut(this, () => {
             this.scene.wake('ExplorationScene');
-            Game.SceneTransition.fadeIn(this.scene.get('ExplorationScene'));
+            const exploration = this.scene.get('ExplorationScene');
+            exploration.setCommandVisible(exploration.mode === 'detail');
+            Game.SceneTransition.fadeIn(exploration);
             this.scene.stop();
         });
     }

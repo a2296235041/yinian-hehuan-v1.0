@@ -312,10 +312,12 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         }).setOrigin(0.5).setVisible(false);
         this.storyText = this.add.text(640, 385, '', {
             fontFamily: '"Noto Serif SC", serif',
-            fontSize: '20px',
+            fontSize: '18px',
             color: '#f4ead2',
-            lineSpacing: 10,
-            wordWrap: { width: 900, useAdvancedWrap: true },
+            lineSpacing: 6,
+            wordWrap: { width: 860, useAdvancedWrap: true },
+            fixedWidth: 920,
+            fixedHeight: 250,
             align: 'center'
         }).setOrigin(0.5).setVisible(false).setDepth(4);
         this.createLocationButtons();
@@ -631,11 +633,13 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
                 companionCount: companions.length,
                 result: fallback
             }, fallback, (text) => {
-                if (this.storyText?.active) this.storyText.setText(text);
+                if (this.storyText?.active) {
+                    this.storyText.setText(Game.TextBoxUtils.fit(text, 46, 9));
+                }
             });
             window.GameAudio.sfx(result.changed ? 'success' : 'deny');
             this.statusText.setVisible(false);
-            this.storyText.setText(story).setVisible(true);
+            this.storyText.setText(Game.TextBoxUtils.fit(story, 46, 9)).setVisible(true);
         } catch (error) {
             console.error('私人场景合修失败:', error.code || '', error.message, error.stack);
             this.statusText.setText('双修暂时无法完成，请稍后再试。').setVisible(true);

@@ -104,7 +104,9 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             backgroundColor: 'rgba(13,27,23,0.92)',
             padding: { x: 20, y: 12 },
             align: 'center',
-            wordWrap: { width: 820 }
+            wordWrap: { width: 840, useAdvancedWrap: true },
+            fixedWidth: 900,
+            fixedHeight: 180
         }).setOrigin(0.5).setAlpha(0).setVisible(false)
             .setInteractive({ useHandCursor: true });
         this.logText.on('pointerdown', (pointer, localX, localY, event) => {
@@ -301,13 +303,14 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.detailText.setText(lines.join('\n'));
     }
     showLog(message) {
-        this.logText.setText(message).setAlpha(1).setVisible(true);
+        const text = Game.TextBoxUtils.fit(message, 36, 5);
+        this.logText.setText(text).setAlpha(1).setVisible(true);
         this.logText.input?.hitArea?.setTo?.(0, 0, this.logText.width, this.logText.height);
         this.tweens.killTweensOf(this.logText);
         this.tweens.add({
             targets: this.logText,
             alpha: 0,
-            delay: 2300,
+            delay: Math.min(7000, 2300 + text.length * 28),
             duration: 450,
             ease: 'Power2',
             onComplete: () => this.logText?.setVisible(false)

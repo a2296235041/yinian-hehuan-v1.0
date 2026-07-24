@@ -1,152 +1,145 @@
 var Game = window.Game || {};
 Game.Scenes = Game.Scenes || {};
-
 Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
     constructor() {
         super('ExplorationScene');
-        this.regionObjects = [];
-        this.statusText = null;
-        this.playerInfoText = null;
-        this.busy = false;
-        this.requestId = 0;
-        this.baseScenesRestored = false;
-        this.assetsReady = false;
+        this.view = null; this.commandPanel = null; this.commandInput = null;
+        this.commandSubmit = null; this.commandQuick = null; this.currentRegion = null;
+        this.mode = 'overview'; this.busy = false; this.requestId = 0;
+        this.baseScenesRestored = false; this.assetsReady = false; this.commandHandlers = null;
     }
-
     create() {
         this.baseScenesRestored = false;
-        this.scene.pause('GameScene');
-        this.scene.pause('UIScene');
-        this.scene.setVisible(false, 'GameScene');
-        this.scene.setVisible(false, 'UIScene');
+        this.scene.pause('GameScene'); this.scene.pause('UIScene');
+        this.scene.setVisible(false, 'GameScene'); this.scene.setVisible(false, 'UIScene');
         window.GameModelUI.setMode('hidden');
-        this.add.image(640, 360, 'bg-sect-map').setDisplaySize(1280, 720);
-        this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.72).setInteractive();
-        this.add.text(640, 42, '出山探险', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '36px',
-            color: '#f4ead2'
-        }).setOrigin(0.5);
-        this.add.rectangle(18, 18, 320, 120, 0x0d1b17, 0.9)
-            .setOrigin(0, 0)
-            .setStrokeStyle(1, 0xd8c38c, 0.65);
-        this.playerInfoText = this.add.text(32, 29, '', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '14px',
-            color: '#f4ead2',
-            lineSpacing: 5
-        });
-        const close = this.add.text(1200, 42, '返回宗门', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 14, y: 8 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        close.on('pointerdown', () => this.close());
-        this.statusText = this.add.text(640, 674, '', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.92)',
-            padding: { x: 18, y: 10 },
-            wordWrap: { width: 1040 }
-        }).setOrigin(0.5).setVisible(false);
+        this.view = Game.ExplorationView.create(this, () => this.close());
+        this.bindCommandPanel();
         Game.EventBus.on('exploration-result', this.handleBattleResult, this);
-        Game.EventBus.on('cultivation-changed', this.refreshView, this);
-        Game.EventBus.on('player-state-changed', this.refreshView, this);
+        Game.EventBus.on('cultivation-changed', this.refreshView, this); Game.EventBus.on(
+            'player-state-changed', this.refreshView, this
+        );
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         this.refreshView();
+        this.showOverview();
+        this.loadEnemyAssets();
+        Game.SceneTransition.fadeIn(this);
+    }
+    bindCommandPanel() {
+        this.commandPanel = document.getElementById('exploration-command-panel');
+        this.commandInput = document.getElementById('exploration-input');
+        this.commandSubmit = document.getElementById('exploration-submit');
+        this.commandQuick = document.getElementById('exploration-quick');
+        const back = document.getElementById('exploration-back');
+        const onSubmit = (event) => {
+            event.preventDefault();
+            this.exploreCurrent(this.commandInput?.value.trim() || '');
+        };
+        const onQuick = () => this.exploreCurrent('');
+        const onBack = () => this.showOverview();
+        this.commandHandlers = { back, onBack, onQuick, onSubmit };
+        this.commandPanel?.addEventListener('submit', onSubmit);
+        this.commandQuick?.addEventListener('click', onQuick);
+        back?.addEventListener('click', onBack);
+    }
+    setCommandVisible(visible, disabled = false) {
+        if (!this.commandPanel) return;
+        this.commandPanel.hidden = !visible;
+        [this.commandInput, this.commandSubmit, this.commandQuick].forEach((item) => {
+            if (item) item.disabled = disabled;
+        });
+        if (visible && !disabled) this.commandInput?.focus();
+    }
+    loadEnemyAssets() {
         Game.EnemyAssets.ensureLoaded(this).then(() => {
-            if (!this.statusText?.active) return;
             this.assetsReady = true;
-            this.statusText.setVisible(false);
-            this.refreshView();
+            if (!this.currentRegion) Game.ExplorationView.setStatus(this.view, '', false);
         }).catch((error) => {
             if (error.code === 'LOAD_CANCELLED') return;
             console.error('敌人素材加载失败:', error.message, error.stack);
-            if (this.statusText?.active) this.statusText.setText('敌人图鉴加载失败，请返回后重试。').setVisible(true);
+            Game.ExplorationView.setStatus(this.view, '敌人图鉴加载失败，请返回后重试。');
         });
-        Game.SceneTransition.fadeIn(this);
     }
-
     refreshView() {
-        this.renderPlayerInfo();
-        if (!this.busy) this.renderRegions();
+        if (!this.view) return;
+        Game.ExplorationView.updatePlayerInfo(this.view);
+        if (this.mode === 'overview' && !this.busy) {
+            this.renderOverview();
+        }
     }
-
-    renderPlayerInfo() {
-        const stats = window.GamePlayerStats.getSnapshot();
-        const player = Game.player;
-        this.playerInfoText.setText(
-            `${stats.originName}　${stats.realmLabel}\n` +
-            `精力 ${player.stamina}/${player.maxStamina}　气血 ${stats.maxHp}　攻击 ${stats.attack}\n` +
-            `力量 ${stats.strength}　根骨 ${stats.constitution}　身法 ${stats.agility}\n` +
-            `神识 ${stats.intelligence}　悟性 ${stats.wisdom}　气运 ${stats.luck}`
+    renderOverview() {
+        Game.ExplorationView.setBackground(this, this.view, 'bg-sect-map');
+        Game.ExplorationView.showRegions(
+            this,
+            this.view,
+            window.GameExploration.getRegions(),
+            (region) => this.enterRegion(region)
         );
+        this.setCommandVisible(false);
     }
-
-    renderRegions() {
-        this.regionObjects.forEach((object) => object.destroy());
-        this.regionObjects = [];
-        window.GameExploration.getRegions().forEach((region, index) => {
-            const column = index % 4;
-            const row = Math.floor(index / 4);
-            this.createRegionCard(region, 175 + column * 310, 260 + row * 255);
+    showOverview() {
+        if (this.busy) return;
+        this.mode = 'overview';
+        this.currentRegion = null;
+        this.renderOverview();
+    }
+    enterRegion(region) {
+        if (this.busy) return;
+        this.currentRegion = region;
+        this.mode = 'detail';
+        Game.ExplorationView.showDetail(this, this.view, region, () => this.showOverview());
+        Game.ExplorationView.setBackground(this, this.view, 'bg-sect-map');
+        Game.ExplorationView.setStatus(this.view, `正在进入${region.name}…`);
+        this.setCommandVisible(false, true);
+        Game.ExplorationAssets.ensureLoaded(this, region.id).then(() => {
+            if (this.currentRegion?.id !== region.id || !this.sys.isActive()) return;
+            Game.ExplorationView.setBackground(
+                this,
+                this.view,
+                Game.ExplorationAssets.key(region.id)
+            );
+            Game.ExplorationView.setStatus(this.view, '', false);
+            this.setCommandVisible(true);
+        }).catch((error) => {
+            console.error('探险场景加载失败:', error.message, error.stack);
+            Game.ExplorationView.setStatus(this.view, '场景加载失败，请返回区域后重试。');
+            this.setCommandVisible(true);
         });
     }
-
-    createRegionCard(region, x, y) {
-        const color = region.unlocked ? 0x14231f : 0x101714;
-        const frame = this.add.rectangle(x, y, 270, 230, color, 0.94)
-            .setStrokeStyle(2, region.unlocked ? 0xd8c38c : 0x42685c, 0.85);
-        const title = this.add.text(x, y - 82, region.name, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '23px',
-            color: region.unlocked ? '#f4ead2' : '#789087'
-        }).setOrigin(0.5);
-        const requirement = region.unlocked
-            ? `险度 ${region.danger} · 精力 -${region.stamina_cost}`
-            : `${window.GameCultivation.getRealmName(region.required_realm)}解锁`;
-        const detail = this.add.text(x, y - 44, requirement, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '14px',
-            color: region.unlocked ? '#d8c38c' : '#789087'
-        }).setOrigin(0.5);
-        const description = this.add.text(x, y + 6, region.description, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '15px',
-            color: region.unlocked ? '#a9c8bd' : '#64766f',
-            align: 'center',
-            lineSpacing: 5,
-            wordWrap: { width: 226, useAdvancedWrap: true }
-        }).setOrigin(0.5);
-        this.regionObjects.push(frame, title, detail, description);
-        if (!region.unlocked) return;
-        frame.setInteractive({ useHandCursor: true });
-        frame.on('pointerdown', () => this.chooseRegion(region, frame));
-    }
-
-    async chooseRegion(region, frame) {
-        if (!this.assetsReady) return this.statusText.setText('敌人图鉴正在加载，请稍候…').setVisible(true);
-        if (this.busy) return;
+    async exploreCurrent(intent) {
+        const region = this.currentRegion;
+        if (!region || this.busy) return;
+        if (!this.assetsReady) {
+            Game.ExplorationView.setStatus(this.view, '敌人图鉴正在加载，请稍候…');
+            return;
+        }
         this.busy = true;
-        frame.setAlpha(0.55);
-        this.statusText.setText(`正在探索${region.name}…`);
-        this.statusText.setVisible(true);
+        const requestId = ++this.requestId;
+        let transitioning = false;
+        this.setCommandVisible(true, true);
+        Game.ExplorationView.setStatus(this.view, `正在${region.name}中探索…`);
         try {
-            const result = await window.GameExploration.explore(region.id);
-            this.renderPlayerInfo();
-            const requestId = ++this.requestId;
-            this.statusText.setText(`${result.text || '探索结束。'}\nAI 正在补全遭遇…`);
-            result.text = await Game.ExplorationNarrator.generate(region, result, (draft) => {
-                if (requestId === this.requestId && this.statusText?.active) {
-                    this.statusText.setText(draft);
-                }
-            });
+            const result = await window.GameExploration.explore(region.id, intent);
             if (requestId !== this.requestId) return;
-            this.statusText.setText(result.text);
+            this.refreshView();
+            Game.ExplorationView.setStatus(
+                this.view,
+                `${result.text || '探索结束。'}\nAI 正在补全遭遇…`
+            );
+            result.text = await Game.ExplorationNarrator.generate(
+                region,
+                result,
+                (draft) => {
+                    if (requestId === this.requestId && this.view?.status?.active) {
+                        Game.ExplorationView.setStatus(this.view, draft);
+                    }
+                }
+            );
+            if (requestId !== this.requestId) return;
+            Game.ExplorationView.setStatus(this.view, result.text);
             if (result.type === 'battle') {
+                transitioning = true;
+                this.setCommandVisible(false, true);
                 window.GameAudio.sfx('deny');
                 Game.SceneTransition.fadeOut(this, () => {
                     this.scene.launch('BattleScene', { encounter: result });
@@ -156,45 +149,52 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             }
             window.GameAudio.sfx(['error', 'locked', 'stamina'].includes(result.type)
                 ? 'deny' : 'success');
+        } catch (error) {
+            console.error('探险结算失败:', error.message, error.stack);
+            Game.ExplorationView.setStatus(this.view, '这次探索未能完成，请稍后重试。');
         } finally {
-            if (frame.active) frame.setAlpha(1);
             this.busy = false;
-            this.renderRegions();
+            if (!transitioning && this.mode === 'detail' && this.currentRegion?.id === region.id) {
+                this.setCommandVisible(true);
+            }
         }
     }
-
     handleBattleResult(result) {
-        this.statusText.setText(result?.text || '战斗结束。').setVisible(true);
-        this.renderPlayerInfo();
-        this.renderRegions();
+        Game.ExplorationView.setStatus(this.view, result?.text || '战斗结束。');
+        this.refreshView();
+        if (this.sys.isActive()) this.setCommandVisible(this.mode === 'detail');
     }
-
     close() {
+        if (this.busy) return;
+        this.requestId += 1;
         window.GameAudio.sfx('click');
+        this.setCommandVisible(false);
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
             this.scene.stop();
         });
     }
-
     restoreBaseScenes() {
         if (this.baseScenesRestored) return;
         this.baseScenesRestored = true;
-        this.scene.setVisible(true, 'GameScene');
-        this.scene.setVisible(true, 'UIScene');
-        this.scene.resume('GameScene');
-        this.scene.resume('UIScene');
+        this.scene.setVisible(true, 'GameScene'); this.scene.setVisible(true, 'UIScene');
+        this.scene.resume('GameScene'); this.scene.resume('UIScene');
         Game.SceneTransition.fadeIn(this.scene.get('GameScene'));
         Game.SceneTransition.fadeIn(this.scene.get('UIScene'));
         window.GameModelUI.setMode('compact');
     }
-
     cleanup() {
         this.requestId += 1;
         window.GameNarrative.cancel();
-        Game.EventBus.off('exploration-result', this.handleBattleResult, this);
-        Game.EventBus.off('cultivation-changed', this.refreshView, this);
-        Game.EventBus.off('player-state-changed', this.refreshView, this);
+        this.setCommandVisible(false);
+        const { back, onBack, onQuick, onSubmit } = this.commandHandlers || {};
+        this.commandPanel?.removeEventListener('submit', onSubmit);
+        this.commandQuick?.removeEventListener('click', onQuick);
+        back?.removeEventListener('click', onBack);
+        this.commandHandlers = null;
+        Game.EventBus.off('exploration-result', this.handleBattleResult, this); Game.EventBus.off(
+            'cultivation-changed', this.refreshView, this
+        ); Game.EventBus.off('player-state-changed', this.refreshView, this);
         this.restoreBaseScenes();
     }
 };

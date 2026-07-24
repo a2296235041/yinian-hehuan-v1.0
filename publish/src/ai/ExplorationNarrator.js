@@ -13,6 +13,7 @@ Game.ExplorationNarrator = {
                 danger: region.danger,
                 description: region.description
             },
+            playerIntent: result.intent || '',
             player: {
                 identity: stats.originName,
                 realm: stats.realmLabel,
