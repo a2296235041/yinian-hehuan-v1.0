@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T10:38:00Z",
+  "updatedAt": "2026-07-24T10:40:59Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -950,6 +950,22 @@
         "quality": 85
       },
       "createdAt": "2026-07-24T10:38:00Z"
+    },
+    {
+      "name": "npc-standee-mo-qiaoer",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-mo-qiaoer.b7bd9287.webp",
+      "contentHash": "b7bd9287",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 56070,
+      "postProcessing": {
+        "trimmed": false,
+        "optimized": true,
+        "dimensions": "640x960",
+        "quality": 85
+      },
+      "createdAt": "2026-07-24T10:40:59Z"
     }
   ]
 }
