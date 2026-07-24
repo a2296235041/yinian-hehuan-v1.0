@@ -1,7 +1,26 @@
 (function startGame(root) {
   'use strict';
 
-  try {
+  function ensureModule(globalName, source) {
+    if (root[globalName]) return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      const separator = source.includes('?') ? '&' : '?';
+      script.src = `${source}${separator}boot-retry=${Date.now()}`;
+      script.onload = () => {
+        if (root[globalName]) {
+          resolve();
+          return;
+        }
+        reject(new Error(`${globalName} 模块加载后未注册`));
+      };
+      script.onerror = () => reject(new Error(`${globalName} 模块加载失败`));
+      document.head.append(script);
+    });
+  }
+
+  function initializeGame() {
     root.GameModelUI.init();
     root.GameDialoguePanel.init();
     root.GameGiftPanel.init();
@@ -74,8 +93,17 @@
     });
 
     refreshAudioButton();
-  } catch (error) {
-    console.error('游戏初始化失败:', error.message, error.stack);
-    root.PlatformBridge.fail('GAME_INIT_FAILED', error.message);
   }
+
+  async function boot() {
+    try {
+      await ensureModule('GameModelUI', './src/ai/ModelUI.js');
+      initializeGame();
+    } catch (error) {
+      console.error('游戏初始化失败:', error.message, error.stack);
+      root.PlatformBridge.fail('GAME_INIT_FAILED', error.message);
+    }
+  }
+
+  boot();
 }(window));
