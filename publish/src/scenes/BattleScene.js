@@ -43,6 +43,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             this.scene.stop();
             return;
         }
+        window.GameAudio.playMusic('battle');
         const cultivation = window.GameCultivation.getSnapshot();
         this.playerStats = window.GamePlayerStats.getSnapshot();
         this.combat = new Game.CombatSystem(this.playerStats, this.encounter.enemy);
@@ -181,6 +182,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
     }
     closeBattle() {
         this.requestId += 1;
+        window.GameAudio.playMusic('global');
         Game.SceneTransition.fadeOut(this, () => {
             this.scene.wake('ExplorationScene');
             Game.SceneTransition.fadeIn(this.scene.get('ExplorationScene'));
