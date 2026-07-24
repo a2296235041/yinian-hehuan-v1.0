@@ -34,7 +34,9 @@ Game.NpcCardRenderer = {
         if (npcId === 'mo_qiaoer') {
             return './assets/generated/npc-standee-mo-qiaoer.b7bd9287.webp';
         }
-        if (npcId === 'bai_zhi') return './assets/generated/npc-bai-zhi.png';
+        if (npcId === 'bai_zhi') {
+            return './assets/generated/npc-standee-bai-zhi.2901ae46.webp';
+        }
         if (npcId === 'qin_wanqing') {
             return './assets/generated/npc-standee-qin-wanqing.6ccb7e14.webp';
         }
