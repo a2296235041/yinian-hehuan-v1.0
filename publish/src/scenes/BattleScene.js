@@ -72,11 +72,11 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.playerHpText = playerView.text;
         this.enemyBar = enemyView.bar;
         this.enemyHpText = enemyView.text;
+        Game.UISkin.addPanel(this, 640, 535, 880, 126, 'wide', { alpha: 0.96 });
         this.logText = this.add.text(640, 535, Game.TextBoxUtils.fit(this.encounter.text, 36, 4), {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
             color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.94)',
             padding: { x: 20, y: 12 },
             align: 'center',
             wordWrap: { width: 760, useAdvancedWrap: true },

@@ -6,18 +6,13 @@ var Game = window.Game || {};
 Game.ShopEntry = {
     create(scene, building) {
         if (!Game.Data.shops?.[building.id]) return null;
-        const button = scene.addViewObject(scene.add.text(500, 58, '灵石商店', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#14231f',
-            backgroundColor: '#d8c38c',
-            padding: { x: 15, y: 9 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
-        button.on('pointerdown', () => {
+        const button = scene.addViewObject(Game.UISkin.makeButton(
+            scene, 500, 58, '灵石商店', () => {
             if (scene.scene.isActive('ShopScene')) return;
             window.GameAudio.sfx('click');
             scene.scene.launch('ShopScene', { buildingId: building.id });
-        });
+            }, { width: 150, height: 46, fontSize: 17 }
+        ));
         return button;
     }
 };

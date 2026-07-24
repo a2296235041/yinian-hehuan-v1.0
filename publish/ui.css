@@ -375,3 +375,67 @@
     font-size: 12px;
   }
 }
+
+/* Generated xianxia skin: images carry ornament while live text stays crisp and accessible. */
+.model-panel-content,
+.gift-content,
+.ai-image-content {
+  border: 0;
+  background-color: transparent;
+  background-image: url("./assets/generated/ui-panel-card.4fed57b2.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.ai-dialogue-panel,
+.exploration-dialogue-panel {
+  border: 0;
+  background-color: transparent;
+  background-image: url("./assets/generated/ui-panel-wide.dec95d3d.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.gift-item {
+  border: 0;
+  background-color: transparent;
+  background-image: url("./assets/generated/ui-panel-wide.dec95d3d.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.boot-error button,
+.dialogue-form button,
+.exploration-command-panel button,
+.settings-save-actions button {
+  border: 0;
+  border-radius: 0;
+  color: #14231f;
+  background-color: transparent;
+  background-image: url("./assets/generated/ui-button-primary.791dc14d.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  font-weight: 600;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.4);
+}
+
+#dialogue-gift,
+#dialogue-draw,
+#exploration-back,
+.settings-save-actions button {
+  color: #f4ead2;
+  background-image: url("./assets/generated/ui-button-secondary.a33b3384.webp");
+  text-shadow: 0 1px 2px #14231f;
+}
+
+.dialogue-form button:active:not(:disabled),
+.exploration-command-panel button:active:not(:disabled),
+.settings-save-actions button:active:not(:disabled),
+.boot-error button:active:not(:disabled) {
+  filter: brightness(0.9);
+  transform: scale(0.96);
+}

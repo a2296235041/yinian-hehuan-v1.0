@@ -27,6 +27,7 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         window.GameModelUI.setMode('hidden');
         this.add.image(640, 360, 'bg-sect').setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.84).setInteractive();
+        Game.UISkin.addPanel(this, 640, 365, 1180, 630, 'card', { alpha: 0.95 });
         const shop = window.GameShop.getShop(this.buildingId);
         this.add.text(640, 46, shop?.name || '灵石商店', {
             fontFamily: '"Noto Serif SC", serif',
@@ -40,14 +41,9 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
             backgroundColor: 'rgba(13,27,23,0.92)',
             padding: { x: 14, y: 9 }
         });
-        const close = this.add.text(1200, 44, '返回', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '19px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 15, y: 9 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        close.on('pointerdown', () => this.close());
+        Game.UISkin.makeButton(this, 1170, 50, '返回', () => this.close(), {
+            width: 120, height: 46, fontSize: 18, variant: 'secondary'
+        });
         this.statusText = this.add.text(640, 670, '正在整理货架…', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
@@ -88,8 +84,9 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
     createProduct(offer, index) {
         const x = index % 2 === 0 ? 350 : 930;
         const y = index < 2 ? 230 : 490;
-        const frame = this.add.rectangle(x, y, 520, 210, 0x14231f, 0.95)
-            .setStrokeStyle(1, 0xd8c38c, 0.75);
+        const frame = Game.UISkin.addPanel(this, x, y, 520, 210, 'card', {
+            alpha: 0.96
+        });
         const title = this.add.text(x - 230, y - 78, offer.item.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '22px',
@@ -103,14 +100,11 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
                 lineSpacing: 6,
                 wordWrap: { width: 450, useAdvancedWrap: true }
             });
-        const button = this.add.text(x, y + 70, `购买 · ${offer.price} 灵石`, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 18, y: 9 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        button.on('pointerdown', () => this.purchase(offer, button));
+        const button = Game.UISkin.makeButton(
+            this, x, y + 70, `购买 · ${offer.price} 灵石`,
+            (target) => this.purchase(offer, target),
+            { width: 230, height: 46, fontSize: 17 }
+        );
         this.productObjects.push(frame, title, detail, button);
     }
 

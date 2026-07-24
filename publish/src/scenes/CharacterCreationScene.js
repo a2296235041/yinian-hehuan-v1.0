@@ -22,8 +22,9 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         const background = this.add.image(width / 2, height / 2, 'bg-sect');
         background.setScale(Math.max(width / background.width, height / background.height));
         this.add.rectangle(width / 2, height / 2, width, height, 0x07100d, 0.58);
-        this.add.rectangle(width / 2, height / 2 + 12, 980, 540, 0x0d1b17, 0.9)
-            .setStrokeStyle(2, 0xd8c38c, 0.65);
+        Game.UISkin.addPanel(this, width / 2, height / 2 + 12, 980, 540, 'card', {
+            alpha: 0.96
+        });
 
         this.add.text(width / 2, 74, '选择你的来路', {
             fontFamily: '"Noto Serif SC", serif',
@@ -61,14 +62,11 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
             color: '#d8c38c'
         }).setOrigin(0.5);
 
-        const confirmButton = this.add.text(width / 2, height - 64, '以此身份入宗', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '26px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 28, y: 12 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        confirmButton.on('pointerdown', () => this.confirmSelection(confirmButton));
+        Game.UISkin.makeButton(
+            this, width / 2, height - 64, '以此身份入宗',
+            (button) => this.confirmSelection(button),
+            { width: 260, height: 58, fontSize: 25 }
+        );
 
         if (!this.originsData.length) {
             window.PlatformBridge.fail('DATA_INVALID', '身份数据为空');
@@ -79,13 +77,9 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
     }
 
     makeArrow(x, y, label, action) {
-        return this.add.text(x, y, label, {
-            fontFamily: 'serif',
-            fontSize: '52px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(20,35,31,0.75)',
-            padding: { x: 16, y: 8 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', action);
+        return Game.UISkin.makeButton(this, x, y, label, action, {
+            width: 72, height: 58, fontSize: 34, variant: 'secondary'
+        });
     }
 
     displayOriginInfo() {

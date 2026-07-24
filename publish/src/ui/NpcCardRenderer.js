@@ -37,8 +37,9 @@ Game.NpcCardRenderer = {
 
     create(scene, npc, x) {
         const affinity = scene.npcSystem.getNpcStateById(npc.id);
-        const frame = scene.addViewObject(scene.add.rectangle(x, 375, 226, 430, 0x0d1b17, 0.9)
-            .setStrokeStyle(2, 0xd8c38c, 0.75));
+        const frame = scene.addViewObject(Game.UISkin.addPanel(
+            scene, x, 375, 226, 430, 'card', { alpha: 0.94 }
+        ));
         const portrait = scene.addViewObject(scene.add.image(x, 325, this.portraitKey(npc.id)));
         portrait.setScale(Math.min(165 / portrait.width, 235 / portrait.height));
         scene.addViewObject(scene.add.text(x, 478, npc.name, {

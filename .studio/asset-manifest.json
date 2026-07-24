@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T06:38:47Z",
+  "updatedAt": "2026-07-24T09:04:24Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -738,6 +738,138 @@
       },
       "traceId": "trace_mrykj4kk_v8re1ntr",
       "createdAt": "2026-07-24T06:38:47Z"
+    },
+    {
+      "name": "ui-panel-wide",
+      "status": "success",
+      "path": "publish/assets/generated/ui-panel-wide.dec95d3d.webp",
+      "contentHash": "dec95d3d",
+      "revisedPrompt": "A refined Chinese xianxia game UI frame for an ink wash immortal sect game: one single very wide horizontal dialogue and status panel, approximately 3.6:1 aspect ratio, centered, dark lacquered forest-green interior with subtle rice-paper texture, slim antique gold and pale jade border, restrained cloud-scroll corner ornaments, crisp readable silhouette, symmetrical, front orthographic view, large calm empty center for HTML text, no controls and no separate objects. Strictly placed on a SOLID UNIFORM #FF00FF chroma key flat color background. The background is a single uniform shade of #FF00FF chroma key magenta that fills 100% of pixels not occupied by the panel. No gradient, no shadow outside the panel, no scenery, no ground, no decoration outside the panel, no environmental elements. Pure flat color background, exactly like a magenta screen used for VFX compositing. No rendered text inside the image. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "2061x763",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 42,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossless_alpha",
+      "originalBytes": 1793028,
+      "finalBytes": 17698,
+      "usage": {
+        "inputTokens": 206,
+        "outputImageTokens": 343
+      },
+      "traceId": "trace_mryp2a7v_3v1qtpib",
+      "createdAt": "2026-07-24T08:45:15Z",
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "decontaminated": true,
+        "dimensions": "960x264",
+        "quality": 84
+      }
+    },
+    {
+      "name": "ui-panel-card",
+      "status": "success",
+      "path": "publish/assets/generated/ui-panel-card.4fed57b2.webp",
+      "contentHash": "4fed57b2",
+      "revisedPrompt": "A refined Chinese xianxia game UI card frame for an ink wash immortal sect game: one single medium rectangular information card, approximately 1.7:1 aspect ratio, centered, dark lacquered forest-green interior with subtle rice-paper texture, thin antique gold and pale jade border, restrained cloud-scroll ornaments only in the four corners, crisp readable silhouette, symmetrical, front orthographic view, broad calm empty center for item text, no controls and no separate objects. Strictly placed on a SOLID UNIFORM #FF00FF chroma key flat color background. The background is a single uniform shade of #FF00FF chroma key magenta that fills 100% of pixels not occupied by the panel. No gradient, no shadow outside the panel, no texture outside the panel, no scenery, no ground, no decoration outside the panel, no environmental elements. Pure flat color background, exactly like a magenta screen used for VFX compositing. No rendered text inside the image. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1635x962",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 34.2,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossless_alpha",
+      "originalBytes": 2012383,
+      "finalBytes": 19152,
+      "usage": {
+        "inputTokens": 214,
+        "outputImageTokens": 1201
+      },
+      "traceId": "trace_mryp3qm8_nptn49ps",
+      "createdAt": "2026-07-24T08:46:45Z",
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "decontaminated": true,
+        "dimensions": "800x409",
+        "quality": 84
+      }
+    },
+    {
+      "name": "ui-button-primary",
+      "status": "success",
+      "path": "publish/assets/generated/ui-button-primary.791dc14d.webp",
+      "contentHash": "791dc14d",
+      "revisedPrompt": "A refined Chinese xianxia game UI button for an ink wash immortal sect game: one single wide horizontal primary action button, approximately 3.4:1 aspect ratio, centered, pale warm ivory jade face, slim antique gold rim, small symmetrical cloud-scroll end caps, restrained elegant ornament, crisp hard edges, front orthographic view, broad completely empty center for HTML text, visually readable at small size, no separate icons and no additional objects. Strictly placed on a SOLID UNIFORM #FF00FF chroma key flat color background. The background is a single uniform shade of #FF00FF chroma key magenta that fills 100% of pixels not occupied by the button. No gradient, no shadow outside the button, no texture outside the button, no scenery, no ground, no decoration outside the button, no environmental elements. Pure flat color background, exactly like a magenta screen used for VFX compositing. No rendered text inside the image. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1915x821",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 69.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossless_alpha",
+      "originalBytes": 1231744,
+      "finalBytes": 4954,
+      "usage": {
+        "inputTokens": 211,
+        "outputImageTokens": 901
+      },
+      "traceId": "trace_mryp5n50_ubz8nvvy",
+      "createdAt": "2026-07-24T08:48:09Z",
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "decontaminated": true,
+        "dimensions": "600x101",
+        "quality": 84
+      }
+    },
+    {
+      "name": "ui-button-secondary",
+      "status": "success",
+      "path": "publish/assets/generated/ui-button-secondary.a33b3384.webp",
+      "contentHash": "a33b3384",
+      "revisedPrompt": "A refined Chinese xianxia game UI button for an ink wash immortal sect game: one single wide horizontal secondary action button, approximately 3.4:1 aspect ratio, centered, deep dark forest-green lacquer face, slim antique gold and pale jade rim, small symmetrical cloud-scroll end caps, restrained elegant ornament, crisp hard edges, front orthographic view, broad completely empty center for HTML text, visually readable at small size, no separate icons and no additional objects. Strictly placed on a SOLID UNIFORM #FF00FF chroma key flat color background. The background is a single uniform shade of #FF00FF chroma key magenta that fills 100% of pixels not occupied by the button. No gradient, no shadow outside the button, no texture outside the button, no scenery, no ground, no decoration outside the button, no environmental elements. Pure flat color background, exactly like a magenta screen used for VFX compositing. No rendered text inside the image. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1914x822",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 62.6,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossless_alpha",
+      "originalBytes": 1046973,
+      "finalBytes": 5426,
+      "usage": {
+        "inputTokens": 215,
+        "outputImageTokens": 901
+      },
+      "traceId": "trace_mryp7j02_jnndzxvf",
+      "createdAt": "2026-07-24T08:49:25Z",
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "decontaminated": true,
+        "dimensions": "599x114",
+        "quality": 84
+      }
     }
   ]
 }

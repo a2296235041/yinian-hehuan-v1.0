@@ -193,19 +193,14 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     }
 
     createBackButton() {
-        const button = this.addViewObject(this.add.text(780, 58, '返回地图', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 15, y: 9 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
-        button.on('pointerdown', () => {
+        const button = this.addViewObject(Game.UISkin.makeButton(
+            this, 780, 58, '返回地图', () => {
             // 对话层打开时禁止处理地图按钮，防止移动端同一触摸事件点穿。
             if (window.GameAI.isDialogueActive()) return;
             window.GameAudio.sfx('click');
             this.showSectMap();
-        });
+            }, { width: 150, height: 46, fontSize: 17, variant: 'secondary' }
+        ));
     }
 
 };
@@ -387,16 +382,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
     }
 
     createInviteControl() {
-        this.inviteButton = this.add.text(1080, 575, '邀请伴侣', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.62)',
-            padding: { x: 16, y: 9 },
-            stroke: '#14231f',
-            strokeThickness: 2
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        this.inviteButton.on('pointerdown', () => {
+        this.inviteButton = Game.UISkin.makeButton(this, 1080, 575, '邀请伴侣', () => {
             if (this.busy) return;
             this.inviteMenuVisible = !this.inviteMenuVisible;
             this.talkMenuVisible = false;
@@ -404,22 +390,12 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             this.renderInvites();
             this.renderTalkMenu();
             window.GameAudio.sfx('click');
-        });
-        this.inviteMenuPanel = this.add.rectangle(824, 275, 424, 290, 0x0d1b17, 0.94)
-            .setOrigin(0, 0)
-            .setStrokeStyle(1, 0xd8c38c, 0.72)
-            .setDepth(8)
+        }, { width: 150, height: 46, fontSize: 17, variant: 'secondary' });
+        this.inviteMenuPanel = Game.UISkin.addPanel(
+            this, 1036, 420, 424, 290, 'card', { depth: 8, alpha: 0.96 }
+        )
             .setVisible(false);
-        this.talkButton = this.add.text(930, 575, '伴侣交谈', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.62)',
-            padding: { x: 16, y: 9 },
-            stroke: '#14231f',
-            strokeThickness: 2
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false);
-        this.talkButton.on('pointerdown', () => {
+        this.talkButton = Game.UISkin.makeButton(this, 930, 575, '伴侣交谈', () => {
             if (this.busy || !this.invitedNpcs.length) return;
             this.talkMenuVisible = !this.talkMenuVisible;
             this.inviteMenuVisible = false;
@@ -427,11 +403,11 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             this.renderTalkMenu();
             this.renderInvites();
             window.GameAudio.sfx('click');
-        });
-        this.talkMenuPanel = this.add.rectangle(824, 275, 424, 290, 0x0d1b17, 0.94)
-            .setOrigin(0, 0)
-            .setStrokeStyle(1, 0xd8c38c, 0.72)
-            .setDepth(8)
+        }, { width: 150, height: 46, fontSize: 17, variant: 'secondary' })
+            .setVisible(false);
+        this.talkMenuPanel = Game.UISkin.addPanel(
+            this, 1036, 420, 424, 290, 'card', { depth: 8, alpha: 0.96 }
+        )
             .setVisible(false);
     }
 

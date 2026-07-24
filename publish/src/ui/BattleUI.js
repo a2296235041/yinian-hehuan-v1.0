@@ -2,6 +2,7 @@ var Game = window.Game || {};
 
 Game.BattleUI = {
     createFighter(scene, x, label, imageKey, playerSide, stats, imageFrame = null) {
+        Game.UISkin.addPanel(scene, x, 286, 350, 420, 'card', { alpha: 0.9 });
         scene.add.text(x, 92, label, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '25px',
@@ -36,7 +37,6 @@ Game.BattleUI = {
             color: '#cde9df',
             align: 'center',
             lineSpacing: 3,
-            backgroundColor: 'rgba(13,27,23,0.84)',
             padding: { x: 10, y: 6 }
         }).setOrigin(0.5);
         scene.add.rectangle(x - 150, 458, 300, 18, 0x10201b).setOrigin(0, 0.5);
@@ -51,14 +51,11 @@ Game.BattleUI = {
     },
 
     makeButton(scene, x, y, label, action) {
-        return scene.add.text(x, y, label, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '22px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 24, y: 11 }
-        }).setOrigin(0.5)
-            .setInteractive({ useHandCursor: true })
-            .on('pointerdown', action);
+        return Game.UISkin.makeButton(scene, x, y, label, action, {
+            width: 126,
+            height: 50,
+            fontSize: 21,
+            variant: label === '撤退' ? 'secondary' : 'primary'
+        });
     }
 };

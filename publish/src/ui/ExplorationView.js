@@ -15,30 +15,23 @@ Game.ExplorationView = {
             stroke: '#14231f',
             strokeThickness: 3
         }).setOrigin(0.5);
-        scene.add.rectangle(18, 18, 320, 120, 0x0d1b17, 0.82)
-            .setOrigin(0, 0)
-            .setStrokeStyle(1, 0xd8c38c, 0.55);
+        Game.UISkin.addPanel(scene, 178, 78, 320, 120, 'wide', { alpha: 0.92 });
         const playerInfo = scene.add.text(32, 29, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '14px',
             color: '#f4ead2',
             lineSpacing: 5
         });
-        const close = scene.add.text(1200, 42, '返回宗门', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.58)',
-            padding: { x: 14, y: 8 },
-            stroke: '#14231f',
-            strokeThickness: 2
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        close.on('pointerdown', onClose);
+        Game.UISkin.makeButton(scene, 1185, 46, '返回宗门', onClose, {
+            width: 150, height: 46, fontSize: 17, variant: 'secondary'
+        });
+        const statusPanel = Game.UISkin.addPanel(
+            scene, 640, 520, 1080, 118, 'wide', { alpha: 0.96 }
+        ).setVisible(false);
         const status = scene.add.text(640, 520, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
             color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.86)',
             padding: { x: 18, y: 10 },
             align: 'center',
             wordWrap: { width: 1010, useAdvancedWrap: true },
@@ -50,6 +43,7 @@ Game.ExplorationView = {
             title,
             playerInfo,
             status,
+            statusPanel,
             regionObjects: [],
             detailObjects: []
         };
@@ -64,6 +58,7 @@ Game.ExplorationView = {
     },
     setStatus(view, text, visible = true) {
         view.status.setText(this.wrap(text, 50, 4)).setVisible(visible);
+        view.statusPanel.setVisible(visible);
     },
     updatePlayerInfo(view) {
         const stats = window.GamePlayerStats.getSnapshot();
@@ -80,12 +75,13 @@ Game.ExplorationView = {
         this.clear(view.regionObjects);
         view.title.setText('出山探险');
         view.status.setVisible(false);
+        view.statusPanel.setVisible(false);
         regions.forEach((region, index) => {
             const x = 175 + (index % 4) * 310;
             const y = 260 + Math.floor(index / 4) * 255;
-            const color = region.unlocked ? 0x14231f : 0x101714;
-            const frame = scene.add.rectangle(x, y, 270, 230, color, 0.82)
-                .setStrokeStyle(2, region.unlocked ? 0xd8c38c : 0x42685c, 0.72);
+            const frame = Game.UISkin.addPanel(scene, x, y, 270, 230, 'card', {
+                alpha: region.unlocked ? 0.92 : 0.48
+            });
             const title = scene.add.text(x, y - 82, region.name, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '23px',
@@ -131,16 +127,9 @@ Game.ExplorationView = {
                 fontSize: '16px',
                 color: '#d8c38c'
             }).setOrigin(0.5);
-        const back = scene.add.text(1080, 126, '返回区域', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '17px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.56)',
-            padding: { x: 13, y: 8 },
-            stroke: '#14231f',
-            strokeThickness: 2
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        back.on('pointerdown', onBack);
+        const back = Game.UISkin.makeButton(scene, 1080, 126, '返回区域', onBack, {
+            width: 140, height: 44, fontSize: 16, variant: 'secondary'
+        });
         view.detailObjects.push(description, detail, back);
     }
 };

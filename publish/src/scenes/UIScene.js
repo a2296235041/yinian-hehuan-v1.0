@@ -35,10 +35,10 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         Game.SceneTransition.fadeIn(this);
     }
     createStatusDisplay() {
-        this.statusPanel = this.add.rectangle(18, 14, 330, 88, 0x0d1b17, 0.9)
-            .setOrigin(0, 0)
-            .setStrokeStyle(1, 0xd8c38c, 0.72)
-            .setDepth(20);
+        this.statusPanel = Game.UISkin.addPanel(this, 183, 58, 330, 88, 'wide', {
+            depth: 20,
+            alpha: 0.96
+        });
         this.avatarRing = this.add.circle(62, 58, 30, 0x14231f, 1)
             .setStrokeStyle(2, 0xf4ead2, 0.95)
             .setDepth(21);
@@ -62,10 +62,10 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.nameText = this.add.text(106, 32, '', style).setDepth(21);
         this.dayText = this.add.text(106, 61, '', style).setDepth(21);
         this.realmText = this.add.text(216, 61, '', style).setDepth(21);
-        this.detailPanel = this.add.rectangle(18, 110, 360, 306, 0x0d1b17, 0.96)
-            .setOrigin(0, 0)
-            .setStrokeStyle(1, 0xd8c38c, 0.72)
-            .setDepth(20)
+        this.detailPanel = Game.UISkin.addPanel(this, 198, 263, 360, 306, 'card', {
+            depth: 20,
+            alpha: 0.98
+        })
             .setVisible(false);
         this.detailText = this.add.text(36, 130, '', {
             ...style,
@@ -83,18 +83,10 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.makeButton(1175, y, '储物袋', () => this.openOverlay('InventoryScene'));
     }
     makeButton(x, y, label, action) {
-        const button = this.add.text(x, y, label, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '18px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 14, y: 9 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        button.on('pointerdown', () => {
+        return Game.UISkin.makeButton(this, x, y, label, () => {
             window.GameAudio.sfx('click');
-            this.tweens.add({ targets: button, scale: 0.95, duration: 70, yoyo: true });
             action();
-        });
+        }, { width: 108, height: 46, fontSize: 17 });
     }
     createLogText() {
         this.logText = this.add.text(640, 328, '', {

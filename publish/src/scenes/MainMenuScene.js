@@ -13,8 +13,9 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         const background = this.add.image(width / 2, height / 2, 'bg-sect');
         background.setScale(Math.max(width / background.width, height / background.height));
         this.add.rectangle(width / 2, height / 2, width, height, 0x07100d, 0.38);
-        this.add.rectangle(width / 2, height / 2 + 5, 840, 410, 0x0d1b17, 0.78)
-            .setStrokeStyle(2, 0xd8c38c, 0.65);
+        Game.UISkin.addPanel(this, width / 2, height / 2 + 5, 840, 410, 'card', {
+            alpha: 0.94
+        });
         this.add.text(width / 2, height / 2 - 130, '一念逍遥，一念合欢', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '50px',
@@ -40,25 +41,12 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
     }
 
     createStartButton(width, height) {
-        const button = this.add.text(width / 2, height / 2 + 12, '开始修行', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '28px',
-            color: '#14231f',
-            backgroundColor: '#f4ead2',
-            padding: { x: 30, y: 12 }
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        button.on('pointerdown', () => {
+        Game.UISkin.makeButton(this, width / 2, height / 2 + 12, '开始修行', (button) => {
             window.GameAudio.start();
             window.GameAudio.sfx('success');
             button.disableInteractive();
-            this.tweens.add({
-                targets: button,
-                scale: 0.94,
-                duration: 90,
-                yoyo: true,
-                onComplete: () => Game.SceneTransition.start(this, 'CharacterCreationScene')
-            });
-        });
+            this.time.delayedCall(120, () => Game.SceneTransition.start(this, 'CharacterCreationScene'));
+        }, { width: 230, height: 58, fontSize: 27 });
     }
 
     createLoadSlots(width, height) {
@@ -67,19 +55,14 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             fontSize: '18px',
             color: '#d8c38c'
         }).setOrigin(0.5);
-        const buttons = [1, 2, 3].map((slotId, index) => this.add.text(
+        const buttons = [1, 2, 3].map((slotId, index) => Game.UISkin.makeButton(
+            this,
             width / 2 - 230 + index * 230,
             height / 2 + 140,
             `存档 ${slotId}\n读取中…`,
-            {
-                fontFamily: '"Noto Serif SC", serif',
-                fontSize: '17px',
-                color: '#f4ead2',
-                backgroundColor: '#14231f',
-                padding: { x: 20, y: 10 },
-                align: 'center'
-            }
-        ).setOrigin(0.5).setAlpha(0.55));
+            null,
+            { width: 210, height: 68, fontSize: 16, variant: 'secondary' }
+        ).setAlpha(0.55).disableInteractive());
         window.GameSave.getStatuses().then((statuses) => {
             statuses.forEach((info) => this.configureSlotButton(buttons[info.slotId - 1], info));
         }).catch((error) => {
