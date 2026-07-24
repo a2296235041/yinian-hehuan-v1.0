@@ -68,8 +68,8 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.addViewObject(this.add.text(640, 38, '合欢宗 · 山门总览', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '32px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 4
         }).setOrigin(0.5));
         Game.Data.buildings.forEach((building) => this.createBuildingMarker(building));
@@ -78,18 +78,18 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     createBuildingMarker(building) {
         const halo = this.addViewObject(
-            this.add.ellipse(building.mapX, building.mapY + 30, 252, 184, 0x0d1b17, 0.14)
+            this.add.ellipse(building.mapX, building.mapY + 30, 252, 184, 0x321522, 0.14)
                 .setBlendMode(Phaser.BlendModes.MULTIPLY)
         );
         const marker = this.addViewObject(
-            this.add.ellipse(building.mapX, building.mapY + 30, 270, 198, 0x0d1b17, 0)
+            this.add.ellipse(building.mapX, building.mapY + 30, 270, 198, 0x321522, 0)
                 .setInteractive({ useHandCursor: true })
         );
         this.addViewObject(this.add.text(building.mapX, building.mapY + 48, building.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '22px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 3
         }).setOrigin(0.5));
         this.addViewObject(this.add.text(
@@ -99,8 +99,8 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '14px',
-                color: '#d8c38c',
-                stroke: '#14231f',
+                color: '#f0a8bb',
+                stroke: '#321522',
                 strokeThickness: 2
             }
         ).setOrigin(0.5));
@@ -121,14 +121,14 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     createPrivateSceneArrow() {
         // 箭头放在山门总览右侧中部，避开顶部操作栏和右上角设置按钮。
         const arrowHalo = this.addViewObject(
-            this.add.circle(1244, 360, 34, 0x0d1b17, 0.18)
+            this.add.circle(1244, 360, 34, 0x321522, 0.18)
                 .setBlendMode(Phaser.BlendModes.MULTIPLY)
         );
         const arrow = this.addViewObject(this.add.text(1244, 360, '▶', {
             fontFamily: 'serif',
             fontSize: '42px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 3
         }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
         arrow.on('pointerover', () => {
@@ -163,14 +163,14 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.addViewObject(this.add.text(640, 58, building.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '36px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 4
         }).setOrigin(0.5));
         this.addViewObject(this.add.text(640, 106, building.description, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
-            color: '#d8c38c',
+            color: '#f0a8bb',
             wordWrap: { width: 760 },
             align: 'center'
         }).setOrigin(0.5));
@@ -298,14 +298,14 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.titleText = this.add.text(640, 54, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '34px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 4
         }).setOrigin(0.5);
         this.descriptionText = this.add.text(640, 102, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
-            color: '#d8c38c',
+            color: '#f0a8bb',
             wordWrap: { width: 760 },
             align: 'center'
         }).setOrigin(0.5);
@@ -314,14 +314,14 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.statusText = this.add.text(640, 535, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             wordWrap: { width: 900 },
             align: 'center'
         }).setOrigin(0.5).setVisible(false);
         this.storyText = this.add.text(640, 385, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             lineSpacing: 6,
             wordWrap: { width: 860, useAdvancedWrap: true },
             fixedWidth: 920,
@@ -345,10 +345,10 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         const arrow = this.add.text(x, y, label, {
             fontFamily: 'serif',
             fontSize: '30px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.48)',
+            color: '#fff8fa',
+            backgroundColor: 'rgba(50,21,34,0.7)',
             padding: { x: 10, y: 6 },
-            stroke: '#14231f',
+            stroke: '#321522',
             strokeThickness: 2
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
         arrow.on('pointerdown', () => {
@@ -365,10 +365,10 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             const button = this.add.text(100 + index * 205, 650, location.name, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '16px',
-                color: '#f4ead2',
-                backgroundColor: 'rgba(13,27,23,0.58)',
+                color: '#fff8fa',
+                backgroundColor: 'rgba(50,21,34,0.78)',
                 padding: { x: 12, y: 8 },
-                stroke: '#14231f',
+                stroke: '#321522',
                 strokeThickness: 2
             }).setOrigin(0.5).setInteractive({ useHandCursor: true });
             button.on('pointerdown', () => {
@@ -385,10 +385,10 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         const close = this.add.text(1138, 54, '返回山门', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.52)',
+            color: '#fff8fa',
+            backgroundColor: 'rgba(50,21,34,0.78)',
             padding: { x: 13, y: 8 },
-            stroke: '#14231f',
+            stroke: '#321522',
             strokeThickness: 2
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
         close.on('pointerdown', () => this.close());
@@ -463,7 +463,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.inviteMenuObjects.push(this.add.text(1036, 296, '选择一位伴侣', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '19px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5).setDepth(9));
         [...this.npcSystem.getAllNpcs().values()].forEach((npc, index) => {
             const affinity = window.GameAffinity.getSnapshot(npc.id);
@@ -477,12 +477,12 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
                     : `好感 ${affinity.affinity}/80`}`, {
                     fontFamily: '"Noto Serif SC", serif',
                     fontSize: '15px',
-                    color: selected ? '#14231f' : (available ? '#f4ead2' : '#789087'),
-                    backgroundColor: selected ? 'rgba(216,195,140,0.86)'
-                        : (available ? 'rgba(13,27,23,0.72)' : 'rgba(13,27,23,0.42)'),
+                    color: selected ? '#321522' : (available ? '#fff8fa' : '#9c7a87'),
+                    backgroundColor: selected ? 'rgba(240,168,187,0.9)'
+                        : (available ? 'rgba(109,40,66,0.82)' : 'rgba(50,21,34,0.5)'),
                     padding: { x: 12, y: 7 },
                     align: 'center',
-                    stroke: '#14231f',
+                    stroke: '#321522',
                     strokeThickness: 2
                 }).setOrigin(0.5).setDepth(9);
             if (available) {
@@ -507,13 +507,13 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '16px',
-                color: selectedCount ? '#14231f' : '#789087',
+                color: selectedCount ? '#321522' : '#9c7a87',
                 backgroundColor: selectedCount
-                    ? 'rgba(216,195,140,0.86)'
-                    : 'rgba(13,27,23,0.46)',
+                    ? 'rgba(240,168,187,0.9)'
+                    : 'rgba(50,21,34,0.54)',
                 padding: { x: 14, y: 7 },
                 align: 'center',
-                stroke: '#14231f',
+                stroke: '#321522',
                 strokeThickness: 2
             }
         ).setOrigin(0.5).setDepth(9);
@@ -646,7 +646,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.talkMenuObjects.push(this.add.text(1036, 300, '选择交谈对象', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '19px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5).setDepth(9));
         this.invitedNpcs.forEach((npc, index) => {
             const affinity = window.GameAffinity.getSnapshot(npc.id);
@@ -654,11 +654,11 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
                 `${npc.name}\n好感 ${affinity.affinity}`, {
                     fontFamily: '"Noto Serif SC", serif',
                     fontSize: '16px',
-                    color: '#f4ead2',
-                    backgroundColor: 'rgba(13,27,23,0.72)',
+                    color: '#fff8fa',
+                    backgroundColor: 'rgba(109,40,66,0.82)',
                     padding: { x: 12, y: 7 },
                     align: 'center',
-                    stroke: '#14231f',
+                    stroke: '#321522',
                     strokeThickness: 2
                 }).setOrigin(0.5).setDepth(9).setInteractive({ useHandCursor: true });
             button.on('pointerdown', () => this.talkToCompanion(npc));

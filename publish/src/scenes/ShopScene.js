@@ -32,13 +32,13 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         this.add.text(640, 46, shop?.name || '灵石商店', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '36px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
         this.stoneText = this.add.text(54, 42, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '21px',
-            color: '#d8c38c',
-            backgroundColor: 'rgba(13,27,23,0.92)',
+            color: '#f0a8bb',
+            backgroundColor: 'rgba(50,21,34,0.92)',
             padding: { x: 14, y: 9 }
         });
         Game.UISkin.makeButton(this, 1170, 50, '返回', () => this.close(), {
@@ -47,8 +47,8 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         this.statusText = this.add.text(640, 670, '正在整理货架…', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.94)',
+            color: '#fff8fa',
+            backgroundColor: 'rgba(50,21,34,0.94)',
             padding: { x: 18, y: 9 },
             wordWrap: { width: 1000, useAdvancedWrap: true },
             fixedWidth: 1050,
@@ -90,13 +90,13 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         const title = this.add.text(x - 230, y - 78, offer.item.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '22px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         });
         const detail = this.add.text(x - 230, y - 38,
             `${offer.item.rarity} · ${window.GameShop.effectLabel(offer.item)}\n${offer.item.description}`, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '15px',
-                color: '#a9c8bd',
+                color: '#f4dfe5',
                 lineSpacing: 6,
                 wordWrap: { width: 450, useAdvancedWrap: true }
             });

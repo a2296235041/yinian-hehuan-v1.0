@@ -75,21 +75,21 @@ Game.NpcCardRenderer = {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '22px',
             fontStyle: 'bold',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 3
         }).setOrigin(0.5, 0));
         scene.addViewObject(scene.add.text(layout.x, layout.groundY + 31, npc.title, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         }).setOrigin(0.5, 0));
         const affinityText = scene.addViewObject(scene.add.text(
             layout.x, layout.groundY + 53, `好感 ${affinity.affinity} · 点击交谈`, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '14px',
-            color: '#cde9df',
-            stroke: '#14231f',
+            color: '#ffe8ee',
+            stroke: '#321522',
             strokeThickness: 2
         }).setOrigin(0.5, 0));
         const updateAffinity = (data) => {

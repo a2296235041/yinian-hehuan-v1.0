@@ -11,15 +11,15 @@ Game.ExplorationView = {
         const title = scene.add.text(640, 42, '出山探险', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '36px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 3
         }).setOrigin(0.5);
         Game.UISkin.addPanel(scene, 178, 78, 320, 120, 'wide', { alpha: 0.92 });
         const playerInfo = scene.add.text(32, 29, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '14px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             lineSpacing: 5
         });
         Game.UISkin.makeButton(scene, 1185, 46, '返回宗门', onClose, {
@@ -31,7 +31,7 @@ Game.ExplorationView = {
         const status = scene.add.text(640, 520, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             padding: { x: 18, y: 10 },
             align: 'center',
             wordWrap: { width: 1010, useAdvancedWrap: true },
@@ -85,7 +85,7 @@ Game.ExplorationView = {
             const title = scene.add.text(x, y - 82, region.name, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '23px',
-                color: region.unlocked ? '#f4ead2' : '#789087'
+                color: region.unlocked ? '#fff8fa' : '#9c7a87'
             }).setOrigin(0.5);
             const requirement = region.unlocked
                 ? `险度 ${region.danger} · 精力 -${region.stamina_cost}`
@@ -93,12 +93,12 @@ Game.ExplorationView = {
             const detail = scene.add.text(x, y - 44, requirement, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '14px',
-                color: region.unlocked ? '#d8c38c' : '#789087'
+                color: region.unlocked ? '#f0a8bb' : '#9c7a87'
             }).setOrigin(0.5);
             const description = scene.add.text(x, y + 6, region.description, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '15px',
-                color: region.unlocked ? '#a9c8bd' : '#64766f',
+                color: region.unlocked ? '#f4dfe5' : '#80606c',
                 align: 'center',
                 lineSpacing: 5,
                 wordWrap: { width: 226, useAdvancedWrap: true }
@@ -117,7 +117,7 @@ Game.ExplorationView = {
         const description = scene.add.text(640, 126, region.description, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '19px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             align: 'center',
             wordWrap: { width: 850, useAdvancedWrap: true }
         }).setOrigin(0.5);
@@ -125,7 +125,7 @@ Game.ExplorationView = {
             `险度 ${region.danger}　·　消耗精力 ${region.stamina_cost}　·　可遇见 ${region.npc_ids.length} 位熟人`, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '16px',
-                color: '#d8c38c'
+                color: '#f0a8bb'
             }).setOrigin(0.5);
         const back = Game.UISkin.makeButton(scene, 1080, 126, '返回区域', onBack, {
             width: 140, height: 44, fontSize: 16, variant: 'secondary'

@@ -25,7 +25,6 @@
     root.GameDialoguePanel.init();
     root.GameGiftPanel.init();
     root.GameBreakthrough.init();
-    root.GameSaveUI.init();
     root.GameAIModels.initialize().catch((error) => {
       console.error('AI 模型初始化失败:', error.code || '', error.message, error.stack);
     });
@@ -64,24 +63,9 @@
     root.game = new Phaser.Game(config);
     root.GameOrientation.init();
 
-    const audioButton = document.getElementById('audio-toggle');
-    const audioState = document.getElementById('audio-state');
-    function refreshAudioButton() {
-      const muted = root.GameAudio.isMuted();
-      audioButton.checked = !muted;
-      audioState.textContent = muted ? '已静音' : '已开启';
-    }
-
     document.addEventListener('pointerdown', () => root.GameAudio.start(), {
       once: true,
       capture: true
-    });
-    audioButton.addEventListener('change', (event) => {
-      event.stopPropagation();
-      root.GameAudio.start().then(() => {
-        if (audioButton.checked === root.GameAudio.isMuted()) root.GameAudio.toggle();
-        refreshAudioButton();
-      });
     });
     document.getElementById('boot-retry').addEventListener('click', () => {
       root.location.reload();
@@ -91,8 +75,6 @@
       if (document.hidden) root.GameAudio.pause();
       else root.GameAudio.resume();
     });
-
-    refreshAudioButton();
   }
 
   async function boot() {

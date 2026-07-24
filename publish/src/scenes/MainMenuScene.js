@@ -19,21 +19,21 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         this.add.text(width / 2, height / 2 - 130, '一念逍遥，一念合欢', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '50px',
-            color: '#f4ead2',
-            stroke: '#14231f',
+            color: '#fff8fa',
+            stroke: '#321522',
             strokeThickness: 5
         }).setOrigin(0.5);
         this.add.text(width / 2, height / 2 - 72, '择一段来路，入红尘修行', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         }).setOrigin(0.5);
         this.createStartButton(width, height);
         this.createLoadSlots(width, height);
         this.add.text(width / 2, height - 34, '开始修行将创建全新进度，读档才会继续旧存档', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5).setAlpha(0.76);
         this.game.canvas.setAttribute('aria-label', '一念逍遥，一念合欢主菜单');
         Game.SceneTransition.fadeIn(this);
@@ -53,7 +53,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         this.add.text(width / 2, height / 2 + 80, '读取存档', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '18px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         }).setOrigin(0.5);
         const buttons = [1, 2, 3].map((slotId, index) => Game.UISkin.makeButton(
             this,

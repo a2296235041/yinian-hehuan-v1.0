@@ -6,7 +6,7 @@ Game.BattleUI = {
         scene.add.text(x, 92, label, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '25px',
-            color: playerSide ? '#d8c38c' : '#f0a5a5'
+            color: playerSide ? '#f0a8bb' : '#f3b0c0'
         }).setOrigin(0.5);
         let image;
         if (Number.isInteger(imageFrame)) {
@@ -34,7 +34,7 @@ Game.BattleUI = {
         scene.add.text(x, 405, stats, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '14px',
-            color: '#cde9df',
+            color: '#f4dfe5',
             align: 'center',
             lineSpacing: 3,
             padding: { x: 10, y: 6 }
@@ -45,7 +45,7 @@ Game.BattleUI = {
         const text = scene.add.text(x, 482, '', {
             fontFamily: 'serif',
             fontSize: '16px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
         return { bar, text };
     },

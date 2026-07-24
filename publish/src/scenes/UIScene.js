@@ -39,8 +39,8 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             depth: 20,
             alpha: 0.96
         });
-        this.avatarRing = this.add.circle(62, 58, 30, 0x14231f, 1)
-            .setStrokeStyle(2, 0xf4ead2, 0.95)
+        this.avatarRing = this.add.circle(62, 58, 30, 0x321522, 1)
+            .setStrokeStyle(2, 0xf0a8bb, 0.95)
             .setDepth(21);
         this.avatarMaskShape = this.make.graphics({ x: 0, y: 0, add: false });
         this.avatarMaskShape.fillCircle(62, 58, 27);
@@ -57,7 +57,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         const style = {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         };
         this.nameText = this.add.text(106, 32, '', style).setDepth(21);
         this.dayText = this.add.text(106, 61, '', style).setDepth(21);
@@ -92,8 +92,8 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.logText = this.add.text(640, 328, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '23px',
-            color: '#f4ead2',
-            backgroundColor: 'rgba(13,27,23,0.92)',
+            color: '#fff8fa',
+            backgroundColor: 'rgba(50,21,34,0.92)',
             padding: { x: 20, y: 12 },
             align: 'center',
             wordWrap: { width: 840, useAdvancedWrap: true },

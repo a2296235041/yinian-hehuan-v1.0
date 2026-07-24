@@ -52,7 +52,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.add.text(640, 46, `${this.encounter.region.name} · 遭遇战`, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '34px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
         const enemyRealm = `${window.GameCultivation.getRealmName(
             this.encounter.enemy.realm_index
@@ -76,7 +76,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.logText = this.add.text(640, 535, Game.TextBoxUtils.fit(this.encounter.text, 36, 4), {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             padding: { x: 20, y: 12 },
             align: 'center',
             wordWrap: { width: 760, useAdvancedWrap: true },

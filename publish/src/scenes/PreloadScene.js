@@ -10,18 +10,18 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 22;
+        const totalResources = 18;
 
         this.cameras.main.setBackgroundColor('#09100e');
         Game.SceneTransition.fadeIn(this, 180);
         const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '24px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
         const track = this.add.rectangle(width / 2, height / 2, 340, 18, 0x223c34)
-            .setStrokeStyle(1, 0xd8c38c, 0.7);
-        const bar = this.add.rectangle(width / 2 - 168, height / 2, 0, 12, 0xd8c38c)
+            .setStrokeStyle(1, 0xf0a8bb, 0.7);
+        const bar = this.add.rectangle(width / 2 - 168, height / 2, 0, 12, 0xd9577b)
             .setOrigin(0, 0.5);
 
         this.load.on('progress', (value) => {
@@ -55,10 +55,6 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.image('npc-mo-qiaoer', './assets/generated/npc-standee-mo-qiaoer.64f6011d.webp');
         this.load.image('npc-bai-zhi', './assets/generated/npc-standee-bai-zhi.79c8c1df.webp');
         this.load.image('npc-qin-wanqing', './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp');
-        this.load.image('ui-panel-wide', './assets/generated/ui-panel-wide.dec95d3d.webp');
-        this.load.image('ui-panel-card', './assets/generated/ui-panel-card.4fed57b2.webp');
-        this.load.image('ui-button-primary', './assets/generated/ui-button-primary.791dc14d.webp');
-        this.load.image('ui-button-secondary', './assets/generated/ui-button-secondary.a33b3384.webp');
         this.load.json('character_origins', './assets/data/character_origins.json');
         this.load.json('npcs', './assets/data/npcs.json');
         this.load.json('npc_openings', './assets/data/npc_openings.json');
@@ -74,8 +70,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         }
         window.PlatformBridge.progress({
             phase: 'runtime_initializing',
-            loadedResources: 22,
-            totalResources: 22,
+            loadedResources: 18,
+            totalResources: 18,
             message: '正在布置宗门'
         });
         Game.SceneTransition.start(this, 'MainMenuScene');

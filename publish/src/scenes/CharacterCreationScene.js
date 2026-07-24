@@ -30,21 +30,21 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.add.text(width / 2, 74, '选择你的来路', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '38px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
 
         this.originNameText = this.add.text(width / 2, 154, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '32px',
             fontStyle: 'bold',
-            color: '#d8c38c',
-            stroke: '#14231f',
+            color: '#f0a8bb',
+            stroke: '#321522',
             strokeThickness: 2
         }).setOrigin(0.5);
         this.originInfoText = this.add.text(width / 2, 202, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             lineSpacing: 8,
             wordWrap: { width: 780, useAdvancedWrap: true },
             fixedWidth: 800,
@@ -53,12 +53,12 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.add.text(width / 2, height / 2 + 98, '初始属性', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         }).setOrigin(0.5);
         this.attributeText = this.add.text(width / 2, height / 2 + 143, '', {
             fontFamily: 'monospace',
             fontSize: '18px',
-            color: '#f4ead2',
+            color: '#fff8fa',
             lineSpacing: 9,
             align: 'center'
         }).setOrigin(0.5);
@@ -69,7 +69,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.pageText = this.add.text(width / 2, height - 116, '', {
             fontFamily: 'serif',
             fontSize: '16px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         }).setOrigin(0.5);
 
         Game.UISkin.makeButton(

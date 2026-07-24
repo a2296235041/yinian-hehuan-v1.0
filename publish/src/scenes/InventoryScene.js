@@ -28,19 +28,19 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.add.text(640, 54, '储物袋', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '38px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
         this.add.text(640, 94, '当前拥有的物品', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
-            color: '#a9c8bd'
+            color: '#f4dfe5'
         }).setOrigin(0.5);
         // 灵石属于常驻货币，不随普通物品列表刷新或为空提示移动。
         Game.UISkin.addPanel(this, 184, 107, 244, 54, 'wide', { alpha: 0.96 });
         this.spiritStoneText = this.add.text(80, 96, '灵石　0', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '20px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         });
         Game.UISkin.makeButton(this, 1170, 54, '返回', () => this.close(), {
             width: 120, height: 46, fontSize: 19, variant: 'secondary'
@@ -48,13 +48,13 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.useStatusText = this.add.text(640, 606, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
-            color: '#d8c38c'
+            color: '#f0a8bb'
         }).setOrigin(0.5);
         this.makePageButton(555, '<', -1);
         this.pageText = this.add.text(640, 660, '', {
             fontFamily: 'serif',
             fontSize: '17px',
-            color: '#f4ead2'
+            color: '#fff8fa'
         }).setOrigin(0.5);
         this.makePageButton(725, '>', 1);
         Game.EventBus.on('inventory-changed', this.renderItems, this);
@@ -76,7 +76,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             this.entryObjects.push(this.add.text(640, 340, '储物袋空空如也', {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '24px',
-                color: '#a9c8bd'
+                color: '#f4dfe5'
             }).setOrigin(0.5));
             return;
         }
@@ -91,17 +91,17 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             this.entryObjects.push(this.add.text(x - 225, y + 10, item.name, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '20px',
-                color: '#d8c38c'
+                color: '#f0a8bb'
             }));
             this.entryObjects.push(this.add.text(x + 220, y + 10, `×${item.quantity}`, {
                 fontFamily: 'serif',
                 fontSize: '20px',
-                color: '#f4ead2'
+                color: '#fff8fa'
             }).setOrigin(1, 0));
             this.entryObjects.push(this.add.text(x - 225, y + 40, `${item.rarity} · ${item.description}`, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '14px',
-                color: '#a9c8bd',
+                color: '#f4dfe5',
                 wordWrap: { width: 350 }
             }));
             if (['cultivation', 'attribute'].includes(item.type)) {

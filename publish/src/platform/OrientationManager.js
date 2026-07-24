@@ -52,7 +52,10 @@
       button.setAttribute('aria-pressed', String(selected));
       button.disabled = selecting;
     });
-    if (!status) return;
+    if (!status) {
+      refreshGameScale();
+      return;
+    }
     if (message) {
       status.textContent = message;
     } else if (actual === preferred) {
