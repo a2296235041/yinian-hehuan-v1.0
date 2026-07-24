@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T10:23:30Z",
+  "updatedAt": "2026-07-24T10:38:00Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -934,6 +934,22 @@
         "quality": 88
       },
       "createdAt": "2026-07-24T10:23:30Z"
+    },
+    {
+      "name": "npc-standee-qin-wanqing",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-qin-wanqing.6ccb7e14.webp",
+      "contentHash": "6ccb7e14",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 47848,
+      "postProcessing": {
+        "trimmed": false,
+        "optimized": true,
+        "dimensions": "640x960",
+        "quality": 85
+      },
+      "createdAt": "2026-07-24T10:38:00Z"
     }
   ]
 }
