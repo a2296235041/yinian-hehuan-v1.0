@@ -12,7 +12,7 @@ Game.NpcCardRenderer = {
         xiao_qingxuan: { x: 930, groundY: 575, height: 360 },
         yun_shuiyao: { x: 350, groundY: 590, height: 380 },
         qin_wanqing: { x: 330, groundY: 600, height: 400 },
-        mo_qiaoer: { x: 950, groundY: 600, height: 370 },
+        mo_qiaoer: { x: 950, groundY: 570, height: 330 },
         bai_zhi: { x: 310, groundY: 600, height: 390 },
         hu_jiuer: { x: 950, groundY: 575, height: 400 }
     },
