@@ -7,8 +7,8 @@
   });
   let context = null;
   let master = null;
-  let music = null;
   let effects = null;
+  let musicAudio = null;
   let activeTrack = null;
   let requestedTrack = 'global';
   let muted = false;
@@ -20,79 +20,60 @@
     if (!AudioContext) return;
     context = new AudioContext();
     master = context.createGain();
-    music = context.createGain();
     effects = context.createGain();
-    const filter = context.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 5600;
-    filter.Q.value = 0.45;
     master.gain.value = muted ? 0 : 0.64;
-    music.gain.value = 0.14;
     effects.gain.value = 0.3;
-    music.connect(filter);
-    filter.connect(master);
     effects.connect(master);
     master.connect(context.destination);
   }
 
-  function createTrack(name) {
-    const audio = new root.Audio(tracks[name]);
-    audio.loop = true;
-    audio.preload = 'auto';
-    audio.dataset.track = name;
-    const source = context.createMediaElementSource(audio);
-    const gain = context.createGain();
-    gain.gain.value = 1;
-    source.connect(gain);
-    gain.connect(music);
-    return audio;
+  function ensureMusicElement() {
+    if (musicAudio) return;
+    musicAudio = root.document.createElement('audio');
+    musicAudio.loop = true;
+    musicAudio.preload = 'auto';
+    musicAudio.volume = 0.14;
+    musicAudio.addEventListener('error', () => {
+      console.error('背景音乐加载失败:', musicAudio.error?.code || 'unknown');
+    });
   }
 
   function ensureTrack(name) {
-    if (!context || activeTrack?.dataset.track === name) return;
-    if (activeTrack) {
-      activeTrack.pause();
-      activeTrack.currentTime = 0;
-    }
-    activeTrack = createTrack(name);
-    if (active && !muted) {
-      activeTrack.play().catch((error) => {
-        console.error('背景音乐启动失败:', error.message, error.stack);
-      });
-    }
+    ensureMusicElement();
+    if (activeTrack === name) return;
+    activeTrack = name;
+    musicAudio.src = tracks[name];
+    musicAudio.load();
+  }
+
+  function playActiveTrack() {
+    if (!active || muted || !musicAudio) return;
+    const promise = musicAudio.play();
+    promise?.catch((error) => {
+      console.error('背景音乐播放失败:', error.name, error.message, error.stack);
+    });
   }
 
   function playMusic(name = 'global') {
     requestedTrack = tracks[name] ? name : 'global';
-    init();
-    if (!context) return false;
     ensureTrack(requestedTrack);
-    context.resume().catch(() => {});
-    if (active && !muted) {
-      activeTrack?.play().catch((error) => {
-        console.error('背景音乐切换失败:', error.message, error.stack);
-      });
-    }
+    init();
+    playActiveTrack();
+    context?.resume().catch(() => {});
     return true;
   }
 
   async function start() {
     active = true;
+    ensureTrack(requestedTrack);
     init();
-    if (!context) return false;
+    // 在用户手势的同步调用栈中触发 play，避免浏览器拦截背景音乐。
+    playActiveTrack();
+    if (!context) return true;
     try {
       await context.resume();
     } catch (error) {
-      console.error('音频启动失败:', error.message, error.stack);
-      return false;
-    }
-    ensureTrack(requestedTrack);
-    if (!muted) {
-      try {
-        await activeTrack.play();
-      } catch (error) {
-        console.error('背景音乐播放失败:', error.message, error.stack);
-      }
+      console.error('音效启动失败:', error.message, error.stack);
     }
     return true;
   }
@@ -133,20 +114,17 @@
     if (master && context) {
       master.gain.setTargetAtTime(muted ? 0 : 0.64, context.currentTime, 0.04);
     }
-    if (muted) {
-      activeTrack?.pause();
-    } else if (active && activeTrack) {
-      context.resume().catch(() => {});
-      activeTrack.play().catch((error) => {
-        console.error('背景音乐恢复失败:', error.message, error.stack);
-      });
+    if (musicAudio) {
+      musicAudio.volume = muted ? 0 : 0.14;
+      if (muted) musicAudio.pause();
+      else playActiveTrack();
     }
     return muted;
   }
 
   function pause() {
     active = false;
-    activeTrack?.pause();
+    musicAudio?.pause();
     context?.suspend().catch(() => {});
   }
 
