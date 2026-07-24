@@ -6,6 +6,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         super('CharacterCreationScene');
         this.originsData = [];
         this.selectedOriginIndex = 0;
+        this.originNameText = null;
         this.originInfoText = null;
         this.attributeText = null;
         this.pageText = null;
@@ -32,20 +33,29 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
             color: '#f4ead2'
         }).setOrigin(0.5);
 
-        this.originInfoText = this.add.text(width / 2, height / 2 - 38, '', {
+        this.originNameText = this.add.text(width / 2, 154, '', {
             fontFamily: '"Noto Serif SC", serif',
-            fontSize: '19px',
-            color: '#f4ead2',
-            lineSpacing: 7,
-            wordWrap: { width: 760, useAdvancedWrap: true },
-            align: 'center'
+            fontSize: '32px',
+            fontStyle: 'bold',
+            color: '#d8c38c',
+            stroke: '#14231f',
+            strokeThickness: 2
         }).setOrigin(0.5);
-        this.add.text(width / 2, height / 2 + 104, '初始属性', {
+        this.originInfoText = this.add.text(width / 2, 202, '', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '17px',
+            color: '#f4ead2',
+            lineSpacing: 8,
+            wordWrap: { width: 780, useAdvancedWrap: true },
+            fixedWidth: 800,
+            align: 'center'
+        }).setOrigin(0.5, 0);
+        this.add.text(width / 2, height / 2 + 98, '初始属性', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
             color: '#d8c38c'
         }).setOrigin(0.5);
-        this.attributeText = this.add.text(width / 2, height / 2 + 150, '', {
+        this.attributeText = this.add.text(width / 2, height / 2 + 143, '', {
             fontFamily: 'monospace',
             fontSize: '18px',
             color: '#f4ead2',
@@ -94,9 +104,9 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
             }, [])
             .map((row) => row.join('  '))
             .join('\n');
+        this.originNameText.setText(`【${origin.name}】`);
         this.originInfoText.setText(
-            `【${origin.name}】\n\n${origin.description}\n\n` +
-            `天赋 · ${origin.talent.name}\n${origin.talent.description}`
+            `${origin.description}\n\n天赋 · ${origin.talent.name}\n${origin.talent.description}`
         );
         this.attributeText.setText(attributes);
         this.pageText.setText(`${this.selectedOriginIndex + 1} / ${this.originsData.length}`);
