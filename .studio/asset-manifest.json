@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T10:19:05Z",
+  "updatedAt": "2026-07-24T10:23:30Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -918,6 +918,22 @@
         "quality": 88
       },
       "createdAt": "2026-07-24T10:19:05Z"
+    },
+    {
+      "name": "npc-standee-yun-shuiyao",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-yun-shuiyao.38bab51c.webp",
+      "contentHash": "38bab51c",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 71920,
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "dimensions": "536x960",
+        "quality": 88
+      },
+      "createdAt": "2026-07-24T10:23:30Z"
     }
   ]
 }

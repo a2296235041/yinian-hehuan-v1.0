@@ -10,7 +10,7 @@ Game.NpcCardRenderer = {
         liu_hanyan: { x: 820, groundY: 590, height: 470 },
         han_yueshuang: { x: 390, groundY: 590, height: 450 },
         xiao_qingxuan: { x: 890, groundY: 590, height: 450 },
-        yun_shuiyao: { x: 850, groundY: 590, height: 440 },
+        yun_shuiyao: { x: 760, groundY: 590, height: 440 },
         qin_wanqing: { x: 390, groundY: 590, height: 450 },
         mo_qiaoer: { x: 870, groundY: 590, height: 430 },
         bai_zhi: { x: 390, groundY: 590, height: 450 },
@@ -28,7 +28,9 @@ Game.NpcCardRenderer = {
             return './assets/generated/npc-standee-han-yueshuang.352ae25d.webp';
         }
         if (npcId === 'hu_jiuer') return './assets/generated/npc-hu-jiuer.png';
-        if (npcId === 'yun_shuiyao') return './assets/generated/npc-yun-shuiyao.png';
+        if (npcId === 'yun_shuiyao') {
+            return './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp';
+        }
         if (npcId === 'mo_qiaoer') return './assets/generated/npc-mo-qiaoer.png';
         if (npcId === 'bai_zhi') return './assets/generated/npc-bai-zhi.png';
         if (npcId === 'qin_wanqing') return './assets/generated/npc-qin-wanqing.png';
