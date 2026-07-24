@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T09:04:24Z",
+  "updatedAt": "2026-07-24T10:05:14Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -870,6 +870,22 @@
         "dimensions": "599x114",
         "quality": 84
       }
+    },
+    {
+      "name": "npc-standee-su-meier",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-su-meier.a9f08237.webp",
+      "contentHash": "a9f08237",
+      "source": "user-upload",
+      "outputFormat": "webp",
+      "finalBytes": 83592,
+      "postProcessing": {
+        "trimmed": true,
+        "optimized": true,
+        "dimensions": "640x943",
+        "quality": 88
+      },
+      "createdAt": "2026-07-24T10:05:14Z"
     }
   ]
 }

@@ -48,7 +48,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.image('npc-xiao-qingxuan', './assets/generated/npc-xiao-qingxuan.png');
         this.load.image('npc-scholar', './assets/generated/scholar-disciple.e2aa08f6.webp');
         this.load.image('npc-hu-jiuer', './assets/generated/npc-hu-jiuer.png');
-        this.load.image('npc-su-meier', './assets/generated/npc-su-meier.png');
+        this.load.image('npc-su-meier', './assets/generated/npc-standee-su-meier.a9f08237.webp');
         this.load.image('npc-liu-hanyan', './assets/generated/npc-liu-hanyan.png');
         this.load.image('npc-han-yueshuang', './assets/generated/npc-han-yueshuang.png');
         this.load.image('npc-yun-shuiyao', './assets/generated/npc-yun-shuiyao.png');

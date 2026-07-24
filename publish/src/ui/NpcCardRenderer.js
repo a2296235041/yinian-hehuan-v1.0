@@ -1,12 +1,26 @@
 var Game = window.Game || {};
 
 /**
- * NPC 卡片集中在独立渲染器中维护，GameScene 只负责场景切换。
- * 卡片高度固定，角色图、身份、境界和好感不会因文字变化互相遮挡。
+ * NPC 立绘集中在独立渲染器中维护，角色本体就是交互入口。
+ * 不绘制卡片框，按建筑背景和人物身份给出稳定站位。
  */
 Game.NpcCardRenderer = {
+    layouts: {
+        su_meier: { x: 390, groundY: 590, height: 480 },
+        liu_hanyan: { x: 640, groundY: 590, height: 500 },
+        han_yueshuang: { x: 390, groundY: 590, height: 450 },
+        xiao_qingxuan: { x: 890, groundY: 590, height: 450 },
+        yun_shuiyao: { x: 850, groundY: 590, height: 440 },
+        qin_wanqing: { x: 390, groundY: 590, height: 450 },
+        mo_qiaoer: { x: 870, groundY: 590, height: 430 },
+        bai_zhi: { x: 390, groundY: 590, height: 450 },
+        hu_jiuer: { x: 890, groundY: 590, height: 470 }
+    },
+
     portraitPath(npcId) {
-        if (npcId === 'su_meier') return './assets/generated/npc-su-meier.png';
+        if (npcId === 'su_meier') {
+            return './assets/generated/npc-standee-su-meier.a9f08237.webp';
+        }
         if (npcId === 'liu_hanyan') return './assets/generated/npc-liu-hanyan.png';
         if (npcId === 'han_yueshuang') return './assets/generated/npc-han-yueshuang.png';
         if (npcId === 'hu_jiuer') return './assets/generated/npc-hu-jiuer.png';
@@ -36,33 +50,34 @@ Game.NpcCardRenderer = {
     },
 
     create(scene, npc, x) {
+        const layout = this.layouts[npc.id] || { x, groundY: 590, height: 440 };
         const affinity = scene.npcSystem.getNpcStateById(npc.id);
-        const frame = scene.addViewObject(Game.UISkin.addPanel(
-            scene, x, 375, 226, 430, 'card', { alpha: 0.94 }
-        ));
-        const portrait = scene.addViewObject(scene.add.image(x, 325, this.portraitKey(npc.id)));
-        portrait.setScale(Math.min(165 / portrait.width, 235 / portrait.height));
-        scene.addViewObject(scene.add.text(x, 478, npc.name, {
+        const portrait = scene.addViewObject(scene.add.image(
+            layout.x, layout.groundY, this.portraitKey(npc.id)
+        ).setOrigin(0.5, 1));
+        const scale = layout.height / portrait.height;
+        portrait.setScale(scale).setDepth(4).setInteractive({ useHandCursor: true });
+        const nameText = scene.addViewObject(scene.add.text(layout.x, layout.groundY + 4, npc.name, {
             fontFamily: '"Noto Serif SC", serif',
-            fontSize: '24px',
-            color: '#f4ead2'
-        }).setOrigin(0.5));
-        scene.addViewObject(scene.add.text(x, 512, npc.title, {
+            fontSize: '22px',
+            fontStyle: 'bold',
+            color: '#f4ead2',
+            stroke: '#14231f',
+            strokeThickness: 3
+        }).setOrigin(0.5, 0));
+        scene.addViewObject(scene.add.text(layout.x, layout.groundY + 31, npc.title, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '16px',
             color: '#d8c38c'
-        }).setOrigin(0.5));
-        scene.addViewObject(scene.add.text(x, 540, `境界 ${npc.realm_label}`, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '15px',
-            color: '#e6cf8f'
-        }).setOrigin(0.5));
+        }).setOrigin(0.5, 0));
         const affinityText = scene.addViewObject(scene.add.text(
-            x, 572, `好感 ${affinity.affinity} · 点击交谈`, {
+            layout.x, layout.groundY + 53, `好感 ${affinity.affinity} · 点击交谈`, {
             fontFamily: '"Noto Serif SC", serif',
-            fontSize: '16px',
-            color: '#cde9df'
-        }).setOrigin(0.5));
+            fontSize: '14px',
+            color: '#cde9df',
+            stroke: '#14231f',
+            strokeThickness: 2
+        }).setOrigin(0.5, 0));
         const updateAffinity = (data) => {
             if (data.npcId === npc.id) {
                 affinityText.setText(`好感 ${data.affinity} · 点击交谈`);
@@ -72,12 +87,15 @@ Game.NpcCardRenderer = {
         affinityText.once(Phaser.GameObjects.Events.DESTROY, () => {
             Game.EventBus.off('affinity-changed', updateAffinity);
         });
-        const hitArea = scene.addViewObject(
-            scene.add.zone(x, 375, 226, 430).setInteractive({ useHandCursor: true })
-        );
-        hitArea.on('pointerdown', () => {
+        portrait.on('pointerover', () => {
+            scene.tweens.add({ targets: portrait, scale: scale * 1.03, duration: 100 });
+        });
+        portrait.on('pointerout', () => {
+            scene.tweens.add({ targets: portrait, scale, duration: 100 });
+        });
+        portrait.on('pointerdown', () => {
             window.GameAudio.sfx('click');
-            scene.tweens.add({ targets: frame, alpha: 0.55, duration: 80, yoyo: true });
+            scene.tweens.add({ targets: portrait, scale: scale * 0.98, duration: 70, yoyo: true });
             scene.dialogueSystem.startDialogue(npc.id);
         });
     }
