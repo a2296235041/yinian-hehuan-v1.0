@@ -93,7 +93,6 @@
     submit.disabled = busy;
     quick.disabled = busy;
     if (message !== null) status.textContent = message;
-    if (!busy) input.focus();
   }
 
   function setMode(hasEncounter) {

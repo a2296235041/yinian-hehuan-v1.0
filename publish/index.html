@@ -8,7 +8,7 @@
   <title>一念逍遥，一念合欢</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./ui.css">
-  <link rel="stylesheet" href="./exploration.css">
+  <link rel="stylesheet" href="./exploration.css?v=20260725-5">
   <link rel="stylesheet" href="./theme.css">
 </head>
 <body>
@@ -108,6 +108,25 @@
         <p id="gift-empty" class="gift-empty" hidden>储物袋中暂无可赠送的物品。</p>
       </div>
     </section>
+    <section id="exploration-screen" class="exploration-screen" hidden>
+      <header class="exploration-screen-header">
+        <div>
+          <h1 id="exploration-screen-title">出山探险</h1>
+          <p id="exploration-player-info"></p>
+        </div>
+        <button id="exploration-screen-close" type="button">返回宗门</button>
+      </header>
+      <main class="exploration-screen-main">
+        <p id="exploration-screen-status" class="exploration-screen-status"></p>
+        <div id="exploration-region-grid" class="exploration-region-grid"></div>
+        <section id="exploration-region-detail" class="exploration-region-detail" hidden>
+          <h2 id="exploration-region-name"></h2>
+          <p id="exploration-region-description"></p>
+          <p id="exploration-region-meta"></p>
+          <button id="exploration-region-back" type="button">返回区域</button>
+        </section>
+      </main>
+    </section>
     <section id="exploration-dialogue-panel" class="exploration-dialogue-panel" hidden>
       <header>
         <strong id="exploration-panel-title"></strong>
@@ -177,6 +196,8 @@
   <script src="./src/ai/AIService.js"></script>
   <script src="./src/ai/DialoguePanel.js"></script>
   <script src="./src/ui/ExplorationPanel.js"></script>
+  <script src="./src/ui/ExplorationDOMView.js?v=20260725-5"></script>
+  <script src="./src/ui/ExplorationDOMController.js?v=20260725-5"></script>
   <script src="./src/ui/GiftPanel.js"></script>
   <script src="./src/ui/BreakthroughController.js"></script>
   <script src="./src/ui/SaveGameUI.js"></script>
@@ -194,9 +215,9 @@
   <script src="./src/scenes/ShopScene.js"></script>
   <script src="./src/scenes/InventoryScene.js"></script>
   <script src="./src/scenes/ExplorationScene.js?v=20260725-3"></script>
-  <script src="./src/scenes/BattleScene.js"></script>
+  <script src="./src/scenes/BattleScene.js?v=20260725-5"></script>
   <script src="./src/scenes/UIScene.js"></script>
-  <script src="./src/scenes/OverlayGuard.js?v=20260725-4"></script>
-  <script src="./main.js?v=20260725-4"></script>
+  <script src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
+  <script src="./main.js?v=20260725-5"></script>
 </body>
 </html>

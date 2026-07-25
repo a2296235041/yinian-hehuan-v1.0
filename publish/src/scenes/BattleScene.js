@@ -6,15 +6,11 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         super('BattleScene');
         this.encounter = null;
         this.combat = null;
-        this.playerHpText = null;
-        this.enemyHpText = null;
-        this.playerBar = null;
-        this.enemyBar = null;
+        this.playerHpText = null; this.enemyHpText = null;
+        this.playerBar = null; this.enemyBar = null;
         this.logText = null;
-        this.actionButtons = [];
-        this.finishButton = null;
-        this.busy = false;
-        this.ending = false;
+        this.actionButtons = []; this.finishButton = null;
+        this.busy = false; this.ending = false;
         this.requestId = 0;
         this.playerStats = null;
     }
@@ -22,15 +18,11 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         // Phaser 停止场景后会复用同一个实例，因此每场战斗都必须重置临时状态。
         this.encounter = data.encounter || null;
         this.combat = null;
-        this.playerHpText = null;
-        this.enemyHpText = null;
-        this.playerBar = null;
-        this.enemyBar = null;
+        this.playerHpText = null; this.enemyHpText = null;
+        this.playerBar = null; this.enemyBar = null;
         this.logText = null;
-        this.actionButtons = [];
-        this.finishButton = null;
-        this.busy = false;
-        this.ending = false;
+        this.actionButtons = []; this.finishButton = null;
+        this.busy = false; this.ending = false;
         this.requestId += 1;
         this.playerStats = null;
     }
@@ -38,8 +30,11 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         if (!this.encounter?.enemy || !this.encounter?.region) {
             console.error('战斗启动失败: 遭遇数据不完整');
             Game.EventBus.emit('exploration-result', { text: '遭遇数据异常，已返回探索界面。' });
-            this.scene.wake('ExplorationScene');
-            Game.SceneTransition.fadeIn(this.scene.get('ExplorationScene'));
+            if (window.GameExplorationDOM?.isOpen()) window.GameExplorationDOM.resumeAfterBattle();
+            else {
+                this.scene.wake('ExplorationScene');
+                Game.SceneTransition.fadeIn(this.scene.get('ExplorationScene'));
+            }
             this.scene.stop();
             return;
         }
@@ -190,6 +185,11 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
         this.requestId += 1;
         window.GameAudio.playMusic('global');
         Game.SceneTransition.fadeOut(this, () => {
+            if (window.GameExplorationDOM?.isOpen()) {
+                window.GameExplorationDOM.resumeAfterBattle();
+                this.scene.stop();
+                return;
+            }
             this.scene.wake('ExplorationScene');
             const exploration = this.scene.get('ExplorationScene');
             exploration.restorePanel();

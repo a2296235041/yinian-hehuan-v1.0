@@ -18,7 +18,6 @@
 
   function recover(scene) {
     try {
-      scene.scene.stop('ExplorationScene');
       ['GameScene', 'UIScene'].forEach((key) => {
         const target = scene.scene.get(key);
         scene.scene.setVisible(true, key);
@@ -40,9 +39,7 @@
     this.overlayOpening = true;
     try {
       await deadline(root.Game.systemsReady || Promise.resolve(), 8000);
-      this.scene.launch(sceneKey);
-      await new Promise((resolve) => root.requestAnimationFrame(resolve));
-      if (!this.scene.isActive(sceneKey)) throw new Error('出山场景未能启动');
+      root.GameExplorationDOM.open(this);
     } catch (error) {
       console.error('打开出山页面失败:', error.code || '', error.message, error.stack);
       recover(this);
