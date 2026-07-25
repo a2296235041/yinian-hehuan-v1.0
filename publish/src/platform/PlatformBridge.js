@@ -38,17 +38,6 @@
     if (panel) panel.hidden = false;
   }
 
-  function safeUrl(value) {
-    const text = String(value || '').trim();
-    if (!text) return '';
-    try {
-      const url = new URL(text, root.location.href);
-      return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
-    } catch (error) {
-      return '';
-    }
-  }
-
   /**
    * 平台 iframe 的 origin 为 null，直接读取 localStorage 会触发 SecurityError。
    * 仅在游戏被放到普通同源页面运行时，才允许把它作为非平台环境的降级存储。
@@ -67,7 +56,7 @@
     return !event.error
       && Number(event.lineno || 0) === 0
       && Number(event.colno || 0) === 0
-      && /^script error\.?$/i.test(message);
+      && (!event.filename || /^script error\.?$/i.test(message));
   }
 
   // 只暴露界面需要的昵称和头像地址，绝不把平台返回的 token 放入游戏状态或日志。
@@ -82,7 +71,8 @@
         const info = await infoApi();
         return {
           name: typeof info?.name === 'string' ? info.name.trim().slice(0, 24) : '',
-          avatarUrl: safeUrl(info?.avatarUrl)
+          // 外链头像可能没有允许 opaque iframe 的 CORS 响应头，统一使用本地默认头像。
+          avatarUrl: ''
         };
       })
       .catch((error) => {
@@ -95,6 +85,7 @@
   root.addEventListener('error', (event) => {
     if (isOpaqueCrossOriginError(event)) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       return;
     }
     const message = event.error?.message || event.message || '未知脚本错误';
