@@ -52,12 +52,20 @@
    * 仅在游戏被放到普通同源页面运行时，才允许把它作为非平台环境的降级存储。
    */
   function getLocalStorage() {
+    if (root.dzmm) return null;
     try {
-      if (root.origin === 'null' || root.location.origin === 'null') return null;
       return root.localStorage;
     } catch (_) {
       return null;
     }
+  }
+
+  function isOpaqueCrossOriginError(event) {
+    const message = String(event.message || '').trim();
+    return !event.error
+      && Number(event.lineno || 0) === 0
+      && Number(event.colno || 0) === 0
+      && /^script error\.?$/i.test(message);
   }
 
   // 只暴露界面需要的昵称和头像地址，绝不把平台返回的 token 放入游戏状态或日志。
@@ -83,12 +91,10 @@
   }
 
   root.addEventListener('error', (event) => {
-    const opaqueCrossOriginError = !event.error
-      && (!event.filename || event.filename === root.location.href)
-      && Number(event.lineno || 0) === 0
-      && Number(event.colno || 0) === 0
-      && String(event.message || '').toLowerCase() === 'script error.';
-    if (opaqueCrossOriginError) return;
+    if (isOpaqueCrossOriginError(event)) {
+      event.preventDefault();
+      return;
+    }
     const message = event.error?.message || event.message || '未知脚本错误';
     console.error('游戏脚本错误:', message, event.error?.stack || '');
     fail('SCRIPT_ERROR', message);

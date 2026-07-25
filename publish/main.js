@@ -46,6 +46,9 @@
         default: 'arcade',
         arcade: { gravity: { y: 0 }, debug: false }
       },
+      input: {
+        windowEvents: false
+      },
       scene: [
         Game.Scenes.BootScene,
         Game.Scenes.PreloadScene,
