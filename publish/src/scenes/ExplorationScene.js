@@ -5,30 +5,28 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         super('ExplorationScene');
         this.view = null; this.currentRegion = null; this.session = null;
         this.mode = 'overview'; this.busy = false; this.requestId = 0;
-        this.baseScenesRestored = false; this.assetsReady = false;
+        this.baseScenesRestored = false;
     }
     create() {
         this.baseScenesRestored = false;
-        this.scene.pause('GameScene'); this.scene.pause('UIScene');
-        this.scene.setVisible(false, 'GameScene'); this.scene.setVisible(false, 'UIScene');
-        window.GameModelUI.setMode('hidden');
-        this.view = Game.ExplorationView.create(this, () => this.close());
-        Game.EventBus.on('exploration-result', this.handleBattleResult, this);
-        Game.EventBus.on('cultivation-changed', this.refreshView, this);
-        Game.EventBus.on('player-state-changed', this.refreshView, this);
-        this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
-        this.refreshView();
-        this.showOverview();
-        this.loadEnemyAssets();
-        Game.SceneTransition.fadeIn(this);
-    }
-    loadEnemyAssets() {
-        Game.EnemyAssets.ensureLoadedSafe(this)
-            .then((loaded) => { this.assetsReady = true; Game.EnemyAssets.reportLoadStatus(this.view, loaded); })
-            .catch((error) => {
-                if (error.code === 'LOAD_CANCELLED') return;
-                this.assetsReady = true; Game.EnemyAssets.reportLoadStatus(this.view, false, error);
-            });
+        this.currentRegion = null; this.session = null;
+        this.mode = 'overview'; this.busy = false;
+        try {
+            this.scene.pause('GameScene'); this.scene.pause('UIScene');
+            this.scene.setVisible(false, 'GameScene'); this.scene.setVisible(false, 'UIScene');
+            window.GameModelUI.setMode('hidden');
+            this.view = Game.ExplorationView.create(this, () => this.close());
+            Game.EventBus.on('exploration-result', this.handleBattleResult, this);
+            Game.EventBus.on('cultivation-changed', this.refreshView, this);
+            Game.EventBus.on('player-state-changed', this.refreshView, this);
+            this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
+            this.refreshView();
+            this.showOverview();
+            Game.SceneTransition.fadeIn(this);
+        } catch (error) {
+            console.error('出山场景创建失败:', error.message, error.stack);
+            this.restoreBaseScenes(); this.scene.stop();
+        }
     }
     refreshView() {
         if (!this.view) return;
@@ -104,10 +102,6 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         const region = this.currentRegion;
         const session = this.session;
         if (!region || !session || this.busy) return;
-        if (!this.assetsReady) {
-            GameExplorationPanel.setBusy(false, '敌人图鉴正在加载，请稍候…');
-            return;
-        }
         this.busy = true;
         const requestId = ++this.requestId;
         let transitioning = false;
@@ -134,6 +128,14 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
             GameExplorationPanel.render(session);
             GameExplorationPanel.setMode(true);
             if (result.type === 'battle') {
+                GameExplorationPanel.setBusy(true, '正在准备战斗画面…');
+                try {
+                    await Game.EnemyAssets.ensureKeyLoaded(this, result.enemy.image_key);
+                } catch (error) {
+                    if (error.code === 'LOAD_CANCELLED') return;
+                    console.error('战斗素材加载失败:', error.message, error.stack);
+                }
+                if (requestId !== this.requestId) return;
                 transitioning = true;
                 GameExplorationPanel.hide();
                 window.GameAudio.sfx('deny');
@@ -169,8 +171,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         GameExplorationPanel.setBusy(false, '');
     }
     close() {
-        this.requestId += 1;
-        this.busy = false;
+        this.requestId += 1; this.busy = false;
         GameExplorationDialogue.cancel();
         GameExplorationPanel.close();
         window.GameAudio.sfx('click');
@@ -189,8 +190,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         window.GameModelUI.setMode('compact');
     }
     cleanup() {
-        this.requestId += 1;
-        GameExplorationDialogue.cancel();
+        this.requestId += 1; GameExplorationDialogue.cancel();
         GameExplorationPanel.close();
         Game.EventBus.off('exploration-result', this.handleBattleResult, this);
         Game.EventBus.off('cultivation-changed', this.refreshView, this);
