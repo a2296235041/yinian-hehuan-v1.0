@@ -56,7 +56,7 @@ Game.UISkin = {
         const nativeSetInteractive = button.setInteractive.bind(button);
         button.setInteractive = (config = {}) => {
             nativeSetInteractive(
-                new Phaser.Geom.Rectangle(-width / 2, -height / 2, width, height),
+                new Phaser.Geom.Rectangle(0, 0, width, height),
                 Phaser.Geom.Rectangle.Contains
             );
             if (button.input && config.useHandCursor) button.input.cursor = 'pointer';
