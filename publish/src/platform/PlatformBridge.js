@@ -59,6 +59,17 @@
       && (!event.filename || /^script error\.?$/i.test(message));
   }
 
+  function safeAvatarUrl(value) {
+    const text = typeof value === 'string' ? value.trim() : '';
+    if (!text) return '';
+    try {
+      const url = new URL(text);
+      return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+    } catch (_) {
+      return '';
+    }
+  }
+
   // 只暴露界面需要的昵称和头像地址，绝不把平台返回的 token 放入游戏状态或日志。
   async function getPlayerProfile() {
     if (playerProfilePromise) return playerProfilePromise;
@@ -71,8 +82,7 @@
         const info = await infoApi();
         return {
           name: typeof info?.name === 'string' ? info.name.trim().slice(0, 24) : '',
-          // 外链头像可能没有允许 opaque iframe 的 CORS 响应头，统一使用本地默认头像。
-          avatarUrl: ''
+          avatarUrl: safeAvatarUrl(info?.avatarUrl)
         };
       })
       .catch((error) => {
