@@ -39,8 +39,10 @@
   }
 
   function safeUrl(value) {
+    const text = String(value || '').trim();
+    if (!text) return '';
     try {
-      const url = new URL(String(value || ''), root.location.href);
+      const url = new URL(text, root.location.href);
       return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
     } catch (error) {
       return '';

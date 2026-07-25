@@ -12,8 +12,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
         this.currentRegion = null; this.session = null;
         this.mode = 'overview'; this.busy = false;
         try {
-            this.scene.pause('GameScene'); this.scene.pause('UIScene');
-            this.scene.setVisible(false, 'GameScene'); this.scene.setVisible(false, 'UIScene');
+            this.setBaseScenesEnabled(false);
             window.GameModelUI.setMode('hidden');
             this.view = Game.ExplorationView.create(this, () => this.close());
             Game.EventBus.on('exploration-result', this.handleBattleResult, this);
@@ -35,10 +34,8 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
     }
     renderOverview() {
         Game.ExplorationView.setBackground(this, this.view, 'bg-sect-map');
-        Game.ExplorationView.showRegions(
-            this, this.view, window.GameExploration.getRegions(),
-            (region) => this.enterRegion(region)
-        );
+        Game.ExplorationView.showRegions(this, this.view, window.GameExploration.getRegions(),
+            (region) => this.enterRegion(region));
     }
     showOverview() {
         this.requestId += 1; this.busy = false;
@@ -172,8 +169,7 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
     }
     close() {
         this.requestId += 1; this.busy = false;
-        GameExplorationDialogue.cancel();
-        GameExplorationPanel.close();
+        GameExplorationDialogue.cancel(); GameExplorationPanel.close();
         window.GameAudio.sfx('click');
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
@@ -183,11 +179,15 @@ Game.Scenes.ExplorationScene = class ExplorationScene extends Phaser.Scene {
     restoreBaseScenes() {
         if (this.baseScenesRestored) return;
         this.baseScenesRestored = true;
-        this.scene.setVisible(true, 'GameScene'); this.scene.setVisible(true, 'UIScene');
-        this.scene.resume('GameScene'); this.scene.resume('UIScene');
-        Game.SceneTransition.fadeIn(this.scene.get('GameScene'));
-        Game.SceneTransition.fadeIn(this.scene.get('UIScene'));
+        this.setBaseScenesEnabled(true);
+        ['GameScene', 'UIScene'].forEach((key) => Game.SceneTransition.fadeIn(this.scene.get(key)));
         window.GameModelUI.setMode('compact');
+    }
+    setBaseScenesEnabled(enabled) {
+        ['GameScene', 'UIScene'].forEach((key) => {
+            this.scene.setVisible(enabled, key); const input = this.scene.get(key)?.input;
+            if (input) input.enabled = enabled;
+        });
     }
     cleanup() {
         this.requestId += 1; GameExplorationDialogue.cancel();
