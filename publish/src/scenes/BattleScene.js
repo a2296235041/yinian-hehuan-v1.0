@@ -1,6 +1,5 @@
 var Game = window.Game || {};
 Game.Scenes = Game.Scenes || {};
-
 Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
     constructor() {
         super('BattleScene');
@@ -39,6 +38,7 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             return;
         }
         window.GameAudio.playMusic('battle');
+        Game.BattleUI.enter(this);
         const cultivation = window.GameCultivation.getSnapshot();
         this.playerStats = window.GamePlayerStats.getSnapshot();
         this.combat = new Game.CombatSystem(this.playerStats, this.encounter.enemy);
@@ -79,12 +79,12 @@ Game.Scenes.BattleScene = class BattleScene extends Phaser.Scene {
             fixedHeight: 112
         }).setOrigin(0.5);
         this.actionButtons = [
-            Game.BattleUI.makeButton(this, 500, 640, '攻击', () => this.act('attack')),
-            Game.BattleUI.makeButton(this, 640, 640, '防御', () => this.act('defend')),
-            Game.BattleUI.makeButton(this, 780, 640, '撤退', () => this.escape())
+            Game.BattleUI.makeButton(this, 420, 646, '攻击', () => this.act('attack')),
+            Game.BattleUI.makeButton(this, 640, 646, '防御', () => this.act('defend')),
+            Game.BattleUI.makeButton(this, 860, 646, '撤退', () => this.escape())
         ];
         this.finishButton = Game.BattleUI.makeButton(
-            this, 640, 640, '结束战斗', () => this.closeBattle()
+            this, 640, 646, '结束战斗', () => this.closeBattle()
         ).setVisible(false);
         this.render(this.combat.snapshot());
         Game.SceneTransition.fadeIn(this);

@@ -1,6 +1,26 @@
 var Game = window.Game || {};
 
+const HUD_ACTION_LABELS = new Set(['下一天', '下一时辰', '修炼', '出山', '储物袋']);
+
 Game.BattleUI = {
+    setHudActionsVisible(scene, visible) {
+        const uiScene = scene.scene.get('UIScene');
+        if (!uiScene?.children) return;
+        uiScene.children.list.forEach((child) => {
+            if (!HUD_ACTION_LABELS.has(child.labelText?.text)) return;
+            child.setVisible(visible);
+            if (visible) child.setInteractive({ useHandCursor: true });
+            else child.disableInteractive();
+        });
+    },
+
+    enter(scene) {
+        this.setHudActionsVisible(scene, false);
+        scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.setHudActionsVisible(scene, true);
+        });
+    },
+
     createFighter(scene, x, label, imageKey, playerSide, stats, imageFrame = null) {
         Game.UISkin.addPanel(scene, x, 286, 350, 420, 'card', { alpha: 0.9 });
         scene.add.text(x, 92, label, {
@@ -53,11 +73,13 @@ Game.BattleUI = {
     },
 
     makeButton(scene, x, y, label, action) {
+        const finish = label === '结束战斗';
         return Game.UISkin.makeButton(scene, x, y, label, action, {
-            width: 126,
-            height: 50,
-            fontSize: 21,
-            variant: label === '撤退' ? 'secondary' : 'primary'
+            width: finish ? 220 : (label === '撤退' ? 164 : 184),
+            height: 76,
+            fontSize: finish ? 20 : 22,
+            variant: label === '撤退' ? 'secondary' : 'primary',
+            stopPropagation: true
         });
     }
 };
