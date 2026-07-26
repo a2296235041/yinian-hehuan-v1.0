@@ -1,18 +1,69 @@
 (function installAIImageService(root) {
   'use strict';
 
+  const completions = root.GamefyRecipes.createCompletionsSafe({
+    getModel: async () => {
+      await root.GameAIModels.whenReady();
+      return root.GameAIModels.getDialogueModel();
+    },
+    timeoutMs: 20_000,
+    timeoutFallback: ''
+  });
+
+  async function summarizeSceneForDrawing(messages) {
+    const recent = messages.slice(-4);
+    if (!recent.length) return '';
+    const result = await completions.run({
+      messages: [
+        {
+          role: 'user',
+          content: [
+            'You are an expert in summarizing dialogue into a vivid, explicit, and precise visual description for an AI image generator.',
+            'Analyze the following conversation snippet and extract the core visual elements.',
+            'Focus ONLY on the characters\' physical actions, poses, facial expressions, body details, and the immediate environment.',
+            'Do NOT include any spoken words, dialogue, or narrative text.',
+            'The output must be a concise, purely descriptive sentence in English, suitable as a high-quality image prompt.',
+            'Example Input: User: "Open your legs for me." Assistant: "Yes, master... I am spreading them wide... my pussy is so wet for you..."',
+            'Example Output: "A woman with a lustful ahegao face, spreading her legs wide to present her dripping wet pussy to the viewer, begging for penetration."'
+          ].join(' ')
+        },
+        {
+          role: 'user',
+          content: `Summarize this scene:\n${JSON.stringify(recent)}`
+        }
+      ],
+      maxTokens: 200,
+    });
+    return result.text.trim();
+  }
+
   const workflow = root.GamefyRecipes.createImageWorkflow({
     buildPrompt(options) {
-      const line = String(options.lastLine || '').slice(0, 300);
-      return [
-        'Painterly Chinese fantasy game scene, cinematic wide composition.',
-        `Inside ${options.building.name}, show the adult woman ${options.npc.name},`,
-        `${options.npc.title}, cultivation realm: ${options.npc.realm_label},`,
-        `personality: ${options.npc.personality}.`,
-        `Current moment: ${line}`,
-        'Tasteful fully covered traditional fantasy clothing, expressive pose,',
-        'environment details matching the building, no UI, no text, no logo, no watermark.'
-      ].join(' ');
+      const time = root.GameTime?.getSnapshot?.();
+      const affinity = root.GameAffinity?.getSnapshot?.(options.npc.id);
+      const sceneDescription = options.sceneDescription || '';
+
+      const artistStyle = '@tsuki no i-min, @kome cola, (@cutesexyrobutts:0.6),';
+
+      const basePrompt = [
+        'NSFW, explicit, photorealistic, best quality, masterpiece, absurdres,',
+        'Chinese fantasy style, cinematic lighting,',
+        `In the ${options.building.name}, during the ${time.name},`,
+        `an adult woman, ${options.npc.name}, ${options.npc.title}.`,
+        `Her personality is ${options.npc.personality}.`,
+        `Her affinity towards player is ${affinity.relationship} (${affinity.affinity}/100).`
+      ];
+
+      const nsfwDetails = [
+        'She is completely nude, showcasing her large breasts, detailed nipples, and wet pussy.',
+        'Her pose is extremely seductive and inviting.',
+        'Her facial expression is one of intense lust and desire, like ahegao.',
+        'The core action of the scene is:',
+        `"${sceneDescription}"`,
+        'The atmosphere is thick with sexual tension.'
+      ];
+
+      return [artistStyle, ...basePrompt, ...nsfwDetails].join(' ');
     },
     onStatus(status) {
       root.Game.EventBus.emit('ai-image-status', { status });
@@ -49,16 +100,24 @@
       });
       return;
     }
-    const lastLine = [...session.messages].reverse()
-      .find((message) => message.role === 'assistant')?.content || '';
     try {
+      const sceneDescription = await summarizeSceneForDrawing(session.messages);
+      if (!sceneDescription) {
+        console.warn('场景描述为空，取消绘图');
+        root.Game.EventBus.emit('ai-image-status', {
+          status: 'error',
+          message: '无法从当前对话提炼画面，请尝试继续对话。'
+        });
+        return;
+      }
+
       const result = await workflow.generate({
         npc: session.npc,
         building: session.building,
-        lastLine,
+        sceneDescription,
         model: root.GameAIModels.getDrawModel(),
         dimension: '3:2',
-        negativePrompt: 'text, logo, watermark, blurry, low quality, revealing clothing'
+        negativePrompt: 'lazyneg, lazyhand, censored, mosaic censoring, (photorealistic, realistic), artist name, signature, lowres, bad anatomy, bad hands, text, error, missing fingers, extra fingers, extra limbs, fewer digits, cropped, worst quality, low quality, jpeg artifacts, watermark, username, conjoined, bad ai-generated, score_1, score_2, score_3,bad anatomy, bad proportions, deformed anatomy, deformed face, deformed eyes, text, multiple fingers, artist name,extra hands,strong, musclur, pubic hair'
       });
       if (!result.ignored && result.image) {
         root.Game.EventBus.emit('ai-image-ready', {
