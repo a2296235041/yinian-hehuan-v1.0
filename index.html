@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>一念逍遥，一念合欢</title>
+    <style>
+        /* 基础样式重置，确保游戏全屏显示无边距 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden; /* 隐藏滚动条 */
+        }
+        /* 游戏容器样式，使其居中显示 */
+        #game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 游戏将在此div中渲染 -->
+    <div id="game-container"></div>
+
+    <!-- 
+      引入Phaser.js游戏引擎库
+      我们直接使用CDN版本，这样无需在本地存放文件，方便快捷。
+      后续如果需要完全离线运行，可以下载此文件到lib目录并修改路径。
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+
+    <!-- 引入我们自己的游戏脚本 -->
+    <!-- 注意：脚本的加载顺序至关重要！ -->
+
+    <!-- 1. 公共工具与常量 -->
+    <script src="./src/utils/Constants.js"></script>
+    <script src="./src/utils/EventBus.js"></script>
+    <script src="./src/utils/BaseScene.js"></script>
+
+    <!-- 2. 核心系统 -->
+    <script src="./src/systems/NPCSystem.js"></script>
+    <script src="./src/systems/DialogueSystem.js"></script>
+    <script src="./src/systems/AffinitySystem.js"></script>
+    <script src="./src/systems/CultivationSystem.js"></script>
+    <script src="./src/systems/InventorySystem.js"></script>
+
+    <!-- 3. 游戏对象 -->
+    <script src="./src/gameobjects/Player.js"></script>
+    <script src="./src/gameobjects/NPC.js"></script>
+
+    <!-- 4. UI组件 -->
+    <script src="./src/ui/DialogueBox.js"></script>
+    <script src="./src/ui/Button.js"></script>
+    <script src="./src/ui/StatusDisplay.js"></script>
+
+    <!-- 5. 场景 -->
+    <script src="./src/scenes/BootScene.js"></script>
+    <script src="./src/scenes/PreloadScene.js"></script>
+    <script src="./src/scenes/MainMenuScene.js"></script>
+    <script src="./src/scenes/GameScene.js"></script>
+    <script src="./src/scenes/UIScene.js"></script>
+
+    <!-- 6. 主入口脚本，必须在最后加载 -->
+    <script src="./main.js"></script>
+
+</body>
+</html>

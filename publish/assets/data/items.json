@@ -1,0 +1,319 @@
+[
+  {
+    "id": "spirit_herb",
+    "name": "凝露灵草",
+    "type": "gift",
+    "rarity": "普通",
+    "description": "带着清晨露水的温和灵草，可入药也可赠人。",
+    "gift_affinity": 2,
+    "initial_quantity": 4
+  },
+  {
+    "id": "fragrant_jade",
+    "name": "凝香玉佩",
+    "type": "gift",
+    "rarity": "精良",
+    "description": "温润玉佩中封存着淡雅花香，是稳妥的见面礼。",
+    "gift_affinity": 3,
+    "initial_quantity": 2
+  },
+  {
+    "id": "peach_wine",
+    "name": "百年桃花酿",
+    "type": "gift",
+    "rarity": "精良",
+    "description": "入口绵甜、灵气悠长，适合与知己共饮。",
+    "gift_affinity": 4,
+    "initial_quantity": 1
+  },
+  {
+    "id": "moon_silk",
+    "name": "月华灵绸",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "月下才会泛起银辉的轻柔灵绸。",
+    "gift_affinity": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "frost_lotus",
+    "name": "玄霜莲",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "生于极寒之地，莲心蕴含澄澈灵力。",
+    "gift_affinity": 6,
+    "initial_quantity": 0
+  },
+  {
+    "id": "beast_core",
+    "name": "凶兽内丹",
+    "type": "material",
+    "rarity": "精良",
+    "description": "凶兽体内凝成的灵力结晶，可用于炼丹与炼器。",
+    "gift_affinity": 2,
+    "initial_quantity": 0
+  },
+  {
+    "id": "star_fragment",
+    "name": "星陨残片",
+    "type": "material",
+    "rarity": "珍稀",
+    "description": "从天外坠落的奇异矿石，触碰时仍有微光流转。",
+    "gift_affinity": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "void_orchid",
+    "name": "太虚幽兰",
+    "type": "gift",
+    "rarity": "传说",
+    "description": "只在空间裂隙附近短暂开放的罕见灵花。",
+    "gift_affinity": 8,
+    "initial_quantity": 0
+  },
+  {
+    "id": "welcome_charm",
+    "name": "迎仙平安符",
+    "type": "gift",
+    "rarity": "普通",
+    "description": "接引弟子亲手系好的平安符，适合作为初次见面的礼物。",
+    "gift_affinity": 2,
+    "initial_quantity": 0
+  },
+  {
+    "id": "cloud_spirit_tea",
+    "name": "云芽灵茶",
+    "type": "cultivation",
+    "rarity": "普通",
+    "description": "饮下后灵台清明，可温和增进修为。",
+    "cultivation_gain": 18,
+    "initial_quantity": 0
+  },
+  {
+    "id": "silk_fan",
+    "name": "流云绢扇",
+    "type": "gift",
+    "rarity": "精良",
+    "description": "扇面绘着山门云景，雅致而不显张扬。",
+    "gift_affinity": 3,
+    "initial_quantity": 0
+  },
+  {
+    "id": "junior_insight_note",
+    "name": "入门悟道札",
+    "type": "attribute",
+    "rarity": "精良",
+    "description": "记录前辈入门心得的手札，使用后永久增加悟性。",
+    "attribute": "wisdom",
+    "attribute_gain": 2,
+    "initial_quantity": 0
+  },
+  {
+    "id": "grand_gathering_pill",
+    "name": "大聚灵丹",
+    "type": "cultivation",
+    "rarity": "精良",
+    "description": "宗主殿按功勋发放的聚灵丹，药力浑厚。",
+    "cultivation_gain": 55,
+    "initial_quantity": 0
+  },
+  {
+    "id": "marrow_jade_pill",
+    "name": "玉髓淬体丹",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "以玉髓灵液炼制，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 3,
+    "initial_quantity": 0
+  },
+  {
+    "id": "phoenix_hairpin",
+    "name": "凤纹金簪",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "内殿珍藏的凤纹金簪，端庄华贵。",
+    "gift_affinity": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "spirit_focus_seal",
+    "name": "凝神法印",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "宗主亲定的凝神法印，使用后永久增加神识。",
+    "attribute": "intelligence",
+    "attribute_gain": 3,
+    "initial_quantity": 0
+  },
+  {
+    "id": "cold_incense",
+    "name": "戒心冷香",
+    "type": "gift",
+    "rarity": "精良",
+    "description": "戒律堂常燃的冷香，气息清冽持久。",
+    "gift_affinity": 4,
+    "initial_quantity": 0
+  },
+  {
+    "id": "iron_body_talisman",
+    "name": "金刚炼力符",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "执法弟子锤炼肉身所用，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 3,
+    "initial_quantity": 0
+  },
+  {
+    "id": "shadow_step_talisman",
+    "name": "无影步符",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "追捕违令者时使用的身法符，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 3,
+    "initial_quantity": 0
+  },
+  {
+    "id": "discipline_elixir",
+    "name": "静律丹",
+    "type": "cultivation",
+    "rarity": "珍稀",
+    "description": "压下杂念、稳固灵息的丹药，可明显增进修为。",
+    "cultivation_gain": 75,
+    "initial_quantity": 0
+  },
+  {
+    "id": "ancient_inkstone",
+    "name": "古法灵砚",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "砚中墨色百年不干，深受喜爱典籍之人珍视。",
+    "gift_affinity": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "insight_scroll",
+    "name": "问心悟道卷",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "守阁书灵拓印的悟道残卷，使用后永久增加悟性。",
+    "attribute": "wisdom",
+    "attribute_gain": 4,
+    "initial_quantity": 0
+  },
+  {
+    "id": "soul_lamp_oil",
+    "name": "照神灯油",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "点燃后照见识海杂念，使用后永久增加神识。",
+    "attribute": "intelligence",
+    "attribute_gain": 4,
+    "initial_quantity": 0
+  },
+  {
+    "id": "secret_manual_fragment",
+    "name": "合欢秘卷残页",
+    "type": "cultivation",
+    "rarity": "珍稀",
+    "description": "藏书阁收录的秘卷残页，参悟后可获得大量修为。",
+    "cultivation_gain": 100,
+    "initial_quantity": 0
+  },
+  {
+    "id": "jade_hair_comb",
+    "name": "百炼玉梳",
+    "type": "gift",
+    "rarity": "珍稀",
+    "description": "丹器坊以温玉精炼而成，灵光细腻柔和。",
+    "gift_affinity": 6,
+    "initial_quantity": 0
+  },
+  {
+    "id": "foundation_pill",
+    "name": "固元筑基丹",
+    "type": "cultivation",
+    "rarity": "珍稀",
+    "description": "丹器坊的招牌丹药，可大幅增进当前境界修为。",
+    "cultivation_gain": 140,
+    "initial_quantity": 0
+  },
+  {
+    "id": "body_refining_pill",
+    "name": "龙骨炼体丹",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "以凶兽骨髓炼成，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "weapon_essence",
+    "name": "百兵精魄",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "百件法器淬出的锋锐精魄，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "fox_bell",
+    "name": "九尾灵铃",
+    "type": "gift",
+    "rarity": "传说",
+    "description": "后山妖族工匠制作的灵铃，铃音能安抚心神。",
+    "gift_affinity": 7,
+    "initial_quantity": 0
+  },
+  {
+    "id": "wind_spirit_dew",
+    "name": "御风灵露",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "采自瀑布逆流处的灵露，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "fortune_berry",
+    "name": "紫运灵果",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "只在灵境气运汇聚时结果，使用后永久增加气运。",
+    "attribute": "luck",
+    "attribute_gain": 5,
+    "initial_quantity": 0
+  },
+  {
+    "id": "thousand_year_fruit",
+    "name": "千年朱果",
+    "type": "cultivation",
+    "rarity": "传说",
+    "description": "后山深处成熟的千年灵果，蕴含极为充沛的修为。",
+    "cultivation_gain": 220,
+    "initial_quantity": 0
+  },
+  {
+    "id": "holy_cultivation_pill",
+    "name": "圣品修为丹",
+    "type": "cultivation",
+    "rarity": "圣品",
+    "description": "探险中偶然获得的圣品丹药，服下后直接增加当前境界的 1% 修为。",
+    "cultivation_percent": 1,
+    "initial_quantity": 0
+  },
+  {
+    "id": "divine_cultivation_pill",
+    "name": "神级修为丹",
+    "type": "cultivation",
+    "rarity": "神级",
+    "description": "蕴含浓郁天地道韵的神级丹药，服下后直接增加当前境界的 10% 修为。",
+    "cultivation_percent": 10,
+    "initial_quantity": 0
+  }
+]

@@ -1,0 +1,514 @@
+:root {
+  --rose: #d9577b;
+  --rose-deep: #9d3d5c;
+  --rose-soft: #f0a8bb;
+  --rose-pale: #ffe8ee;
+  --plum: #321522;
+  --plum-deep: #1b0d15;
+  --plum-panel: rgba(50, 21, 34, 0.96);
+  --white: #fff8fa;
+  --muted-white: #f4dfe5;
+  --muted-rose: #d9a8b8;
+}
+
+body {
+  color: var(--white);
+  background: var(--plum-deep);
+}
+
+#game-shell {
+  background: #170b12;
+}
+
+.settings-blocker {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  background: rgba(27, 13, 21, 0.2);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.settings-blocker[hidden] {
+  display: none;
+}
+
+.model-panel {
+  z-index: 11;
+  top: max(8px, env(safe-area-inset-top));
+  right: max(8px, env(safe-area-inset-right));
+}
+
+.model-panel-toggle {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 232, 238, 0.78);
+  border-radius: 8px;
+  color: var(--rose-pale);
+  background: rgba(50, 21, 34, 0.9);
+  box-shadow: 0 5px 15px rgba(27, 13, 21, 0.34);
+  font-size: 18px;
+}
+
+.model-panel-toggle:hover,
+.model-panel-toggle:focus-visible {
+  border-color: var(--white);
+  color: var(--white);
+  background: rgba(157, 61, 92, 0.94);
+  outline: 0;
+}
+
+.model-panel-content {
+  top: 46px;
+  width: min(264px, calc(100vw - 16px));
+  max-height: calc(100dvh - 58px);
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(240, 168, 187, 0.72);
+  border-top: 3px solid var(--rose);
+  border-radius: 8px;
+  color: var(--white);
+  background: rgba(50, 21, 34, 0.98);
+  background-image: none;
+  box-shadow: 0 16px 40px rgba(14, 4, 10, 0.52);
+  scrollbar-color: var(--rose) var(--plum-deep);
+}
+
+.settings-heading {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-heading strong {
+  color: var(--rose-pale);
+  font-size: 16px;
+}
+
+.settings-heading button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 0;
+  color: var(--rose-pale);
+  background: transparent;
+  font: 24px/1 sans-serif;
+  cursor: pointer;
+}
+
+.settings-heading button:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 1px;
+}
+
+.settings-row {
+  border-bottom-color: rgba(240, 168, 187, 0.28);
+}
+
+.settings-row b,
+.settings-field,
+.settings-save-slot {
+  color: var(--rose-pale);
+}
+
+.settings-switch-track {
+  border-color: rgba(240, 168, 187, 0.62);
+  background: rgba(27, 13, 21, 0.9);
+}
+
+.settings-switch-track::after {
+  background: var(--muted-rose);
+}
+
+.settings-switch input:checked + .settings-switch-track {
+  background: var(--rose);
+}
+
+.settings-switch input:checked + .settings-switch-track::after {
+  background: var(--white);
+}
+
+.settings-switch input:focus-visible + .settings-switch-track {
+  outline-color: var(--rose-pale);
+}
+
+.model-panel-content select,
+.settings-save-slot select {
+  border: 1px solid rgba(240, 168, 187, 0.54);
+  border-radius: 7px;
+  color: var(--white);
+  background: var(--plum-deep);
+}
+
+.model-panel-content small {
+  color: var(--muted-white);
+}
+
+.settings-save-actions {
+  border-top-color: rgba(240, 168, 187, 0.28);
+}
+
+.settings-save-actions button {
+  min-height: 40px;
+  border: 1px solid var(--rose-soft);
+  border-radius: 7px;
+  color: var(--plum);
+  background: var(--rose-pale);
+  background-image: none;
+  box-shadow: 0 4px 12px rgba(157, 61, 92, 0.2);
+  text-shadow: none;
+}
+
+.settings-save-actions button:active:not(:disabled) {
+  background: var(--rose);
+}
+
+.settings-save-actions button:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 1px;
+}
+
+.boot-error {
+  color: var(--white);
+  background: rgba(27, 13, 21, 0.98);
+}
+
+.boot-error h1 {
+  color: var(--rose-pale);
+}
+
+.boot-error p {
+  color: var(--muted-white);
+}
+
+.boot-error button {
+  border: 1px solid var(--rose-soft);
+  border-radius: 10px;
+  color: var(--plum);
+  background: var(--rose-pale);
+  box-shadow: 0 8px 20px rgba(157, 61, 92, 0.32);
+}
+
+.ai-dialogue-panel {
+  border: 0;
+  border-radius: 18px 18px 10px 10px;
+  color: var(--white);
+  background: rgba(40, 16, 28, 0.96);
+  box-shadow: 0 18px 50px rgba(14, 4, 10, 0.58);
+}
+
+.ai-dialogue-panel::before {
+  position: absolute;
+  top: 0;
+  right: 14%;
+  left: 14%;
+  height: 3px;
+  border-radius: 0 0 5px 5px;
+  background: var(--rose);
+  content: "";
+}
+
+.ai-dialogue-panel header strong {
+  color: var(--rose-pale);
+}
+
+.ai-dialogue-panel header span {
+  color: var(--muted-white);
+}
+
+.ai-dialogue-panel header .dialogue-affinity {
+  color: var(--rose-soft);
+}
+
+.ai-dialogue-panel header button,
+.ai-image-content > button {
+  color: var(--rose-pale);
+}
+
+.ai-dialogue-panel header button:active,
+.ai-image-content > button:active,
+.gift-close:active {
+  color: var(--rose);
+  transform: scale(0.92);
+}
+
+.ai-dialogue-panel header .dialogue-portrait-button {
+  display: inline-flex;
+  width: 42px;
+  min-width: 42px;
+  height: 36px;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border: 1px solid rgba(240, 168, 187, 0.78);
+  border-radius: 8px;
+  color: var(--rose-pale);
+  background: rgba(157, 61, 92, 0.35);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.dialogue-header-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.ai-dialogue-panel header .dialogue-close-button {
+  display: inline-flex;
+  width: 76px;
+  min-width: 76px;
+  height: 36px;
+  flex: 0 0 76px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 1px solid rgba(255, 232, 238, 0.82);
+  border-radius: 8px;
+  color: var(--plum);
+  background: var(--rose-pale);
+  box-shadow: 0 4px 12px rgba(157, 61, 92, 0.25);
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ai-dialogue-panel header .dialogue-close-button:hover,
+.ai-dialogue-panel header .dialogue-close-button:focus-visible {
+  border-color: var(--white);
+  color: var(--white);
+  background: var(--rose-deep);
+  outline: 0;
+}
+
+.ai-dialogue-panel header .dialogue-close-button:active {
+  color: var(--white);
+  background: var(--rose);
+  transform: scale(0.97);
+}
+
+.dialogue-line {
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(15, 4, 10, 0.16);
+}
+
+.dialogue-line--assistant {
+  color: var(--white);
+  background: rgba(109, 40, 66, 0.74);
+}
+
+.dialogue-line--user {
+  color: var(--plum);
+  background: var(--rose-pale);
+}
+
+.dialogue-status {
+  color: var(--rose-soft);
+}
+
+.dialogue-form input,
+.dialogue-form button {
+  border-radius: 10px;
+}
+
+.dialogue-form input {
+  border: 1px solid rgba(240, 168, 187, 0.5);
+  color: var(--white);
+  background: rgba(27, 13, 21, 0.9);
+}
+
+.dialogue-form input::placeholder {
+  color: var(--muted-rose);
+}
+
+.dialogue-form button {
+  border: 1px solid var(--rose-soft);
+  color: var(--plum);
+  background: var(--rose-pale);
+  box-shadow: 0 4px 12px rgba(157, 61, 92, 0.2);
+}
+
+.dialogue-form button:active:not(:disabled),
+.exploration-command-panel button:active:not(:disabled) {
+  background: var(--rose);
+  transform: scale(0.97);
+}
+
+.dialogue-form button:disabled,
+.dialogue-form input:disabled {
+  border-color: rgba(240, 168, 187, 0.25);
+}
+
+.ai-image-modal,
+.gift-modal {
+  background: rgba(20, 7, 14, 0.84);
+}
+
+.ai-image-content,
+.gift-content {
+  border: 1px solid rgba(240, 168, 187, 0.64);
+  border-top: 3px solid var(--rose);
+  border-radius: 16px;
+  color: var(--white);
+  background: var(--plum-panel);
+  box-shadow: 0 20px 56px rgba(14, 4, 10, 0.58);
+}
+
+.ai-image-content p {
+  color: var(--muted-white);
+}
+
+.gift-content h2 {
+  color: var(--rose-pale);
+}
+
+.gift-close {
+  color: var(--rose-pale);
+}
+
+.gift-list {
+  scrollbar-color: var(--rose) var(--plum-deep);
+}
+
+.gift-item {
+  border: 1px solid rgba(240, 168, 187, 0.32);
+  border-radius: 12px;
+  color: var(--white);
+  background: rgba(109, 40, 66, 0.52);
+}
+
+.gift-item:hover,
+.gift-item:focus-visible {
+  border-color: var(--rose-soft);
+  background: rgba(157, 61, 92, 0.72);
+  outline: 0;
+}
+
+.gift-item strong {
+  color: var(--rose-pale);
+}
+
+.gift-item small,
+.gift-empty {
+  color: var(--muted-white);
+}
+
+.gift-item em {
+  color: var(--white);
+}
+
+.exploration-dialogue-panel {
+  border: 0;
+  border-radius: 18px 18px 10px 10px;
+  color: var(--white);
+  background: rgba(40, 16, 28, 0.96);
+  box-shadow: 0 18px 50px rgba(14, 4, 10, 0.54);
+}
+
+.exploration-dialogue-panel::before {
+  position: absolute;
+  top: 0;
+  right: 14%;
+  left: 14%;
+  height: 3px;
+  border-radius: 0 0 5px 5px;
+  background: var(--rose);
+  content: "";
+}
+
+.exploration-dialogue-panel header {
+  border-bottom-color: rgba(240, 168, 187, 0.28);
+}
+
+.exploration-dialogue-panel header strong {
+  color: var(--rose-pale);
+}
+
+.exploration-dialogue-panel header span,
+.exploration-panel-status {
+  color: var(--muted-white);
+}
+
+.exploration-line {
+  border-radius: 11px;
+}
+
+.exploration-line--user {
+  color: var(--plum);
+  background: var(--rose-pale);
+}
+
+.exploration-line--assistant {
+  color: var(--white);
+  background: rgba(109, 40, 66, 0.74);
+}
+
+.exploration-line.is-streaming {
+  border-left-color: var(--rose-soft);
+}
+
+.exploration-command-panel input,
+.exploration-command-panel button {
+  border-radius: 10px;
+}
+
+.exploration-command-panel input {
+  border-color: rgba(240, 168, 187, 0.5);
+  color: var(--white);
+  background: rgba(27, 13, 21, 0.9);
+}
+
+.exploration-command-panel input::placeholder {
+  color: var(--muted-rose);
+}
+
+.exploration-command-panel button {
+  border-color: var(--rose-soft);
+  color: var(--plum);
+  background: var(--rose-pale);
+}
+
+.exploration-command-panel button:last-child {
+  border-color: rgba(240, 168, 187, 0.46);
+  color: var(--white);
+  background: rgba(109, 40, 66, 0.74);
+}
+
+.dialogue-blocker {
+  background: rgba(27, 13, 21, 0.22);
+}
+
+@media (max-height: 520px) {
+  .ai-dialogue-panel,
+  .exploration-dialogue-panel {
+    border-radius: 12px;
+  }
+
+  .ai-dialogue-panel header {
+    padding-right: 46px;
+  }
+
+  .ai-dialogue-panel header .dialogue-portrait-button {
+    width: 38px;
+    min-width: 38px;
+    height: 34px;
+    flex-basis: 38px;
+    padding: 0 3px;
+    font-size: 10px;
+  }
+
+  .ai-dialogue-panel header .dialogue-close-button {
+    width: 68px;
+    min-width: 68px;
+    height: 34px;
+    flex-basis: 68px;
+    padding: 0 5px;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "start_node": "greeting_1",
+  "nodes": {
+    "greeting_1": {
+      "npc_text": "新来的？别杵在那儿挡路！没看到老娘正忙着炼丹吗？有事快说，没事快滚！",
+      "player_options": [
+        {
+          "text": "弟子想向师叔求几枚丹药。",
+          "next_node": "response_ask",
+          "affinity_change": 0
+        },
+        {
+          "text": "师叔炼丹的样子，真是迷人。",
+          "next_node": "response_praise",
+          "affinity_change": 5
+        },
+        {
+          "text": "（默默离开）",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_ask": {
+      "npc_text": "求药？你当我的丹药是大白菜吗？想要丹药，就拿等价的灵石或者药材来换！",
+      "player_options": [
+        {
+          "text": "弟子明白了。",
+          "next_node": "end"
+        }
+      ]
+    },
+    "response_praise": {
+      "npc_text": "哼，算你小子有眼光！老娘炼丹的姿态，天下第一！看你顺眼，这瓶培元丹就赏你了！",
+      "player_options": [
+        {
+          "text": "多谢师叔赏赐！",
+          "next_node": "end"
+        }
+      ]
+    },
+    "end": {
+      "npc_text": null,
+      "end_dialogue": true
+    }
+  }
+}

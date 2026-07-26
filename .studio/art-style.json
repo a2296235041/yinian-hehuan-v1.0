@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "name": "ink wash immortal sect",
+  "description": "Painterly Chinese fantasy game art with crisp silhouettes, restrained ornament, and readable 2D composition.",
+  "palette": ["#14231f", "#42685c", "#d8c38c", "#b95f4d", "#f4ead2"],
+  "view": "landscape 2D scene with portrait-style character tokens",
+  "outline": "soft dark painted edge",
+  "lighting": "misty dawn with warm lantern accents",
+  "avoid": ["text", "logo", "watermark", "real brands", "revealing clothing", "childlike characters"]
+}
