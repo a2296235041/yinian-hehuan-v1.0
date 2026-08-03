@@ -114,7 +114,7 @@
   }
 
   function opening(companions, location) {
-    return `[scene]${companions.map((npc) => npc.name).join('、')}已来到${location.name}，众人正等你开口。`;
+    return `[scene]${companions.map((npc) => npc.name).join('、')}已应邀来到${location.name}，接下来的言行由你决定。`;
   }
 
   root.GamePrivateGroupPrompts = Object.freeze({

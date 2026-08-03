@@ -412,7 +412,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             this, 1036, 420, 424, 290, 'card', { depth: 8, alpha: 0.96 }
         )
             .setVisible(false);
-        this.talkButton = Game.UISkin.makeButton(this, 930, 575, '多人交谈', () => {
+        this.talkButton = Game.UISkin.makeButton(this, 930, 575, '多人互动', () => {
             if (this.busy || !this.invitedNpcs.length) return;
             this.inviteMenuVisible = false;
             this.inviteButton.setText('邀请伴侣');
@@ -535,36 +535,6 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.inviteMenuObjects.push(confirm);
     }
 
-    buildDualCultivationFallback(companions, result, cultivationBefore) {
-        const names = companions.map((npc) => npc.name).join('、');
-        if (!result.changed) {
-            const reason = result.reason === 'stamina'
-                ? '精力不足，灵台难以维持稳定'
-                : '修为已经接近瓶颈，灵气无法继续沉淀';
-            return [
-                `你与${names}在私人场景中盘膝相对，尝试引导灵息汇入经脉。`,
-                `可惜当前${reason}，几人的气息只在周身缓缓回旋，最终化作一阵清风散去。`,
-                `虽然这次未能取得修为进展，但彼此之间的默契并未消退，`,
-                `${names}也约定待你准备妥当后再继续这场修行。`
-            ].join('');
-        }
-        const resultText = cultivationBefore.canBreakthrough
-            ? `在灵息交汇到最深处时，你的境界壁垒应声而裂，终于踏入${result.snapshot.realmName}。`
-            : `一轮周天运行结束，你的经脉被温和的灵力洗涤，当前境界修为增加了${result.gain}点。`;
-        return [
-            `你带着${names}来到${this.locations[this.sceneIndex].name}，`,
-            '四周的灵花、竹影与水雾都在合修气机的牵引下缓慢改变。',
-            '众人没有急于催动灵力，而是先以神识确认彼此的节奏，',
-            '再让各自的真元沿着既定的周天交替流转。',
-            `${names}的气息一一融入阵势，时而如春水相逢，时而如月光映雪，`,
-            '原本散乱的灵息逐渐被整理成稳定而清澈的回路。',
-            '你在其中感受到同伴的信任，也察觉到自己的心境比独自修炼时更加澄明。',
-            resultText,
-            '余韵散去后，场景重新归于安静，几位伴侣仍在身旁调息，',
-            '彼此之间多了一份只有共同经历过这场修行才懂的默契。'
-        ].join('');
-    }
-
     async inviteNpcs(npcs) {
         if (this.busy) return;
         const companions = (npcs || []).filter(Boolean);
@@ -582,9 +552,8 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.renderInvites();
         this.busy = true;
         const companionNames = companions.map((npc) => npc.name).join('、');
-        this.statusText.setText(
-            `正在邀请${companionNames}，AI 正在生成长篇双修剧情…`
-        ).setVisible(true);
+        this.storyText.setVisible(false);
+        this.statusText.setText(`正在邀请${companionNames}进入私人场景…`).setVisible(true);
         try {
             const cultivation = window.GameCultivation.getSnapshot();
             let result;
@@ -608,35 +577,15 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             this.talkButton.setVisible(true);
             this.talkMenuVisible = false;
             this.renderTalkMenu();
-            const fallback = this.buildDualCultivationFallback(
-                companions,
-                result,
-                cultivation
-            );
-            this.storyText.setText('灵息正在交汇，AI 正在续写这场合修…').setVisible(true);
-            const story = await window.GameNarrative.generateDetailed('dual_cultivation', {
-                companions: companions.map((npc, index) => ({
-                    name: npc.name,
-                    title: npc.title,
-                    realm: npc.realm_label,
-                    affinity: affinities[index].affinity,
-                    personality: npc.personality
-                })),
-                playerRealm: window.GameCultivation.getSnapshot().label,
-                playerStamina: `${Game.player.stamina}/${Game.player.maxStamina}`,
-                companionCount: companions.length,
-                result: fallback
-            }, fallback, (text) => {
-                if (this.storyText?.active) {
-                    this.storyText.setText(Game.TextBoxUtils.fit(text, 46, 9));
-                }
-            });
-            window.GameAudio.sfx(result.changed ? 'success' : 'deny');
             this.statusText.setVisible(false);
-            this.storyText.setText(Game.TextBoxUtils.fit(story, 46, 9)).setVisible(true);
+            window.GameAudio.sfx(result.changed ? 'success' : 'click');
+            window.GamePrivateGroupDialogue.open({
+                companions: this.invitedNpcs,
+                location: this.locations[this.sceneIndex]
+            });
         } catch (error) {
-            console.error('私人场景合修失败:', error.code || '', error.message, error.stack);
-            this.statusText.setText('双修暂时无法完成，请稍后再试。').setVisible(true);
+            console.error('私人场景邀请失败:', error.code || '', error.message, error.stack);
+            this.statusText.setText('邀请暂时无法完成，请稍后再试。').setVisible(true);
         } finally {
             this.busy = false;
             this.renderInvites();

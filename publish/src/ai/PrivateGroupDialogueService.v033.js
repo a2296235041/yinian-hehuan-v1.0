@@ -47,7 +47,7 @@
         await npcSystem.recordDialogue(npcId);
         emit('npc-dialogue-completed', { npcId, source: 'private-group' });
       } catch (error) {
-        console.error('多人交谈好感记录失败:', error.code || '', error.message, error.stack);
+        console.error('多人互动好感记录失败:', error.code || '', error.message, error.stack);
       }
     }
   }

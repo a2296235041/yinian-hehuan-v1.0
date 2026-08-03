@@ -1,4 +1,4 @@
-/* release 0.3.3 */ (function startGame(root) {
+/* release 0.3.4 */ (function startGame(root) {
   'use strict';
 
   function ensureModule(globalName, source) {
