@@ -297,6 +297,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.background = this.add.image(640, 360, 'bg-sect-map')
             .setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.4);
+        Game.PrivateSceneEffects?.createLayer?.(this);
         this.titleText = this.add.text(640, 54, '', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '34px',
@@ -438,6 +439,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         if (this.textures.exists(location.key)) {
             this.background.setTexture(location.key).setDisplaySize(1280, 720);
         }
+        Game.PrivateSceneEffects?.apply?.(this, location.key);
     }
 
     loadLocationBackgrounds() {
@@ -699,6 +701,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
 
     cleanup() {
         window.GameNarrative.cancel();
+        Game.PrivateSceneEffects?.destroy?.(this);
         Game.EventBus.off('affinity-changed', this.renderInvites, this);
         Game.EventBus.off('cultivation-changed', this.renderInvites, this);
     }
