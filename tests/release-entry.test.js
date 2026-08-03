@@ -6,8 +6,8 @@ const path = require('node:path');
 
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
-const version = '0.3.5';
-const build = '20260803.10';
+const version = '0.3.6';
+const build = '20260803.11';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -31,6 +31,7 @@ assert.ok(html.includes('./cheat-panel.v021.css'));
 assert.ok(html.includes('./tournament.v029.css'));
 assert.ok(html.includes('./tournament-participants.v032.css'));
 assert.ok(html.includes('./private-group-dialogue.v033.css'));
+assert.ok(html.includes('./boot.v036.css'));
 assert.ok(
   html.includes('./layout.v015.css'),
   'release entry should load the mobile layout override'
@@ -57,7 +58,7 @@ assert.ok(
   './src/ui/TournamentPanel.js',
   './src/ui/TournamentEntry.js',
   './src/ui/PrivateGroupDialoguePanel.v033.js',
-  './main.v035.js'
+  './main.v036.js'
 ].forEach((entry) => {
   assert.ok(
     html.includes(entry),
@@ -92,6 +93,7 @@ assert.ok(!html.includes('<form id="exploration-command-panel"'));
   './main.v032.js',
   './main.v033.js',
   './main.v034.js',
+  './main.v035.js',
   './src/ui/TournamentOpponentView.v031.js',
   './src/ai/AIImageService.js',
   './src/scenes/CharacterCreationScene.js',

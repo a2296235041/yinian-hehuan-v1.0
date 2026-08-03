@@ -17,6 +17,26 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.originsData = this.cache.json.get('character_origins') || [];
     }
 
+    preload() {
+        const added = Game.PlayerPortraitAssets.preload(this);
+        if (!added) return;
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        this.cameras.main.setBackgroundColor('#09100e');
+        const label = this.add.text(width / 2, height / 2 - 18, '正在展开命格画卷', {
+            fontFamily: '"STKaiti", "KaiTi", "Noto Serif SC", serif',
+            fontSize: '28px',
+            color: '#fff4f7'
+        }).setOrigin(0.5);
+        const progress = this.add.text(width / 2, height / 2 + 28, '0%', {
+            fontFamily: '"Noto Serif SC", serif',
+            fontSize: '15px',
+            color: '#e8b7c7'
+        }).setOrigin(0.5);
+        this.load.on('progress', (value) => progress.setText(`${Math.round(value * 100)}%`));
+        this.load.once('complete', () => label.setText('命格已显'));
+    }
+
     create() {
         window.GameModelUI.setMode('compact');
         const width = this.cameras.main.width;

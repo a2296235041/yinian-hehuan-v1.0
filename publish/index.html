@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.3.5">
+  <meta name="game-version" content="0.3.6">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.3.5',
-        build: '20260803.10',
-        cacheName: 'yinian-hehuan-v0.3.5-20260803.10',
-        entry: 'main.v035.js'
+        version: '0.3.6',
+        build: '20260803.11',
+        cacheName: 'yinian-hehuan-v0.3.6-20260803.11',
+        entry: 'main.v036.js'
       });
 
       root.GameRelease = release;
@@ -77,6 +77,7 @@
   </script>
   <link rel="preload" href="./vendor/phaser.min.js" as="script">
   <link rel="stylesheet" href="./style.css?v=20260731-1">
+  <link rel="stylesheet" href="./boot.v036.css">
   <link rel="stylesheet" href="./ui.css">
   <link rel="stylesheet" href="./exploration.css?v=20260725-5">
   <link rel="stylesheet" href="./theme.css">
@@ -88,6 +89,11 @@
 </head>
 <body>
   <main id="game-shell">
+    <section id="boot-splash" class="boot-splash" aria-label="游戏正在启动">
+      <span>合欢</span>
+      <strong>正在开启山门</strong>
+      <i aria-hidden="true"></i>
+    </section>
     <div id="game-container" aria-label="游戏画面"></div>
     <div id="settings-blocker" class="settings-blocker" hidden aria-hidden="true"></div>
     <section id="model-panel" class="model-panel" hidden>
@@ -344,7 +350,7 @@
   <script defer src="./src/assets/BuildingAssets.js"></script>
   <script defer src="./src/assets/ExplorationAssets.js"></script>
   <script defer src="./src/assets/EnemyAssets.js?v=20260725-2"></script>
-  <script defer src="./src/assets/PlayerPortraitAssets.v002.js"></script>
+  <script defer src="./src/assets/PlayerPortraitAssets.v002.js?v=20260803-11"></script>
   <script defer src="./src/ai/ModelPicker.js"></script>
   <script defer src="./src/ai/CompletionsSafe.v022.js"></script>
   <script defer src="./src/ai/AIJson.js?v=20260803-10"></script>
@@ -421,9 +427,9 @@
   <script defer src="./src/systems/NPCSystem.v024.js"></script>
   <script defer src="./src/systems/DialogueSystem.v025.js"></script>
   <script defer src="./src/scenes/BootScene.js"></script>
-  <script defer src="./src/scenes/PreloadScene.v025.js?v=20260803-2"></script>
-  <script defer src="./src/scenes/MainMenuScene.js?v=20260803-2"></script>
-  <script defer src="./src/scenes/CharacterCreationScene.v017.js?v=20260803-1"></script>
+  <script defer src="./src/scenes/PreloadScene.v025.js?v=20260803-11"></script>
+  <script defer src="./src/scenes/MainMenuScene.js?v=20260803-11"></script>
+  <script defer src="./src/scenes/CharacterCreationScene.v017.js?v=20260803-11"></script>
   <script defer src="./src/scenes/GameScene.js?v=20260803-9"></script>
   <script defer src="./src/scenes/ShopScene.js"></script>
   <script defer src="./src/scenes/InventoryScene.v021.js"></script>
@@ -432,6 +438,6 @@
   <script defer src="./src/scenes/UIScene.js?v=20260803-10"></script>
   <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
   <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js?v=20260803-10"></script>
-  <script defer src="./main.v035.js"></script>
+  <script defer src="./main.v036.js"></script>
 </body>
 </html>

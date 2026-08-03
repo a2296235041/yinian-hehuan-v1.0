@@ -34,10 +34,22 @@ Game.PlayerPortraitAssets = {
         }
     ],
 
-    preload(scene) {
-        this.entries.forEach(({ textureKey, path }) => {
-            if (!scene.textures.exists(textureKey)) scene.load.image(textureKey, path);
+    preload(scene, entries = this.entries) {
+        let added = 0;
+        entries.forEach(({ textureKey, path }) => {
+            if (scene.textures.exists(textureKey)) return;
+            scene.load.image(textureKey, path);
+            added += 1;
         });
+        return added;
+    },
+
+    preloadFirst(scene) {
+        return this.preload(scene, this.entries.slice(0, 1));
+    },
+
+    preloadRemaining(scene) {
+        return this.preload(scene, this.entries.slice(1));
     },
 
     textureKey(originOrId) {

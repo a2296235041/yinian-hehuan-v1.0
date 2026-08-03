@@ -40,7 +40,21 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             phase: 'first_frame',
             message: '正在显示主菜单'
         });
-        requestAnimationFrame(() => window.PlatformBridge.ready());
+        requestAnimationFrame(() => {
+            window.PlatformBridge.ready();
+            this.warmPortraits();
+        });
+    }
+
+    warmPortraits() {
+        const added = Game.PlayerPortraitAssets.preloadRemaining(this);
+        if (!added || this.load.isLoading()) return;
+        this.load.on('loaderror', (file) => {
+            if (String(file.key || '').startsWith('player-')) {
+                console.warn('身份立绘后台加载失败:', file.key);
+            }
+        });
+        this.load.start();
     }
 
     createMenuDecor(width, height) {

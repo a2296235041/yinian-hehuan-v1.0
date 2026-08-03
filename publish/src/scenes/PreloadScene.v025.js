@@ -11,7 +11,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 19 + Game.PlayerPortraitAssets.entries.length;
+        const totalResources = 20;
         this.totalResources = totalResources;
 
         window.PlatformBridge.progress({
@@ -53,7 +53,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.image('npc-mo-qiaoer', './assets/generated/npc-standee-mo-qiaoer.webp');
         this.load.image('npc-bai-zhi', './assets/generated/npc-standee-bai-zhi.79c8c1df.webp');
         this.load.image('npc-qin-wanqing', './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp');
-        Game.PlayerPortraitAssets.preload(this);
+        Game.PlayerPortraitAssets.preloadFirst(this);
         this.load.json('character_origins', './assets/data/character_origins.v025.json');
         this.load.json('npcs', './assets/data/npcs.v025.json');
         this.load.json('tournament_npcs', './assets/data/tournament_npcs.json');
@@ -64,6 +64,8 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     }
 
     createLoadingView(width, height) {
+        const splash = document.getElementById('boot-splash');
+        if (splash) splash.hidden = true;
         try {
             return Game.PreloadDecor.create(this, width, height);
         } catch (error) {
