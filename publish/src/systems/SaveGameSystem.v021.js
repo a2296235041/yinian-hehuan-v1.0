@@ -174,6 +174,7 @@
       await root.GameAutoSave?.clear?.();
       const allStorages = [...storages.values(), legacyStorage, ...auxiliaryStorages];
       await Promise.all(allStorages.map((storage) => storage.clear()));
+      await root.GameTournament?.clear?.();
       SLOT_IDS.forEach((slotId) => slots.set(slotId, root.GameSaveData.emptySlot()));
       root.GameCheat?.resetLocal?.();
       initPromise = null;

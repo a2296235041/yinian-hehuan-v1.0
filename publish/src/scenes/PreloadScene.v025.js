@@ -5,13 +5,13 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     constructor() {
         super('PreloadScene');
         this.loadFailed = false;
-        this.totalResources = 18;
+        this.totalResources = 19;
     }
 
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 18 + Game.PlayerPortraitAssets.entries.length;
+        const totalResources = 19 + Game.PlayerPortraitAssets.entries.length;
         this.totalResources = totalResources;
 
         window.PlatformBridge.progress({
@@ -56,6 +56,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         Game.PlayerPortraitAssets.preload(this);
         this.load.json('character_origins', './assets/data/character_origins.v025.json');
         this.load.json('npcs', './assets/data/npcs.v025.json');
+        this.load.json('tournament_npcs', './assets/data/tournament_npcs.json');
         this.load.json('npc_openings', './assets/data/npc_openings.v025.json');
         this.load.json('items', './assets/data/items.json');
         this.load.json('exploration_regions', './assets/data/exploration_regions.json');

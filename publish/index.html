@@ -82,6 +82,7 @@
   <link rel="stylesheet" href="./theme.css">
   <link rel="stylesheet" href="./layout.v015.css">
   <link rel="stylesheet" href="./cheat-panel.v021.css">
+  <link rel="stylesheet" href="./tournament.v027.css">
 </head>
 <body>
   <main id="game-shell">
@@ -263,6 +264,46 @@
         <button id="exploration-back" type="button" aria-label="返回区域">返回区域</button>
       </div>
     </section>
+    <section id="tournament-screen" class="tournament-screen" hidden>
+      <header class="tournament-header">
+        <div class="tournament-heading">
+          <h1 id="tournament-title">宗门大比</h1>
+          <p id="tournament-subtitle"></p>
+        </div>
+        <button id="tournament-close" class="tournament-close" type="button">返回山门</button>
+      </header>
+      <main class="tournament-layout">
+        <aside class="tournament-sidebar">
+          <section class="tournament-section">
+            <h2>参赛名录</h2>
+            <div id="tournament-roster" class="tournament-roster"></div>
+          </section>
+          <section class="tournament-section">
+            <h2>晋级签表</h2>
+            <div id="tournament-bracket" class="tournament-bracket"></div>
+          </section>
+        </aside>
+        <section class="tournament-arena">
+          <div class="tournament-status-line">
+            <p id="tournament-status" aria-live="polite"></p>
+            <strong id="tournament-score" class="tournament-score">三回合累计判定</strong>
+          </div>
+          <div id="tournament-opponents" class="tournament-opponents"></div>
+          <div id="tournament-history" class="tournament-history"></div>
+          <div class="tournament-controls">
+            <button id="tournament-start" type="button">抽签入场</button>
+            <div id="tournament-action-area" class="tournament-action-area" hidden>
+              <textarea id="tournament-action-input" class="tournament-action-input"
+                        maxlength="500" placeholder="描述你的招式、身法、法宝或战术…"></textarea>
+              <button id="tournament-submit" type="button">施展此招</button>
+            </div>
+            <button id="tournament-advance" type="button" hidden>进入下一轮</button>
+            <button id="tournament-claim" type="button" hidden>领取魁首奖励</button>
+            <button id="tournament-finish" type="button" hidden>结束本届赛事</button>
+          </div>
+        </section>
+      </main>
+    </section>
     <section id="boot-error" class="boot-error" hidden>
       <h1>游戏未能启动</h1>
       <p id="boot-error-message">请刷新后重试。</p>
@@ -299,6 +340,7 @@
   <script defer src="./src/data/BuildingData.js"></script>
   <script defer src="./src/data/CultivationData.js"></script>
   <script defer src="./src/data/ShopData.js"></script>
+  <script defer src="./src/data/TournamentRoster.js"></script>
   <script defer src="./src/systems/AffinityState.js"></script>
   <script defer src="./src/systems/AffinitySystem.js"></script>
   <script defer src="./src/systems/InventorySystem.js"></script>
@@ -309,6 +351,8 @@
   <script defer src="./src/systems/PlayerStatsSystem.js"></script>
   <script defer src="./src/systems/CombatSystem.js"></script>
   <script defer src="./src/systems/ExplorationSystem.js"></script>
+  <script defer src="./src/systems/TournamentRules.js"></script>
+  <script defer src="./src/systems/TournamentSystem.js"></script>
   <script defer src="./src/systems/PlayerStateSystem.js?v=20260727-1"></script>
   <script defer src="./src/systems/SaveGameSystem.v021.js?v=20260802-1"></script>
   <script defer src="./src/systems/AutoSaveSystem.js?v=20260802-1"></script>
@@ -324,6 +368,7 @@
   <script defer src="./src/ai/CharacterImagePrompts.v019.js"></script>
   <script defer src="./src/ai/AIImageService.v021.js"></script>
   <script defer src="./src/ai/NPCGiftInteraction.js"></script>
+  <script defer src="./src/ai/TournamentJudge.js"></script>
   <script defer src="./src/ai/AIService.v016.js"></script>
   <script defer src="./src/ai/DialoguePanel.v014.js"></script>
   <script defer src="./src/ui/ExplorationPanel.v014.js"></script>
@@ -336,6 +381,9 @@
   <script defer src="./src/ui/BattleUI.js?v=20260725-2"></script>
   <script defer src="./src/ui/ExplorationView.js"></script>
   <script defer src="./src/ui/ShopEntry.js?v=20260727-1"></script>
+  <script defer src="./src/ui/TournamentView.js"></script>
+  <script defer src="./src/ui/TournamentPanel.js"></script>
+  <script defer src="./src/ui/TournamentEntry.js"></script>
   <script defer src="./src/ui/NpcCardRenderer.js"></script>
   <script defer src="./src/ui/MainMenuDecor.js?v=20260803-2"></script>
   <script defer src="./src/ui/PreloadDecor.js?v=20260803-1"></script>

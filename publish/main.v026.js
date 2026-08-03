@@ -30,6 +30,10 @@
     root.GameGiftPanel.init();
     root.GameBreakthrough.init();
     root.GameSaveUI.init();
+    root.GameTournamentPanel.init();
+    root.GameTournament.initialize().catch((error) => {
+      console.error('赛事进度初始化失败:', error.code || '', error.message, error.stack);
+    });
     root.GameAutoSave.init().catch((error) => {
       console.error('自动存档初始化失败:', error.code || '', error.message, error.stack);
     });

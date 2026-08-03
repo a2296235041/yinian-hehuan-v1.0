@@ -75,6 +75,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         }).setOrigin(0.5));
         Game.Data.buildings.forEach((building) => this.createBuildingMarker(building));
         this.createPrivateSceneArrow();
+        Game.TournamentEntry?.create?.(this);
     }
 
     createBuildingMarker(building) {
