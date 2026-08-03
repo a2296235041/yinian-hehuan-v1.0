@@ -7,6 +7,7 @@
   let buttons = [];
   let resizeFrame = 0;
   let resizeTimer = 0;
+  let containerObserver;
   let orientationQuery;
   let selecting = false;
 
@@ -131,6 +132,11 @@
     root.addEventListener('orientationchange', handleResize);
     root.visualViewport?.addEventListener?.('resize', handleResize);
     document.addEventListener('fullscreenchange', handleResize);
+    const gameContainer = document.getElementById('game-container');
+    if (gameContainer && typeof root.ResizeObserver === 'function') {
+      containerObserver = new root.ResizeObserver(handleResize);
+      containerObserver.observe(gameContainer);
+    }
     orientationQuery = root.matchMedia?.('(orientation: landscape)');
     orientationQuery?.addEventListener?.('change', handleResize);
     root.game?.events?.once?.('ready', handleResize);

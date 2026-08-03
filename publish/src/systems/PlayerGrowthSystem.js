@@ -1,7 +1,9 @@
 (function installPlayerGrowthSystem(root) {
   'use strict';
 
-  const allowed = ['strength', 'constitution', 'agility', 'intelligence', 'wisdom', 'luck'];
+  const allowed = [
+    'strength', 'constitution', 'agility', 'intelligence', 'charisma', 'wisdom', 'luck'
+  ];
   let state = { bonuses: {} };
   let readyPromise = null;
   let storage = null;

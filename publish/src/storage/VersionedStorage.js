@@ -1,10 +1,9 @@
 (function installVersionedStorageRecipe(root) {
   'use strict';
-  const recipes = root.GamefyRecipes || (root.GamefyRecipes = {});
-  const utils = recipes.versionedStorageUtils;
+  const recipes = root.GamefyRecipes || (root.GamefyRecipes = {}); const utils = recipes.versionedStorageUtils;
   if (!utils) throw new Error('请先加载 versioned-storage-utils.js');
-  const { PLATFORM_MAX_KV_BYTES, isPlainRecord, cloneJson, normalizeUpdatedAt,
-    utf8Length, assertPersistable, withDeadline, readStorageCandidate, backendError } = utils;
+  const { PLATFORM_MAX_KV_BYTES, isPlainRecord, cloneJson, normalizeUpdatedAt, utf8Length,
+    assertPersistable, withDeadline, createSettlementGate, readStorageCandidate, backendError } = utils;
   function createVersionedStorage(options = {}) {
     const namespace = String(options.namespace || 'game:');
     const key = String(options.key || '').trim();
@@ -14,13 +13,12 @@
     const sanitize = typeof options.sanitize === 'function' ? options.sanitize : value => value;
     const dzmmRef = typeof options.dzmmRef === 'function' ? options.dzmmRef : () => root.dzmm;
     const localStorageRef = typeof options.localStorageRef === 'function' ? options.localStorageRef : () => root.PlatformBridge?.getLocalStorage?.();
-    const readTimeoutMs = Math.max(100, Math.min(5000, Number(options.readTimeoutMs) || 1200));
-    const writeTimeoutMs = Math.max(100, Math.min(5000, Number(options.writeTimeoutMs) || 1500));
+    const readTimeoutMs = Math.max(100, Math.min(30000, Number(options.readTimeoutMs) || 10000));
+    const writeTimeoutMs = Math.max(100, Math.min(30000, Number(options.writeTimeoutMs) || 15000));
     const maxBytes = Math.min(PLATFORM_MAX_KV_BYTES, Math.max(1024, Number(options.maxBytes) || 512 * 1024));
     const safety = { rejectDataUrls: options.rejectDataUrls !== false };
     const localKey = String(options.localKey || `dzmm:${namespace}${key}`);
-    let remoteWriteQueue = Promise.resolve();
-    let remoteWritePoisoned = false;
+    let remoteWriteQueue = Promise.resolve(); const remoteWriteGate = createSettlementGate(writeTimeoutMs);
     let mutationGeneration = 0;
     let currentEnvelope = null;
     if (!key) throw new Error('versioned-storage 需要非空 key');
@@ -113,11 +111,11 @@
     }
     async function awaitRemoteMutation(operation) {
       const result = await withDeadline(() => operation, writeTimeoutMs);
-      if (result.timedOut) remoteWritePoisoned = true;
+      if (result.timedOut) remoteWriteGate.mark(operation);
       return result;
     }
     function queueRemoteSave(target, envelope, flush) {
-      if (remoteWritePoisoned || !target || typeof target.store?.put !== 'function') {
+      if (!target || typeof target.store?.put !== 'function') {
         return Promise.resolve({ ok: false });
       }
       // 初始化、保存和清空共用一个队列，调用方超时也不会让同 key 的远端变更重叠。
@@ -127,7 +125,7 @@
       return awaitRemoteMutation(operation);
     }
     function queueRemoteDelete(target) {
-      if (remoteWritePoisoned || !target || typeof target.store?.delete !== 'function') {
+      if (!target || typeof target.store?.delete !== 'function') {
         return Promise.resolve({ ok: false });
       }
       const operation = queueRemoteMutation(() => target.store.delete(target.key));
@@ -136,15 +134,17 @@
     async function load() {
       const loadGeneration = mutationGeneration;
       const localCurrent = () => currentEnvelope || readLocal().value;
-      if (remoteWritePoisoned) {
+      try {
+        await remoteWriteGate.wait('上一次远端写入仍在处理中，请稍后重试');
+      } catch (error) {
         const current = localCurrent();
-        if (!current) throw new Error('远端写入状态未知，且没有有效本地副本');
+        if (!current) throw error;
         return cloneJson(current.data);
       }
       const writesBeforeLoad = remoteWriteQueue;
       const queueWait = await withDeadline(() => writesBeforeLoad, writeTimeoutMs);
       if (queueWait.timedOut) {
-        remoteWritePoisoned = true;
+        remoteWriteGate.mark(writesBeforeLoad);
         const current = localCurrent();
         if (!current) throw new Error('等待远端写入超时，且没有有效本地副本');
         return cloneJson(current.data);
@@ -173,7 +173,7 @@
       return cloneJson(selected.data);
     }
     async function save(value, saveOptions = {}) {
-      if (remoteWritePoisoned) throw new Error('上一次远端写入状态未知，请重新加载后再保存');
+      await remoteWriteGate.wait('上一次远端写入仍在处理中，请稍后重试');
       const envelope = makeEnvelope(value);
       mutationGeneration += 1;
       currentEnvelope = envelope;
@@ -182,14 +182,14 @@
       return { value: cloneJson(envelope.data), remote: remote.ok };
     }
     async function clear() {
-      if (remoteWritePoisoned) throw new Error('上一次远端写入状态未知，请重新加载后再清空');
+      await remoteWriteGate.wait('上一次远端写入仍在处理中，请稍后重试');
       const localRead = readLocal(); const localBackup = currentEnvelope || localRead.value; const target = remoteTarget();
       if (!removeLocal() && (localRead.ok || !target)) throw new Error('本地删除未确认，远端未改动并取消清空');
       const clearGeneration = ++mutationGeneration; currentEnvelope = null;
       const remote = await queueRemoteDelete(target);
       if (target && !remote.ok) {
         if (mutationGeneration !== clearGeneration) throw new Error('远端删除未确认；已保留并发产生的较新本地状态');
-        const restored = localBackup ? writeLocal(localBackup) : false; if (!restored) { currentEnvelope = localBackup; remoteWritePoisoned = true; throw new Error('远端删除未确认且本地副本恢复失败；存储状态未知，当前实例已 fail closed'); }
+        const restored = localBackup ? writeLocal(localBackup) : false; if (!restored) { currentEnvelope = localBackup; throw new Error('远端删除未确认且本地副本恢复失败；请刷新后重试'); }
         currentEnvelope = localBackup; throw new Error('远端删除未确认，已恢复本地副本并取消清空');
       }
       return { remote: remote.ok };

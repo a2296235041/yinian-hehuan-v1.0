@@ -73,6 +73,24 @@
       }),
     ]).finally(() => root.clearTimeout(timer));
   }
+  function createSettlementGate(timeoutMs) {
+    let pending = null;
+    function mark(operation) {
+      pending = operation;
+      operation.then(
+        () => { if (pending === operation) pending = null; },
+        () => { if (pending === operation) pending = null; },
+      );
+    }
+    async function wait(message) {
+      if (!pending) return;
+      const operation = pending;
+      const result = await withDeadline(() => operation, timeoutMs);
+      if (result.timedOut) throw new Error(message);
+      if (pending === operation) pending = null;
+    }
+    return Object.freeze({ mark, wait });
+  }
   function readStorageCandidate(storageRef, key, decode) {
     try {
       const storage = storageRef();
@@ -96,6 +114,7 @@
     utf8Length,
     assertPersistable,
     withDeadline,
+    createSettlementGate,
     readStorageCandidate,
     backendError,
   });

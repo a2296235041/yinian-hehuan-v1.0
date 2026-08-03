@@ -17,18 +17,26 @@
   }
 
   function progress(payload) {
-    if (!failed && !bootComplete) callLoading('progress', payload);
+    if (failed || bootComplete) return;
+    const pulse = root.GameBootPulse;
+    if (pulse && typeof pulse.progress === 'function') {
+      pulse.progress(payload);
+      return;
+    }
+    callLoading('progress', payload);
   }
 
   function ready() {
     if (failed || bootComplete) return;
     bootComplete = true;
+    root.GameBootPulse?.stop?.();
     callLoading('ready');
   }
 
   function fail(code, message) {
     if (failed || bootComplete) return;
     failed = true;
+    root.GameBootPulse?.stop?.();
     const safeMessage = message || '游戏启动失败';
     callLoading('error', code || 'BOOT_FAILED', safeMessage);
 

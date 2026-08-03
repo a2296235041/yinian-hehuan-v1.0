@@ -1,0 +1,223 @@
+.cheat-panel {
+  position: absolute;
+  z-index: 14;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top))
+           max(16px, env(safe-area-inset-right))
+           max(16px, env(safe-area-inset-bottom))
+           max(16px, env(safe-area-inset-left));
+  color: #e8e5dc;
+  background: rgba(4, 9, 8, 0.72);
+}
+
+.cheat-panel[hidden] {
+  display: none;
+}
+
+.cheat-dialog {
+  display: flex;
+  width: min(680px, 100%);
+  max-height: min(580px, calc(100dvh - 32px));
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(180, 188, 174, 0.42);
+  border-radius: 6px;
+  background: #151a18;
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.5);
+}
+
+.cheat-dialog header {
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 0 20px;
+  border-bottom: 1px solid rgba(180, 188, 174, 0.2);
+}
+
+.cheat-dialog h2,
+.cheat-dialog h3 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.cheat-dialog h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.cheat-dialog h3 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#cheat-close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  color: #aaaFA9;
+  background: transparent;
+  font: 28px/1 sans-serif;
+  cursor: pointer;
+}
+
+.cheat-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 20px 18px;
+}
+
+.cheat-section {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(180, 188, 174, 0.16);
+}
+
+.cheat-fields {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) minmax(130px, 1fr) 88px;
+  gap: 10px;
+  align-items: end;
+  margin-top: 12px;
+}
+
+.cheat-fields label {
+  display: grid;
+  gap: 6px;
+  color: #b8beb5;
+  font-size: 13px;
+}
+
+.cheat-fields select,
+.cheat-fields input,
+.cheat-fields button {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid #59645c;
+  border-radius: 4px;
+  color: #f1eee5;
+  background: #202824;
+  font: inherit;
+}
+
+.cheat-fields select,
+.cheat-fields input {
+  padding: 0 10px;
+}
+
+.cheat-fields button {
+  color: #172019;
+  background: #b8c1b5;
+  cursor: pointer;
+}
+
+.cheat-fields button:active,
+#cheat-close:active {
+  transform: scale(0.96);
+}
+
+.cheat-section output {
+  display: block;
+  min-height: 20px;
+  margin-top: 9px;
+  color: #9da69e;
+  font-size: 13px;
+}
+
+.cheat-toggle-row {
+  display: flex;
+  min-height: 86px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.cheat-toggle-row output {
+  margin-top: 7px;
+}
+
+.cheat-switch {
+  position: relative;
+  display: block;
+  width: 52px;
+  height: 30px;
+  flex: 0 0 auto;
+}
+
+.cheat-switch input {
+  position: absolute;
+  opacity: 0;
+}
+
+.cheat-switch span {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #687169;
+  border-radius: 15px;
+  background: #2a302d;
+  cursor: pointer;
+}
+
+.cheat-switch span::after {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #aeb4ad;
+  content: "";
+  transition: transform 120ms ease;
+}
+
+.cheat-switch input:checked + span {
+  border-color: #a99b64;
+  background: #5d573d;
+}
+
+.cheat-switch input:checked + span::after {
+  transform: translateX(22px);
+}
+
+.cheat-status {
+  min-height: 22px;
+  margin: 14px 0 0;
+  color: #b8beb5;
+  font-size: 14px;
+  text-align: center;
+}
+
+.cheat-status[data-type="success"] {
+  color: #c9d59f;
+}
+
+.cheat-status[data-type="error"] {
+  color: #e2a39b;
+}
+
+.cheat-control:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+@media (max-width: 620px), (max-height: 520px) {
+  .cheat-dialog {
+    max-height: calc(100dvh - 12px);
+  }
+
+  .cheat-scroll {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .cheat-fields {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .cheat-fields button {
+    grid-column: 1 / -1;
+  }
+}

@@ -37,6 +37,10 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         }).setOrigin(0.5).setAlpha(0.76);
         this.game.canvas.setAttribute('aria-label', '一念逍遥，一念合欢主菜单');
         Game.SceneTransition.fadeIn(this);
+        window.PlatformBridge.progress({
+            phase: 'first_frame',
+            message: '正在显示主菜单'
+        });
         requestAnimationFrame(() => window.PlatformBridge.ready());
     }
 
@@ -55,40 +59,49 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             fontSize: '18px',
             color: '#f0a8bb'
         }).setOrigin(0.5);
-        const buttons = [1, 2, 3].map((slotId, index) => Game.UISkin.makeButton(
+        const slotLabels = ['自动存档', '存档 1', '存档 2', '存档 3'];
+        const buttons = slotLabels.map((label, index) => Game.UISkin.makeButton(
             this,
-            width / 2 - 230 + index * 230,
+            width / 2 - 285 + index * 190,
             height / 2 + 140,
-            `存档 ${slotId}\n读取中…`,
+            `${label}\n读取中…`,
             null,
-            { width: 210, height: 68, fontSize: 16, variant: 'secondary' }
+            { width: 175, height: 68, fontSize: 15, variant: 'secondary' }
         ).setAlpha(0.55).disableInteractive());
-        window.GameSave.getStatuses().then((statuses) => {
-            statuses.forEach((info) => this.configureSlotButton(buttons[info.slotId - 1], info));
+        Promise.all([window.GameAutoSave.getStatus(), window.GameSave.getStatuses()]).then(
+          ([autoStatus, manualStatuses]) => {
+            const statuses = [
+              autoStatus,
+              ...manualStatuses.map((info) => ({ ...info, label: `存档 ${info.slotId}` }))
+            ];
+            statuses.forEach((info, index) => this.configureSlotButton(buttons[index], info));
         }).catch((error) => {
             console.error('读取存档列表失败:', error.code || '', error.message, error.stack);
-            buttons.forEach((button, index) => button.setText(`存档 ${index + 1}\n不可用`));
+            buttons.forEach((button, index) => button.setText(`${slotLabels[index]}\n不可用`));
         });
     }
 
     configureSlotButton(button, info) {
         if (!button?.active) return;
         if (!info.hasSave) {
-            button.setText(`存档 ${info.slotId}\n空槽`);
+            button.setText(`${info.label}\n空槽`);
             return;
         }
-        button.setText(`存档 ${info.slotId}\n第 ${info.day} 天 · ${info.originName}`);
+        const originName = String(info.originName || '').slice(0, 5);
+        button.setText(`${info.label}\n第${info.day}天 · ${originName}`);
         button.setAlpha(1).setInteractive({ useHandCursor: true });
-        button.on('pointerdown', () => this.loadGame(info.slotId, button));
+        button.on('pointerdown', () => this.loadGame(info, button));
     }
 
-    async loadGame(slotId, button) {
+    async loadGame(info, button) {
         if (button.getData('busy')) return;
-        button.setData('busy', true).disableInteractive().setText(`存档 ${slotId}\n读取中…`);
+        button.setData('busy', true).disableInteractive().setText(`${info.label}\n读取中…`);
         window.GameAudio.start();
         window.GameAudio.sfx('click');
         try {
-            const snapshot = await window.GameSave.loadSlot(slotId);
+            const snapshot = info.slotId === 'auto'
+                ? await window.GameAutoSave.loadSlot()
+                : await window.GameSave.loadSlot(info.slotId);
             const origins = this.cache.json.get('character_origins') || [];
             const origin = origins.find((item) => item.id === snapshot.player.origin.id);
             if (!origin) throw new Error('存档中的玩家身份已失效');
@@ -99,7 +112,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             });
         } catch (error) {
             console.error('开始页读档失败:', error.code || '', error.message, error.stack);
-            button.setData('busy', false).setText(`存档 ${slotId}\n读取失败`)
+            button.setData('busy', false).setText(`${info.label}\n读取失败`)
                 .setInteractive({ useHandCursor: true });
         }
     }

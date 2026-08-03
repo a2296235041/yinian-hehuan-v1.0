@@ -47,6 +47,7 @@
       root.GamePlayerGrowth.restore(snapshot?.growth),
       root.GameAffinity.restore(snapshot?.affinity)
     ]);
+    root.GameAI?.restoreSessions?.(snapshot?.dialogueHistory);
     const origin = snapshot?.player?.origin || root.Game.player?.origin;
     root.Game.player = normalizePlayer(origin, snapshot?.player);
     root.Game.player.day = root.GameAffinity.getDay();

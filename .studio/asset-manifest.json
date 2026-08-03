@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-24T11:18:42Z",
+  "updatedAt": "2026-07-31T00:00:00Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -1014,6 +1014,21 @@
         "quality": 88
       },
       "createdAt": "2026-07-24T11:18:42Z"
+    },
+    {
+      "name": "player-moonbound-cultivator",
+      "status": "success",
+      "path": "publish/assets/characters/player-moonbound-cultivator.22018820.png",
+      "contentHash": "22018820",
+      "source": "user-upload",
+      "outputFormat": "png",
+      "finalBytes": 979236,
+      "postProcessing": {
+        "trimmed": false,
+        "optimized": false,
+        "dimensions": "832x1248"
+      },
+      "createdAt": "2026-07-31T00:00:00Z"
     }
   ]
 }

@@ -5,11 +5,83 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
+  <meta name="game-version" content="0.2.5">
   <title>一念逍遥，一念合欢</title>
-  <link rel="stylesheet" href="./style.css">
+  <script>
+    (function installReleaseInfo(root) {
+      'use strict';
+
+      var release = Object.freeze({
+        version: '0.2.5',
+        build: '20260802.2',
+        cacheName: 'yinian-hehuan-v0.2.5-20260802.2',
+        entry: 'main.v025.js'
+      });
+
+      root.GameRelease = release;
+      root.GameTrace = function trace(scope, eventName, details) {
+        console.info(
+          '[GameTrace][' + release.version + '][' + scope + '] ' + eventName,
+          details && typeof details === 'object' ? details : {}
+        );
+      };
+      root.GameTrace('Entry', 'loaded', {
+        build: release.build,
+        cacheName: release.cacheName,
+        entry: release.entry
+      });
+    }(window));
+  </script>
+  <script>
+    (function installBootPulse(root) {
+      'use strict';
+
+      var active = true;
+      var timer = 0;
+      var payload = { phase: 'start', message: '正在准备游戏' };
+
+      function report() {
+        if (!active) return;
+        try {
+          var loading = root.dzmm && root.dzmm.loading;
+          if (loading && typeof loading.progress === 'function') {
+            loading.progress(payload);
+          }
+        } catch (error) {
+          console.error('启动状态上报失败:', error.message || '未知错误');
+        }
+      }
+
+      function schedule() {
+        timer = root.setTimeout(function pulse() {
+          report();
+          schedule();
+        }, 2000);
+      }
+
+      root.GameBootPulse = {
+        progress: function progress(nextPayload) {
+          if (!active) return;
+          if (nextPayload && typeof nextPayload === 'object') payload = nextPayload;
+          report();
+        },
+        stop: function stop() {
+          active = false;
+          if (timer) root.clearTimeout(timer);
+        }
+      };
+
+      report();
+      schedule();
+    }(window));
+  </script>
+  <link rel="preload" href="./vendor/phaser.min.js" as="script">
+  <link rel="stylesheet" href="./style.css?v=20260731-1">
   <link rel="stylesheet" href="./ui.css">
   <link rel="stylesheet" href="./exploration.css?v=20260725-5">
   <link rel="stylesheet" href="./theme.css">
+  <link rel="stylesheet" href="./layout.v015.css">
+  <link rel="stylesheet" href="./cheat-panel.v021.css">
 </head>
 <body>
   <main id="game-shell">
@@ -34,6 +106,52 @@
             <span class="settings-switch-track" aria-hidden="true"></span>
           </label>
         </div>
+        <div class="settings-row">
+          <span>
+            <b>省流模式</b>
+            <small id="traffic-saver-state">已关闭，使用 AI 补充</small>
+          </span>
+          <label class="settings-switch" title="切换省流模式">
+            <input id="traffic-saver-toggle" type="checkbox" aria-label="启用省流模式">
+            <span class="settings-switch-track" aria-hidden="true"></span>
+          </label>
+        </div>
+        <div id="traffic-saver-options" class="settings-subgroup" aria-disabled="true">
+          <div class="settings-row settings-sub-row">
+            <span>
+              <b>修炼 AI 补充</b>
+              <small id="traffic-cultivation-state">随主开关启用</small>
+            </span>
+            <label class="settings-switch" title="对修炼 AI 补充启用省流">
+              <input id="traffic-cultivation-toggle" type="checkbox" checked
+                     aria-label="修炼使用固定文案">
+              <span class="settings-switch-track" aria-hidden="true"></span>
+            </label>
+          </div>
+          <div class="settings-row settings-sub-row">
+            <span>
+              <b>探险 AI 补充</b>
+              <small id="traffic-exploration-state">随主开关启用</small>
+            </span>
+            <label class="settings-switch" title="对探险 AI 补充启用省流">
+              <input id="traffic-exploration-toggle" type="checkbox" checked
+                     aria-label="探险使用固定文案">
+              <span class="settings-switch-track" aria-hidden="true"></span>
+            </label>
+          </div>
+          <div class="settings-row settings-sub-row">
+            <span>
+              <b>战斗 AI 补充</b>
+              <small id="traffic-battle-state">随主开关启用</small>
+            </span>
+            <label class="settings-switch" title="对战斗 AI 补充启用省流">
+              <input id="traffic-battle-toggle" type="checkbox" checked
+                     aria-label="战斗使用固定文案">
+              <span class="settings-switch-track" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+        <small id="traffic-saver-status" aria-live="polite">省流设置会自动保存</small>
         <label class="settings-field">
           <span>对话模型</span>
           <select id="dialogue-model" aria-label="对话模型"></select>
@@ -55,6 +173,8 @@
           <button id="settings-save" type="button">存档</button>
           <button id="settings-load" type="button">读档</button>
           <small id="settings-save-status" aria-live="polite">正在读取存档…</small>
+          <button id="settings-auto-load" type="button">读取自动存档</button>
+          <small id="settings-auto-status" aria-live="polite">正在读取自动存档…</small>
         </div>
       </div>
     </section>
@@ -77,14 +197,14 @@
       </header>
       <div id="dialogue-history" class="dialogue-history"></div>
       <p id="dialogue-status" class="dialogue-status" aria-live="polite"></p>
-      <form id="dialogue-form" class="dialogue-form">
+      <div id="dialogue-form" class="dialogue-form" role="group" aria-label="NPC 对话输入">
         <input id="dialogue-input" type="text" maxlength="500"
-               autocomplete="off" placeholder="输入你想说的话">
-        <button id="dialogue-send" type="submit">发送</button>
+               autocomplete="off" enterkeyhint="send" placeholder="输入你想说的话">
+        <button id="dialogue-send" type="button">发送</button>
         <button id="dialogue-gift" type="button">赠礼</button>
         <button id="dialogue-breakthrough" type="button">双修突破</button>
         <button id="dialogue-draw" type="button">绘制此刻</button>
-      </form>
+      </div>
     </section>
     <section id="ai-image-modal" class="ai-image-modal" hidden>
       <div class="ai-image-content">
@@ -134,13 +254,14 @@
       </header>
       <div id="exploration-history" class="exploration-history"></div>
       <p id="exploration-panel-status" class="exploration-panel-status" aria-live="polite"></p>
-      <form id="exploration-command-panel" class="exploration-command-panel">
+      <div id="exploration-command-panel" class="exploration-command-panel"
+           role="group" aria-label="探索意图输入">
         <input id="exploration-input" type="text" maxlength="500"
-               autocomplete="off" placeholder="输入你想如何探索">
-        <button id="exploration-submit" type="submit">按意图探索</button>
+               autocomplete="off" enterkeyhint="send" placeholder="输入你想如何探索">
+        <button id="exploration-submit" type="button">按意图探索</button>
         <button id="exploration-quick" type="button">一键探索</button>
         <button id="exploration-back" type="button" aria-label="返回区域">返回区域</button>
-      </form>
+      </div>
     </section>
     <section id="boot-error" class="boot-error" hidden>
       <h1>游戏未能启动</h1>
@@ -149,75 +270,87 @@
     </section>
   </main>
 
-  <script src="./src/platform/PlatformBridge.js?v=20260725-6"></script>
-  <script src="./src/platform/AudioManager.js"></script>
-  <script src="./src/platform/OrientationManager.js"></script>
-  <script src="./vendor/phaser.min.js"></script>
-  <script src="./src/utils/EventBus.js"></script>
-  <script src="./src/utils/SceneTransition.js"></script>
-  <script src="./src/ui/TextBoxUtils.js"></script>
-  <script src="./src/systems/TimeSystem.js"></script>
-  <script src="./src/ui/SceneBackdrop.js"></script>
-  <script src="./src/ui/UISkin.js?v=20260725-2"></script>
-  <script src="./src/assets/BuildingAssets.js"></script>
-  <script src="./src/assets/ExplorationAssets.js"></script>
-  <script src="./src/assets/EnemyAssets.js?v=20260725-2"></script>
-  <script src="./src/ai/ModelPicker.js"></script>
-  <script src="./src/ai/CompletionsSafe.js"></script>
-  <script src="./src/ai/AITextSanitizer.js"></script>
-  <script src="./src/ai/ImageWorkflow.js"></script>
-  <script src="./src/storage/VersionedStorageUtils.js"></script>
-  <script src="./src/storage/VersionedStorage.js"></script>
-  <script src="./src/storage/SaveData.js"></script>
-  <script src="./src/data/BuildingData.js"></script>
-  <script src="./src/data/CultivationData.js"></script>
-  <script src="./src/data/ShopData.js"></script>
-  <script src="./src/systems/AffinityState.js"></script>
-  <script src="./src/systems/AffinitySystem.js"></script>
-  <script src="./src/systems/InventorySystem.js"></script>
-  <script src="./src/systems/GiftSystem.js"></script>
-  <script src="./src/systems/CultivationSystem.js"></script>
-  <script src="./src/systems/PlayerGrowthSystem.js"></script>
-  <script src="./src/systems/ShopSystem.js"></script>
-  <script src="./src/systems/PlayerStatsSystem.js"></script>
-  <script src="./src/systems/CombatSystem.js"></script>
-  <script src="./src/systems/ExplorationSystem.js"></script>
-  <script src="./src/systems/PlayerStateSystem.js"></script>
-  <script src="./src/systems/SaveGameSystem.js"></script>
-  <script src="./src/ai/AIModels.js"></script>
-  <script src="./src/ai/NarrativeService.js"></script>
-  <script src="./src/ai/BattleNarrator.js"></script>
-  <script src="./src/ai/ExplorationDialogue.js"></script>
-  <script src="./src/ai/ModelUI.js?v=20260724-1"></script>
-  <script src="./src/ai/DialoguePrompts.js"></script>
-  <script src="./src/ai/DialogueGreetingService.js"></script>
-  <script src="./src/ai/AIImageService.js"></script>
-  <script src="./src/ai/NPCGiftInteraction.js"></script>
-  <script src="./src/ai/AIService.js"></script>
-  <script src="./src/ai/DialoguePanel.js"></script>
-  <script src="./src/ui/ExplorationPanel.js"></script>
-  <script src="./src/ui/ExplorationDOMView.js?v=20260725-5"></script>
-  <script src="./src/ui/ExplorationDOMController.js?v=20260725-5"></script>
-  <script src="./src/ui/GiftPanel.js"></script>
-  <script src="./src/ui/BreakthroughController.js"></script>
-  <script src="./src/ui/SaveGameUI.js"></script>
-  <script src="./src/ui/BattleUI.js?v=20260725-2"></script>
-  <script src="./src/ui/ExplorationView.js"></script>
-  <script src="./src/ui/ShopEntry.js"></script>
-  <script src="./src/ui/NpcCardRenderer.js"></script>
-  <script src="./src/systems/NPCSystem.js"></script>
-  <script src="./src/systems/DialogueSystem.js"></script>
-  <script src="./src/scenes/BootScene.js"></script>
-  <script src="./src/scenes/PreloadScene.js"></script>
-  <script src="./src/scenes/MainMenuScene.js"></script>
-  <script src="./src/scenes/CharacterCreationScene.js"></script>
-  <script src="./src/scenes/GameScene.js"></script>
-  <script src="./src/scenes/ShopScene.js"></script>
-  <script src="./src/scenes/InventoryScene.js"></script>
-  <script src="./src/scenes/ExplorationScene.js?v=20260725-3"></script>
-  <script src="./src/scenes/BattleScene.js?v=20260725-6"></script>
-  <script src="./src/scenes/UIScene.js"></script>
-  <script src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
-  <script src="./main.js?v=20260725-5"></script>
+  <script defer src="./src/platform/PlatformBridge.js?v=20260726-2"></script>
+  <script defer src="./src/platform/AudioManager.js"></script>
+  <script defer src="./src/platform/OrientationManager.js?v=20260726-1"></script>
+  <script defer src="./vendor/phaser.min.js"></script>
+  <script defer src="./src/utils/EventBus.js"></script>
+  <script defer src="./src/utils/SceneTransition.js"></script>
+  <script defer src="./src/ui/TextBoxUtils.js"></script>
+  <script defer src="./src/systems/TimeSystem.js?v=20260729-1"></script>
+  <script defer src="./src/ui/SceneBackdrop.js"></script>
+  <script defer src="./src/ui/UISkin.js?v=20260725-2"></script>
+  <script defer src="./src/assets/BuildingAssets.js"></script>
+  <script defer src="./src/assets/ExplorationAssets.js"></script>
+  <script defer src="./src/assets/EnemyAssets.js?v=20260725-2"></script>
+  <script defer src="./src/assets/PlayerPortraitAssets.v002.js"></script>
+  <script defer src="./src/ai/ModelPicker.js"></script>
+  <script defer src="./src/ai/CompletionsSafe.v022.js"></script>
+  <script defer src="./src/ai/AITextSanitizer.js"></script>
+  <script defer src="./src/ai/ImageWorkflow.js"></script>
+  <script defer src="./src/storage/VersionedStorageUtils.js?v=20260802-1"></script>
+  <script defer src="./src/storage/VersionedStorage.js?v=20260802-1"></script>
+  <script defer src="./src/settings/TrafficSaver.v023.js"></script>
+  <script defer src="./src/settings/TrafficSaverUI.v022.js"></script>
+  <script defer src="./src/storage/DialogueHistoryState.v024.js"></script>
+  <script defer src="./src/storage/SaveData.v025.js"></script>
+  <script defer src="./src/data/PlayerIdentity.v001.js"></script>
+  <script defer src="./src/data/NPCRelations.v025.js"></script>
+  <script defer src="./src/data/BuildingData.js"></script>
+  <script defer src="./src/data/CultivationData.js"></script>
+  <script defer src="./src/data/ShopData.js"></script>
+  <script defer src="./src/systems/AffinityState.js"></script>
+  <script defer src="./src/systems/AffinitySystem.js"></script>
+  <script defer src="./src/systems/InventorySystem.js"></script>
+  <script defer src="./src/systems/GiftSystem.js"></script>
+  <script defer src="./src/systems/CultivationSystem.v025.js"></script>
+  <script defer src="./src/systems/PlayerGrowthSystem.js?v=20260727-1"></script>
+  <script defer src="./src/systems/ShopSystem.js"></script>
+  <script defer src="./src/systems/PlayerStatsSystem.js"></script>
+  <script defer src="./src/systems/CombatSystem.js"></script>
+  <script defer src="./src/systems/ExplorationSystem.js"></script>
+  <script defer src="./src/systems/PlayerStateSystem.js?v=20260727-1"></script>
+  <script defer src="./src/systems/SaveGameSystem.v021.js?v=20260802-1"></script>
+  <script defer src="./src/systems/AutoSaveSystem.js?v=20260802-1"></script>
+  <script defer src="./src/systems/CheatSystem.v021.js"></script>
+  <script defer src="./src/storage/SaveLifecycle.js?v=20260727-1"></script>
+  <script defer src="./src/ai/AIModels.v022.js"></script>
+  <script defer src="./src/ai/NarrativeService.v025.js"></script>
+  <script defer src="./src/ai/BattleNarrator.v001.js"></script>
+  <script defer src="./src/ai/ExplorationDialogue.v025.js"></script>
+  <script defer src="./src/ai/ModelUI.js?v=20260724-1"></script>
+  <script defer src="./src/ai/DialoguePrompts.v025.js"></script>
+  <script defer src="./src/ai/DialogueGreetingService.v024.js"></script>
+  <script defer src="./src/ai/CharacterImagePrompts.v019.js"></script>
+  <script defer src="./src/ai/AIImageService.v021.js"></script>
+  <script defer src="./src/ai/NPCGiftInteraction.js"></script>
+  <script defer src="./src/ai/AIService.v016.js"></script>
+  <script defer src="./src/ai/DialoguePanel.v014.js"></script>
+  <script defer src="./src/ui/ExplorationPanel.v014.js"></script>
+  <script defer src="./src/ui/ExplorationDOMView.js?v=20260725-5"></script>
+  <script defer src="./src/ui/ExplorationDOMController.v023.js"></script>
+  <script defer src="./src/ui/GiftPanel.js"></script>
+  <script defer src="./src/ui/BreakthroughController.js"></script>
+  <script defer src="./src/ui/SaveGameUI.js?v=20260729-1"></script>
+  <script defer src="./src/ui/CheatPanel.v021.js"></script>
+  <script defer src="./src/ui/BattleUI.js?v=20260725-2"></script>
+  <script defer src="./src/ui/ExplorationView.js"></script>
+  <script defer src="./src/ui/ShopEntry.js?v=20260727-1"></script>
+  <script defer src="./src/ui/NpcCardRenderer.js"></script>
+  <script defer src="./src/systems/NPCSystem.v024.js"></script>
+  <script defer src="./src/systems/DialogueSystem.v025.js"></script>
+  <script defer src="./src/scenes/BootScene.js"></script>
+  <script defer src="./src/scenes/PreloadScene.v025.js"></script>
+  <script defer src="./src/scenes/MainMenuScene.js?v=20260729-1"></script>
+  <script defer src="./src/scenes/CharacterCreationScene.v017.js"></script>
+  <script defer src="./src/scenes/GameScene.js?v=20260727-2"></script>
+  <script defer src="./src/scenes/ShopScene.js"></script>
+  <script defer src="./src/scenes/InventoryScene.v021.js"></script>
+  <script defer src="./src/scenes/ExplorationScene.v023.js"></script>
+  <script defer src="./src/scenes/BattleScene.v023.js"></script>
+  <script defer src="./src/scenes/UIScene.js"></script>
+  <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
+  <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js"></script>
+  <script defer src="./main.v025.js"></script>
 </body>
 </html>

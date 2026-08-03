@@ -160,13 +160,14 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.currentBuilding = building;
         this.backdrop = Game.SceneBackdrop.create(this, 'bg-sect', 0.22);
         Game.BuildingAssets.apply(this, building, this.backdrop);
-        this.addViewObject(this.add.text(640, 58, building.name, {
+        const title = this.addViewObject(this.add.text(640, 58, building.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '36px',
             color: '#fff8fa',
             stroke: '#321522',
             strokeThickness: 4
         }).setOrigin(0.5));
+        const headerOffset = Math.max(160, Math.ceil(title.displayWidth / 2) + 99);
         this.addViewObject(this.add.text(640, 106, building.description, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
@@ -174,8 +175,8 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             wordWrap: { width: 760 },
             align: 'center'
         }).setOrigin(0.5));
-        this.createBackButton();
-        Game.ShopEntry.create(this, building);
+        this.createBackButton(640 + headerOffset);
+        Game.ShopEntry.create(this, building, 640 - headerOffset);
         const npcs = building.npcIds
             .map((id) => this.npcSystem.getNpcDataById(id))
             .filter(Boolean);
@@ -192,11 +193,11 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         else this.showSectMap();
     }
 
-    createBackButton() {
+    createBackButton(x = 800) {
         const isRearSanctuary = this.currentBuilding?.id === 'rear-sanctuary';
         const button = this.addViewObject(Game.UISkin.makeButton(
             this,
-            isRearSanctuary ? 1060 : 780,
+            x,
             58,
             '返回地图',
             () => {
@@ -206,7 +207,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             this.showSectMap();
             },
             {
-                width: isRearSanctuary ? 136 : 150,
+                width: 150,
                 height: 46,
                 fontSize: 17,
                 variant: 'secondary',

@@ -62,6 +62,9 @@
       previousPeriod: previous.name
     });
     root.Game.EventBus.emit('player-state-changed', { player: { ...player } });
+    if (newDay) {
+      root.Game.EventBus.emit('game-day-advanced', { day: player.day, durable });
+    }
     return snapshot;
   }
 
