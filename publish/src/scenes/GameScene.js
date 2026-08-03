@@ -412,19 +412,17 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             this, 1036, 420, 424, 290, 'card', { depth: 8, alpha: 0.96 }
         )
             .setVisible(false);
-        this.talkButton = Game.UISkin.makeButton(this, 930, 575, '伴侣交谈', () => {
+        this.talkButton = Game.UISkin.makeButton(this, 930, 575, '多人交谈', () => {
             if (this.busy || !this.invitedNpcs.length) return;
-            this.talkMenuVisible = !this.talkMenuVisible;
             this.inviteMenuVisible = false;
             this.inviteButton.setText('邀请伴侣');
-            this.renderTalkMenu();
             this.renderInvites();
             window.GameAudio.sfx('click');
+            window.GamePrivateGroupDialogue.open({
+                companions: this.invitedNpcs,
+                location: this.locations[this.sceneIndex]
+            });
         }, { width: 150, height: 46, fontSize: 17, variant: 'secondary' })
-            .setVisible(false);
-        this.talkMenuPanel = Game.UISkin.addPanel(
-            this, 1036, 420, 424, 290, 'card', { depth: 8, alpha: 0.96 }
-        )
             .setVisible(false);
     }
 
@@ -465,7 +463,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         this.inviteMenuObjects = [];
         this.inviteMenuPanel?.setVisible(this.inviteMenuVisible);
         if (!this.inviteMenuVisible) return;
-        this.inviteMenuObjects.push(this.add.text(1036, 296, '选择一位伴侣', {
+        this.inviteMenuObjects.push(this.add.text(1036, 296, '选择伴侣（最多三位）', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '19px',
             color: '#fff8fa'
@@ -495,9 +493,13 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
                 button.on('pointerdown', () => {
                     if (this.selectedInviteIds.has(npc.id)) {
                         this.selectedInviteIds.delete(npc.id);
+                    } else if (this.selectedInviteIds.size >= 3) {
+                        this.statusText.setText('一次最多邀请三位伴侣。').setVisible(true);
+                        return;
                     } else {
                         this.selectedInviteIds.add(npc.id);
                     }
+                    this.statusText.setVisible(false);
                     this.renderInvites();
                     window.GameAudio.sfx('click');
                 });
@@ -602,12 +604,10 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
             } else {
                 result = { changed: false, reason: 'stamina' };
             }
-            if (result.changed) {
-                this.invitedNpcs = companions.slice();
-                this.talkButton.setVisible(true);
-                this.talkMenuVisible = false;
-                this.renderTalkMenu();
-            }
+            this.invitedNpcs = companions.slice(0, 3);
+            this.talkButton.setVisible(true);
+            this.talkMenuVisible = false;
+            this.renderTalkMenu();
             const fallback = this.buildDualCultivationFallback(
                 companions,
                 result,
@@ -702,6 +702,7 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
 
     cleanup() {
         window.GameNarrative.cancel();
+        window.GamePrivateGroupDialogue?.close?.();
         Game.PrivateSceneEffects?.destroy?.(this);
         Game.EventBus.off('affinity-changed', this.renderInvites, this);
         Game.EventBus.off('cultivation-changed', this.renderInvites, this);

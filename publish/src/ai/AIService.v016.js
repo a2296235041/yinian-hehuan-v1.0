@@ -190,7 +190,7 @@
     closeDialogue,
     exportSessions: root.GameDialogueHistory.exportState,
     restoreSessions: root.GameDialogueHistory.restoreState,
-    resetSessions: () => { closeDialogue(); root.GameDialogueHistory.clear(); },
+    resetSessions: () => { closeDialogue(); root.GamePrivateGroupDialogue?.close?.(); root.GameDialogueHistory.clear(); },
     isDialogueActive: () => Boolean(current)
   };
 }(window));

@@ -6,8 +6,8 @@ const path = require('node:path');
 
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
-const version = '0.3.2';
-const build = '20260803.7';
+const version = '0.3.3';
+const build = '20260803.8';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -30,6 +30,7 @@ assert.ok(html.includes('./src/ui/CheatPanel.v021.js'));
 assert.ok(html.includes('./cheat-panel.v021.css'));
 assert.ok(html.includes('./tournament.v029.css'));
 assert.ok(html.includes('./tournament-participants.v032.css'));
+assert.ok(html.includes('./private-group-dialogue.v033.css'));
 assert.ok(
   html.includes('./layout.v015.css'),
   'release entry should load the mobile layout override'
@@ -38,6 +39,9 @@ assert.ok(
   './src/storage/DialogueHistoryState.v024.js',
   './src/storage/TournamentState.js',
   './src/ai/AIService.v016.js',
+  './src/ai/AIJson.js',
+  './src/ai/PrivateGroupPrompts.v033.js',
+  './src/ai/PrivateGroupDialogueService.v033.js',
   './src/ai/DialoguePanel.v014.js',
   './src/ui/ExplorationPanel.v014.js',
   './src/ui/ExplorationDOMController.v023.js',
@@ -52,7 +56,8 @@ assert.ok(
   './src/ui/TournamentView.js',
   './src/ui/TournamentPanel.js',
   './src/ui/TournamentEntry.js',
-  './main.v032.js'
+  './src/ui/PrivateGroupDialoguePanel.v033.js',
+  './main.v033.js'
 ].forEach((entry) => {
   assert.ok(
     html.includes(entry),
@@ -84,6 +89,7 @@ assert.ok(!html.includes('<form id="exploration-command-panel"'));
   './main.v029.js',
   './main.v030.js',
   './main.v031.js',
+  './main.v032.js',
   './src/ui/TournamentOpponentView.v031.js',
   './src/ai/AIImageService.js',
   './src/scenes/CharacterCreationScene.js',

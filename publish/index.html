@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.3.2">
+  <meta name="game-version" content="0.3.3">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.3.2',
-        build: '20260803.7',
-        cacheName: 'yinian-hehuan-v0.3.2-20260803.7',
-        entry: 'main.v032.js'
+        version: '0.3.3',
+        build: '20260803.8',
+        cacheName: 'yinian-hehuan-v0.3.3-20260803.8',
+        entry: 'main.v033.js'
       });
 
       root.GameRelease = release;
@@ -84,6 +84,7 @@
   <link rel="stylesheet" href="./cheat-panel.v021.css">
   <link rel="stylesheet" href="./tournament.v029.css">
   <link rel="stylesheet" href="./tournament-participants.v032.css">
+  <link rel="stylesheet" href="./private-group-dialogue.v033.css">
 </head>
 <body>
   <main id="game-shell">
@@ -208,6 +209,24 @@
         <button id="dialogue-draw" type="button">绘制此刻</button>
       </div>
     </section>
+    <div id="private-group-blocker" class="private-group-blocker" hidden aria-hidden="true"></div>
+    <section id="private-group-panel" class="private-group-panel" hidden>
+      <header class="private-group-header">
+        <div class="private-group-heading">
+          <strong>同席传音</strong>
+          <span id="private-group-location"></span>
+        </div>
+        <button id="private-group-close" class="private-group-close" type="button">返回场景</button>
+      </header>
+      <div id="private-group-participants" class="private-group-participants"></div>
+      <div id="private-group-history" class="private-group-history"></div>
+      <p id="private-group-status" class="private-group-status" aria-live="polite"></p>
+      <div class="private-group-form" role="group" aria-label="多人互动输入">
+        <input id="private-group-input" type="text" maxlength="500"
+               autocomplete="off" enterkeyhint="send" placeholder="对众人说话或描述行动">
+        <button id="private-group-send" type="button">发送</button>
+      </div>
+    </section>
     <section id="ai-image-modal" class="ai-image-modal" hidden>
       <div class="ai-image-content">
         <button id="ai-image-close" type="button" aria-label="关闭图片">×</button>
@@ -328,6 +347,7 @@
   <script defer src="./src/assets/PlayerPortraitAssets.v002.js"></script>
   <script defer src="./src/ai/ModelPicker.js"></script>
   <script defer src="./src/ai/CompletionsSafe.v022.js"></script>
+  <script defer src="./src/ai/AIJson.js"></script>
   <script defer src="./src/ai/AITextSanitizer.js"></script>
   <script defer src="./src/ai/ImageWorkflow.js"></script>
   <script defer src="./src/storage/VersionedStorageUtils.js?v=20260802-1"></script>
@@ -372,8 +392,10 @@
   <script defer src="./src/ai/CharacterImagePrompts.v019.js"></script>
   <script defer src="./src/ai/AIImageService.v021.js"></script>
   <script defer src="./src/ai/NPCGiftInteraction.js"></script>
+  <script defer src="./src/ai/PrivateGroupPrompts.v033.js"></script>
+  <script defer src="./src/ai/PrivateGroupDialogueService.v033.js"></script>
   <script defer src="./src/ai/TournamentJudge.js?v=20260803-4"></script>
-  <script defer src="./src/ai/AIService.v016.js"></script>
+  <script defer src="./src/ai/AIService.v016.js?v=20260803-8"></script>
   <script defer src="./src/ai/DialoguePanel.v014.js"></script>
   <script defer src="./src/ui/ExplorationPanel.v014.js"></script>
   <script defer src="./src/ui/ExplorationDOMView.js?v=20260725-5"></script>
@@ -389,6 +411,7 @@
   <script defer src="./src/ui/TournamentView.js?v=20260803-7"></script>
   <script defer src="./src/ui/TournamentPanel.js?v=20260803-4"></script>
   <script defer src="./src/ui/TournamentEntry.js"></script>
+  <script defer src="./src/ui/PrivateGroupDialoguePanel.v033.js"></script>
   <script defer src="./src/ui/NpcCardRenderer.js"></script>
   <script defer src="./src/ui/MainMenuDecor.js?v=20260803-2"></script>
   <script defer src="./src/ui/PreloadDecor.js?v=20260803-1"></script>
@@ -401,7 +424,7 @@
   <script defer src="./src/scenes/PreloadScene.v025.js?v=20260803-2"></script>
   <script defer src="./src/scenes/MainMenuScene.js?v=20260803-2"></script>
   <script defer src="./src/scenes/CharacterCreationScene.v017.js?v=20260803-1"></script>
-  <script defer src="./src/scenes/GameScene.js?v=20260803-3"></script>
+  <script defer src="./src/scenes/GameScene.js?v=20260803-8"></script>
   <script defer src="./src/scenes/ShopScene.js"></script>
   <script defer src="./src/scenes/InventoryScene.v021.js"></script>
   <script defer src="./src/scenes/ExplorationScene.v023.js"></script>
@@ -409,6 +432,6 @@
   <script defer src="./src/scenes/UIScene.js"></script>
   <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
   <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js"></script>
-  <script defer src="./main.v032.js"></script>
+  <script defer src="./main.v033.js"></script>
 </body>
 </html>

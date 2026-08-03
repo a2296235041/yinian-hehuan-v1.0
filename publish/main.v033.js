@@ -1,4 +1,4 @@
-/* release 0.3.2 */ (function startGame(root) {
+/* release 0.3.3 */ (function startGame(root) {
   'use strict';
 
   function ensureModule(globalName, source) {
@@ -27,6 +27,7 @@
     root.GameTrafficSaverUI.init();
     root.GameModelUI.init();
     root.GameDialoguePanel.init();
+    root.GamePrivateGroupDialoguePanel.init();
     root.GameGiftPanel.init();
     root.GameBreakthrough.init();
     root.GameSaveUI.init();

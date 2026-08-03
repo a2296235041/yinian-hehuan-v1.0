@@ -1,0 +1,46 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+
+const source = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/PrivateGroupPrompts.v033.js'),
+  'utf8'
+);
+const companions = [
+  { id: 'npc_a', name: '沈玉枝' },
+  { id: 'npc_b', name: '陆千雪' },
+  { id: 'npc_c', name: '唐妙音' }
+];
+const window = {
+  GamePlayerIdentity: { get: () => ({ role: '合欢宗弟子', intimacyRule: '' }) },
+  GameAffinity: {
+    getSnapshot: () => ({ affinity: 85, relationship: '倾心' })
+  },
+  GameNPCRelations: { promptRule: () => '保持原称呼。' }
+};
+vm.runInNewContext(source, { window, Set, Map, Math, JSON });
+
+const prompts = window.GamePrivateGroupPrompts;
+const result = {
+  sceneBeat: '三人交换目光。',
+  responses: [
+    { speakerId: 'npc_a', type: 'dialogue', content: '她先接过了话头。' },
+    { speakerId: 'npc_b', type: 'action', content: '她抬手示意另外两人稍候。' }
+  ]
+};
+assert.equal(prompts.validate(result, companions.map((npc) => npc.id)), true);
+assert.equal(prompts.validate({
+  sceneBeat: '',
+  responses: [{ speakerId: 'unknown', type: 'dialogue', content: '越界' }]
+}, companions.map((npc) => npc.id)), false);
+
+const stored = prompts.format(result, companions);
+const parsed = prompts.parse(stored, companions);
+assert.equal(parsed.some((entry) => entry.speakerName === '沈玉枝'), true);
+assert.equal(parsed.some((entry) => entry.type === 'action'), true);
+assert.match(prompts.sessionId(companions), /^private_group_[a-z0-9]+$/);
+assert.equal(prompts.fallback(companions, '一起品茶').responses.length, 3);
+console.log('private group prompts test passed');
