@@ -14,25 +14,25 @@
     root.GameTournamentView.render(state(), mode, { busy, status });
   }
 
-  function showError(error, fallback) {
+  function errorMessage(error, fallback) {
     const message = error?.message || fallback;
     console.error('赛事操作失败:', error?.code || '', message, error?.stack || '');
-    render(message);
     root.GameAudio?.sfx?.('deny');
+    return message;
   }
 
   async function run(action, loadingText) {
     if (busy) return;
     busy = true;
     render(loadingText);
+    let finalStatus = '';
     try {
       await action();
-      render();
     } catch (error) {
-      showError(error, '赛事操作失败，请稍后重试');
+      finalStatus = errorMessage(error, '赛事操作失败，请稍后重试');
     } finally {
       busy = false;
-      render();
+      render(finalStatus);
     }
   }
 
@@ -55,6 +55,7 @@
     if (!active || active.mode !== mode || active.phase !== 'battle') return;
     const generation = openGeneration;
     busy = true;
+    let finalStatus = '';
     render('裁判正在推演招式碰撞，约需 10–30 秒…');
     elements['tournament-action-input'].value = '';
     try {
@@ -62,13 +63,17 @@
       await root.GameTournament.recordExchange(move, result);
       root.GameAudio?.sfx?.(result.winner === 'opponent' ? 'deny' : 'success');
       if (generation === openGeneration && !elements['tournament-screen'].hidden) {
-        render(result.fallback ? 'AI 暂时不可用，本回合已由本地裁判完成判定。' : '');
+        finalStatus = result.fallback ? 'AI 暂时不可用，本回合已由本地裁判完成判定。' : '';
       }
     } catch (error) {
-      if (generation === openGeneration) showError(error, '本回合未能完成，请重新出招');
+      if (generation === openGeneration) {
+        finalStatus = errorMessage(error, '本回合未能完成，请重新出招');
+      }
     } finally {
       busy = false;
-      if (generation === openGeneration && !elements['tournament-screen'].hidden) render();
+      if (generation === openGeneration && !elements['tournament-screen'].hidden) {
+        render(finalStatus);
+      }
     }
   }
 

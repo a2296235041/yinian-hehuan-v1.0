@@ -126,7 +126,9 @@
     elements['tournament-advance'].disabled = busy;
     elements['tournament-claim'].hidden = !sameMode
       || active.phase !== 'event_complete' || !active.playerWon || active.rewardClaimed;
-    elements['tournament-finish'].hidden = !sameMode || active.phase !== 'event_complete';
+    elements['tournament-finish'].hidden = !sameMode
+      || active.phase !== 'event_complete'
+      || (active.playerWon && !active.rewardClaimed);
   }
 
   function render(state, mode, options = {}) {
@@ -143,7 +145,9 @@
       ? (sameMode.phase === 'event_complete'
         ? `本届已结束 · 魁首：${champion || '待定'}`
         : `${sameMode.round.label} · 第 ${sameMode.turn + 1} 招`)
-      : '赛事当前可开启，完成后需等待十天再次举办。');
+      : (active
+        ? `当前已有进行中的${active.title}，请从山门进入对应赛事。`
+        : '赛事当前可开启，完成后需等待十天再次举办。'));
     elements['tournament-score'].textContent = sameMode
       ? `你 ${sameMode.scores?.player || 0} : ${sameMode.scores?.opponent || 0} 对手`
       : '三回合累计判定';

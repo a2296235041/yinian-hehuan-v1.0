@@ -1,6 +1,5 @@
 (function installTournamentSystem(root) {
   'use strict';
-
   const MODE_INFO = Object.freeze({
     internal: Object.freeze({ title: '宗门大比', reward: 120 }),
     spirit: Object.freeze({ title: '灵界武道大会', reward: 300 })
@@ -126,6 +125,7 @@
         active.scores.player += Math.max(0, Math.floor(Number(result.playerDelta) || 0));
         active.scores.opponent += Math.max(0, Math.floor(Number(result.opponentDelta) || 0));
         active.logs.push({ speaker: '你', text: String(move).slice(0, 500) });
+        active.logs.push({ speaker: '对手', text: String(result.opponentAction || '').slice(0, 300) });
         active.logs.push({ speaker: '战局', text: String(result.narration || '').slice(0, 900) });
         active.logs.push({ speaker: '解说', text: String(result.commentary || '').slice(0, 360) });
         if (result.finished) {
