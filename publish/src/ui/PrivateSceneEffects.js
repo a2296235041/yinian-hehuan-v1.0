@@ -70,24 +70,6 @@ Game.PrivateSceneEffects = {
             });
         }
     },
-    addRipples(scene, count, color, yRange) {
-        for (let i = 0; i < count; i += 1) {
-            const ripple = this.add(scene, scene.add.ellipse(
-                Phaser.Math.Between(250, 1030),
-                Phaser.Math.Between(yRange[0], yRange[1]),
-                Phaser.Math.Between(75, 145), 18, color, 0
-            ).setStrokeStyle(1, color, 0.22));
-            this.tween(scene, ripple, {
-                scaleX: 1.28,
-                scaleY: 1.12,
-                alpha: 0,
-                duration: 3200 + i * 450,
-                delay: i * 700,
-                repeat: -1
-            });
-        }
-    },
-
     cave(scene) {
         this.addDrifters(scene, {
             count: 8, circle: true, colors: [0x9edbc8, 0xc9eadc],
@@ -95,7 +77,6 @@ Game.PrivateSceneEffects = {
             dx: [-10, 10], dy: [-28, -12], duration: [2800, 4600],
             fadeTo: 0.48, yoyo: true
         });
-        this.addRipples(scene, 2, 0x83c7bd, [560, 640]);
     },
 
     bamboo(scene) {
@@ -112,7 +93,6 @@ Game.PrivateSceneEffects = {
             size: [28, 52], height: [75, 125], alpha: [0.025, 0.065],
             dx: [-25, 25], dy: [-170, -110], duration: [5200, 8200], fadeTo: 0
         });
-        this.addRipples(scene, 4, 0xbadfd9, [535, 640]);
     },
 
     flower(scene) {
@@ -130,7 +110,6 @@ Game.PrivateSceneEffects = {
             dx: [-6, 6], dy: [-16, -5], duration: [2200, 4200],
             fadeTo: 0.7, yoyo: true
         });
-        this.addRipples(scene, 3, 0xb7d8f3, [540, 635]);
     },
 
     garden(scene) {
