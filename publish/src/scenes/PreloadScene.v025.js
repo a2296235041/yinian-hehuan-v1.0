@@ -22,18 +22,10 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         });
         this.cameras.main.setBackgroundColor('#09100e');
         Game.SceneTransition.fadeIn(this, 180);
-        const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '24px',
-            color: '#fff8fa'
-        }).setOrigin(0.5);
-        const track = this.add.rectangle(width / 2, height / 2, 340, 18, 0x223c34)
-            .setStrokeStyle(1, 0xf0a8bb, 0.7);
-        const bar = this.add.rectangle(width / 2 - 168, height / 2, 0, 12, 0xd9577b)
-            .setOrigin(0, 0.5);
+        const loadingView = this.createLoadingView(width, height);
 
         this.load.on('progress', (value) => {
-            bar.width = 336 * value;
+            loadingView.update(value);
             window.PlatformBridge.progress({
                 phase: 'resource_loading',
                 loadedResources: Math.round(totalResources * value),
@@ -46,9 +38,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
             console.error('资源加载失败:', file.key, file.src);
         });
         this.load.once('complete', () => {
-            title.destroy();
-            track.destroy();
-            bar.destroy();
+            loadingView.complete();
         });
 
         this.load.image('bg-sect', './assets/generated/sect-courtyard.c4be5633.webp');
@@ -70,6 +60,27 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.json('items', './assets/data/items.json');
         this.load.json('exploration_regions', './assets/data/exploration_regions.json');
         this.load.json('enemies', './assets/data/enemies.json');
+    }
+
+    createLoadingView(width, height) {
+        try {
+            return Game.PreloadDecor.create(this, width, height);
+        } catch (error) {
+            console.error('加载页装饰渲染失败:', error.message, error.stack);
+            const title = this.add.text(width / 2, height / 2 - 58, '正在进入合欢宗', {
+                fontFamily: '"Noto Serif SC", serif',
+                fontSize: '24px',
+                color: '#fff8fa'
+            }).setOrigin(0.5);
+            const track = this.add.rectangle(width / 2, height / 2, 340, 18, 0x223c34)
+                .setStrokeStyle(1, 0xf0a8bb, 0.7);
+            const bar = this.add.rectangle(width / 2 - 168, height / 2, 0, 12, 0xd9577b)
+                .setOrigin(0, 0.5);
+            return {
+                update(value) { bar.width = 336 * value; },
+                complete() { title.setText('山门已开'); track.setAlpha(0.8); }
+            };
+        }
     }
 
     create() {
