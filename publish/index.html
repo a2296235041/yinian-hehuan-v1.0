@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.2.9">
+  <meta name="game-version" content="0.3.0">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.2.9',
-        build: '20260803.4',
-        cacheName: 'yinian-hehuan-v0.2.9-20260803.4',
-        entry: 'main.v029.js'
+        version: '0.3.0',
+        build: '20260803.5',
+        cacheName: 'yinian-hehuan-v0.3.0-20260803.5',
+        entry: 'main.v030.js'
       });
 
       root.GameRelease = release;
@@ -334,7 +334,8 @@
   <script defer src="./src/settings/TrafficSaver.v023.js"></script>
   <script defer src="./src/settings/TrafficSaverUI.v022.js"></script>
   <script defer src="./src/storage/DialogueHistoryState.v024.js"></script>
-  <script defer src="./src/storage/SaveData.v025.js"></script>
+  <script defer src="./src/storage/TournamentState.js?v=20260803-5"></script>
+  <script defer src="./src/storage/SaveData.v025.js?v=20260803-5"></script>
   <script defer src="./src/data/PlayerIdentity.v001.js"></script>
   <script defer src="./src/data/NPCRelations.v025.js"></script>
   <script defer src="./src/data/BuildingData.js"></script>
@@ -354,9 +355,9 @@
   <script defer src="./src/systems/TournamentRules.js"></script>
   <script defer src="./src/systems/TournamentBattleState.js?v=20260803-4"></script>
   <script defer src="./src/systems/TournamentRelations.js?v=20260803-4"></script>
-  <script defer src="./src/systems/TournamentSystem.js?v=20260803-4"></script>
-  <script defer src="./src/systems/PlayerStateSystem.js?v=20260727-1"></script>
-  <script defer src="./src/systems/SaveGameSystem.v021.js?v=20260803-2"></script>
+  <script defer src="./src/systems/TournamentSystem.js?v=20260803-5"></script>
+  <script defer src="./src/systems/PlayerStateSystem.js?v=20260803-5"></script>
+  <script defer src="./src/systems/SaveGameSystem.v021.js?v=20260803-5"></script>
   <script defer src="./src/systems/AutoSaveSystem.js?v=20260802-1"></script>
   <script defer src="./src/systems/CheatSystem.v021.js"></script>
   <script defer src="./src/storage/SaveLifecycle.js?v=20260727-1"></script>
@@ -406,6 +407,6 @@
   <script defer src="./src/scenes/UIScene.js"></script>
   <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
   <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js"></script>
-  <script defer src="./main.v029.js"></script>
+  <script defer src="./main.v030.js"></script>
 </body>
 </html>

@@ -67,6 +67,7 @@ const context = { window, console, Math, Date };
 vm.runInNewContext(source('publish/src/systems/TournamentRules.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentBattleState.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentRelations.js'), context);
+vm.runInNewContext(source('publish/src/storage/TournamentState.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
@@ -139,6 +140,19 @@ async function winRound() {
   await window.GameTournament.claimReward();
   assert.equal(stones, 120);
   assert.equal(window.GameTournament.getState().active.rewardClaimed, true);
+
+  const exported = window.GameTournament.exportState();
+  exported.corruption['npc-2'] = 24;
+  await window.GameTournament.restore(exported);
+  assert.equal(window.GameTournament.getState().corruption['npc-2'], 24);
+
+  await window.GameTournament.restore(null);
+  assert.deepEqual(JSON.parse(JSON.stringify(window.GameTournament.getState())), {
+    active: null,
+    cooldowns: { internal: 0, spirit: 0 },
+    history: [],
+    corruption: {}
+  });
   console.log('tournament system test passed');
 })().catch((error) => {
   console.error(error);

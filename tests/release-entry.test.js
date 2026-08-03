@@ -6,8 +6,8 @@ const path = require('node:path');
 
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
-const version = '0.2.9';
-const build = '20260803.4';
+const version = '0.3.0';
+const build = '20260803.5';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -35,6 +35,7 @@ assert.ok(
 );
 [
   './src/storage/DialogueHistoryState.v024.js',
+  './src/storage/TournamentState.js',
   './src/ai/AIService.v016.js',
   './src/ai/DialoguePanel.v014.js',
   './src/ui/ExplorationPanel.v014.js',
@@ -49,7 +50,7 @@ assert.ok(
   './src/ui/TournamentView.js',
   './src/ui/TournamentPanel.js',
   './src/ui/TournamentEntry.js',
-  './main.v029.js'
+  './main.v030.js'
 ].forEach((entry) => {
   assert.ok(
     html.includes(entry),
@@ -78,6 +79,7 @@ assert.ok(!html.includes('<form id="exploration-command-panel"'));
   './main.v026.js',
   './main.v027.js',
   './main.v028.js',
+  './main.v029.js',
   './src/ai/AIImageService.js',
   './src/scenes/CharacterCreationScene.js',
   './src/scenes/CharacterCreationScene.v016.js',

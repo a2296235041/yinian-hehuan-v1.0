@@ -127,6 +127,7 @@
       inventory: sanitizeInventory(value?.inventory),
       growth: { bonuses: { ...attributes.bonuses } },
       dialogueHistory: root.GameDialogueHistory.sanitize(value?.dialogueHistory),
+      tournament: root.GameTournamentState.sanitize(value?.tournament),
       location: { buildingId }
     };
   }
@@ -156,6 +157,7 @@
       inventory: { quantities, spiritStones: 100 },
       growth: { bonuses: {} },
       dialogueHistory: { sessions: {} },
+      tournament: root.GameTournamentState.fresh(),
       location: { buildingId: null }
     });
   }

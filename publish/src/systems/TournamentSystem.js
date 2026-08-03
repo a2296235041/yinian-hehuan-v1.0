@@ -4,28 +4,11 @@
     internal: Object.freeze({ title: '宗门大比', reward: 120 }),
     spirit: Object.freeze({ title: '灵界武道大会', reward: 300 })
   });
-  const fallback = {
-    active: null, cooldowns: { internal: 0, spirit: 0 }, history: [], corruption: {}
-  };
-  let state = fallback;
+  const State = root.GameTournamentState;
+  let state = State.fresh();
   let storage = null;
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
-  function clone(value) {
-    return JSON.parse(JSON.stringify(value));
-  }
-  function sanitize(value) {
-    const cooldowns = value?.cooldowns || {};
-    return {
-      active: value?.active && typeof value.active === 'object' ? value.active : null,
-      cooldowns: {
-        internal: Math.max(0, Math.floor(Number(cooldowns.internal) || 0)),
-        spirit: Math.max(0, Math.floor(Number(cooldowns.spirit) || 0))
-      },
-      history: Array.isArray(value?.history) ? value.history.slice(-12) : [],
-      corruption: root.GameTournamentRelations.sanitize(value?.corruption)
-    };
-  }
   function queue(action) {
     const task = mutationQueue.then(action, action);
     mutationQueue = task.then(() => undefined, () => undefined);
@@ -35,8 +18,8 @@
     const result = await storage.save(state, { flush });
     if (result.remote !== true) throw new Error('赛事进度未能同步到平台');
     state = result.value;
-    root.Game?.EventBus?.emit('tournament-changed', clone(state));
-    return clone(state);
+    root.Game?.EventBus?.emit('tournament-changed', State.clone(state));
+    return State.clone(state);
   }
   function currentDay() {
     return Math.max(1, Math.floor(Number(root.Game?.player?.day) || 1));
@@ -50,17 +33,17 @@
       namespace: 'hehuan:',
       key: 'tournament-progress',
       version: 2,
-      fallback,
+      fallback: State.fresh(),
       migrations: {
-        0: (value) => value || fallback,
-        1: (value) => ({ ...(value || fallback), corruption: value?.corruption || {} })
+        0: (value) => value || State.fresh(),
+        1: (value) => ({ ...(value || State.fresh()), corruption: value?.corruption || {} })
       },
-      sanitize,
+      sanitize: State.sanitize,
       maxBytes: 256 * 1024
     });
     readyPromise = storage.load().then((saved) => {
       state = saved;
-      return clone(state);
+      return State.clone(state);
     }).catch((error) => {
       console.error('赛事进度读取失败:', error.code || '', error.message, error.stack);
       throw error;
@@ -103,7 +86,15 @@
   root.GameTournament = {
     MODE_INFO,
     initialize,
-    getState: () => clone(state),
+    getState: () => State.clone(state),
+    exportState: () => State.clone(state),
+    restore(nextState) {
+      return queue(async () => {
+        await initialize();
+        state = State.sanitize(nextState);
+        return persist(true);
+      });
+    },
     start,
     recordExchange(move, result) {
       return queue(async () => {
@@ -142,7 +133,7 @@
       return queue(async () => {
         const active = state.active;
         if (!active || active.phase !== 'round_complete') throw new Error('当前轮次尚未结束');
-        active.roundHistory.push(clone(active.round));
+        active.roundHistory.push(State.clone(active.round));
         active.stageIndex += 1;
         active.round = root.GameTournamentRules.createRound(
           active.pendingEntrants, active.stageIndex, active.roster
@@ -175,8 +166,8 @@
       return queue(async () => {
         await initialize();
         await storage.clear();
-        state = clone(fallback);
-        root.Game?.EventBus?.emit('tournament-changed', clone(state));
+        state = State.fresh();
+        root.Game?.EventBus?.emit('tournament-changed', State.clone(state));
         return true;
       });
     }

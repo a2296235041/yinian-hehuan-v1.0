@@ -45,7 +45,8 @@
       root.GameInventory.restore(snapshot?.inventory),
       root.GameCultivation.restore(snapshot?.cultivation),
       root.GamePlayerGrowth.restore(snapshot?.growth),
-      root.GameAffinity.restore(snapshot?.affinity)
+      root.GameAffinity.restore(snapshot?.affinity),
+      root.GameTournament.restore(snapshot?.tournament)
     ]);
     root.GameAI?.restoreSessions?.(snapshot?.dialogueHistory);
     const origin = snapshot?.player?.origin || root.Game.player?.origin;

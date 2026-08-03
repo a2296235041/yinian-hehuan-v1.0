@@ -10,7 +10,6 @@
   let initPromise = null;
   let activeSlot = 1;
   let persistencePaused = false;
-
   function migrationsFor(version) {
     const migrations = {};
     for (let index = 0; index < version; index += 1) {
@@ -18,7 +17,6 @@
     }
     return migrations;
   }
-
   function makeStorage(key, version = 2) {
     return root.GamefyRecipes.createVersionedStorage({
       namespace: 'hehuan:',
@@ -30,7 +28,6 @@
       maxBytes: SAVE_MAX_BYTES
     });
   }
-
   const storages = new Map(SLOT_IDS.map((id) => [id, makeStorage(`manual-save-${id}`)]));
   const legacyStorage = makeStorage('manual-save', 3);
   const auxiliaryStorages = AUXILIARY_KEYS.map((key) => (
@@ -43,7 +40,6 @@
       sanitize: (value) => value
     })
   ));
-
   function validateSlotId(value) {
     const slotId = Math.floor(Number(value));
     if (!SLOT_IDS.includes(slotId)) throw new Error('存档位必须为 1、2 或 3');
@@ -114,7 +110,10 @@
   }
 
   async function capture() {
-    await (root.Game.systemsReady || root.GamePlayerState.ready());
+    await Promise.all([
+      root.Game.systemsReady || root.GamePlayerState.ready(),
+      root.GameTournament.initialize()
+    ]);
     const growth = root.GamePlayerGrowth.exportState();
     const stats = root.GamePlayerStats.getSnapshot();
     const effective = {};
@@ -134,6 +133,7 @@
       inventory: root.GameInventory.exportState(),
       growth,
       dialogueHistory: root.GameAI.exportSessions(),
+      tournament: root.GameTournament.exportState(),
       location: currentLocation()
     });
   }
