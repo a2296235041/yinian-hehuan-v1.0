@@ -24,10 +24,11 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         const background = this.add.image(width / 2, height / 2, 'bg-sect');
         background.setScale(Math.max(width / background.width, height / background.height));
         this.add.rectangle(width / 2, height / 2, width, height, 0x07100d, 0.58);
+        const finishDecor = Game.CharacterCreationDecor?.create?.(this, width, height) || (() => {});
         Game.UISkin.addPanel(this, width / 2, height / 2 + 12, 980, 540, 'card', {
             alpha: 0.96
         });
-
+        finishDecor();
         this.add.text(width / 2, 74, '选择你的来路', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '38px',
