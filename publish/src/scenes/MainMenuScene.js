@@ -13,21 +13,17 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         const background = this.add.image(width / 2, height / 2, 'bg-sect');
         background.setScale(Math.max(width / background.width, height / background.height));
         this.add.rectangle(width / 2, height / 2, width, height, 0x07100d, 0.38);
+        Game.MainMenuDecor.addPetals(this, width, height);
         Game.UISkin.addPanel(this, width / 2, height / 2 + 5, 840, 410, 'card', {
             alpha: 0.94
         });
-        this.add.text(width / 2, height / 2 - 130, '一念逍遥，一念合欢', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '50px',
-            color: '#fff8fa',
-            stroke: '#321522',
-            strokeThickness: 5
-        }).setOrigin(0.5);
+        Game.MainMenuDecor.addPanel(this, width, height);
+        Game.MainMenuDecor.addTitle(this, width, height);
         this.add.text(width / 2, height / 2 - 72, '择一段来路，入红尘修行', {
-            fontFamily: '"Noto Serif SC", serif',
+            fontFamily: '"STKaiti", "KaiTi", "Noto Serif SC", serif',
             fontSize: '20px',
-            color: '#f0a8bb'
-        }).setOrigin(0.5);
+            color: '#f3bcc9'
+        }).setOrigin(0.5).setShadow(0, 2, '#180811', 0.8);
         this.createStartButton(width, height);
         this.createLoadSlots(width, height);
         this.add.text(width / 2, height - 34, '开始修行将创建全新进度，读档才会继续旧存档', {
