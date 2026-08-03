@@ -27,35 +27,13 @@
     return root.GameTournamentRoster.getProfile(id, active?.roster);
   }
 
-  function relationBadge(profile, mode, state) {
-    const relation = root.GameTournamentRelations.display(profile, mode, state);
-    if (!relation) return null;
-    const badge = node('span', `tournament-relation is-${relation.type}`);
-    badge.textContent = `${relation.label} ${relation.value} · ${relation.rank}`;
-    return badge;
-  }
-
   function renderRoster(active, mode, state) {
     const profiles = active?.mode === mode
       ? active.roster
       : root.GameTournamentRoster.getCandidates(mode);
-    elements['tournament-roster'].replaceChildren();
-    profiles.forEach((profile) => {
-      const card = node('article', 'tournament-roster-card');
-      const badge = node('span', 'tournament-roster-badge', profile.name === '你'
-        ? '你'
-        : profile.name.slice(0, 1));
-      const copy = node('div', 'tournament-roster-copy');
-      copy.append(
-        node('strong', '', profile.name),
-        node('span', '', `${profile.faction} · ${profile.title}`)
-      );
-      const relation = relationBadge(profile, mode, state);
-      if (relation) copy.append(relation);
-      copy.append(node('small', '', `${profile.physique}｜${profile.personality}`));
-      card.append(badge, copy);
-      elements['tournament-roster'].append(card);
-    });
+    root.GameTournamentParticipantView.renderRoster(
+      elements['tournament-roster'], profiles, mode, state
+    );
   }
 
   function matchLabel(active, match) {
@@ -146,7 +124,7 @@
       : '三回合累计判定';
     renderRoster(sameMode, mode, state);
     renderBracket(sameMode);
-    root.GameTournamentOpponentView.render(
+    root.GameTournamentParticipantView.renderOpponents(
       elements['tournament-opponents'], sameMode, state
     );
     renderHistory(sameMode);

@@ -56,7 +56,7 @@ function textOf(element) {
 }
 
 const source = fs.readFileSync(
-  path.join(__dirname, '../publish/src/ui/TournamentOpponentView.v031.js'),
+  path.join(__dirname, '../publish/src/ui/TournamentParticipantView.v032.js'),
   'utf8'
 );
 const profiles = [{
@@ -87,7 +87,9 @@ vm.runInNewContext(source, { window, document, Set, Object });
 
 const container = new FakeElement('div');
 const active = { id: 'event-1', mode: 'spirit', opponentIds: ['rival'], roster: profiles };
-window.GameTournamentOpponentView.render(container, active, { corruption: { rival: 12 } });
+window.GameTournamentParticipantView.renderOpponents(
+  container, active, { corruption: { rival: 12 } }
+);
 
 assert.equal(container.children.length, 1);
 assert.equal(container.children[0].children[1].hidden, true);
@@ -104,4 +106,16 @@ const expandedText = textOf(container.children[0]);
 
 container.children[0].children[0].click();
 assert.equal(container.children[0].children[1].hidden, true);
-console.log('tournament opponent view test passed');
+
+const roster = new FakeElement('div');
+window.GameTournamentParticipantView.renderRoster(
+  roster, profiles, 'spirit', { corruption: { rival: 12 } }
+);
+assert.equal(roster.children[0].children[1].hidden, true);
+roster.children[0].children[0].click();
+assert.equal(roster.children[0].className.includes('is-expanded'), true);
+assert.equal(roster.children[0].children[1].hidden, false);
+assert.equal(textOf(roster.children[0]).includes('一线霜天'), true);
+roster.children[0].children[0].click();
+assert.equal(roster.children[0].children[1].hidden, true);
+console.log('tournament participant view test passed');

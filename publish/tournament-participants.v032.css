@@ -156,6 +156,93 @@
   user-select: text;
 }
 
+.tournament-roster-card {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(240, 168, 187, 0.12);
+}
+
+.tournament-roster-card.is-expanded {
+  margin: 4px 0 7px;
+  background: rgba(75, 29, 53, 0.32);
+  border: 1px solid rgba(229, 189, 120, 0.34);
+  border-radius: 5px;
+}
+
+.tournament-roster-toggle {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 14px;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 4px;
+  color: #fff8fa;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.tournament-roster-toggle:hover,
+.tournament-roster-toggle:focus-visible {
+  background: rgba(229, 189, 120, 0.07);
+  outline: none;
+}
+
+.tournament-roster-badge {
+  overflow: hidden;
+}
+
+.tournament-roster-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 16%;
+}
+
+.tournament-roster-badge strong {
+  font: 700 17px "Noto Serif SC", serif;
+}
+
+.tournament-roster-chevron {
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid #d8b46e;
+  border-bottom: 2px solid #d8b46e;
+  transform: rotate(45deg) translate(-1px, 1px);
+  transition: transform 140ms ease;
+}
+
+.tournament-roster-card.is-expanded .tournament-roster-chevron {
+  transform: rotate(225deg);
+}
+
+.tournament-roster-card .tournament-opponent-details {
+  padding: 8px 7px 11px;
+  border-top: 1px solid rgba(240, 168, 187, 0.13);
+}
+
+.tournament-roster-card .tournament-opponent-summary {
+  min-height: 0;
+  padding: 0 0 7px;
+}
+
+.tournament-roster-card .tournament-opponent-fields {
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.tournament-roster-card .tournament-opponent-field.is-wide {
+  grid-column: auto;
+}
+
+.tournament-roster-card .tournament-opponent-field {
+  grid-template-columns: 43px minmax(0, 1fr);
+  font-size: 10px;
+}
+
 @media (max-height: 620px) {
   .tournament-opponent-details {
     padding-bottom: 9px;
