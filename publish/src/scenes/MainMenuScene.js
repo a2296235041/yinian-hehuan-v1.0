@@ -13,12 +13,15 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         const background = this.add.image(width / 2, height / 2, 'bg-sect');
         background.setScale(Math.max(width / background.width, height / background.height));
         this.add.rectangle(width / 2, height / 2, width, height, 0x07100d, 0.38);
-        Game.MainMenuDecor.addPetals(this, width, height);
+        try {
+            Game.MainMenuDecor.addPetals(this, width, height);
+        } catch (error) {
+            console.error('主菜单花瓣渲染失败:', error.message, error.stack);
+        }
         Game.UISkin.addPanel(this, width / 2, height / 2 + 5, 840, 410, 'card', {
             alpha: 0.94
         });
-        Game.MainMenuDecor.addPanel(this, width, height);
-        Game.MainMenuDecor.addTitle(this, width, height);
+        this.createMenuDecor(width, height);
         this.add.text(width / 2, height / 2 - 72, '择一段来路，入红尘修行', {
             fontFamily: '"STKaiti", "KaiTi", "Noto Serif SC", serif',
             fontSize: '20px',
@@ -38,6 +41,22 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             message: '正在显示主菜单'
         });
         requestAnimationFrame(() => window.PlatformBridge.ready());
+    }
+
+    createMenuDecor(width, height) {
+        try {
+            Game.MainMenuDecor.addPanel(this, width, height);
+            Game.MainMenuDecor.addTitle(this, width, height);
+        } catch (error) {
+            console.error('主菜单装饰渲染失败:', error.message, error.stack);
+            this.add.text(width / 2, height / 2 - 130, '一念逍遥，一念合欢', {
+                fontFamily: '"Noto Serif SC", serif',
+                fontSize: '50px',
+                color: '#fff8fa',
+                stroke: '#321522',
+                strokeThickness: 5
+            }).setOrigin(0.5);
+        }
     }
 
     createStartButton(width, height) {

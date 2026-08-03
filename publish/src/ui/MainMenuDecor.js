@@ -49,10 +49,8 @@ Game.MainMenuDecor = {
         [-1, 1].forEach((side) => {
             const edgeX = cx + side * 386;
             decor.lineStyle(2, rose, 0.34);
-            decor.beginPath();
-            decor.moveTo(edgeX, top + 62);
-            decor.quadraticBezierTo(cx + side * 348, top + 74, cx + side * 318, top + 111);
-            decor.strokePath();
+            decor.lineBetween(edgeX, top + 62, cx + side * 350, top + 77);
+            decor.lineBetween(cx + side * 350, top + 77, cx + side * 318, top + 111);
             decor.lineStyle(1, gold, 0.4);
             decor.lineBetween(edgeX, top + 348, cx + side * 350, top + 378);
             decor.lineBetween(cx + side * 350, top + 378, cx + side * 305, top + 378);
