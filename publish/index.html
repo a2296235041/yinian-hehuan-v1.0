@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.3.4">
+  <meta name="game-version" content="0.3.5">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.3.4',
-        build: '20260803.9',
-        cacheName: 'yinian-hehuan-v0.3.4-20260803.9',
-        entry: 'main.v034.js'
+        version: '0.3.5',
+        build: '20260803.10',
+        cacheName: 'yinian-hehuan-v0.3.5-20260803.10',
+        entry: 'main.v035.js'
       });
 
       root.GameRelease = release;
@@ -122,12 +122,12 @@
         <div id="traffic-saver-options" class="settings-subgroup" aria-disabled="true">
           <div class="settings-row settings-sub-row">
             <span>
-              <b>修炼 AI 补充</b>
+              <b>修炼与时序 AI 补充</b>
               <small id="traffic-cultivation-state">随主开关启用</small>
             </span>
-            <label class="settings-switch" title="对修炼 AI 补充启用省流">
+            <label class="settings-switch" title="对修炼与时序 AI 补充启用省流">
               <input id="traffic-cultivation-toggle" type="checkbox" checked
-                     aria-label="修炼使用固定文案">
+                     aria-label="修炼与时序使用固定文案">
               <span class="settings-switch-track" aria-hidden="true"></span>
             </label>
           </div>
@@ -338,7 +338,7 @@
   <script defer src="./src/utils/EventBus.js"></script>
   <script defer src="./src/utils/SceneTransition.js"></script>
   <script defer src="./src/ui/TextBoxUtils.js"></script>
-  <script defer src="./src/systems/TimeSystem.js?v=20260729-1"></script>
+  <script defer src="./src/systems/TimeSystem.js?v=20260803-10"></script>
   <script defer src="./src/ui/SceneBackdrop.js"></script>
   <script defer src="./src/ui/UISkin.js?v=20260725-2"></script>
   <script defer src="./src/assets/BuildingAssets.js"></script>
@@ -347,12 +347,12 @@
   <script defer src="./src/assets/PlayerPortraitAssets.v002.js"></script>
   <script defer src="./src/ai/ModelPicker.js"></script>
   <script defer src="./src/ai/CompletionsSafe.v022.js"></script>
-  <script defer src="./src/ai/AIJson.js"></script>
+  <script defer src="./src/ai/AIJson.js?v=20260803-10"></script>
   <script defer src="./src/ai/AITextSanitizer.js"></script>
   <script defer src="./src/ai/ImageWorkflow.js"></script>
   <script defer src="./src/storage/VersionedStorageUtils.js?v=20260802-1"></script>
   <script defer src="./src/storage/VersionedStorage.js?v=20260802-1"></script>
-  <script defer src="./src/settings/TrafficSaver.v023.js"></script>
+  <script defer src="./src/settings/TrafficSaver.v023.js?v=20260803-10"></script>
   <script defer src="./src/settings/TrafficSaverUI.v022.js"></script>
   <script defer src="./src/storage/DialogueHistoryState.v024.js"></script>
   <script defer src="./src/storage/TournamentState.js?v=20260803-5"></script>
@@ -383,7 +383,7 @@
   <script defer src="./src/systems/CheatSystem.v021.js"></script>
   <script defer src="./src/storage/SaveLifecycle.js?v=20260727-1"></script>
   <script defer src="./src/ai/AIModels.v022.js"></script>
-  <script defer src="./src/ai/NarrativeService.v025.js"></script>
+  <script defer src="./src/ai/NarrativeService.v025.js?v=20260803-10"></script>
   <script defer src="./src/ai/BattleNarrator.v001.js"></script>
   <script defer src="./src/ai/ExplorationDialogue.v025.js"></script>
   <script defer src="./src/ai/ModelUI.js?v=20260724-1"></script>
@@ -393,7 +393,7 @@
   <script defer src="./src/ai/AIImageService.v021.js"></script>
   <script defer src="./src/ai/NPCGiftInteraction.js"></script>
   <script defer src="./src/ai/PrivateGroupPrompts.v033.js"></script>
-  <script defer src="./src/ai/PrivateGroupDialogueService.v033.js"></script>
+  <script defer src="./src/ai/PrivateGroupDialogueService.v033.js?v=20260803-10"></script>
   <script defer src="./src/ai/TournamentJudge.js?v=20260803-4"></script>
   <script defer src="./src/ai/AIService.v016.js?v=20260803-8"></script>
   <script defer src="./src/ai/DialoguePanel.v014.js"></script>
@@ -404,7 +404,7 @@
   <script defer src="./src/ui/BreakthroughController.js"></script>
   <script defer src="./src/ui/SaveGameUI.js?v=20260729-1"></script>
   <script defer src="./src/ui/CheatPanel.v021.js"></script>
-  <script defer src="./src/ui/BattleUI.js?v=20260725-2"></script>
+  <script defer src="./src/ui/BattleUI.js?v=20260803-10"></script>
   <script defer src="./src/ui/ExplorationView.js"></script>
   <script defer src="./src/ui/ShopEntry.js?v=20260727-1"></script>
   <script defer src="./src/ui/TournamentParticipantView.v032.js"></script>
@@ -429,9 +429,9 @@
   <script defer src="./src/scenes/InventoryScene.v021.js"></script>
   <script defer src="./src/scenes/ExplorationScene.v023.js"></script>
   <script defer src="./src/scenes/BattleScene.v023.js"></script>
-  <script defer src="./src/scenes/UIScene.js"></script>
+  <script defer src="./src/scenes/UIScene.js?v=20260803-10"></script>
   <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
-  <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js"></script>
-  <script defer src="./main.v034.js"></script>
+  <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js?v=20260803-10"></script>
+  <script defer src="./main.v035.js"></script>
 </body>
 </html>

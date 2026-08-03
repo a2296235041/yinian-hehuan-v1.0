@@ -62,6 +62,20 @@
       };
     }
 
+    function parseJson(rawText) {
+      const source = String(rawText || '').replace(/^\uFEFF/, '').trim();
+      const fenced = source.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+      const candidate = (fenced ? fenced[1] : source).trim();
+      try {
+        return JSON.parse(candidate);
+      } catch (originalError) {
+        const start = candidate.indexOf('{');
+        const end = candidate.lastIndexOf('}');
+        if (start >= 0 && end > start) return JSON.parse(candidate.slice(start, end + 1));
+        throw originalError;
+      }
+    }
+
     async function generate(request = {}) {
       const prompt = [
         String(request.instructions || '').trim(),
@@ -87,7 +101,7 @@
       }
       let parsed;
       try {
-        parsed = normalize(JSON.parse(result.text));
+        parsed = normalize(parseJson(result.text));
       } catch (error) {
         return fallback(request.fallback ?? options.fallback, {
           reason: result.source === 'fallback' ? result.reason : 'invalid_json',

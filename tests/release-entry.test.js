@@ -6,8 +6,8 @@ const path = require('node:path');
 
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
-const version = '0.3.4';
-const build = '20260803.9';
+const version = '0.3.5';
+const build = '20260803.10';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -57,7 +57,7 @@ assert.ok(
   './src/ui/TournamentPanel.js',
   './src/ui/TournamentEntry.js',
   './src/ui/PrivateGroupDialoguePanel.v033.js',
-  './main.v034.js'
+  './main.v035.js'
 ].forEach((entry) => {
   assert.ok(
     html.includes(entry),
@@ -91,6 +91,7 @@ assert.ok(!html.includes('<form id="exploration-command-panel"'));
   './main.v031.js',
   './main.v032.js',
   './main.v033.js',
+  './main.v034.js',
   './src/ui/TournamentOpponentView.v031.js',
   './src/ai/AIImageService.js',
   './src/scenes/CharacterCreationScene.js',

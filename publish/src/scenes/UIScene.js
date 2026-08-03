@@ -77,7 +77,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     createActionButtons() {
         const y = 680;
         this.makeButton(714, y, '下一天', () => this.handleNextDay());
-        this.makeButton(830, y, '下一时辰', () => this.handleNextPeriod());
+        this.makeButton(830, y, '下一时段', () => this.handleNextPeriod());
         this.makeButton(946, y, '修炼', () => this.handleCultivate());
         this.makeButton(1062, y, '出山', () => this.openOverlay('ExplorationScene'));
         this.makeButton(1178, y, '储物袋', () => this.openOverlay('InventoryScene'));
@@ -162,7 +162,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             window.GameAudio.sfx('success');
             const fallback = result.newDay
                 ? `第 ${player.day} 天清晨，交谈、赠礼、修炼与精力均已恢复`
-                : `时辰推进至${result.name}，${result.atmosphere}`;
+                : `时段推进至${result.name}，${result.atmosphere}`;
             this.showLog(`${result.name}时已至，AI 正在续写宗门光景…`);
             this.showLog(await window.GameNarrative.generateDetailed('time_shift', {
                 day: player.day,
@@ -174,8 +174,8 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             }, fallback));
             this.updateUI();
         } catch (error) {
-            console.error('推进时辰失败:', error.code || '', error.message, error.stack);
-            this.rejectAction('时辰推进失败，请稍后重试');
+            console.error('推进时段失败:', error.code || '', error.message, error.stack);
+            this.rejectAction('时段推进失败，请稍后重试');
         } finally {
             this.dayAdvancing = false;
         }

@@ -17,7 +17,7 @@
     battle_end: '战斗结束与奖励结算',
     cultivation: '宗门内修炼',
     new_day: '新一天开始',
-    time_shift: '宗门内时辰推进',
+    time_shift: '宗门内时段推进',
     dual_cultivation: '私人场景中的双修',
     shop_purchase: '在宗门商店购买物品',
     use_item: '在储物袋中使用修炼物品'
@@ -90,7 +90,8 @@
     await root.GameTrafficSaver.whenReady();
     const fixedFeature = root.GameTrafficSaver.featureForNarrative(kind);
     if (fixedFeature && root.GameTrafficSaver.isEnabled(fixedFeature)) {
-      const fixedText = root.GameTrafficSaver.nextText(fixedFeature);
+      const textKey = kind === 'new_day' || kind === 'time_shift' ? kind : fixedFeature;
+      const fixedText = root.GameTrafficSaver.nextText(textKey);
       onUpdate?.(fixedText);
       return fixedText;
     }

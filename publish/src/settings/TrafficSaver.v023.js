@@ -18,6 +18,20 @@
       '功法运转顺畅，你在短暂入定后缓缓收功，周身气机更为凝实。',
       '你循序炼化四周灵气，没有冒进，这次修炼平稳结束。'
     ]),
+    new_day: Object.freeze([
+      '晨钟穿过山间薄雾，新的一日随灵禽清鸣缓缓展开。',
+      '天光越过合欢宗檐角，山门内外重新有了修行与往来的声息。',
+      '一夜灵露凝在花叶之间，你迎着清晨的风开始新一日修行。',
+      '护山阵纹在晨曦中依次亮起，宗门上下也从静谧中醒来。',
+      '远峰云海渐染霞色，新的一天伴着淡淡花香悄然到来。'
+    ]),
+    time_shift: Object.freeze([
+      '山间光影缓缓偏移，宗门景色也随新的时段换了层气韵。',
+      '风穿过花林与长廊，提醒你这一段时光已经悄然过去。',
+      '远处钟声轻响，弟子们的行止随时段更替而渐有变化。',
+      '天色与灵雾一同流转，山门内迎来了新的修行时段。',
+      '檐下光线渐渐改变，四周声息也呈现出不同于方才的节奏。'
+    ]),
     exploration: Object.freeze([
       '你放慢脚步观察四周，确认眼前动静后继续向前探索。',
       '山风掠过衣袖，你收敛气息，将沿途线索逐一记下。',
@@ -42,7 +56,13 @@
     sanitize
   });
   const listeners = new Set();
-  const cursors = { cultivation: 0, exploration: 0, battle: 0 };
+  const cursors = {
+    cultivation: 0,
+    new_day: 0,
+    time_shift: 0,
+    exploration: 0,
+    battle: 0
+  };
   let state = sanitize(DEFAULT_STATE);
   let readyPromise = null;
 
@@ -109,7 +129,9 @@
       return state.enabled;
     },
     featureForNarrative(kind) {
-      if (kind === 'cultivation') return 'cultivation';
+      if (kind === 'cultivation' || kind === 'new_day' || kind === 'time_shift') {
+        return 'cultivation';
+      }
       if (kind === 'battle_action' || kind === 'battle_end') return 'battle';
       if (kind === 'exploration' || kind === 'npc_encounter') return 'exploration';
       return null;

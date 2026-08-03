@@ -38,6 +38,16 @@
     return error?.message || '多人互动暂时不可用，请稍后再试。';
   }
 
+  function fallbackMessage(result) {
+    if (['invalid_json', 'invalid_schema'].includes(result.reason)) {
+      return 'AI 回应格式已自动修正，本轮使用本地回应接续。';
+    }
+    if (['timeout', 'service_unavailable'].includes(result.reason)) {
+      return 'AI 响应超时，本轮已使用本地回应接续。';
+    }
+    return `${errorMessage(result.error)} 本轮已使用本地回应接续。`;
+  }
+
   async function recordResponders(ids) {
     const scene = root.game?.scene?.getScene('GameScene');
     const npcSystem = scene?.npcSystem;
@@ -114,7 +124,7 @@
         content: root.GamePrivateGroupPrompts.format(result.value, session.companions)
       });
       emitRender();
-      status('ready', result.source === 'fallback' ? 'AI 暂不可用，已使用本地回应接续。' : '');
+      status('ready', result.source === 'fallback' ? fallbackMessage(result) : '');
       if (result.source === 'ai') {
         await recordResponders(result.value.responses.map((response) => response.speakerId));
       }

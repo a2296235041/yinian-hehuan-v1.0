@@ -68,7 +68,7 @@
     return snapshot;
   }
 
-  // 下一时辰正常循环；从深夜进入早晨时才自动跨日。
+  // 下一时段正常循环；从深夜进入早晨时才自动跨日。
   async function advance() {
     const player = root.Game?.player;
     if (!player) throw new Error('玩家状态尚未初始化');

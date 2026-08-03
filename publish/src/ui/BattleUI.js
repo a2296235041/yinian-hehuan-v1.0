@@ -1,6 +1,6 @@
 var Game = window.Game || {};
 
-const HUD_ACTION_LABELS = new Set(['下一天', '下一时辰', '修炼', '出山', '储物袋']);
+const HUD_ACTION_LABELS = new Set(['下一天', '下一时段', '修炼', '出山', '储物袋']);
 
 Game.BattleUI = {
     setHudActionsVisible(scene, visible) {
