@@ -86,32 +86,6 @@
     });
   }
 
-  function renderOpponents(active, state) {
-    elements['tournament-opponents'].replaceChildren();
-    (active?.opponentIds || []).forEach((id) => {
-      const profile = profileById(active, id);
-      if (!profile) return;
-      const card = node('article', 'tournament-opponent-card');
-      const portrait = node('div', 'tournament-portrait-placeholder', profile.name.slice(0, 1));
-      portrait.append(node('small', '', profile.portrait_key ? '宗门立绘' : '立绘待绘制'));
-      const details = node('div', 'tournament-opponent-copy');
-      details.append(
-        node('span', 'tournament-faction', profile.faction),
-        node('h2', '', `${profile.name} · ${profile.title}`)
-      );
-      const relation = relationBadge(profile, active.mode, state);
-      if (relation) details.append(relation);
-      details.append(
-        node('p', '', profile.appearance),
-        node('p', '', `性格：${profile.personality}`),
-        node('p', '', `战法：${profile.combat_style}`),
-        node('strong', '', `招牌式：${profile.signature_move}`)
-      );
-      card.append(portrait, details);
-      elements['tournament-opponents'].append(card);
-    });
-  }
-
   function renderHistory(active) {
     elements['tournament-history'].replaceChildren();
     (active?.logs || []).forEach((entry) => {
@@ -172,7 +146,9 @@
       : '三回合累计判定';
     renderRoster(sameMode, mode, state);
     renderBracket(sameMode);
-    renderOpponents(sameMode, state);
+    root.GameTournamentOpponentView.render(
+      elements['tournament-opponents'], sameMode, state
+    );
     renderHistory(sameMode);
     renderControls(active, mode, options.busy === true);
   }

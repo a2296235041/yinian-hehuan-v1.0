@@ -1,0 +1,186 @@
+.tournament-opponents {
+  align-content: start;
+  min-height: 66px;
+}
+
+.tournament-opponent-card {
+  display: block;
+  min-height: 64px;
+  overflow: hidden;
+  background: rgba(38, 19, 31, 0.82);
+  border: 1px solid rgba(229, 189, 120, 0.34);
+  border-radius: 6px;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.tournament-opponent-card.is-expanded {
+  grid-column: 1 / -1;
+  border-color: rgba(229, 189, 120, 0.68);
+  background: rgba(38, 19, 31, 0.94);
+}
+
+.tournament-opponent-toggle {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 18px;
+  width: 100%;
+  min-height: 62px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  color: #fff8fa;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.tournament-opponent-toggle:hover,
+.tournament-opponent-toggle:focus-visible {
+  background: rgba(229, 189, 120, 0.08);
+  outline: none;
+}
+
+.tournament-opponent-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  color: #321522;
+  background: #b88978;
+  border: 1px solid rgba(244, 209, 140, 0.7);
+  border-radius: 50%;
+}
+
+.tournament-opponent-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 16%;
+}
+
+.tournament-opponent-avatar strong {
+  font: 700 22px "Noto Serif SC", serif;
+}
+
+.tournament-opponent-heading {
+  min-width: 0;
+}
+
+.tournament-opponent-heading strong,
+.tournament-opponent-heading span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tournament-opponent-heading strong {
+  font: 17px "Noto Serif SC", serif;
+}
+
+.tournament-opponent-heading span {
+  display: none;
+  margin-top: 2px;
+  color: #caaeb7;
+  font-size: 11px;
+}
+
+.tournament-opponent-card.is-expanded .tournament-opponent-heading span {
+  display: block;
+}
+
+.tournament-opponent-chevron {
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #e5bd78;
+  border-bottom: 2px solid #e5bd78;
+  transform: rotate(45deg) translate(-2px, 2px);
+  transition: transform 140ms ease;
+}
+
+.tournament-opponent-card.is-expanded .tournament-opponent-chevron {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.tournament-opponent-details {
+  padding: 0 14px 13px 72px;
+  border-top: 1px solid rgba(240, 168, 187, 0.13);
+}
+
+.tournament-opponent-details[hidden] {
+  display: none;
+}
+
+.tournament-opponent-summary {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.tournament-opponent-summary .tournament-relation {
+  margin-top: 0;
+}
+
+.tournament-opponent-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 14px;
+}
+
+.tournament-opponent-field {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 7px;
+  margin: 0;
+  color: #d4c8cc;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.tournament-opponent-field.is-wide {
+  grid-column: 1 / -1;
+}
+
+.tournament-opponent-field b {
+  color: #e5bd78;
+  font-weight: 600;
+}
+
+.tournament-opponent-field span {
+  min-width: 0;
+  user-select: text;
+}
+
+@media (max-height: 620px) {
+  .tournament-opponent-details {
+    padding-bottom: 9px;
+  }
+
+  .tournament-opponent-summary {
+    min-height: 29px;
+    padding-block: 4px;
+  }
+
+  .tournament-opponent-fields {
+    gap-block: 3px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tournament-opponent-details {
+    padding-left: 14px;
+  }
+
+  .tournament-opponent-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .tournament-opponent-field.is-wide {
+    grid-column: auto;
+  }
+}
