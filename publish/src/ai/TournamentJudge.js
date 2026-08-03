@@ -43,6 +43,17 @@
     const opponentTotal = payload.scores.opponent + opponentDelta;
     const names = payload.opponents.map((item) => item.name).join('与');
     const winner = finished && playerTotal < opponentTotal ? 'opponent' : 'player';
+    const relationshipChanges = payload.opponents.map((opponent, index) => {
+      const shifted = seed >>> ((index * 5) % 20);
+      const delta = payload.mode === 'spirit' ? (shifted % 8) - 4 : (shifted % 8) - 3;
+      return {
+        opponentId: opponent.id,
+        delta,
+        reason: delta >= 0
+          ? '你的临场表现令她产生了新的兴趣与动摇。'
+          : '你的做法触碰了她的原则，使她重新提高戒心。'
+      };
+    });
     return {
       opponentAction: `${names}循着你的灵力变化强行变招，试图夺回擂台中线。`,
       narration: `你的构想化作真实攻势铺满擂台，${names}在灵光与罡风中连续拆招，护体灵韵被震得明灭不定。`,
@@ -53,6 +64,7 @@
       opponentDelta,
       finished,
       winner: finished ? winner : 'ongoing',
+      relationshipChanges,
       fallback: true,
       fallbackMessage: reason
     };
@@ -66,6 +78,18 @@
     const finished = payload.turn >= 3;
     const playerTotal = payload.scores.player + playerDelta;
     const opponentTotal = payload.scores.opponent + opponentDelta;
+    const relationshipChanges = payload.opponents.map((opponent, index) => {
+      const source = Array.isArray(raw.relationshipChanges) ? raw.relationshipChanges : [];
+      const change = source.find((entry) => entry?.opponentId === opponent.id)
+        || source[index] || {};
+      const min = payload.mode === 'spirit' ? -4 : -3;
+      const max = payload.mode === 'spirit' ? 3 : 4;
+      return {
+        opponentId: opponent.id,
+        delta: number(change.delta, min, max, base.relationshipChanges[index].delta),
+        reason: text(change.reason, 160) || base.relationshipChanges[index].reason
+      };
+    });
     return {
       opponentAction: text(raw.opponentAction, 360) || base.opponentAction,
       narration: text(raw.narration, 1100) || base.narration,
@@ -76,7 +100,8 @@
       playerDelta,
       opponentDelta,
       finished,
-      winner: finished ? (playerTotal >= opponentTotal ? 'player' : 'opponent') : 'ongoing'
+      winner: finished ? (playerTotal >= opponentTotal ? 'player' : 'opponent') : 'ongoing',
+      relationshipChanges
     };
   }
 
@@ -91,11 +116,15 @@
       `当前第${payload.turn}回合，比分：玩家${payload.scores.player}，对手${payload.scores.opponent}。`,
       `玩家资料：${JSON.stringify(payload.player)}。`,
       `对手资料：${JSON.stringify(payload.opponents)}。`,
+      `当前关系数值：${JSON.stringify(payload.currentRelations)}。`,
       `此前全局战况摘要：${payload.battleSummary || '双方刚刚登台，尚未正式交锋。'}`,
       `此前完整战斗记录：\n${payload.battleHistory || '暂无'}`,
       `玩家本回合行动：${payload.move}`,
-      '只返回 JSON，不要代码块。字段：opponentAction、narration、globalCommentary、battleSummary、tacticalHint、playerDelta、opponentDelta。',
+      '只返回 JSON，不要代码块。字段：opponentAction、narration、globalCommentary、battleSummary、tacticalHint、playerDelta、opponentDelta、relationshipChanges。',
       'globalCommentary 需有全局视角和连续性；battleSummary 用于下一回合承接；tacticalHint 给玩家明确的下一步突破口。',
+      payload.mode === 'spirit'
+        ? 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -4 到 3 的整数：魅惑、诱导、动摇道心会增加堕落，尊重、唤醒原则或失败会降低堕落。'
+        : 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -3 到 4 的整数：尊重、精彩表现和手下留情增加好感，羞辱、残酷和欺骗降低好感。',
       'playerDelta 0-45，opponentDelta 0-38。避免色情描写。'
     ].join('\n');
   }
@@ -115,16 +144,20 @@
     return 'AI 暂时不可用，本回合已由离线裁判完成。';
   }
 
-  async function judge(active, move) {
+  async function judge(active, move, tournamentState) {
     const opponents = active.opponentIds
       .map((id) => root.GameTournamentRoster.getProfile(id, active.roster))
       .filter(Boolean);
     const payload = {
       turn: active.turn + 1,
+      mode: active.mode,
       move,
       player: root.GameTournamentRoster.getProfile('player', active.roster),
       opponents,
       scores: active.scores,
+      currentRelations: opponents.map((profile) => (
+        root.GameTournamentRelations.display(profile, active.mode, tournamentState)
+      )),
       battleSummary: active.battleSummary || '',
       battleHistory: active.logs.slice(-14)
         .map((entry) => `${entry.speaker}：${entry.text}`).join('\n').slice(0, 3600)

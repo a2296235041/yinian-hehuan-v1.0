@@ -59,7 +59,7 @@
     render('裁判正在推演招式碰撞，约需 10–30 秒…');
     elements['tournament-action-input'].value = '';
     try {
-      const result = await root.GameTournamentJudge.judge(active, move);
+      const result = await root.GameTournamentJudge.judge(active, move, state());
       await root.GameTournament.recordExchange(move, result);
       root.GameAudio?.sfx?.(result.winner === 'opponent' ? 'deny' : 'success');
       if (generation === openGeneration && !elements['tournament-screen'].hidden) {

@@ -4,7 +4,9 @@
     internal: Object.freeze({ title: '宗门大比', reward: 120 }),
     spirit: Object.freeze({ title: '灵界武道大会', reward: 300 })
   });
-  const fallback = { active: null, cooldowns: { internal: 0, spirit: 0 }, history: [] };
+  const fallback = {
+    active: null, cooldowns: { internal: 0, spirit: 0 }, history: [], corruption: {}
+  };
   let state = fallback;
   let storage = null;
   let readyPromise = null;
@@ -20,7 +22,8 @@
         internal: Math.max(0, Math.floor(Number(cooldowns.internal) || 0)),
         spirit: Math.max(0, Math.floor(Number(cooldowns.spirit) || 0))
       },
-      history: Array.isArray(value?.history) ? value.history.slice(-12) : []
+      history: Array.isArray(value?.history) ? value.history.slice(-12) : [],
+      corruption: root.GameTournamentRelations.sanitize(value?.corruption)
     };
   }
   function queue(action) {
@@ -41,28 +44,17 @@
   function currentMatch(active = state.active) {
     return active?.round?.matches?.find((match) => match.id === active.round.playerMatchId) || null;
   }
-  function prepareBattle(active) {
-    const match = currentMatch(active);
-    active.phase = 'battle';
-    active.turn = 0;
-    active.scores = { player: 0, opponent: 0 };
-    active.battleSummary = '双方登上擂台，阵法封闭四周，第一回合尚未正式交锋。';
-    active.logs = [{
-      speaker: '裁判',
-      text: active.stageIndex === 2
-        ? '问鼎战开始。你需在三人混战中压服另外两位天骄。'
-        : '双方登台，护山阵法已开启。请施展你的第一招。'
-    }];
-    active.opponentIds = (match?.participants || []).filter((id) => id !== 'player');
-  }
   function initialize() {
     if (readyPromise) return readyPromise;
     storage = root.GamefyRecipes.createVersionedStorage({
       namespace: 'hehuan:',
       key: 'tournament-progress',
-      version: 1,
+      version: 2,
       fallback,
-      migrations: { 0: (value) => value || fallback },
+      migrations: {
+        0: (value) => value || fallback,
+        1: (value) => ({ ...(value || fallback), corruption: value?.corruption || {} })
+      },
       sanitize,
       maxBytes: 256 * 1024
     });
@@ -104,7 +96,7 @@
         playerWon: false,
         rewardClaimed: false
       };
-      prepareBattle(state.active);
+      root.GameTournamentBattleState.prepare(state.active, currentMatch(state.active));
       return persist();
     });
   }
@@ -117,17 +109,9 @@
       return queue(async () => {
         const active = state.active;
         if (!active || active.phase !== 'battle') throw new Error('当前没有可进行的赛事对局');
-        active.turn += 1;
-        active.scores.player += Math.max(0, Math.floor(Number(result.playerDelta) || 0));
-        active.scores.opponent += Math.max(0, Math.floor(Number(result.opponentDelta) || 0));
-        active.logs.push({ speaker: '你', text: String(move).slice(0, 500) });
-        active.logs.push({ speaker: '对手', text: String(result.opponentAction || '').slice(0, 300) });
-        active.logs.push({ speaker: '战局', text: String(result.narration || '').slice(0, 900) });
-        active.logs.push({ speaker: '全局战报', text: String(
-          result.globalCommentary || result.commentary || ''
-        ).slice(0, 900) });
-        active.logs.push({ speaker: '破局提示', text: String(result.tacticalHint || '').slice(0, 240) });
-        active.battleSummary = String(result.battleSummary || active.battleSummary).slice(0, 600);
+        root.GameTournamentBattleState.applyExchange(active, move, result);
+        const relationLogs = await root.GameTournamentRelations.apply(state, active, result);
+        active.logs.push(...relationLogs);
         if (result.finished) {
           const match = currentMatch(active);
           const winnerId = result.winner === 'player'
@@ -164,7 +148,7 @@
           active.pendingEntrants, active.stageIndex, active.roster
         );
         delete active.pendingEntrants;
-        prepareBattle(active);
+        root.GameTournamentBattleState.prepare(active, currentMatch(active));
         return persist();
       });
     },

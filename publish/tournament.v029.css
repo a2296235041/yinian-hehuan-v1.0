@@ -155,6 +155,25 @@
   font-size: 12px;
 }
 
+.tournament-relation {
+  display: inline-flex !important;
+  width: fit-content;
+  margin-top: 4px;
+  padding: 2px 7px;
+  color: #f4e8ed !important;
+  font-size: 11px !important;
+  line-height: 1.4;
+  background: rgba(87, 38, 61, 0.76);
+  border: 1px solid rgba(240, 168, 187, 0.36);
+  border-radius: 4px;
+}
+
+.tournament-relation.is-corruption {
+  color: #e4f1e9 !important;
+  background: rgba(31, 72, 59, 0.76);
+  border-color: rgba(121, 185, 157, 0.48);
+}
+
 .tournament-roster-copy small {
   margin-top: 3px;
   overflow: hidden;
@@ -331,6 +350,17 @@
 
 .tournament-log.is-hint strong {
   color: #9fd4bb;
+}
+
+.tournament-log.is-relation {
+  padding: 7px 10px;
+  color: #eadce2;
+  background: rgba(79, 44, 66, 0.48);
+  border-left: 3px solid #d989a5;
+}
+
+.tournament-log.is-relation strong {
+  color: #f0a8bb;
 }
 
 .tournament-controls {

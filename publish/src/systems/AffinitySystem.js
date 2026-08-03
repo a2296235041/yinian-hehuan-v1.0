@@ -1,9 +1,6 @@
 (function installAffinitySystem(root) {
   'use strict';
-
-  const MAX_AFFINITY = 100;
-  const DIALOGUE_LIMIT = 5;
-  const GIFT_LIMIT = 1;
+  const MAX_AFFINITY = 100, DIALOGUE_LIMIT = 5, GIFT_LIMIT = 1;
   const DEFAULT_GIFT_GAIN = 3;
   const initialAffinity = new Map();
   let state = { day: 1, records: {} };
@@ -24,11 +21,9 @@
     key: 'affection',
     version: 1,
     fallback: { day: 1, records: {} },
-    migrations: {
-      0(value) {
-        return value && typeof value === 'object' ? value : { day: 1, records: {} };
-      }
-    },
+    migrations: { 0: (value) => (
+      value && typeof value === 'object' ? value : { day: 1, records: {} }
+    ) },
     sanitize: sanitizeState
   });
   function ensureRecord(id) {
@@ -124,7 +119,6 @@
       return { changed: true, gain: appliedGain, durable, snapshot: getSnapshot(id) };
     });
   }
-  // 礼物的好感收益由物品配置决定，但每天一次的限制仍由本系统统一校验。
   function giveGift(id, gain = DEFAULT_GIFT_GAIN) {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
@@ -146,18 +140,22 @@
       return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
     });
   }
-  // 探险偶遇属于额外奖励，不占用每天 5 次交谈或 1 次赠礼额度。
-  function addBonus(id, gain, source = 'exploration') {
+  function adjust(id, delta, source = 'event') {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
-      const affinityGain = clamp(gain, 1, 10);
       const record = ensureRecord(id);
-      record.affinity = clamp(record.affinity + affinityGain, -100, MAX_AFFINITY);
+      const requested = clamp(Math.trunc(Number(delta) || 0), -10, 10);
+      const before = record.affinity;
+      record.affinity = clamp(before + requested, -100, MAX_AFFINITY);
+      const applied = record.affinity - before;
+      if (!applied) return { changed: false, delta: 0, snapshot: getSnapshot(id) };
       const durable = await persist(false);
-      emitChange(id, affinityGain, source, durable);
-      return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
+      emitChange(id, applied, source, durable);
+      return { changed: true, gain: applied, delta: applied, durable, snapshot: getSnapshot(id) };
     });
   }
+  function addBonus(id, gain, source = 'exploration') {
+    return adjust(id, clamp(gain, 1, 10), source); }
   function advanceDay() {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
@@ -188,6 +186,7 @@
     getSnapshot,
     recordDialogue,
     giveGift,
+    adjust,
     addBonus,
     advanceDay,
     exportState,

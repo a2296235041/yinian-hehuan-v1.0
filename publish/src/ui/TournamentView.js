@@ -27,7 +27,15 @@
     return root.GameTournamentRoster.getProfile(id, active?.roster);
   }
 
-  function renderRoster(active, mode) {
+  function relationBadge(profile, mode, state) {
+    const relation = root.GameTournamentRelations.display(profile, mode, state);
+    if (!relation) return null;
+    const badge = node('span', `tournament-relation is-${relation.type}`);
+    badge.textContent = `${relation.label} ${relation.value} · ${relation.rank}`;
+    return badge;
+  }
+
+  function renderRoster(active, mode, state) {
     const profiles = active?.mode === mode
       ? active.roster
       : root.GameTournamentRoster.getCandidates(mode);
@@ -40,9 +48,11 @@
       const copy = node('div', 'tournament-roster-copy');
       copy.append(
         node('strong', '', profile.name),
-        node('span', '', `${profile.faction} · ${profile.title}`),
-        node('small', '', `${profile.physique}｜${profile.personality}`)
+        node('span', '', `${profile.faction} · ${profile.title}`)
       );
+      const relation = relationBadge(profile, mode, state);
+      if (relation) copy.append(relation);
+      copy.append(node('small', '', `${profile.physique}｜${profile.personality}`));
       card.append(badge, copy);
       elements['tournament-roster'].append(card);
     });
@@ -76,7 +86,7 @@
     });
   }
 
-  function renderOpponents(active) {
+  function renderOpponents(active, state) {
     elements['tournament-opponents'].replaceChildren();
     (active?.opponentIds || []).forEach((id) => {
       const profile = profileById(active, id);
@@ -87,7 +97,11 @@
       const details = node('div', 'tournament-opponent-copy');
       details.append(
         node('span', 'tournament-faction', profile.faction),
-        node('h2', '', `${profile.name} · ${profile.title}`),
+        node('h2', '', `${profile.name} · ${profile.title}`)
+      );
+      const relation = relationBadge(profile, active.mode, state);
+      if (relation) details.append(relation);
+      details.append(
         node('p', '', profile.appearance),
         node('p', '', `性格：${profile.personality}`),
         node('p', '', `战法：${profile.combat_style}`),
@@ -103,7 +117,9 @@
     (active?.logs || []).forEach((entry) => {
       const special = entry.speaker === '全局战报'
         ? ' is-global'
-        : (entry.speaker === '破局提示' ? ' is-hint' : '');
+        : (entry.speaker === '破局提示'
+          ? ' is-hint'
+          : (entry.speaker === '关系变化' ? ' is-relation' : ''));
       const row = node('p', `tournament-log${special}`);
       row.append(node('strong', '', entry.speaker), document.createTextNode(entry.text));
       elements['tournament-history'].append(row);
@@ -154,9 +170,9 @@
     elements['tournament-score'].textContent = sameMode
       ? `你 ${sameMode.scores?.player || 0} : ${sameMode.scores?.opponent || 0} 对手`
       : '三回合累计判定';
-    renderRoster(sameMode, mode);
+    renderRoster(sameMode, mode, state);
     renderBracket(sameMode);
-    renderOpponents(sameMode);
+    renderOpponents(sameMode, state);
     renderHistory(sameMode);
     renderControls(active, mode, options.busy === true);
   }

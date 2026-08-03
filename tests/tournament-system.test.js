@@ -11,6 +11,7 @@ function source(file) {
 
 let saved = null;
 let stones = 0;
+const affinities = {};
 const roster = Array.from({ length: 12 }, (_, index) => ({
   id: index === 0 ? 'player' : `npc-${index}`,
   name: index === 0 ? '你' : `NPC ${index}`,
@@ -27,7 +28,12 @@ const window = {
     createVersionedStorage() {
       return {
         async load() {
-          return saved || { active: null, cooldowns: { internal: 0, spirit: 0 }, history: [] };
+          return saved || {
+            active: null,
+            cooldowns: { internal: 0, spirit: 0 },
+            history: [],
+            corruption: {}
+          };
         },
         async save(value) {
           saved = JSON.parse(JSON.stringify(value));
@@ -47,12 +53,20 @@ const window = {
       return { changed: true, balance: stones };
     }
   },
+  GameAffinity: {
+    async adjust(id, delta) {
+      affinities[id] = (affinities[id] || 0) + delta;
+      return { changed: delta !== 0, delta };
+    }
+  },
   console,
   Math,
   Date
 };
 const context = { window, console, Math, Date };
 vm.runInNewContext(source('publish/src/systems/TournamentRules.js'), context);
+vm.runInNewContext(source('publish/src/systems/TournamentBattleState.js'), context);
+vm.runInNewContext(source('publish/src/systems/TournamentRelations.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
@@ -62,6 +76,7 @@ async function winRound() {
     globalCommentary: '全局来看，你开始控制战斗节奏。',
     battleSummary: '第一回合后，你暂时占优。',
     tacticalHint: '继续压制对手。',
+    relationshipChanges: [{ opponentId: 'npc-1', delta: 3, reason: '欣赏你的招式。' }],
     playerDelta: 30,
     opponentDelta: 10,
     finished: false,
@@ -73,6 +88,7 @@ async function winRound() {
     globalCommentary: '此前优势在第二回合继续扩大。',
     battleSummary: '第二回合后，对手转入守势。',
     tacticalHint: '抓住对手换气间隙。',
+    relationshipChanges: [{ opponentId: 'npc-1', delta: -2, reason: '不满你的追击。' }],
     playerDelta: 30,
     opponentDelta: 10,
     finished: false,
@@ -84,6 +100,7 @@ async function winRound() {
     globalCommentary: '整场比赛的连续压制最终形成胜势。',
     battleSummary: '三回合结束，你取得胜利。',
     tacticalHint: '等待裁判宣布结果。',
+    relationshipChanges: [{ opponentId: 'npc-1', delta: 2, reason: '认可你的胜利。' }],
     playerDelta: 30,
     opponentDelta: 10,
     finished: true,
@@ -100,6 +117,10 @@ async function winRound() {
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
   assert.equal(
     window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '全局战报'),
+    true
+  );
+  assert.equal(
+    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '关系变化'),
     true
   );
   await window.GameTournament.advanceRound();
