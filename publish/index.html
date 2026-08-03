@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.2.7">
+  <meta name="game-version" content="0.2.8">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.2.7',
-        build: '20260803.2',
-        cacheName: 'yinian-hehuan-v0.2.7-20260803.2',
-        entry: 'main.v027.js'
+        version: '0.2.8',
+        build: '20260803.3',
+        cacheName: 'yinian-hehuan-v0.2.8-20260803.3',
+        entry: 'main.v028.js'
       });
 
       root.GameRelease = release;
@@ -82,7 +82,7 @@
   <link rel="stylesheet" href="./theme.css">
   <link rel="stylesheet" href="./layout.v015.css">
   <link rel="stylesheet" href="./cheat-panel.v021.css">
-  <link rel="stylesheet" href="./tournament.v027.css">
+  <link rel="stylesheet" href="./tournament.v028.css">
 </head>
 <body>
   <main id="game-shell">
@@ -352,7 +352,7 @@
   <script defer src="./src/systems/CombatSystem.js"></script>
   <script defer src="./src/systems/ExplorationSystem.js"></script>
   <script defer src="./src/systems/TournamentRules.js"></script>
-  <script defer src="./src/systems/TournamentSystem.js"></script>
+  <script defer src="./src/systems/TournamentSystem.js?v=20260803-3"></script>
   <script defer src="./src/systems/PlayerStateSystem.js?v=20260727-1"></script>
   <script defer src="./src/systems/SaveGameSystem.v021.js?v=20260803-2"></script>
   <script defer src="./src/systems/AutoSaveSystem.js?v=20260802-1"></script>
@@ -368,7 +368,7 @@
   <script defer src="./src/ai/CharacterImagePrompts.v019.js"></script>
   <script defer src="./src/ai/AIImageService.v021.js"></script>
   <script defer src="./src/ai/NPCGiftInteraction.js"></script>
-  <script defer src="./src/ai/TournamentJudge.js"></script>
+  <script defer src="./src/ai/TournamentJudge.js?v=20260803-3"></script>
   <script defer src="./src/ai/AIService.v016.js"></script>
   <script defer src="./src/ai/DialoguePanel.v014.js"></script>
   <script defer src="./src/ui/ExplorationPanel.v014.js"></script>
@@ -381,8 +381,8 @@
   <script defer src="./src/ui/BattleUI.js?v=20260725-2"></script>
   <script defer src="./src/ui/ExplorationView.js"></script>
   <script defer src="./src/ui/ShopEntry.js?v=20260727-1"></script>
-  <script defer src="./src/ui/TournamentView.js"></script>
-  <script defer src="./src/ui/TournamentPanel.js"></script>
+  <script defer src="./src/ui/TournamentView.js?v=20260803-3"></script>
+  <script defer src="./src/ui/TournamentPanel.js?v=20260803-3"></script>
   <script defer src="./src/ui/TournamentEntry.js"></script>
   <script defer src="./src/ui/NpcCardRenderer.js"></script>
   <script defer src="./src/ui/MainMenuDecor.js?v=20260803-2"></script>
@@ -404,6 +404,6 @@
   <script defer src="./src/scenes/UIScene.js"></script>
   <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
   <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js"></script>
-  <script defer src="./main.v027.js"></script>
+  <script defer src="./main.v028.js"></script>
 </body>
 </html>

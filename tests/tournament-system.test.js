@@ -59,7 +59,9 @@ async function winRound() {
   await window.GameTournament.recordExchange('第一招', {
     opponentAction: '对手应招',
     narration: '第一回合',
-    commentary: '你占上风',
+    globalCommentary: '全局来看，你开始控制战斗节奏。',
+    battleSummary: '第一回合后，你暂时占优。',
+    tacticalHint: '继续压制对手。',
     playerDelta: 30,
     opponentDelta: 10,
     finished: false,
@@ -68,7 +70,9 @@ async function winRound() {
   await window.GameTournament.recordExchange('第二招', {
     opponentAction: '对手变招',
     narration: '第二回合',
-    commentary: '优势扩大',
+    globalCommentary: '此前优势在第二回合继续扩大。',
+    battleSummary: '第二回合后，对手转入守势。',
+    tacticalHint: '抓住对手换气间隙。',
     playerDelta: 30,
     opponentDelta: 10,
     finished: false,
@@ -77,7 +81,9 @@ async function winRound() {
   await window.GameTournament.recordExchange('第三招', {
     opponentAction: '对手绝招',
     narration: '第三回合',
-    commentary: '裁判定胜',
+    globalCommentary: '整场比赛的连续压制最终形成胜势。',
+    battleSummary: '三回合结束，你取得胜利。',
+    tacticalHint: '等待裁判宣布结果。',
     playerDelta: 30,
     opponentDelta: 10,
     finished: true,
@@ -92,6 +98,10 @@ async function winRound() {
 
   await winRound();
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
+  assert.equal(
+    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '全局战报'),
+    true
+  );
   await window.GameTournament.advanceRound();
   assert.equal(window.GameTournament.getState().active.round.matches.length, 3);
 

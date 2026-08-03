@@ -101,7 +101,10 @@
   function renderHistory(active) {
     elements['tournament-history'].replaceChildren();
     (active?.logs || []).forEach((entry) => {
-      const row = node('p', 'tournament-log');
+      const special = entry.speaker === '全局战报'
+        ? ' is-global'
+        : (entry.speaker === '破局提示' ? ' is-hint' : '');
+      const row = node('p', `tournament-log${special}`);
       row.append(node('strong', '', entry.speaker), document.createTextNode(entry.text));
       elements['tournament-history'].append(row);
     });

@@ -311,6 +311,28 @@
   color: #e8b4c3;
 }
 
+.tournament-log.is-global {
+  padding: 9px 11px;
+  color: #f2e7da;
+  background: rgba(75, 29, 53, 0.55);
+  border-left: 3px solid #e5bd78;
+}
+
+.tournament-log.is-global strong {
+  color: #f4d18c;
+}
+
+.tournament-log.is-hint {
+  padding: 7px 10px;
+  color: #d7eadf;
+  background: rgba(32, 72, 60, 0.45);
+  border-left: 3px solid #79b99d;
+}
+
+.tournament-log.is-hint strong {
+  color: #9fd4bb;
+}
+
 .tournament-controls {
   display: flex;
   min-height: 66px;

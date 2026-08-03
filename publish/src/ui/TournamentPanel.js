@@ -63,7 +63,7 @@
       await root.GameTournament.recordExchange(move, result);
       root.GameAudio?.sfx?.(result.winner === 'opponent' ? 'deny' : 'success');
       if (generation === openGeneration && !elements['tournament-screen'].hidden) {
-        finalStatus = result.fallback ? 'AI 暂时不可用，本回合已由本地裁判完成判定。' : '';
+        finalStatus = result.fallback ? result.fallbackMessage : 'AI 已延伸并更新整场战局。';
       }
     } catch (error) {
       if (generation === openGeneration) {
