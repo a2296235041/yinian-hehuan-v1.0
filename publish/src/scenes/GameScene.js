@@ -65,6 +65,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.clearView();
         this.currentBuilding = null;
         this.backdrop = Game.SceneBackdrop.create(this, 'bg-sect-map', 0.08);
+        Game.SectMapDecor?.add?.(this, Game.Data.buildings);
         this.addViewObject(this.add.text(640, 38, '合欢宗 · 山门总览', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '32px',
