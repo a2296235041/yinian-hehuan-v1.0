@@ -35,8 +35,8 @@
     active.scores.player += Math.max(0, Math.floor(Number(result.playerDelta) || 0));
     active.scores.opponent += Math.max(0, Math.floor(Number(result.opponentDelta) || 0));
     const speaker = responseSpeaker(active);
-    const response = stripLeadingLabel(result.response || result.summary, speaker, 240);
-    const verdict = stripLeadingLabel(result.verdict, '裁判判决', 140);
+    const response = stripLeadingLabel(result.response || result.summary, speaker, 320);
+    const verdict = stripLeadingLabel(result.verdict, '裁判判决', 160);
     active.logs.push({ speaker: '你', text: String(move).slice(0, 500) });
     active.logs.push({
       speaker,
@@ -47,7 +47,7 @@
       speaker: '裁判判决',
       text: verdict
     });
-    active.battleSummary = response || String(active.battleSummary).slice(0, 240);
+    active.battleSummary = response || String(active.battleSummary).slice(0, 320);
   }
 
   function applyDecision(active, winnerId) {

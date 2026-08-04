@@ -1,11 +1,23 @@
 (function installTournamentResponseText(root) {
   'use strict';
 
-  const MAX_LENGTH = 240;
+  const MAX_LENGTH = 320;
   const MIN_LENGTH = 150;
 
+  function compact(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ');
+  }
+
   function clean(value) {
-    return String(value || '').trim().replace(/\s+/g, ' ').slice(0, MAX_LENGTH);
+    const source = compact(value);
+    if (source.length <= MAX_LENGTH) return source;
+    for (let index = MAX_LENGTH - 1; index >= MIN_LENGTH; index -= 1) {
+      if (!/[。！？!?]/.test(source[index])) continue;
+      let end = index + 1;
+      while (/[”’」』】）)]/.test(source[end] || '')) end += 1;
+      return source.slice(0, end);
+    }
+    return `${source.slice(0, MAX_LENGTH - 1)}…`;
   }
 
   function opponentNames(payload) {
@@ -36,7 +48,7 @@
   }
 
   function ensure(value, payload, outcome) {
-    let response = clean(value);
+    let response = compact(value);
     const additions = continuation(payload, outcome);
     for (let index = 0; response.length < MIN_LENGTH && index < additions.length; index += 1) {
       response += additions[index];

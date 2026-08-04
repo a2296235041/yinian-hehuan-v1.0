@@ -110,7 +110,7 @@ const active = {
   assert.equal(result.response.includes('顾清罗'), true);
   assert.equal(result.response.includes('：“'), true);
   assert.ok(result.response.length >= 150);
-  assert.ok(result.response.length <= 240);
+  assert.ok(result.response.length <= 320);
   assert.equal(result.summary, result.response);
   assert.equal(result.source, 'ai-json');
   assert.equal(result.fallback, false);
@@ -136,7 +136,9 @@ const active = {
   assert.equal(captured.messages[0].content.includes('不得替玩家角色新增'), true);
   assert.equal(captured.messages[0].content.includes('不要以对手姓名开头'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
-  assert.equal(captured.messages[0].content.includes('至少进行五回合'), true);
+  assert.equal(captured.messages[0].content.includes('至少进行十回合'), true);
+  assert.equal(captured.messages[0].content.includes('最多 320 字'), true);
+  assert.equal(captured.messages[0].content.includes('主动认输、投降、服输或求饶'), true);
   assert.equal(captured.messages[0].content.includes('matchResult 固定填写 continue'), true);
   assert.equal(captured.messages[0].content.includes('非零整数'), true);
   assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
@@ -193,7 +195,7 @@ const active = {
     active, '我完成贴身成人动作并持续控制她。', tournamentState
   );
   assert.ok(adultAi.playerDelta > adultAi.opponentDelta);
-  assert.equal(adultAi.verdict.includes('本回合判你占优'), true);
+  assert.equal(adultAi.verdict.includes('本回合行动判定有效'), true);
 
   const plainAiText = '她借着交错的灵光向前踏出半步，剑锋没有立刻落下，而是在你肩侧停住。短暂的沉默后，她收紧手指，低声追问你是否还要继续，同时顺着当前距离调整呼吸与站位。看台上传来几声压低的议论，她却始终没有移开视线，只把尚未结束的回应留在你们之间。';
   window.dzmm.completions = async (_config, callback) => {
@@ -250,7 +252,7 @@ const active = {
   assert.equal(fallback.fallback, true);
   assert.equal(fallback.fallbackMessage.includes('网络连接异常'), true);
   assert.ok(fallback.response.length >= 150);
-  assert.ok(fallback.response.length <= 240);
+  assert.ok(fallback.response.length <= 320);
   assert.equal(fallback.response.includes('：“'), true);
   assert.equal(fallback.verdict.includes('裁判判决'), true);
   assert.equal(fallback.relationshipChanges[0].delta >= -5, true);
@@ -287,6 +289,7 @@ const active = {
   assert.equal(directed.finished, false);
   assert.equal(directed.winner, 'ongoing');
   assert.ok(directed.playerDelta > directed.opponentDelta);
+  assert.equal(directed.verdict.includes('本回合行动判定有效'), true);
   assert.equal(directed.response.includes('完整构想'), false);
 
   const surrendered = await window.GameTournamentJudge.judge(
@@ -297,7 +300,24 @@ const active = {
   assert.equal(surrendered.finished, false);
   assert.equal(surrendered.winner, 'ongoing');
   assert.ok(surrendered.opponentDelta > surrendered.playerDelta);
+  assert.equal(surrendered.verdict.includes('主动认输或求饶'), true);
   assert.equal(surrendered.response.includes('依照你的安排'), false);
+
+  const defeatedButValid = await window.GameTournamentJudge.judge(
+    active,
+    '我被她击倒在擂台边缘，但我没有认输，也没有求饶。',
+    tournamentState
+  );
+  assert.ok(defeatedButValid.playerDelta > defeatedButValid.opponentDelta);
+  assert.equal(defeatedButValid.verdict.includes('本回合行动判定有效'), true);
+
+  const longResponse = `${'甲'.repeat(170)}。${'乙'.repeat(200)}。`;
+  const trimmed = window.GameTournamentResponseText.ensure(longResponse, {
+    opponents: [{ name: '顾清罗' }]
+  }, { finished: false, winner: 'ongoing' });
+  assert.ok(trimmed.length >= 150);
+  assert.ok(trimmed.length <= 320);
+  assert.equal(trimmed.endsWith('。'), true);
   console.log('tournament judge test passed');
 })().catch((error) => {
   console.error(error);

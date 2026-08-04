@@ -319,9 +319,11 @@
 
 .tournament-log {
   margin: 0 0 8px;
+  overflow-wrap: anywhere;
   color: #ddd3d6;
   font-size: 13px;
   line-height: 1.58;
+  white-space: pre-wrap;
   user-select: text;
 }
 
