@@ -77,7 +77,13 @@ const window = {
   },
   GameTournamentRelations: {
     display() {
-      return { type: 'corruption', label: '堕落值', value: 12, rank: '清明' };
+      return {
+        type: 'corruption',
+        label: '堕落值',
+        value: 12,
+        rank: '清正自持',
+        full: false
+      };
     }
   },
   GameAudio: { sfx() {} }
@@ -101,7 +107,7 @@ assert.equal(container.children[0].className.includes('is-expanded'), true);
 assert.equal(container.children[0].children[1].hidden, false);
 assert.equal(container.children[0].children[0].attributes['aria-expanded'], 'true');
 const expandedText = textOf(container.children[0]);
-['高挑纤长', '墨发齐腰', '自律严谨', '寒气封锁', '一线霜天', '堕落值 12']
+['高挑纤长', '墨发齐腰', '自律严谨', '寒气封锁', '一线霜天', '堕落值 12', '清正自持']
   .forEach((value) => assert.equal(expandedText.includes(value), true));
 
 container.children[0].children[0].click();

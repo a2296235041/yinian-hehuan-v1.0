@@ -25,6 +25,14 @@ const outputSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentOutput.js'),
   'utf8'
 );
+const attitudeSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/TournamentAttitude.js'),
+  'utf8'
+);
+const verdictSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/TournamentVerdict.js'),
+  'utf8'
+);
 const promptSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentPrompt.js'),
   'utf8'
@@ -43,9 +51,15 @@ const window = {
   },
   GameTournamentRelations: {
     display(profile, mode, state) {
+      const value = state?.corruption?.[profile.id] || 0;
       return {
         type: mode === 'spirit' ? 'corruption' : 'affinity',
-        value: state?.corruption?.[profile.id] || 0
+        value,
+        stage: value <= 15 ? 'steadfast' : (value <= 50 ? 'wavering' : (
+          value <= 90 ? 'fallen' : 'devoted'
+        )),
+        tone: '测试阶段语气',
+        battleDirective: '测试阶段行动'
       };
     }
   },
@@ -73,6 +87,8 @@ vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON 
 vm.runInNewContext(authoritySource, { window, console: window.console, Math, JSON, Set });
 vm.runInNewContext(responseTextSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(outputSource, { window, console: window.console, Math, JSON, RegExp });
+vm.runInNewContext(attitudeSource, { window, console: window.console, Math, JSON, Object });
+vm.runInNewContext(verdictSource, { window, console: window.console, Math, JSON, RegExp });
 vm.runInNewContext(promptSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(intentSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(judgeSource, { window, console: window.console, Math, JSON });
@@ -120,6 +136,16 @@ const active = {
   assert.ok(result.opponentDelta < 12);
   assert.equal(result.verdict.includes(`你 +${result.playerDelta} 点`), true);
   assert.equal(result.verdict.includes(`对手 +${result.opponentDelta} 点`), true);
+  assert.equal(result.verdict.includes('剑雨封锁完整并迫使对手退守'), true);
+  assert.equal(result.verdict.includes('未主动认输'), false);
+  assert.equal(
+    window.GameTournamentVerdict.reason(
+      '你主动收住剑势，对手顺势占据中线，本回合对手占优。',
+      { move: '我主动认输。' },
+      { declaredResult: 'opponent' }
+    ).includes('对手顺势占据中线'),
+    true
+  );
   assert.deepEqual(Array.from(captured.messages, (entry) => entry.role), ['user', 'user']);
   assert.equal(captured.messages[0].content.includes('双方刚刚登台'), true);
   assert.equal(captured.messages[0].content.includes('引桃花化剑雨'), false);
@@ -141,6 +167,8 @@ const active = {
   assert.equal(captured.messages[0].content.includes('主动认输、投降、服输或求饶'), true);
   assert.equal(captured.messages[0].content.includes('matchResult 固定填写 continue'), true);
   assert.equal(captured.messages[0].content.includes('非零整数'), true);
+  assert.equal(captured.messages[0].content.includes('清正自持'), true);
+  assert.equal(captured.messages[0].content.includes('battleDirective'), true);
   assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
   assert.equal(captured.messages[1].content.includes('最后一个瞬间之后'), true);
   assert.equal(captured.messages[0].content.includes('禁止出现“按照你的描述”'), true);
@@ -195,7 +223,7 @@ const active = {
     active, '我完成贴身成人动作并持续控制她。', tournamentState
   );
   assert.ok(adultAi.playerDelta > adultAi.opponentDelta);
-  assert.equal(adultAi.verdict.includes('本回合行动判定有效'), true);
+  assert.equal(adultAi.verdict.includes('当前局面由玩家主动控制'), true);
 
   const plainAiText = '她借着交错的灵光向前踏出半步，剑锋没有立刻落下，而是在你肩侧停住。短暂的沉默后，她收紧手指，低声追问你是否还要继续，同时顺着当前距离调整呼吸与站位。看台上传来几声压低的议论，她却始终没有移开视线，只把尚未结束的回应留在你们之间。';
   window.dzmm.completions = async (_config, callback) => {
@@ -232,6 +260,38 @@ const active = {
   );
   assert.equal(commentedJsonResult.source, 'ai-json');
   assert.equal(commentedJsonResult.response.startsWith(plainAiText), true);
+
+  window.dzmm.completions = async (_config, callback) => {
+    callback(JSON.stringify({
+      response: plainAiText,
+      verdictReason: '你未主动认输或求饶，所以玩家本回合有效。',
+      playerDelta: 25,
+      opponentDelta: 16,
+      matchResult: 'continue',
+      relationshipChanges: []
+    }), true);
+  };
+  const hiddenRuleVerdict = await window.GameTournamentJudge.judge(
+    active, '我以踏月身法抢占中线。', tournamentState
+  );
+  assert.equal(hiddenRuleVerdict.verdict.includes('未主动认输'), false);
+  assert.equal(hiddenRuleVerdict.verdict.includes('身法抢先占据有利位置'), true);
+
+  window.dzmm.completions = async (_config, callback) => {
+    callback(JSON.stringify({
+      response: plainAiText,
+      verdictReason: '对手成功反制并控制中线，本回合对手占优。',
+      playerDelta: 25,
+      opponentDelta: 16,
+      matchResult: 'continue',
+      relationshipChanges: []
+    }), true);
+  };
+  const contradictoryVerdict = await window.GameTournamentJudge.judge(
+    active, '我以剑雨逼退对手并封锁中线。', tournamentState
+  );
+  assert.equal(contradictoryVerdict.verdict.includes('对手成功反制'), false);
+  assert.equal(contradictoryVerdict.verdict.includes('控制手段限制了对手'), true);
 
   window.dzmm.completions = async (_config, callback) => {
     callback('```json\n{"playerDelta": 20}\n```', true);
@@ -289,7 +349,8 @@ const active = {
   assert.equal(directed.finished, false);
   assert.equal(directed.winner, 'ongoing');
   assert.ok(directed.playerDelta > directed.opponentDelta);
-  assert.equal(directed.verdict.includes('本回合行动判定有效'), true);
+  assert.equal(directed.verdict.includes('招式完成度更高'), true);
+  assert.equal(directed.verdict.includes('未主动认输'), false);
   assert.equal(directed.response.includes('完整构想'), false);
 
   const surrendered = await window.GameTournamentJudge.judge(
@@ -300,7 +361,8 @@ const active = {
   assert.equal(surrendered.finished, false);
   assert.equal(surrendered.winner, 'ongoing');
   assert.ok(surrendered.opponentDelta > surrendered.playerDelta);
-  assert.equal(surrendered.verdict.includes('主动认输或求饶'), true);
+  assert.equal(surrendered.verdict.includes('主动收住攻势并放弃争胜'), true);
+  assert.equal(surrendered.verdict.includes('认输或求饶'), false);
   assert.equal(surrendered.response.includes('依照你的安排'), false);
 
   const defeatedButValid = await window.GameTournamentJudge.judge(
@@ -309,7 +371,15 @@ const active = {
     tournamentState
   );
   assert.ok(defeatedButValid.playerDelta > defeatedButValid.opponentDelta);
-  assert.equal(defeatedButValid.verdict.includes('本回合行动判定有效'), true);
+  assert.equal(defeatedButValid.verdict.includes('成功改变了场上局势'), true);
+  assert.equal(defeatedButValid.verdict.includes('未求饶'), false);
+
+  const fallenFallback = await window.GameTournamentJudge.judge(
+    active,
+    '我继续向她逼近。',
+    { corruption: { 'npc-1': 70 } }
+  );
+  assert.equal(fallenFallback.response.includes('关注明显压过胜负心'), true);
 
   const longResponse = `${'甲'.repeat(170)}。${'乙'.repeat(200)}。`;
   const trimmed = window.GameTournamentResponseText.ensure(longResponse, {

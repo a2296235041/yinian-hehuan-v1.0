@@ -40,6 +40,20 @@ vm.runInNewContext(source, { window, Math });
   });
   assert.equal(affinity.disciple, -2);
   assert.equal(relations.display(roster[0], 'internal', state).label, '好感度');
+  [
+    [0, 'steadfast', '清正自持'],
+    [15, 'steadfast', '清正自持'],
+    [16, 'wavering', '道心动摇'],
+    [50, 'wavering', '道心动摇'],
+    [51, 'fallen', '沉沦渐深'],
+    [90, 'fallen', '沉沦渐深'],
+    [91, 'devoted', '彻底堕落'],
+    [100, 'devoted', '彻底堕落']
+  ].forEach(([value, id, label]) => {
+    const stage = relations.corruptionStage(value);
+    assert.equal(stage.id, id);
+    assert.equal(stage.label, label);
+  });
 
   const spirit = {
     mode: 'spirit',
@@ -64,6 +78,11 @@ vm.runInNewContext(source, { window, Math });
   });
   assert.equal(state.corruption.outsider, 4);
   state.corruption.outsider = 100;
+  const full = relations.display(roster[1], 'spirit', state);
+  assert.equal(full.full, true);
+  assert.equal(full.rank, '彻底堕落');
+  assert.equal(full.tone.includes('热切'), true);
+  assert.equal(full.battleDirective.includes('迎合'), true);
   await relations.apply(state, spirit, {
     relationshipChanges: [{ opponentId: 'outsider', delta: 3, reason: '边界反向波动' }]
   });

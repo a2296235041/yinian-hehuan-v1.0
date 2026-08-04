@@ -1,6 +1,41 @@
 (function installTournamentRelations(root) {
   'use strict';
 
+  const CORRUPTION_STAGES = Object.freeze([
+    Object.freeze({
+      id: 'steadfast',
+      min: 0,
+      max: 15,
+      label: '清正自持',
+      tone: '克制、疏离、警惕，措辞正式，尽力维持礼法与冷静。',
+      battleDirective: '保持距离并认真应战，受到影响时会压住情绪，不主动亲近玩家。'
+    }),
+    Object.freeze({
+      id: 'wavering',
+      min: 16,
+      max: 50,
+      label: '道心动摇',
+      tone: '语气出现迟疑、羞恼与额外关注，强硬表面下会暴露动摇。',
+      battleDirective: '仍会防守和交锋，但更容易被玩家的话语与动作牵动注意。'
+    }),
+    Object.freeze({
+      id: 'fallen',
+      min: 51,
+      max: 90,
+      label: '沉沦渐深',
+      tone: '对玩家明显依恋、偏执而坦率，情绪和身体反应更难掩饰。',
+      battleDirective: '会主动贴近并顺着玩家主导的节奏回应，胜负心开始让位于关注玩家。'
+    }),
+    Object.freeze({
+      id: 'devoted',
+      min: 91,
+      max: 100,
+      label: '彻底堕落',
+      tone: '态度热切、顺从且毫不掩饰，对玩家的称呼和回应更亲密直接。',
+      battleDirective: '主动迎合玩家的行动与局面安排，将取悦和追随玩家置于比赛胜负之前。'
+    })
+  ]);
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, Math.trunc(Number(value) || 0)));
   }
@@ -13,12 +48,10 @@
     return clean;
   }
 
-  function corruptionRank(value) {
-    if (value < 20) return '清明';
-    if (value < 40) return '动摇';
-    if (value < 60) return '沉沦';
-    if (value < 80) return '迷失';
-    return '深陷';
+  function corruptionStage(value) {
+    const amount = clamp(value, 0, 100);
+    return CORRUPTION_STAGES.find((stage) => amount <= stage.max)
+      || CORRUPTION_STAGES.at(-1);
   }
 
   function display(profile, mode, state) {
@@ -33,7 +66,17 @@
       };
     }
     const value = clamp(state?.corruption?.[profile.id], 0, 100);
-    return { type: 'corruption', label: '堕落值', value, rank: corruptionRank(value) };
+    const stage = corruptionStage(value);
+    return {
+      type: 'corruption',
+      label: '堕落值',
+      value,
+      rank: stage.label,
+      stage: stage.id,
+      tone: stage.tone,
+      battleDirective: stage.battleDirective,
+      full: value === 100
+    };
   }
 
   function normalizedChanges(active, result) {
@@ -87,7 +130,9 @@
   }
 
   root.GameTournamentRelations = Object.freeze({
+    CORRUPTION_STAGES,
     sanitize,
+    corruptionStage,
     display,
     normalizedChanges,
     apply

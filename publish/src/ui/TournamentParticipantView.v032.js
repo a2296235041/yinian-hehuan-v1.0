@@ -32,10 +32,11 @@
   function relationBadge(profile, mode, state) {
     const relation = root.GameTournamentRelations.display(profile, mode, state);
     if (!relation) return null;
+    const full = relation.full ? ' · 满值' : '';
     return node(
       'span',
       `tournament-relation is-${relation.type}`,
-      `${relation.label} ${relation.value} · ${relation.rank}`
+      `${relation.label} ${relation.value} · ${relation.rank}${full}`
     );
   }
 

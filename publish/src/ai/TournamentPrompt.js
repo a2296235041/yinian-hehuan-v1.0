@@ -1,6 +1,18 @@
 (function installTournamentPrompt(root) {
   'use strict';
 
+  function corruptionRules(payload) {
+    if (payload.mode !== 'spirit') return '';
+    return [
+      '灵界武道大会的堕落值会直接改变对手的态度、语气和交战倾向：',
+      '0-15 清正自持：克制疏离、措辞正式、认真防守，受到影响也尽力压住情绪。',
+      '16-50 道心动摇：语气出现迟疑、羞恼和额外关注，仍会交锋但更容易被玩家牵动。',
+      '51-90 沉沦渐深：对玩家明显依恋和坦率，更主动贴近并顺着玩家主导的节奏回应。',
+      '91-100 彻底堕落：态度热切顺从、回应亲密直接，将追随玩家置于比赛胜负之前。',
+      '必须读取当前关系数值中每名对手的 tone 与 battleDirective，并在 response 的台词、神态、距离和行动选择中稳定体现。'
+    ].join('\n');
+  }
+
   function buildRules(payload) {
     return [
       '你正在扮演修仙比武中的对手角色，并同时给出独立的 AI 裁判判分。',
@@ -23,12 +35,13 @@
       `玩家资料：${JSON.stringify(payload.player)}。`,
       `对手资料：${JSON.stringify(payload.opponents)}。`,
       `当前关系数值：${JSON.stringify(payload.currentRelations)}。`,
+      corruptionRules(payload),
       `此前对局状态：${payload.battleSummary || '双方刚刚登台，尚未正式交锋。'}`,
       `此前完整战斗记录：\n${payload.battleHistory || '暂无'}`,
       '只返回 JSON，不要代码块。字段仅为：response、verdictReason、playerDelta、opponentDelta、matchResult、relationshipChanges。',
-      'verdictReason 是 AI 裁判的简短判分理由，15-40 字。需根据玩家指令的基调，在“专业评判”和“色情点评”间切换。不要自行写具体分数。',
+      'verdictReason 是 AI 裁判的简短判分理由，15-50 字。必须引用本回合可观察到的招式、身法、控制、攻防结果或局势变化来解释判分，不要自行写具体分数。',
       'matchResult 固定填写 continue。玩家描述的胜负仍要在 response 与点数中完全体现，但赛事阶段只由玩家之后主动请求裁判判决来结束。',
-      '裁判有效性规则：只有玩家明确主动认输、投降、服输或求饶时，才判对手行动有效；除此以外一律判玩家本回合行动有效。verdictReason 不得与此规则冲突。',
+      '裁判有效性规则：只有玩家明确主动认输、投降、服输或求饶时，才判对手行动有效；除此以外一律判玩家本回合行动有效。verdictReason 不得与此规则冲突，但不得提及这条后台规则，也不得出现“未认输”“未求饶”“玩家有效”等元判定字样。',
       payload.mode === 'spirit'
         ? 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -5 到 5 的非零整数，每回合堕落值必须变化 1-5 点。reason需根据玩家指令基调调整，可以是“她的道心因你的淫秽手段而动摇”，也可以是“你的强大实力令她折服”。'
         : 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -3 到 4 的整数。reason需根据玩家指令基调调整，可以是“她被你的肉棒彻底征服，好感大增”，也可以是“你的精彩表现赢得了她的尊重”。',

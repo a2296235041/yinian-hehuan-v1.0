@@ -49,10 +49,9 @@
     } else {
       response = `${names}迎着尚未散尽的攻势抬起兵刃，脚下连退两步后猛然稳住重心。她没有用旁观者的口吻评价方才一击，而是顺势逼近你，呼吸、眼神与招式都紧接着当前局面变化。${ending}看台边缘传来几声短促低呼，随即又被下一次交锋压了下去。`;
     }
+    response += root.GameTournamentAttitude.fallbackLine(payload);
     response = root.GameTournamentResponseText.ensure(response, payload, outcome);
-    const verdictReason = outcome.declaredResult === 'opponent'
-      ? '你本回合主动认输或求饶，裁判判对手有效。'
-      : '你未主动认输或求饶，本回合行动判定有效。';
+    const verdictReason = root.GameTournamentVerdict.reason('', payload, outcome, intent);
     return {
       response,
       summary: response,
@@ -81,9 +80,9 @@
     const legacyResponse = [raw.response, raw.summary, raw.narration,
       raw.opponentAction, raw.globalCommentary].filter(Boolean).join('');
     const response = root.GameTournamentResponseText.ensure(legacyResponse, payload, outcome);
-    const verdictReason = outcome.declaredResult === 'opponent'
-      ? '你本回合主动认输或求饶，裁判判对手有效。'
-      : '你未主动认输或求饶，本回合行动判定有效。';
+    const verdictReason = root.GameTournamentVerdict.reason(
+      raw.verdictReason, payload, outcome, intent
+    );
     const relationshipChanges = payload.opponents.map((opponent, index) => {
       const source = Array.isArray(raw.relationshipChanges) ? raw.relationshipChanges : [];
       const change = source.find((entry) => entry?.opponentId === opponent.id)
