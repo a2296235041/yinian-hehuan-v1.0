@@ -27,10 +27,12 @@
       if (!response || typeof response !== 'object') return false;
       if (!allowed.has(response.speakerId) || used.has(response.speakerId)) return false;
       used.add(response.speakerId);
+      const contentLength = typeof response.content === 'string'
+        ? response.content.trim().length
+        : 0;
       return RESPONSE_TYPES.has(response.type)
-        && typeof response.content === 'string'
-        && response.content.trim().length >= 1
-        && response.content.length <= 100;
+        && contentLength >= 70
+        && contentLength <= 150;
     });
   }
 
@@ -57,9 +59,10 @@
       '根据玩家本轮对白或行动判断应由一人、两人或全部角色回应。',
       '玩家明确面向众人、发起共同活动或行动影响所有人时，应让全部角色分别回应。',
       '每名角色必须保持自己的性格、身份、称呼与关系程度，角色之间也可互相接话。',
+      '每名回应角色的 content 必须不少于70字且不多于150字，要包含具体对白、动作或情绪变化。',
       '不得替玩家决定后续行动，不修改好感、修为、物品或任何游戏数值。',
       '输出对象格式：{"sceneBeat":"环境或众人反应，不超过60字","responses":[',
-      '{"speakerId":"只能使用参与角色id","type":"dialogue或action","content":"不超过100字"}]}。',
+      '{"speakerId":"只能使用参与角色id","type":"dialogue或action","content":"70至150字"}]}。',
       'responses 中角色不可重复，数量为1至参与人数；不要输出额外字段。'
     ].join('');
   }
@@ -78,9 +81,9 @@
     value.responses.forEach((response) => {
       const name = names.get(response.speakerId);
       if (!name) return;
-      lines.push(`[npc:${response.speakerId}:${response.type}]${text(response.content, 100)}`);
+      lines.push(`[npc:${response.speakerId}:${response.type}]${text(response.content, 150)}`);
     });
-    return lines.join('\n').slice(0, 500);
+    return lines.join('\n').slice(0, 800);
   }
 
   function parse(content, companions) {

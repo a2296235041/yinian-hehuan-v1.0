@@ -111,7 +111,7 @@
     const ids = session.companions.map((npc) => npc.id);
     const generator = root.GamefyRecipes.createAiJson({
       completions,
-      maxTokens: 700,
+      maxTokens: 1200,
       validate: (result) => root.GamePrivateGroupPrompts.validate(result, ids),
       fallback: rejectLocalFallback
     });
