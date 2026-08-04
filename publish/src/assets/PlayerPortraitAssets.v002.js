@@ -1,6 +1,8 @@
 var Game = window.Game || {};
 
 Game.PlayerPortraitAssets = {
+    pending: new Map(),
+
     entries: [
         {
             originId: 'demon_prince',
@@ -52,9 +54,44 @@ Game.PlayerPortraitAssets = {
         return this.preload(scene, this.entries.slice(1));
     },
 
-    textureKey(originOrId) {
+    entry(originOrId) {
         const originId = typeof originOrId === 'string' ? originOrId : originOrId?.id;
-        return this.entries.find((entry) => entry.originId === originId)?.textureKey || 'npc-scholar';
+        return this.entries.find((item) => item.originId === originId) || null;
+    },
+
+    ensureLoaded(scene, originOrId) {
+        const entry = this.entry(originOrId);
+        if (!entry) return Promise.reject(new Error('找不到玩家身份立绘'));
+        if (scene.textures.exists(entry.textureKey)) return Promise.resolve(entry.textureKey);
+        if (this.pending.has(entry.textureKey)) return this.pending.get(entry.textureKey);
+
+        const task = new Promise((resolve, reject) => {
+            const cleanup = () => {
+                scene.load.off('filecomplete', onComplete);
+                scene.load.off('loaderror', onError);
+            };
+            const onComplete = (key) => {
+                if (key !== entry.textureKey) return;
+                cleanup();
+                resolve(entry.textureKey);
+            };
+            const onError = (file) => {
+                if (file?.key !== entry.textureKey) return;
+                cleanup();
+                reject(new Error(`玩家身份立绘加载失败：${entry.textureKey}`));
+            };
+            scene.load.on('filecomplete', onComplete);
+            scene.load.on('loaderror', onError);
+            scene.load.image(entry.textureKey, entry.path);
+            if (!scene.load.isLoading()) scene.load.start();
+        }).finally(() => this.pending.delete(entry.textureKey));
+
+        this.pending.set(entry.textureKey, task);
+        return task;
+    },
+
+    textureKey(originOrId) {
+        return this.entry(originOrId)?.textureKey || 'npc-scholar';
     },
 
     fit(image, maxWidth, maxHeight) {

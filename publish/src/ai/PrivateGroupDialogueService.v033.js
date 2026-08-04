@@ -32,20 +32,23 @@
     if (code === 'RATE_LIMITED') return '请求太频繁，请稍后再次发送。';
     if (code === 'QUOTA_EXHAUSTED') return '积分或今日对话额度不足。';
     if (code === 'VIP_REQUIRED') return '当前对话模型需要 VIP 权限。';
+    if (code === 'AI_INVALID_RESPONSE') return 'AI 回应格式不完整，请重新发送本轮内容。';
     if (['UNAUTHORIZED', 'TOKEN_EXPIRED', 'FORBIDDEN'].includes(code)) {
       return '登录状态已失效，请重新进入游戏。';
     }
     return error?.message || '多人互动暂时不可用，请稍后再试。';
   }
 
-  function fallbackMessage(result) {
-    if (['invalid_json', 'invalid_schema'].includes(result.reason)) {
-      return 'AI 回应格式已自动修正，本轮使用本地回应接续。';
-    }
-    if (['timeout', 'service_unavailable'].includes(result.reason)) {
-      return 'AI 响应超时，本轮已使用本地回应接续。';
-    }
-    return `${errorMessage(result.error)} 本轮已使用本地回应接续。`;
+  function rejectLocalFallback(context = {}) {
+    if (context.reason === 'request_failed' && context.error) throw context.error;
+    const error = new Error('AI 回应格式不完整，请重新发送本轮内容。');
+    error.code = 'AI_INVALID_RESPONSE';
+    throw error;
+  }
+
+  function rollbackMessage(session, message) {
+    const index = session.messages.indexOf(message);
+    if (index >= 0) session.messages.splice(index, 1);
   }
 
   async function recordResponders(ids) {
@@ -101,7 +104,8 @@
       return { ok: false, reason: 'busy' };
     }
     const session = current;
-    session.messages.push({ role: 'user', content, promptContent: content });
+    const playerMessage = { role: 'user', content, promptContent: content };
+    session.messages.push(playerMessage);
     emitRender();
     status('thinking', '众人正在回应，约需 10–30 秒…');
     const ids = session.companions.map((npc) => npc.id);
@@ -109,7 +113,7 @@
       completions,
       maxTokens: 700,
       validate: (result) => root.GamePrivateGroupPrompts.validate(result, ids),
-      fallback: root.GamePrivateGroupPrompts.fallback(session.companions, content)
+      fallback: rejectLocalFallback
     });
     try {
       const result = await generator.generate({
@@ -118,19 +122,24 @@
         ),
         userText: root.GamePrivateGroupPrompts.userText(session, content)
       });
-      if (result.ignored || current !== session) return { ok: false, reason: 'stale' };
+      if (result.ignored || current !== session) {
+        rollbackMessage(session, playerMessage);
+        if (current === session) emitRender();
+        return { ok: false, reason: 'stale' };
+      }
+      if (result.source !== 'ai') rejectLocalFallback({ reason: 'invalid_source' });
       session.messages.push({
         role: 'assistant',
         content: root.GamePrivateGroupPrompts.format(result.value, session.companions)
       });
       emitRender();
-      status('ready', result.source === 'fallback' ? fallbackMessage(result) : '');
-      if (result.source === 'ai') {
-        await recordResponders(result.value.responses.map((response) => response.speakerId));
-      }
-      return { ok: true, source: result.source };
+      status('ready');
+      await recordResponders(result.value.responses.map((response) => response.speakerId));
+      return { ok: true, source: 'ai' };
     } catch (error) {
+      rollbackMessage(session, playerMessage);
       if (current !== session) return { ok: false, reason: 'stale' };
+      emitRender();
       console.error('私人多人对话失败:', error.code || '', error.message, error.stack);
       status('error', errorMessage(error));
       return { ok: false, reason: error.code || 'request-error' };

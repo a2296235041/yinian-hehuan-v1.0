@@ -12,6 +12,8 @@ const source = fs.readFileSync(
 const events = [];
 const recorded = [];
 let generated = 0;
+let failGeneration = false;
+let generatorOptions;
 const companions = [
   { id: 'npc_a', name: '沈玉枝', title: '大师姐' },
   { id: 'npc_b', name: '陆千雪', title: '剑侍' },
@@ -25,9 +27,12 @@ const window = {
   GameDialogueHistory: { sessions: new Map() },
   GamefyRecipes: {
     createCompletionsSafe: () => completions,
-    createAiJson: () => ({
+    createAiJson: (options) => {
+      generatorOptions = options;
+      return {
       async generate() {
         generated += 1;
+        if (failGeneration) throw new Error('AI unavailable');
         return {
           ignored: false,
           source: 'ai',
@@ -40,14 +45,14 @@ const window = {
           }
         };
       }
-    })
+      };
+    }
   },
   GameAIModels: { whenReady: async () => {}, getDialogueModel: () => 'default' },
   GamePrivateGroupPrompts: {
     sessionId: () => 'private_group_test',
     opening: () => '[scene]众人到场。',
     validate: () => true,
-    fallback: () => ({}),
     instructions: () => 'rules',
     userText: () => 'input',
     format: (value) => value.responses.map((item) => item.speakerId).join(',')
@@ -83,6 +88,20 @@ vm.runInNewContext(source, { window, console, Map, Set, Object });
   assert.deepEqual(recorded, ['npc_a', 'npc_c']);
   assert.equal(events.some((event) => event.name === 'private-group-render'), true);
   assert.equal(window.GameDialogueHistory.sessions.get('private_group_test').messages.length, 3);
+  assert.equal(typeof generatorOptions.fallback, 'function');
+  assert.throws(
+    () => generatorOptions.fallback({ reason: 'invalid_json' }),
+    (error) => error.code === 'AI_INVALID_RESPONSE'
+  );
+  failGeneration = true;
+  const failed = await window.GamePrivateGroupDialogue.send('再说一次');
+  assert.equal(failed.ok, false);
+  assert.equal(window.GameDialogueHistory.sessions.get('private_group_test').messages.length, 3);
+  assert.equal(
+    events.some((event) => event.name === 'private-group-status'
+      && event.payload.state === 'error'),
+    true
+  );
   window.GamePrivateGroupDialogue.close();
   assert.equal(window.GamePrivateGroupDialogue.isActive(), false);
   console.log('private group service test passed');

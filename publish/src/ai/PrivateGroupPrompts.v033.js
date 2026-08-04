@@ -34,20 +34,6 @@
     });
   }
 
-  function fallback(companions, playerText) {
-    const intent = text(playerText, 24) || '方才的话';
-    return {
-      sceneBeat: '几人交换目光，顺着此刻的气氛自然接过了话头。',
-      responses: companions.map((npc, index) => ({
-        speakerId: npc.id,
-        type: index % 2 === 0 ? 'dialogue' : 'action',
-        content: index % 2 === 0
-          ? `${npc.name}回应了你关于“${intent}”的意思，也留意着其他人的反应。`
-          : `${npc.name}略作思量，以一个符合她性情的举动回应了你。`
-      }))
-    };
-  }
-
   function instructions(companions, location) {
     const player = root.GamePlayerIdentity.get();
     const profiles = companions.map((npc) => {
@@ -120,7 +106,6 @@
   root.GamePrivateGroupPrompts = Object.freeze({
     sessionId,
     validate,
-    fallback,
     instructions,
     userText,
     format,

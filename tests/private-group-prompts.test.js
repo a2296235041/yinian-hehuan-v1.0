@@ -42,5 +42,5 @@ const parsed = prompts.parse(stored, companions);
 assert.equal(parsed.some((entry) => entry.speakerName === '沈玉枝'), true);
 assert.equal(parsed.some((entry) => entry.type === 'action'), true);
 assert.match(prompts.sessionId(companions), /^private_group_[a-z0-9]+$/);
-assert.equal(prompts.fallback(companions, '一起品茶').responses.length, 3);
+assert.equal('fallback' in prompts, false);
 console.log('private group prompts test passed');

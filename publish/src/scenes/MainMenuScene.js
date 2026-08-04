@@ -42,19 +42,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         });
         requestAnimationFrame(() => {
             window.PlatformBridge.ready();
-            this.warmPortraits();
         });
-    }
-
-    warmPortraits() {
-        const added = Game.PlayerPortraitAssets.preloadRemaining(this);
-        if (!added || this.load.isLoading()) return;
-        this.load.on('loaderror', (file) => {
-            if (String(file.key || '').startsWith('player-')) {
-                console.warn('身份立绘后台加载失败:', file.key);
-            }
-        });
-        this.load.start();
     }
 
     createMenuDecor(width, height) {
@@ -134,6 +122,7 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
             const origins = this.cache.json.get('character_origins') || [];
             const origin = origins.find((item) => item.id === snapshot.player.origin.id);
             if (!origin) throw new Error('存档中的玩家身份已失效');
+            await Game.PlayerPortraitAssets.ensureLoaded(this, origin);
             Game.SceneTransition.start(this, 'GameScene', {
                 playerOrigin: origin,
                 saveSnapshot: snapshot,
