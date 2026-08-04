@@ -1,15 +1,12 @@
 (function installTournamentJudge(root) {
   'use strict';
-
   function text(value, max) {
     return String(value || '').trim().slice(0, max);
   }
-
   function number(value, min, max, fallback) {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? Math.max(min, Math.min(max, parsed)) : fallback;
   }
-
   function hash(input) {
     let value = 2166136261;
     for (let index = 0; index < input.length; index += 1) {
@@ -18,7 +15,6 @@
     }
     return value >>> 0;
   }
-
   function parseJson(raw) {
     const cleaned = text(raw, 8000)
       .replace(/^```(?:json)?\s*/i, '')
@@ -32,7 +28,6 @@
       try { return JSON.parse(cleaned.slice(start, end + 1)); } catch (_) { return null; }
     }
   }
-
   function deterministicFallback(payload, reason) {
     const seed = hash(`${payload.turn}:${payload.move}:${payload.battleSummary}`);
     const creative = Math.min(9, Math.floor(payload.move.length / 28));
@@ -41,10 +36,9 @@
     const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
       payload, proposedPlayer, proposedOpponent
     ) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
-    const { playerDelta, opponentDelta } = balanced;
-    const finished = payload.turn >= 3;
+    const outcome = root.GameTournamentPlayerAuthority.resolve(payload, balanced, 'continue');
+    const { playerDelta, opponentDelta, finished, winner } = outcome;
     const names = payload.opponents.map((item) => item.name).join('与');
-    const winner = finished && playerTotal < opponentTotal ? 'opponent' : 'player';
     const relationshipChanges = payload.opponents.map((opponent, index) => {
       const shifted = seed >>> ((index * 5) % 20);
       const delta = payload.mode === 'spirit' ? (shifted % 8) - 4 : (shifted % 8) - 3;
@@ -56,7 +50,12 @@
           : '你的做法触碰了她的原则，使她重新提高戒心。'
       };
     });
-    const summary = `你施展“${text(payload.move, 42)}”，灵力随招式骤然铺开，直逼${names}立足之处。${names}没有硬接，而是依照自身战法侧身卸力，旋即借擂台阵纹回卷灵光，试图从你的攻势边缘切入。双方力量连续碰撞，碎光沿地面迸散，护阵也随之泛起层层波纹。观战席先是一静，随后因这轮迅疾变招响起低声喝彩；待余波散去，你仍守住中线，对手则重新调整气息，准备迎接下一轮交锋。`;
+    const ending = finished
+      ? (winner === 'player'
+        ? `待余波散去，你所指定的胜势已经落定，${names}无力再战，观众随即为结果喝彩。`
+        : `待余波散去，你所指定的败局已经落定，${names}取得胜势，观众也接受了这一结果。`)
+      : '待余波散去，本回合完全依照你的安排收束，双方停在你指定的局面中等待下一步。';
+    const summary = `你依照自己的完整构想推进本回合：“${text(payload.move, 36)}”。场上的招式、过程、对手反应与结果都沿着你的描述展开，没有被额外改变。灵力碰撞激起的碎光掠过擂台阵纹，护阵随之泛起层层波纹，观战席也因局势变化传来低声议论，场边执事同时记下每一次攻守变化。${ending}`;
     const verdictReason = playerDelta >= opponentDelta
       ? '招式衔接完整且取得主动，本回合判你占优。'
       : '对手化解充分并完成反制，本回合对手占优。';
@@ -66,7 +65,7 @@
       playerDelta,
       opponentDelta,
       finished,
-      winner: finished ? winner : 'ongoing',
+      winner,
       relationshipChanges,
       fallback: true,
       fallbackMessage: reason
@@ -81,10 +80,10 @@
     const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
       payload, proposedPlayer, proposedOpponent
     ) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
-    const { playerDelta, opponentDelta } = balanced;
-    const finished = payload.turn >= 3;
-    const playerTotal = payload.scores.player + playerDelta;
-    const opponentTotal = payload.scores.opponent + opponentDelta;
+    const outcome = root.GameTournamentPlayerAuthority.resolve(
+      payload, balanced, raw.matchResult
+    );
+    const { playerDelta, opponentDelta, finished, winner } = outcome;
     const legacySummary = [
       raw.summary, raw.narration, raw.opponentAction, raw.globalCommentary
     ].filter(Boolean).join('');
@@ -111,7 +110,7 @@
       playerDelta,
       opponentDelta,
       finished,
-      winner: finished ? (playerTotal >= opponentTotal ? 'player' : 'opponent') : 'ongoing',
+      winner,
       relationshipChanges
     };
   }
@@ -119,11 +118,12 @@
   function buildPrompt(payload) {
     return [
       '你是修仙比武的战况叙事者与 AI 裁判。',
-      '玩家输入的是本回合释放的招式或行动。承接此前战况，围绕这次行动续写一整段连续综述，不要拆成多个段落、标题或列表。',
+      '玩家输入是本回合的最高叙事指令，可能包含招式、完整过程、对手反应、环境变化乃至最终结果。',
+      '必须逐项承接玩家已经描述的内容，不得否定、削弱、反转或擅自修改玩家指定的过程与结果；只补充衔接、细节和氛围。',
+      '玩家未描述的部分才允许你合理续写。不要替玩家新增会改变结果的主动行为。',
       'summary 必须约 150-200 个中文字符，依次自然包含：玩家出招后的一系列后续、对手依据性格和战法作出的反应、双方碰撞与环境变化、少量观众反应、本回合结束时的局面。',
-      '不要替玩家新增未描述的第二个主动招式；可以合理延伸招式造成的连锁变化。',
-      '双方战力、攻击、防御、速度和气血必须影响裁决。弱者需要更具体合理的战术才能弥补数值差距，不能仅凭一句夸张描述无条件压倒强者。',
-      '比赛固定三回合，前两回合不得结束。第三回合按累计得分决胜，同分判玩家胜。',
+      '玩家明确指定过程或胜负时，该指令优先于双方数值；未指定结果时，战力、攻击、防御、速度和气血才用于补足发展并影响裁决。',
+      '赛事默认最多三回合。若玩家明确描述一方获胜、落败、认输或失去战力，必须将 matchResult 设为对应结果并立即结束本场。',
       `当前第${payload.turn}回合，比分：玩家${payload.scores.player}，对手${payload.scores.opponent}。`,
       `玩家资料：${JSON.stringify(payload.player)}。`,
       `对手资料：${JSON.stringify(payload.opponents)}。`,
@@ -131,8 +131,9 @@
       `此前全局战况摘要：${payload.battleSummary || '双方刚刚登台，尚未正式交锋。'}`,
       `此前完整战斗记录：\n${payload.battleHistory || '暂无'}`,
       `玩家本回合行动：${payload.move}`,
-      '只返回 JSON，不要代码块。字段仅为：summary、verdictReason、playerDelta、opponentDelta、relationshipChanges。',
+      '只返回 JSON，不要代码块。字段仅为：summary、verdictReason、playerDelta、opponentDelta、matchResult、relationshipChanges。',
       'verdictReason 是 AI 裁判的简短判分理由，15-40 字，不要自行写具体分数。',
+      'matchResult 只能是 player、opponent、continue。仅当玩家明确写出最终胜负时填写 player 或 opponent，否则填写 continue。',
       payload.mode === 'spirit'
         ? 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -4 到 3 的整数：魅惑、诱导、动摇道心会增加堕落，尊重、唤醒原则或失败会降低堕落。'
         : 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -3 到 4 的整数：尊重、精彩表现和手下留情增加好感，羞辱、残酷和欺骗降低好感。',
