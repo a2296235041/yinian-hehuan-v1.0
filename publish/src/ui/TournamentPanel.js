@@ -33,14 +33,16 @@
     busy = true;
     render(loadingText);
     let finalStatus = '';
+    let result = null;
     try {
-      await action();
+      result = await action();
     } catch (error) {
       finalStatus = errorMessage(error, '赛事操作失败，请稍后重试');
     } finally {
       busy = false;
       render(finalStatus);
     }
+    return result;
   }
 
   async function start() {
@@ -74,14 +76,16 @@
     elements['tournament-action-input'].value = '';
     try {
       const result = await root.GameTournamentJudge.judge(active, move, state());
-      await root.GameTournament.recordExchange(move, result);
+      const updated = await root.GameTournament.recordExchange(move, result);
       root.GameAudio?.sfx?.(result.winner === 'opponent' ? 'deny' : 'success');
       if (generation === openGeneration && !elements['tournament-screen'].hidden) {
-        finalStatus = result.fallback
+        finalStatus = updated.active?.turn >= root.GameTournamentDecision.MIN_TURNS
+          ? `已完成 ${updated.active.turn} 回合，可继续出招或请求裁判判决。`
+          : (result.fallback
           ? result.fallbackMessage
           : (result.source === 'ai-text'
             ? '已采用 AI 正文，裁判点数由赛事规则补全。'
-            : '对手回应与裁判点数已更新。');
+            : '对手回应与裁判点数已更新。'));
       }
     } catch (error) {
       if (generation === openGeneration) {
@@ -108,6 +112,17 @@
       opponentId ? '正在篡改下一轮签文…' : '正在开启下一轮签表…'
     );
     root.GameAudio?.sfx?.('success');
+  }
+
+  async function decide() {
+    const updated = await run(
+      () => root.GameTournament.requestDecision(),
+      '裁判正在核算累计点数并作出本轮终判…'
+    );
+    const active = updated?.active;
+    root.GameAudio?.sfx?.(
+      active?.phase === 'round_complete' || active?.playerWon ? 'success' : 'deny'
+    );
   }
 
   async function claim() {
@@ -140,6 +155,7 @@
     document.getElementById('tournament-close').addEventListener('click', close);
     elements['tournament-start'].addEventListener('click', start);
     elements['tournament-submit'].addEventListener('click', submit);
+    elements['tournament-decision'].addEventListener('click', decide);
     elements['tournament-advance'].addEventListener('click', advance);
     elements['tournament-claim'].addEventListener('click', claim);
     elements['tournament-finish'].addEventListener('click', finish);

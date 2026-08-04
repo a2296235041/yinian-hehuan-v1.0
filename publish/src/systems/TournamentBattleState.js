@@ -50,5 +50,18 @@
     active.battleSummary = response || String(active.battleSummary).slice(0, 240);
   }
 
-  root.GameTournamentBattleState = Object.freeze({ prepare, applyExchange });
+  function applyDecision(active, winnerId) {
+    const playerWon = winnerId === 'player';
+    const playerScore = Math.max(0, Number(active.scores?.player) || 0);
+    const opponentScore = Math.max(0, Number(active.scores?.opponent) || 0);
+    const winnerName = playerWon
+      ? '你'
+      : ((active.roster || []).find((entry) => entry.id === winnerId)?.name || '对手');
+    active.logs.push({
+      speaker: '裁判终判',
+      text: `应你的请求，裁判核定${active.turn}回合累计点数：你 ${playerScore}，对手 ${opponentScore}。本轮由${winnerName}胜出。`
+    });
+  }
+
+  root.GameTournamentBattleState = Object.freeze({ prepare, applyExchange, applyDecision });
 }(window));

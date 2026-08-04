@@ -66,38 +66,34 @@ const window = {
 const context = { window, console, Math, Date };
 vm.runInNewContext(source('publish/src/systems/TournamentRules.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentBattleState.js'), context);
+vm.runInNewContext(source('publish/src/systems/TournamentDecision.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentRelations.js'), context);
 vm.runInNewContext(source('publish/src/storage/TournamentState.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
-  await window.GameTournament.recordExchange('第一招', {
-    response: 'NPC 7退守后立即稳住架势，抬眼向你回应：“这一招我接下了，继续。”',
-    verdict: '裁判判决：你 +30 点，对手 +10 点。你取得主动。',
-    relationshipChanges: [{ opponentId: 'npc-1', delta: 3, reason: '欣赏你的招式。' }],
-    playerDelta: 30,
-    opponentDelta: 10,
-    finished: false,
-    winner: 'ongoing'
-  });
-  await window.GameTournament.recordExchange('第二招', {
-    response: '对手仓促变招后重新贴近，沉声说道：“别以为我会一直后退。”',
-    verdict: '裁判判决：你 +30 点，对手 +10 点。优势继续扩大。',
-    relationshipChanges: [{ opponentId: 'npc-1', delta: -2, reason: '不满你的追击。' }],
-    playerDelta: 30,
-    opponentDelta: 10,
-    finished: false,
-    winner: 'ongoing'
-  });
-  await window.GameTournament.recordExchange('第三招', {
-    response: '对手的绝招被化解后缓缓收势，直视着你承认：“这一场，是你赢了。”',
-    verdict: '裁判判决：你 +30 点，对手 +10 点。三回合总分由你领先。',
-    relationshipChanges: [{ opponentId: 'npc-1', delta: 2, reason: '认可你的胜利。' }],
-    playerDelta: 30,
-    opponentDelta: 10,
-    finished: true,
-    winner: 'player'
-  });
+  const opponentId = window.GameTournament.getState().active.opponentIds[0];
+  for (let turn = 1; turn <= 5; turn += 1) {
+    await window.GameTournament.recordExchange(`第${turn}招`, {
+      response: turn === 1
+        ? '对手退守后立即稳住架势，抬眼向你回应：“这一招我接下了，继续。”'
+        : '对手承受攻势后仍留在擂台中央，继续等待你的下一步行动。',
+      verdict: `裁判判决：你 +30 点，对手 +10 点。第${turn}回合由你占优。`,
+      relationshipChanges: [{
+        opponentId,
+        delta: turn % 2 === 0 ? -2 : 3,
+        reason: '本回合改变了她对你的判断。'
+      }],
+      playerDelta: 30,
+      opponentDelta: 10,
+      finished: turn === 5,
+      winner: turn === 5 ? 'player' : 'ongoing'
+    });
+  }
+  const pending = window.GameTournament.getState().active;
+  assert.equal(pending.turn, 5);
+  assert.equal(pending.phase, 'battle');
+  await window.GameTournament.requestDecision();
 }
 
 (async () => {
@@ -112,6 +108,10 @@ async function winRound() {
     window.GameTournament.getState().active.logs.some((entry) => entry.text.includes('篡改')),
     true
   );
+  await assert.rejects(
+    () => window.GameTournament.requestDecision(),
+    /至少完成 5 回合/
+  );
 
   await winRound();
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
@@ -119,7 +119,7 @@ async function winRound() {
     window.GameTournament.getState().active.logs.some((entry) => (
       entry.kind === 'opponent-response'
         && entry.speaker === 'NPC 7'
-        && entry.text.startsWith('退守后')
+        && entry.text.startsWith('对手退守后')
     )),
     true
   );
@@ -136,6 +136,10 @@ async function winRound() {
   assert.equal(
     window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '关系变化'),
     false
+  );
+  assert.equal(
+    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '裁判终判'),
+    true
   );
   const nextOpponent = window.GameTournament.getState().active.pendingEntrants
     .find((id) => id !== 'player');

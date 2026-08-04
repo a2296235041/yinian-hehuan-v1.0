@@ -42,11 +42,13 @@
       : [];
     return active.opponentIds.map((id, index) => {
       const raw = changes.find((entry) => entry?.opponentId === id) || changes[index] || {};
-      const min = active.mode === 'spirit' ? -4 : -3;
-      const max = active.mode === 'spirit' ? 3 : 4;
+      const rawDelta = Math.trunc(Number(raw.delta) || 0);
+      const delta = active.mode === 'spirit'
+        ? (rawDelta < 0 ? -1 : 1) * clamp(Math.abs(rawDelta), 1, 5)
+        : clamp(rawDelta, -3, 4);
       return {
         opponentId: id,
-        delta: clamp(raw.delta, min, max),
+        delta,
         reason: String(raw.reason || '这次交锋改变了她对你的看法。').slice(0, 160)
       };
     });
@@ -69,7 +71,10 @@
         });
       } else {
         const before = clamp(state.corruption[profile.id], 0, 100);
-        const after = clamp(before + change.delta, 0, 100);
+        let requested = change.delta;
+        if (before === 0 && requested < 0) requested = Math.abs(requested);
+        if (before === 100 && requested > 0) requested = -requested;
+        const after = clamp(before + requested, 0, 100);
         state.corruption[profile.id] = after;
         const applied = after - before;
         logs.push({

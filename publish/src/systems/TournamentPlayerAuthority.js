@@ -35,13 +35,13 @@
     } else if (declaredResult === 'opponent') {
       opponentDelta = Math.max(opponentDelta, playerScore + playerDelta - opponentScore + 1);
     }
-    const finished = declaredResult !== 'continue' || Number(payload?.turn) >= 3;
-    const winner = declaredResult !== 'continue'
-      ? declaredResult
-      : (finished && playerScore + playerDelta < opponentScore + opponentDelta
-        ? 'opponent'
-        : (finished ? 'player' : 'ongoing'));
-    return { playerDelta, opponentDelta, declaredResult, finished, winner };
+    return {
+      playerDelta,
+      opponentDelta,
+      declaredResult,
+      finished: false,
+      winner: 'ongoing'
+    };
   }
 
   root.GameTournamentPlayerAuthority = Object.freeze({ detect, resolve });

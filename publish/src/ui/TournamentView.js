@@ -6,6 +6,7 @@
     'tournament-roster', 'tournament-bracket', 'tournament-opponents',
     'tournament-history', 'tournament-score', 'tournament-start',
     'tournament-action-area', 'tournament-action-input', 'tournament-submit',
+    'tournament-decision',
     'tournament-advance', 'tournament-claim', 'tournament-finish',
     'tournament-matchmaking', 'tournament-draw-mode', 'tournament-opponent-field',
     'tournament-opponent-select', 'tournament-matchmaking-note'
@@ -136,6 +137,10 @@
     elements['tournament-action-area'].hidden = !sameMode || active.phase !== 'battle';
     elements['tournament-submit'].disabled = busy;
     elements['tournament-submit'].textContent = busy ? 'AI 裁决中 · 约 10–30 秒' : '施展此招';
+    const canRequestDecision = sameMode && active.phase === 'battle'
+      && active.turn >= root.GameTournamentDecision.MIN_TURNS;
+    elements['tournament-decision'].hidden = !canRequestDecision;
+    elements['tournament-decision'].disabled = busy;
     elements['tournament-advance'].hidden = !sameMode || active.phase !== 'round_complete';
     elements['tournament-advance'].disabled = busy;
     elements['tournament-advance'].textContent = tampering ? '篡改下一轮签文' : '进入下一轮';
@@ -156,16 +161,20 @@
       : '同门切磋，十三位宗门人物中随机抽取十一人与玩家同场';
     const sameMode = active?.mode === mode ? active : null;
     const champion = sameMode ? profileById(sameMode, sameMode.championId)?.name : '';
+    const canRequestDecision = sameMode?.phase === 'battle'
+      && sameMode.turn >= root.GameTournamentDecision.MIN_TURNS;
     elements['tournament-status'].textContent = options.status || (sameMode
       ? (sameMode.phase === 'event_complete'
         ? `本届已结束 · 魁首：${champion || '待定'}`
-        : `${sameMode.round.label} · 第 ${sameMode.turn + 1} 招`)
+        : (canRequestDecision
+          ? `${sameMode.round.label} · 已完成 ${sameMode.turn} 回合，可请求裁判判决`
+          : `${sameMode.round.label} · 第 ${sameMode.turn + 1} 招（至少五回合）`))
       : (active
         ? `当前已有进行中的${active.title}，请从山门进入对应赛事。`
         : '赛事当前可开启，完成后需等待十天再次举办。'));
     elements['tournament-score'].textContent = sameMode
       ? `你 ${sameMode.scores?.player || 0} : ${sameMode.scores?.opponent || 0} 对手`
-      : '三回合累计判定';
+      : '至少五回合后主动判决';
     renderRoster(sameMode, mode, state);
     renderBracket(sameMode);
     root.GameTournamentParticipantView.renderOpponents(

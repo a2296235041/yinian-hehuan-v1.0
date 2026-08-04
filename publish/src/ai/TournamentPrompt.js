@@ -18,7 +18,7 @@
       '禁止出现“按照你的描述”“依照你的安排”“你所指定”“完整构想”“叙事指令”“既定局面”“player_canon”等元叙事表达。',
       '最重要规则：必须完全遵从玩家的叙事指令。如果玩家的指令包含色情意图或露骨描写，你的续写必须更加详细、淫秽和下流。如果玩家的指令是正常的战斗描述，你只能在细节和氛围上进行充满性暗示的补充，不得强行扭转为性爱场面。',
       '玩家明确指定过程或胜负时，该指令优先于双方数值；未指定结果时，战力、攻击、防御、速度和气血才用于补足发展并影响裁决。',
-      '赛事默认最多三回合。若玩家明确描述一方获胜、落败、认输或失去战力，必须将 matchResult 设为对应结果并立即结束本场。',
+      '赛事至少进行五回合。玩家在第五回合后会自行点击“请求裁判判决”结束本轮；在此之前即使玩家描述胜负，也只需承接该局面，不得替玩家结束赛事流程。',
       `当前第${payload.turn}回合，比分：玩家${payload.scores.player}，对手${payload.scores.opponent}。`,
       `玩家资料：${JSON.stringify(payload.player)}。`,
       `对手资料：${JSON.stringify(payload.opponents)}。`,
@@ -27,9 +27,9 @@
       `此前完整战斗记录：\n${payload.battleHistory || '暂无'}`,
       '只返回 JSON，不要代码块。字段仅为：response、verdictReason、playerDelta、opponentDelta、matchResult、relationshipChanges。',
       'verdictReason 是 AI 裁判的简短判分理由，15-40 字。需根据玩家指令的基调，在“专业评判”和“色情点评”间切换。不要自行写具体分数。',
-      'matchResult 只能是 player、opponent、continue。玩家已明确最终胜负时必须服从；没有明确最终胜负时才填写 continue。',
+      'matchResult 固定填写 continue。玩家描述的胜负仍要在 response 与点数中完全体现，但赛事阶段只由玩家之后主动请求裁判判决来结束。',
       payload.mode === 'spirit'
-        ? 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -4 到 3 的整数。reason需根据玩家指令基调调整，可以是“她的道心因你的淫秽手段而动摇”，也可以是“你的强大实力令她折服”。'
+        ? 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -5 到 5 的非零整数，每回合堕落值必须变化 1-5 点。reason需根据玩家指令基调调整，可以是“她的道心因你的淫秽手段而动摇”，也可以是“你的强大实力令她折服”。'
         : 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -3 到 4 的整数。reason需根据玩家指令基调调整，可以是“她被你的肉棒彻底征服，好感大增”，也可以是“你的精彩表现赢得了她的尊重”。',
       'playerDelta 0-45，opponentDelta 0-38。response 使用第二人称“你”。当且仅当玩家的行动指令包含明确的色情意图时，才进行详细、露骨的色情描写；否则，只在细节和氛围上进行暧昧、充满性暗示的补充。'
     ].join('\n');

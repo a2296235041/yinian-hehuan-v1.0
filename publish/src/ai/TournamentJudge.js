@@ -26,7 +26,8 @@
     const names = payload.opponents.map((item) => item.name).join('与');
     const relationshipChanges = payload.opponents.map((opponent, index) => {
       const shifted = seed >>> ((index * 5) % 20);
-      const delta = payload.mode === 'spirit' ? (shifted % 8) - 4 : (shifted % 8) - 3;
+      const rawDelta = payload.mode === 'spirit' ? (shifted % 11) - 5 : (shifted % 8) - 3;
+      const delta = payload.mode === 'spirit' && rawDelta === 0 ? 1 : rawDelta;
       return {
         opponentId: opponent.id,
         delta,
@@ -91,11 +92,13 @@
       const source = Array.isArray(raw.relationshipChanges) ? raw.relationshipChanges : [];
       const change = source.find((entry) => entry?.opponentId === opponent.id)
         || source[index] || {};
-      const min = payload.mode === 'spirit' ? -4 : -3;
-      const max = payload.mode === 'spirit' ? 3 : 4;
+      const min = payload.mode === 'spirit' ? -5 : -3;
+      const max = payload.mode === 'spirit' ? 5 : 4;
+      let delta = number(change.delta, min, max, base.relationshipChanges[index].delta);
+      if (payload.mode === 'spirit' && delta === 0) delta = 1;
       return {
         opponentId: opponent.id,
-        delta: number(change.delta, min, max, base.relationshipChanges[index].delta),
+        delta,
         reason: text(change.reason, 160) || base.relationshipChanges[index].reason
       };
     });

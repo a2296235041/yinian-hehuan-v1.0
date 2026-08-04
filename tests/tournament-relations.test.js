@@ -49,9 +49,25 @@ vm.runInNewContext(source, { window, Math });
   const changes = relations.normalizedChanges(spirit, {
     relationshipChanges: [{ opponentId: 'outsider', delta: 99, reason: '心境动摇' }]
   });
-  assert.equal(changes[0].delta, 3);
+  assert.equal(changes[0].delta, 5);
   await relations.apply(state, spirit, { relationshipChanges: changes });
-  assert.equal(state.corruption.outsider, 13);
+  assert.equal(state.corruption.outsider, 15);
+  assert.equal(relations.normalizedChanges(spirit, {
+    relationshipChanges: [{ opponentId: 'outsider', delta: 0 }]
+  })[0].delta, 1);
+  assert.equal(relations.normalizedChanges(spirit, {
+    relationshipChanges: [{ opponentId: 'outsider', delta: -99 }]
+  })[0].delta, -5);
+  state.corruption.outsider = 0;
+  await relations.apply(state, spirit, {
+    relationshipChanges: [{ opponentId: 'outsider', delta: -4, reason: '边界反向波动' }]
+  });
+  assert.equal(state.corruption.outsider, 4);
+  state.corruption.outsider = 100;
+  await relations.apply(state, spirit, {
+    relationshipChanges: [{ opponentId: 'outsider', delta: 3, reason: '边界反向波动' }]
+  });
+  assert.equal(state.corruption.outsider, 97);
   assert.equal(relations.display(roster[1], 'spirit', state).label, '堕落值');
   console.log('tournament relations test passed');
 })().catch((error) => {

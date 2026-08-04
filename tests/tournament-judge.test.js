@@ -115,7 +115,7 @@ const active = {
   assert.equal(result.source, 'ai-json');
   assert.equal(result.fallback, false);
   assert.equal(result.finished, false);
-  assert.equal(result.relationshipChanges[0].delta, 3);
+  assert.equal(result.relationshipChanges[0].delta, 5);
   assert.ok(result.playerDelta > 31);
   assert.ok(result.opponentDelta < 12);
   assert.equal(result.verdict.includes(`你 +${result.playerDelta} 点`), true);
@@ -136,6 +136,9 @@ const active = {
   assert.equal(captured.messages[0].content.includes('不得替玩家角色新增'), true);
   assert.equal(captured.messages[0].content.includes('不要以对手姓名开头'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
+  assert.equal(captured.messages[0].content.includes('至少进行五回合'), true);
+  assert.equal(captured.messages[0].content.includes('matchResult 固定填写 continue'), true);
+  assert.equal(captured.messages[0].content.includes('非零整数'), true);
   assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
   assert.equal(captured.messages[1].content.includes('最后一个瞬间之后'), true);
   assert.equal(captured.messages[0].content.includes('禁止出现“按照你的描述”'), true);
@@ -250,8 +253,9 @@ const active = {
   assert.ok(fallback.response.length <= 240);
   assert.equal(fallback.response.includes('：“'), true);
   assert.equal(fallback.verdict.includes('裁判判决'), true);
-  assert.equal(fallback.relationshipChanges[0].delta >= -4, true);
-  assert.equal(fallback.relationshipChanges[0].delta <= 3, true);
+  assert.equal(fallback.relationshipChanges[0].delta >= -5, true);
+  assert.equal(fallback.relationshipChanges[0].delta <= 5, true);
+  assert.notEqual(fallback.relationshipChanges[0].delta, 0);
 
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Request rejected'), { code: 'INVALID_REQUEST' });
@@ -280,8 +284,8 @@ const active = {
     '我以这一剑击败顾清罗，她当场认输，比赛就此结束。',
     tournamentState
   );
-  assert.equal(directed.finished, true);
-  assert.equal(directed.winner, 'player');
+  assert.equal(directed.finished, false);
+  assert.equal(directed.winner, 'ongoing');
   assert.ok(directed.playerDelta > directed.opponentDelta);
   assert.equal(directed.response.includes('完整构想'), false);
 
@@ -290,8 +294,8 @@ const active = {
     '我主动认输，由顾清罗赢下这一场。',
     tournamentState
   );
-  assert.equal(surrendered.finished, true);
-  assert.equal(surrendered.winner, 'opponent');
+  assert.equal(surrendered.finished, false);
+  assert.equal(surrendered.winner, 'ongoing');
   assert.ok(surrendered.opponentDelta > surrendered.playerDelta);
   assert.equal(surrendered.response.includes('依照你的安排'), false);
   console.log('tournament judge test passed');

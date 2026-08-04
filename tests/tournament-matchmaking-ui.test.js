@@ -15,9 +15,12 @@ const system = read('publish/src/systems/TournamentSystem.js');
 
 assert.ok(html.includes('<option value="tamper">篡改签文</option>'));
 assert.ok(html.includes('id="tournament-opponent-select"'));
+assert.ok(html.includes('id="tournament-decision"'));
 assert.ok(panel.includes('selectedOpponent()'));
 assert.ok(panel.includes('篡改下一轮签文'));
+assert.ok(panel.includes('requestDecision()'));
 assert.ok(view.includes('问鼎战三人同台'));
+assert.ok(view.includes('GameTournamentDecision.MIN_TURNS'));
 assert.ok(system.includes("speaker: '签表异动'"));
 
 console.log('tournament matchmaking UI test passed');

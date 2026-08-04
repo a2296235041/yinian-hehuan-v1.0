@@ -113,29 +113,20 @@
         if (!active || active.phase !== 'battle') throw new Error('当前没有可进行的赛事对局');
         root.GameTournamentBattleState.applyExchange(active, move, result);
         await root.GameTournamentRelations.apply(state, active, result);
-        if (result.finished) {
-          const match = currentMatch(active);
-          const winnerId = result.winner === 'player'
-            ? 'player'
-            : root.GameTournamentRules.weightedWinner(active.opponentIds, active.roster);
-          const winners = root.GameTournamentRules.resolvePlayerMatch(active.round, winnerId);
-          if (winnerId !== 'player') {
-            active.championId = root.GameTournamentRules.simulateChampion(
-              winners, active.stageIndex + 1, active.roster
-            );
-            active.playerWon = false;
-            active.phase = 'event_complete';
-            state.cooldowns[active.mode] = currentDay() + 10;
-          } else if (active.stageIndex === 2) {
-            active.championId = 'player';
-            active.playerWon = true;
-            active.phase = 'event_complete';
-            state.cooldowns[active.mode] = currentDay() + 10;
-          } else {
-            active.pendingEntrants = winners;
-            active.phase = 'round_complete';
-          }
+        return persist();
+      });
+    },
+    requestDecision() {
+      return queue(async () => {
+        const active = state.active;
+        if (!active || active.phase !== 'battle') throw new Error('当前没有可裁决的赛事对局');
+        if (!root.GameTournamentDecision.canRequest(active)) {
+          throw new Error(`至少完成 ${root.GameTournamentDecision.MIN_TURNS} 回合后才能请求裁判判决`);
         }
+        const winnerId = root.GameTournamentDecision.selectWinner(active);
+        if (!winnerId) throw new Error('裁判无法确认本轮胜者');
+        root.GameTournamentBattleState.applyDecision(active, winnerId);
+        root.GameTournamentDecision.complete(state, active, winnerId, currentDay());
         return persist();
       });
     },
