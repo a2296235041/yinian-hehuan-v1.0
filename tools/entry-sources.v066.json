@@ -8,6 +8,7 @@
   "src/systems/TimeSystem.js",
   "src/ui/SceneBackdrop.js",
   "src/ui/UISkin.js",
+  "src/ui/TransitionMessageBox.js",
   "src/assets/BuildingAssets.js",
   "src/assets/ExplorationAssets.js",
   "src/assets/EnemyAssets.js",

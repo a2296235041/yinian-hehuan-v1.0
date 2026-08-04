@@ -11,7 +11,7 @@ function read(relativePath) {
 const view = read('publish/src/ui/PlayerStatusView.js');
 const header = read('publish/src/ui/PlayerStatusHeader.js');
 const scene = read('publish/src/scenes/UIScene.js');
-const manifest = read('tools/entry-sources.v065.json');
+const manifest = read('tools/entry-sources.v066.json');
 
 assert.ok(header.includes('fillRoundedRect(12, 11, 360, 78, 7)'));
 assert.ok(header.includes("text(scene, 84, 61, '历程'"));

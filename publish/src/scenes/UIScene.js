@@ -5,7 +5,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     constructor() {
         super('UIScene');
         this.playerStatus = null;
-        this.logText = null;
+        this.logBox = null;
         this.dayAdvancing = false;
         this.cultivating = false;
         this.overlayOpening = false;
@@ -13,7 +13,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     create() {
         this.createStatusDisplay();
         this.createActionButtons();
-        this.createLogText();
+        this.createLogBox();
         Game.EventBus.on('affinity-changed', this.showAffinityChange, this);
         Game.EventBus.on('time-period-changed', this.updateUI, this);
         Game.EventBus.on('player-state-changed', this.updateUI, this);
@@ -39,23 +39,12 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             action();
         }, { width: 104, height: 46, fontSize: 16 });
     }
-    createLogText() {
-        this.logText = this.add.text(640, 328, '', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '23px',
-            color: '#fff8fa',
-            backgroundColor: 'rgba(50,21,34,0.92)',
-            padding: { x: 20, y: 12 },
-            align: 'center',
-            wordWrap: { width: 840, useAdvancedWrap: true },
-            fixedWidth: 900,
-            fixedHeight: 180
-        }).setOrigin(0.5).setAlpha(0).setVisible(false)
-            .setInteractive({ useHandCursor: true });
-        this.logText.on('pointerdown', (pointer, localX, localY, event) => {
+    createLogBox() {
+        this.logBox = Game.TransitionMessageBox.create(this);
+        this.logBox.container.on('pointerdown', (pointer, localX, localY, event) => {
             event?.stopPropagation?.();
-            this.tweens.killTweensOf(this.logText);
-            this.logText.setAlpha(0).setVisible(false);
+            this.tweens.killTweensOf(this.logBox.container);
+            this.logBox.container.setAlpha(0).setVisible(false);
         });
     }
     async openOverlay(sceneKey) {
@@ -174,17 +163,16 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         await Game.PlayerStatusView.loadProfile(this, this.playerStatus);
     }
     showLog(message) {
-        const text = Game.TextBoxUtils.fit(message, 36, 5);
-        this.logText.setText(text).setAlpha(1).setVisible(true);
-        this.logText.input?.hitArea?.setTo?.(0, 0, this.logText.width, this.logText.height);
-        this.tweens.killTweensOf(this.logText);
+        const text = this.logBox.layout(message);
+        const target = this.logBox.container.setAlpha(1).setVisible(true);
+        this.tweens.killTweensOf(target);
         this.tweens.add({
-            targets: this.logText,
+            targets: target,
             alpha: 0,
             delay: Math.min(7000, 2300 + text.length * 28),
             duration: 450,
             ease: 'Power2',
-            onComplete: () => this.logText?.setVisible(false)
+            onComplete: () => target.setVisible(false)
         });
     }
     cleanup() {
