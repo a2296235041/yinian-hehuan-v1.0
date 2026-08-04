@@ -21,6 +21,13 @@
     return message;
   }
 
+  function selectedOpponent() {
+    if (elements['tournament-draw-mode'].value !== 'tamper') return '';
+    const opponentId = elements['tournament-opponent-select'].value;
+    if (!opponentId) throw new Error('请选择要通过篡改签文锁定的对手');
+    return opponentId;
+  }
+
   async function run(action, loadingText) {
     if (busy) return;
     busy = true;
@@ -37,9 +44,16 @@
   }
 
   async function start() {
+    let opponentId = '';
+    try {
+      opponentId = selectedOpponent();
+    } catch (error) {
+      render(errorMessage(error, '请选择对手'));
+      return;
+    }
     await run(
-      () => root.GameTournament.start(mode),
-      '护山钟声响起，正在抽取十二人签表…'
+      () => root.GameTournament.start(mode, opponentId),
+      opponentId ? '正在篡改首轮签文并重排十二人对阵…' : '护山钟声响起，正在抽取十二人签表…'
     );
     root.GameAudio?.sfx?.('success');
   }
@@ -78,7 +92,17 @@
   }
 
   async function advance() {
-    await run(() => root.GameTournament.advanceRound(), '正在开启下一轮签表…');
+    let opponentId = '';
+    try {
+      opponentId = selectedOpponent();
+    } catch (error) {
+      render(errorMessage(error, '请选择对手'));
+      return;
+    }
+    await run(
+      () => root.GameTournament.advanceRound(opponentId),
+      opponentId ? '正在篡改下一轮签文…' : '正在开启下一轮签表…'
+    );
     root.GameAudio?.sfx?.('success');
   }
 
@@ -115,6 +139,8 @@
     elements['tournament-advance'].addEventListener('click', advance);
     elements['tournament-claim'].addEventListener('click', claim);
     elements['tournament-finish'].addEventListener('click', finish);
+    elements['tournament-draw-mode'].addEventListener('change', () => render());
+    elements['tournament-opponent-select'].addEventListener('change', () => render());
     elements['tournament-action-input'].addEventListener('keydown', (event) => {
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();

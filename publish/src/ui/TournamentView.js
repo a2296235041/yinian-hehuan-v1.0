@@ -6,7 +6,9 @@
     'tournament-roster', 'tournament-bracket', 'tournament-opponents',
     'tournament-history', 'tournament-score', 'tournament-start',
     'tournament-action-area', 'tournament-action-input', 'tournament-submit',
-    'tournament-advance', 'tournament-claim', 'tournament-finish'
+    'tournament-advance', 'tournament-claim', 'tournament-finish',
+    'tournament-matchmaking', 'tournament-draw-mode', 'tournament-opponent-field',
+    'tournament-opponent-select', 'tournament-matchmaking-note'
   ];
   let elements = null;
 
@@ -71,12 +73,47 @@
         ? ' is-global'
         : (entry.speaker === '破局提示'
           ? ' is-hint'
-          : (entry.speaker === '关系变化' ? ' is-relation' : ''));
+          : (entry.speaker === '关系变化'
+            ? ' is-relation'
+            : (entry.speaker === '签表异动' ? ' is-tamper' : '')));
       const row = node('p', `tournament-log${special}`);
       row.append(node('strong', '', entry.speaker), document.createTextNode(entry.text));
       elements['tournament-history'].append(row);
     });
     elements['tournament-history'].scrollTop = elements['tournament-history'].scrollHeight;
+  }
+
+  function renderMatchmaking(active, mode, busy) {
+    const sameMode = active?.mode === mode;
+    const choosingNext = sameMode && active.phase === 'round_complete';
+    const visible = !active || choosingNext;
+    elements['tournament-matchmaking'].hidden = !visible;
+    if (!visible) return;
+    const entrantIds = choosingNext ? active.pendingEntrants || [] : null;
+    const profiles = entrantIds
+      ? entrantIds.filter((id) => id !== 'player').map((id) => profileById(active, id))
+      : root.GameTournamentRoster.getCandidates(mode);
+    const candidates = profiles.filter(Boolean);
+    const finalRound = choosingNext && entrantIds.length === 3;
+    const method = elements['tournament-draw-mode'];
+    const selected = elements['tournament-opponent-select'];
+    const previous = selected.value;
+    if (finalRound) method.value = 'random';
+    method.disabled = busy || finalRound;
+    selected.replaceChildren(...candidates.map((profile) => {
+      const option = node('option', '', `${profile.name} · ${profile.faction} · 战力 ${profile.power}`);
+      option.value = profile.id;
+      return option;
+    }));
+    if (candidates.some((profile) => profile.id === previous)) selected.value = previous;
+    const tampering = method.value === 'tamper' && !finalRound;
+    elements['tournament-opponent-field'].hidden = !tampering;
+    selected.disabled = busy || !tampering;
+    elements['tournament-matchmaking-note'].textContent = finalRound
+      ? '问鼎战三人同台，两名对手都会登场，无法篡改为单独对阵。'
+      : (tampering
+        ? '篡改签文会锁定你的对手，其余签位仍按赛事规则生成。'
+        : '听从正常抽签，对手将由签表随机决定。');
   }
 
   function renderControls(active, mode, busy) {
@@ -85,16 +122,19 @@
     const sameMode = active?.mode === mode;
     const blocked = active && !sameMode;
     const canStart = !active && day >= cooldown;
+    const tampering = elements['tournament-draw-mode'].value === 'tamper'
+      && !elements['tournament-draw-mode'].disabled;
     elements['tournament-start'].hidden = Boolean(active);
     elements['tournament-start'].disabled = !canStart || busy;
     elements['tournament-start'].textContent = blocked
       ? `请先完成${active.title}`
-      : (cooldown > day ? `第 ${cooldown} 天再开` : '抽签入场');
+      : (cooldown > day ? `第 ${cooldown} 天再开` : (tampering ? '篡改签文入场' : '抽签入场'));
     elements['tournament-action-area'].hidden = !sameMode || active.phase !== 'battle';
     elements['tournament-submit'].disabled = busy;
     elements['tournament-submit'].textContent = busy ? 'AI 裁决中 · 约 10–30 秒' : '施展此招';
     elements['tournament-advance'].hidden = !sameMode || active.phase !== 'round_complete';
     elements['tournament-advance'].disabled = busy;
+    elements['tournament-advance'].textContent = tampering ? '篡改下一轮签文' : '进入下一轮';
     elements['tournament-claim'].hidden = !sameMode
       || active.phase !== 'event_complete' || !active.playerWon || active.rewardClaimed;
     elements['tournament-finish'].hidden = !sameMode
@@ -128,6 +168,7 @@
       elements['tournament-opponents'], sameMode, state
     );
     renderHistory(sameMode);
+    renderMatchmaking(active, mode, options.busy === true);
     renderControls(active, mode, options.busy === true);
   }
 

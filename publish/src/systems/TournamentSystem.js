@@ -27,6 +27,15 @@
   function currentMatch(active = state.active) {
     return active?.round?.matches?.find((match) => match.id === active.round.playerMatchId) || null;
   }
+  function recordTampering(active, opponentId) {
+    if (!opponentId) return;
+    const profile = active.roster.find((entry) => entry.id === opponentId);
+    active.tamperedOpponentIds = [...(active.tamperedOpponentIds || []), opponentId];
+    active.logs.push({
+      speaker: '签表异动',
+      text: `你暗中篡改了${active.round.label}签文，将${profile?.name || '指定人物'}锁定为对手。`
+    });
+  }
   function initialize() {
     if (readyPromise) return readyPromise;
     storage = root.GamefyRecipes.createVersionedStorage({
@@ -50,7 +59,7 @@
     });
     return readyPromise;
   }
-  function start(mode) {
+  function start(mode, preferredOpponentId = '') {
     return queue(async () => {
       await initialize();
       if (!MODE_INFO[mode]) throw new Error('未知赛事类型');
@@ -60,9 +69,9 @@
       if (currentDay() < state.cooldowns[mode]) {
         throw new Error(`赛事尚未开启，第 ${state.cooldowns[mode]} 天可再次参加`);
       }
-      const roster = root.GameTournamentRoster.build(mode);
+      const roster = root.GameTournamentRoster.build(mode, Math.random, preferredOpponentId);
       const round = root.GameTournamentRules.createRound(
-        roster.map((entry) => entry.id), 0, roster
+        roster.map((entry) => entry.id), 0, roster, Math.random, preferredOpponentId
       );
       state.active = {
         id: `${mode}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -77,9 +86,11 @@
         phase: 'battle',
         championId: null,
         playerWon: false,
-        rewardClaimed: false
+        rewardClaimed: false,
+        tamperedOpponentIds: []
       };
       root.GameTournamentBattleState.prepare(state.active, currentMatch(state.active));
+      recordTampering(state.active, preferredOpponentId);
       return persist();
     });
   }
@@ -129,17 +140,19 @@
         return persist();
       });
     },
-    advanceRound() {
+    advanceRound(preferredOpponentId = '') {
       return queue(async () => {
         const active = state.active;
         if (!active || active.phase !== 'round_complete') throw new Error('当前轮次尚未结束');
         active.roundHistory.push(State.clone(active.round));
         active.stageIndex += 1;
         active.round = root.GameTournamentRules.createRound(
-          active.pendingEntrants, active.stageIndex, active.roster
+          active.pendingEntrants, active.stageIndex, active.roster,
+          Math.random, preferredOpponentId
         );
         delete active.pendingEntrants;
         root.GameTournamentBattleState.prepare(active, currentMatch(active));
+        recordTampering(active, active.stageIndex < 2 ? preferredOpponentId : '');
         return persist();
       });
     },

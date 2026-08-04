@@ -77,10 +77,15 @@
     };
   }
 
-  function build(mode, random = Math.random) {
+  function build(mode, random = Math.random, preferredOpponentId = '') {
     const pool = mode === 'spirit' ? externalPool() : internalPool();
     if (pool.length < 11) throw new Error('赛事 NPC 数量不足，无法组成十二人签表');
-    return [playerProfile(), ...shuffle(pool, random).slice(0, 11)];
+    const preferred = pool.find((entry) => entry.id === preferredOpponentId);
+    if (preferredOpponentId && !preferred) throw new Error('所选对手不在本届候选名单中');
+    const candidates = preferred
+      ? [preferred, ...shuffle(pool.filter((entry) => entry.id !== preferred.id), random).slice(0, 10)]
+      : shuffle(pool, random).slice(0, 11);
+    return [playerProfile(), ...candidates];
   }
 
   root.GameTournamentRoster = Object.freeze({

@@ -111,8 +111,16 @@ async function winRound() {
 
 (async () => {
   await window.GameTournament.initialize();
-  await window.GameTournament.start('internal');
+  await window.GameTournament.start('internal', 'npc-7');
   assert.equal(window.GameTournament.getState().active.round.matches.length, 6);
+  assert.deepEqual(
+    Array.from(window.GameTournament.getState().active.opponentIds),
+    ['npc-7']
+  );
+  assert.equal(
+    window.GameTournament.getState().active.logs.some((entry) => entry.text.includes('篡改')),
+    true
+  );
 
   await winRound();
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
@@ -124,8 +132,14 @@ async function winRound() {
     window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '关系变化'),
     true
   );
-  await window.GameTournament.advanceRound();
+  const nextOpponent = window.GameTournament.getState().active.pendingEntrants
+    .find((id) => id !== 'player');
+  await window.GameTournament.advanceRound(nextOpponent);
   assert.equal(window.GameTournament.getState().active.round.matches.length, 3);
+  assert.deepEqual(
+    Array.from(window.GameTournament.getState().active.opponentIds),
+    [nextOpponent]
+  );
 
   await winRound();
   await window.GameTournament.advanceRound();

@@ -27,8 +27,21 @@
     return profiles.at(-1)?.id || ids[0];
   }
 
-  function makeMatches(entrantIds, stageIndex, roster, random = Math.random) {
-    const ordered = shuffle(entrantIds, random);
+  function makeMatches(entrantIds, stageIndex, roster, random = Math.random, preferredId = '') {
+    if (preferredId && (
+      preferredId === root.GameTournamentRoster.PLAYER_ID || !entrantIds.includes(preferredId)
+    )) {
+      throw new Error('无法将所选人物写入当前签表');
+    }
+    const ordered = preferredId && stageIndex < 2
+      ? [
+        root.GameTournamentRoster.PLAYER_ID,
+        preferredId,
+        ...shuffle(entrantIds.filter((id) => (
+          id !== root.GameTournamentRoster.PLAYER_ID && id !== preferredId
+        )), random)
+      ]
+      : shuffle(entrantIds, random);
     const groups = stageIndex === 2
       ? [ordered]
       : Array.from({ length: ordered.length / 2 }, (_, index) => (
@@ -46,12 +59,17 @@
     });
   }
 
-  function createRound(entrantIds, stageIndex, roster, random = Math.random) {
+  function createRound(
+    entrantIds, stageIndex, roster, random = Math.random, preferredOpponentId = ''
+  ) {
     const stage = STAGES[stageIndex];
     if (!stage || entrantIds.length !== stage.size) {
       throw new Error('赛事轮次人数不符合晋级规则');
     }
-    const matches = makeMatches(entrantIds, stageIndex, roster, random);
+    const matches = makeMatches(
+      entrantIds, stageIndex, roster, random,
+      stageIndex < 2 ? preferredOpponentId : ''
+    );
     const playerMatch = matches.find((match) => match.playerMatch);
     return {
       stageIndex,

@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.3.9">
+  <meta name="game-version" content="0.4.0">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.3.9',
-        build: '20260804.7',
-        cacheName: 'yinian-hehuan-v0.3.9-20260804.7',
-        entry: 'main.v039.js'
+        version: '0.4.0',
+        build: '20260804.8',
+        cacheName: 'yinian-hehuan-v0.4.0-20260804.8',
+        entry: 'main.v040.js'
       });
 
       root.GameRelease = release;
@@ -204,16 +204,16 @@
       to { transform: translateX(150%); }
     }
   </style>
-  <link rel="preload" href="./vendor/phaser.min.js?v=20260804-7" as="script">
-  <link rel="stylesheet" href="./style.css?v=20260804-7">
-  <link rel="stylesheet" href="./ui.css?v=20260804-7">
-  <link rel="stylesheet" href="./exploration.css?v=20260804-7">
-  <link rel="stylesheet" href="./theme.css?v=20260804-7">
-  <link rel="stylesheet" href="./layout.v015.css?v=20260804-7">
-  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260804-7">
-  <link rel="stylesheet" href="./tournament.v029.css?v=20260804-7">
-  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260804-7">
-  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260804-7">
+  <link rel="preload" href="./vendor/phaser.min.js?v=20260804-8" as="script">
+  <link rel="stylesheet" href="./style.css?v=20260804-8">
+  <link rel="stylesheet" href="./ui.css?v=20260804-8">
+  <link rel="stylesheet" href="./exploration.css?v=20260804-8">
+  <link rel="stylesheet" href="./theme.css?v=20260804-8">
+  <link rel="stylesheet" href="./layout.v015.css?v=20260804-8">
+  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260804-8">
+  <link rel="stylesheet" href="./tournament.v029.css?v=20260804-8">
+  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260804-8">
+  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260804-8">
 </head>
 <body>
   <main id="game-shell">
@@ -445,6 +445,20 @@
           <div id="tournament-opponents" class="tournament-opponents"></div>
           <div id="tournament-history" class="tournament-history"></div>
           <div class="tournament-controls">
+            <div id="tournament-matchmaking" class="tournament-matchmaking">
+              <label>
+                <span>对阵方式</span>
+                <select id="tournament-draw-mode">
+                  <option value="random">听从抽签</option>
+                  <option value="tamper">篡改签文</option>
+                </select>
+              </label>
+              <label id="tournament-opponent-field" hidden>
+                <span>锁定对手</span>
+                <select id="tournament-opponent-select"></select>
+              </label>
+              <small id="tournament-matchmaking-note"></small>
+            </div>
             <button id="tournament-start" type="button">抽签入场</button>
             <div id="tournament-action-area" class="tournament-action-area" hidden>
               <textarea id="tournament-action-input" class="tournament-action-input"
@@ -465,7 +479,7 @@
     </section>
   </main>
 
-  <script defer src="./vendor/phaser.min.js?v=20260804-7"></script>
-  <script defer src="./main.v039.js?v=20260804-7"></script>
+  <script defer src="./vendor/phaser.min.js?v=20260804-8"></script>
+  <script defer src="./main.v040.js?v=20260804-8"></script>
 </body>
 </html>

@@ -26,6 +26,11 @@ const first = rules.createRound(roster.map((entry) => entry.id), 0, roster, noSh
 assert.equal(first.label, '十二进六');
 assert.equal(first.matches.length, 6);
 assert.equal(first.matches.filter((match) => match.playerMatch).length, 1);
+const tampered = rules.createRound(
+  roster.map((entry) => entry.id), 0, roster, noShuffle, 'npc-7'
+);
+const tamperedMatch = tampered.matches.find((match) => match.playerMatch);
+assert.deepEqual(Array.from(tamperedMatch.participants), ['player', 'npc-7']);
 
 const six = rules.resolvePlayerMatch(first, 'player');
 assert.equal(six.length, 6);
