@@ -13,9 +13,9 @@ const preload = read('publish/src/scenes/PreloadScene.v025.js');
 const mainMenu = read('publish/src/scenes/MainMenuScene.js');
 const characterCreation = read('publish/src/scenes/CharacterCreationScene.v017.js');
 const portraitAssets = read('publish/src/assets/PlayerPortraitAssets.v002.js');
-const gameScenePreload = read('publish/src/assets/GameScenePreload.v037.js');
+const gameScenePreload = read('publish/src/assets/GameScenePreload.v038.js');
 const npcCards = read('publish/src/ui/NpcCardRenderer.js');
-const main = read('publish/src/boot/GameBootstrap.v037.js');
+const main = read('publish/src/boot/GameBootstrap.v038.js');
 
 assert.ok(html.includes('id="boot-splash"'));
 assert.ok(html.includes('<style data-critical-boot>'));
@@ -33,6 +33,10 @@ assert.ok(portraitAssets.includes('pending: new Map()'));
 assert.ok(characterCreation.includes('正在展开命格画卷'));
 assert.ok(characterCreation.includes('Game.PlayerPortraitAssets.preloadFirst(this)'));
 assert.ok(characterCreation.includes('Game.PlayerPortraitAssets.ensureLoaded(this, origin)'));
+assert.ok(characterCreation.includes("this.load.off('progress', onProgress)"));
+assert.ok(gameScenePreload.includes("this.load.off('progress', onProgress)"));
+assert.ok(preload.includes("this.load.off('progress', onProgress)"));
+assert.ok(preload.includes("this.load.off('loaderror', onLoadError)"));
 assert.ok(!main.includes('ensureModule'));
 assert.ok(
   main.indexOf('root.game = new Phaser.Game(config)')

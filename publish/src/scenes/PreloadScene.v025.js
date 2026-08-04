@@ -24,7 +24,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         Game.SceneTransition.fadeIn(this, 180);
         const loadingView = this.createLoadingView(width, height);
 
-        this.load.on('progress', (value) => {
+        const onProgress = (value) => {
             loadingView.update(value);
             window.PlatformBridge.progress({
                 phase: 'resource_loading',
@@ -32,19 +32,23 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
                 totalResources,
                 message: '正在加载宗门资源'
             });
-        });
-        this.load.on('loaderror', (file) => {
+        };
+        const onLoadError = (file) => {
             this.loadFailed = true;
             console.error('资源加载失败:', file.key, file.src);
-        });
+        };
+        this.load.on('progress', onProgress);
+        this.load.on('loaderror', onLoadError);
         this.load.once('complete', () => {
+            this.load.off('progress', onProgress);
+            this.load.off('loaderror', onLoadError);
             loadingView.complete();
         });
 
         this.load.image('bg-sect', './assets/generated/sect-courtyard.c4be5633.webp');
         this.load.json(
             'character_origins',
-            './assets/data/character_origins.v025.json?v=20260804-5'
+            './assets/data/character_origins.v025.json?v=20260804-6'
         );
     }
 

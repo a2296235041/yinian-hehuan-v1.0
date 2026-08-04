@@ -9,12 +9,12 @@
     originalPreload?.call(this);
     const resources = [
       ['image', 'bg-sect-map', './assets/generated/sect-map.2a28a8cb.webp'],
-      ['json', 'npcs', './assets/data/npcs.v025.json?v=20260804-5'],
-      ['json', 'tournament_npcs', './assets/data/tournament_npcs.json?v=20260804-5'],
-      ['json', 'npc_openings', './assets/data/npc_openings.v025.json?v=20260804-5'],
-      ['json', 'items', './assets/data/items.json?v=20260804-5'],
-      ['json', 'exploration_regions', './assets/data/exploration_regions.json?v=20260804-5'],
-      ['json', 'enemies', './assets/data/enemies.json?v=20260804-5']
+      ['json', 'npcs', './assets/data/npcs.v025.json?v=20260804-6'],
+      ['json', 'tournament_npcs', './assets/data/tournament_npcs.json?v=20260804-6'],
+      ['json', 'npc_openings', './assets/data/npc_openings.v025.json?v=20260804-6'],
+      ['json', 'items', './assets/data/items.json?v=20260804-6'],
+      ['json', 'exploration_regions', './assets/data/exploration_regions.json?v=20260804-6'],
+      ['json', 'enemies', './assets/data/enemies.json?v=20260804-6']
     ];
     this.cameras.main.setBackgroundColor('#09100e');
     const label = this.add.text(640, 330, '正在布置宗门地图', {
@@ -27,10 +27,14 @@
       fontSize: '15px',
       color: '#e8b7c7'
     }).setOrigin(0.5);
-    this.load.on('progress', (value) => progress.setText(`${Math.round(value * 100)}%`));
+    const onProgress = (value) => {
+      if (progress.active) progress.setText(`${Math.round(value * 100)}%`);
+    };
+    this.load.on('progress', onProgress);
     this.load.once('complete', () => {
-      label.destroy();
-      progress.destroy();
+      this.load.off('progress', onProgress);
+      if (label.active) label.destroy();
+      if (progress.active) progress.destroy();
     });
     resources.forEach(([type, key, url]) => {
       if (type === 'image') {

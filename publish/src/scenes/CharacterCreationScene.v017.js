@@ -33,8 +33,15 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
             fontSize: '15px',
             color: '#e8b7c7'
         }).setOrigin(0.5);
-        this.load.on('progress', (value) => progress.setText(`${Math.round(value * 100)}%`));
-        this.load.once('complete', () => label.setText('命格已显'));
+        const onProgress = (value) => {
+            if (progress.active) progress.setText(`${Math.round(value * 100)}%`);
+        };
+        this.load.on('progress', onProgress);
+        this.load.once('complete', () => {
+            this.load.off('progress', onProgress);
+            if (label.active) label.destroy();
+            if (progress.active) progress.destroy();
+        });
     }
 
     create() {
