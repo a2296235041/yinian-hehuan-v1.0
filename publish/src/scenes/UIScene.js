@@ -4,17 +4,7 @@ Game.Scenes = Game.Scenes || {};
 Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     constructor() {
         super('UIScene');
-        this.dayText = null;
-        this.nameText = null;
-        this.realmText = null;
-        this.statusPanel = null;
-        this.detailPanel = null;
-        this.detailText = null;
-        this.avatarImage = null;
-        this.avatarRing = null;
-        this.avatarMaskShape = null;
-        this.detailVisible = false;
-        this.playerName = '无名修士';
+        this.playerStatus = null;
         this.logText = null;
         this.dayAdvancing = false;
         this.cultivating = false;
@@ -34,46 +24,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.loadPlayerProfile();
         Game.SceneTransition.fadeIn(this);
     }
-    createStatusDisplay() {
-        this.statusPanel = Game.UISkin.addPanel(this, 183, 58, 330, 88, 'wide', {
-            depth: 20,
-            alpha: 0.96
-        });
-        this.avatarRing = this.add.circle(62, 58, 30, 0x321522, 1)
-            .setStrokeStyle(2, 0xf0a8bb, 0.95)
-            .setDepth(21);
-        this.avatarMaskShape = this.make.graphics({ x: 0, y: 0, add: false });
-        this.avatarMaskShape.fillCircle(62, 58, 27);
-        const avatarMask = this.avatarMaskShape.createGeometryMask();
-        this.avatarImage = this.add.image(62, 58, 'npc-scholar')
-            .setDisplaySize(62, 62)
-            .setMask(avatarMask)
-            .setDepth(22);
-        this.fitAvatarImage();
-        const avatarButton = this.add.circle(62, 58, 34, 0xffffff, 0.001)
-            .setInteractive({ useHandCursor: true })
-            .setDepth(23);
-        avatarButton.on('pointerdown', () => this.toggleDetails());
-        const style = {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '16px',
-            color: '#fff8fa'
-        };
-        this.nameText = this.add.text(106, 32, '', style).setDepth(21);
-        this.dayText = this.add.text(106, 61, '', style).setDepth(21);
-        this.realmText = this.add.text(216, 61, '', style).setDepth(21);
-        this.detailPanel = Game.UISkin.addPanel(this, 198, 263, 360, 306, 'card', {
-            depth: 20,
-            alpha: 0.98
-        })
-            .setVisible(false);
-        this.detailText = this.add.text(36, 130, '', {
-            ...style,
-            fontSize: '15px',
-            lineSpacing: 7,
-            wordWrap: { width: 324, useAdvancedWrap: true }
-        }).setDepth(21).setVisible(false);
-    }
+    createStatusDisplay() { this.playerStatus = Game.PlayerStatusView.create(this); }
     createActionButtons() {
         const y = 680;
         this.makeButton(714, y, '下一天', () => this.handleNextDay());
@@ -218,81 +169,9 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         this.showLog(`双修圆满，突破至${data.realmName}！`);
         this.updateUI();
     }
-    updateUI() {
-        const player = Game.player;
-        const cultivation = window.GameCultivation.getSnapshot();
-        this.dayText.setText(window.GameTime.getSnapshot(player).label);
-        this.realmText.setText(cultivation.label);
-        this.nameText.setText(this.playerName || player.origin?.name || '无名修士');
-        this.updateDetails();
-    }
+    updateUI() { Game.PlayerStatusView.update(this.playerStatus); }
     async loadPlayerProfile() {
-        const profile = await window.PlatformBridge.getPlayerProfile();
-        this.playerName = profile.name || Game.player?.origin?.name || '无名修士';
-        this.updateUI();
-        if (!profile.avatarUrl || !this.avatarImage?.active) return;
-        const textureKey = 'player-avatar';
-        if (this.textures.exists(textureKey)) {
-            this.avatarImage.setTexture(textureKey);
-            this.fitAvatarImage();
-            return;
-        }
-        try {
-            this.load.once('loaderror', (file) => {
-                if (file.key === textureKey) {
-                    console.warn('玩家头像加载失败，继续使用默认头像');
-                }
-            });
-            this.load.once('complete', () => {
-                if (this.avatarImage?.active && this.textures.exists(textureKey)) {
-                    this.avatarImage.setTexture(textureKey);
-                    this.fitAvatarImage();
-                }
-            });
-            this.load.image(textureKey, profile.avatarUrl);
-            this.load.start();
-        } catch (error) {
-            console.error('玩家头像加载失败:', error.code || '', error.message, error.stack);
-        }
-    }
-    fitAvatarImage() {
-        if (!this.avatarImage?.active) return;
-        const targetSize = 62;
-        const width = Number(this.avatarImage.width) || targetSize;
-        const height = Number(this.avatarImage.height) || targetSize;
-        const scale = Math.max(targetSize / width, targetSize / height);
-        this.avatarImage.setScale(scale);
-    }
-    toggleDetails() {
-        this.detailVisible = !this.detailVisible;
-        this.detailPanel.setVisible(this.detailVisible);
-        this.detailText.setVisible(this.detailVisible);
-        this.updateDetails();
-    }
-    updateDetails() {
-        if (!this.detailText || !Game.player) return;
-        const cultivation = window.GameCultivation.getSnapshot();
-        const stats = window.GamePlayerStats.getSnapshot();
-        const player = Game.player;
-        const cultivationLine = cultivation.maxRealm
-            ? '修为　已臻化境'
-            : `修为　${cultivation.progress} / ${cultivation.required}（${cultivation.percent}%）`;
-        const lines = [
-            `身份　${stats.originName}`,
-            `天赋　${stats.talentName}`,
-            `境界　${cultivation.label}`,
-            cultivationLine,
-            `精力　${player.stamina} / ${player.maxStamina}`,
-            `今日修炼　${player.dailyCultivationCount} / ${player.maxDailyCultivation}`,
-            '',
-            '力量　' + stats.strength + '　　根骨　' + stats.constitution,
-            '身法　' + stats.agility + '　　神识　' + stats.intelligence,
-            '魅力　' + stats.charisma + '　　悟性　' + stats.wisdom,
-            '气运　' + stats.luck,
-            '',
-            `战斗　攻击 ${stats.attack}　防御 ${stats.defense}　速度 ${stats.speed}`
-        ];
-        this.detailText.setText(lines.join('\n'));
+        await Game.PlayerStatusView.loadProfile(this, this.playerStatus);
     }
     showLog(message) {
         const text = Game.TextBoxUtils.fit(message, 36, 5);
@@ -308,7 +187,6 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
             onComplete: () => this.logText?.setVisible(false)
         });
     }
-
     cleanup() {
         Game.EventBus.off('affinity-changed', this.showAffinityChange, this);
         Game.EventBus.off('time-period-changed', this.updateUI, this);

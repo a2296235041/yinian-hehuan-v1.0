@@ -86,6 +86,7 @@
   "src/ui/ShopQuantityDialog.js",
   "src/ui/ShopPurchaseController.js",
   "src/ui/ShopGridView.js",
+  "src/ui/PlayerStatusView.js",
   "src/ui/NpcCardRenderer.js",
   "src/ui/MainMenuDecor.js",
   "src/ui/PreloadDecor.js",
@@ -99,7 +100,7 @@
   "src/scenes/MainMenuScene.js",
   "src/scenes/CharacterCreationScene.v017.js",
   "src/scenes/GameScene.js",
-  "src/assets/GameScenePreload.v045.js",
+  "src/assets/GameScenePreload.v046.js",
   "src/scenes/ShopScene.js",
   "src/scenes/InventoryScene.v021.js",
   "src/scenes/ExplorationScene.v023.js",
@@ -107,5 +108,5 @@
   "src/scenes/UIScene.js",
   "src/scenes/OverlayGuard.js",
   "src/settings/TrafficSaverPromptGuard.v023.js",
-  "src/boot/GameBootstrap.v045.js"
+  "src/boot/GameBootstrap.v046.js"
 ]
