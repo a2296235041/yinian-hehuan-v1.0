@@ -21,6 +21,10 @@ const responseTextSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentResponseText.js'),
   'utf8'
 );
+const promptSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/TournamentPrompt.js'),
+  'utf8'
+);
 let captured = null;
 const window = {
   navigator: { onLine: true },
@@ -60,6 +64,7 @@ const window = {
 vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(authoritySource, { window, console: window.console, Math, JSON, Set });
 vm.runInNewContext(responseTextSource, { window, console: window.console, Math, JSON });
+vm.runInNewContext(promptSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(judgeSource, { window, console: window.console, Math, JSON });
 
 const active = {
@@ -97,17 +102,23 @@ const active = {
   assert.ok(result.opponentDelta < 12);
   assert.equal(result.verdict.includes(`你 +${result.playerDelta} 点`), true);
   assert.equal(result.verdict.includes(`对手 +${result.opponentDelta} 点`), true);
-  assert.deepEqual(Array.from(captured.messages, (entry) => entry.role), ['user']);
+  assert.deepEqual(Array.from(captured.messages, (entry) => entry.role), ['user', 'user']);
   assert.equal(captured.messages[0].content.includes('双方刚刚登台'), true);
-  assert.equal(captured.messages[0].content.includes('引桃花化剑雨'), true);
+  assert.equal(captured.messages[0].content.includes('引桃花化剑雨'), false);
+  assert.equal(captured.messages[1].content.includes('引桃花化剑雨'), true);
+  assert.equal(captured.messages[1].content.includes('<player_canon>'), true);
+  assert.equal(captured.messages[1].content.includes('不可改写'), true);
   assert.equal(captured.messages[0].content.includes('不少于 150'), true);
   assert.equal(captured.messages[0].content.includes('字段仅为：response'), true);
   assert.equal(captured.messages[0].content.includes('不要写战报、综述'), true);
   assert.equal(captured.messages[0].content.includes('观众反应只能偶尔出现'), true);
-  assert.equal(captured.messages[0].content.includes('最高叙事指令'), true);
+  assert.equal(captured.messages[0].content.includes('玩家绝对叙事权'), true);
+  assert.equal(captured.messages[0].content.includes('合理续写的定义'), true);
+  assert.equal(captured.messages[0].content.includes('禁止新增与之冲突的拒绝'), true);
+  assert.equal(captured.messages[0].content.includes('不得替玩家角色新增'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
   assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
-  assert.equal(captured.messages[0].content.includes('最后一个动作或结果之后'), true);
+  assert.equal(captured.messages[1].content.includes('最后一个瞬间之后'), true);
   assert.equal(captured.messages[0].content.includes('禁止出现“按照你的描述”'), true);
 
   const conciseSummary = '剑雨消散的刹那，顾清罗立即压低剑锋贴近中线，借残留寒气封住退路。你顺势转腕逼开霜刃，她踉跄半步后重新稳住呼吸，双方距离再次缩短。';
@@ -127,6 +138,24 @@ const active = {
   assert.equal(concise.response.startsWith(conciseSummary), true);
   assert.ok(concise.response.length >= 150);
   assert.equal(concise.summary, concise.response);
+
+  window.dzmm.completions = async (_config, callback) => {
+    callback(JSON.stringify({
+      response: '顾清罗失去力气伏在擂台上，只能抬眼看向你，紊乱的呼吸让她一时说不出完整的话。',
+      verdictReason: '玩家已完全控制当前局面，本回合你占优。',
+      matchResult: 'continue',
+      relationshipChanges: [],
+      playerDelta: 32,
+      opponentDelta: 4
+    }), true);
+  };
+  const controlled = await window.GameTournamentJudge.judge(
+    active, '我封住她的经脉，让她失去力气伏在地上，只能看着我。', tournamentState
+  );
+  assert.ok(controlled.response.length >= 150);
+  ['还没结束', '重新逼近', '反击', '挣脱'].forEach((phrase) => {
+    assert.equal(controlled.response.includes(phrase), false);
+  });
 
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
