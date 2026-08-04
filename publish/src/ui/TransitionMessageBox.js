@@ -41,6 +41,9 @@
 
   function create(scene) {
     const frame = scene.add.graphics();
+    const hitTarget = scene.add.zone(0, 0, WIDTH, MIN_HEIGHT)
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
     const crest = scene.add.text(0, 0, '◆', {
       fontFamily: 'serif',
       fontSize: '17px',
@@ -55,14 +58,10 @@
       fixedWidth: TEXT_WIDTH,
       wordWrap: { width: TEXT_WIDTH, useAdvancedWrap: true }
     }).setOrigin(0.5);
-    const container = scene.add.container(640, 360, [frame, crest, text])
+    const container = scene.add.container(640, 360, [frame, crest, text, hitTarget])
       .setDepth(40)
       .setAlpha(0)
       .setVisible(false);
-    container.setInteractive(
-      new Phaser.Geom.Rectangle(-WIDTH / 2, -MIN_HEIGHT / 2, WIDTH, MIN_HEIGHT),
-      Phaser.Geom.Rectangle.Contains
-    );
 
     function layout(message) {
       const fitted = root.Game.TextBoxUtils.fit(message, 42, 6);
@@ -71,12 +70,13 @@
       crest.setY(-height / 2 + 17);
       draw(frame, height);
       container.setSize(WIDTH, height);
-      container.input?.hitArea?.setTo(-WIDTH / 2, -height / 2, WIDTH, height);
+      hitTarget.setSize(WIDTH, height);
+      hitTarget.input?.hitArea?.setTo(0, 0, WIDTH, height);
       container.setPosition(640, 360);
       return fitted;
     }
 
-    return { container, text, layout };
+    return { container, hitTarget, text, layout };
   }
 
   root.Game.TransitionMessageBox = Object.freeze({ create, heightFor });

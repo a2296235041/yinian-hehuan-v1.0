@@ -41,10 +41,25 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     }
     createLogBox() {
         this.logBox = Game.TransitionMessageBox.create(this);
-        this.logBox.container.on('pointerdown', (pointer, localX, localY, event) => {
+        this.logBox.hitTarget.on('pointerdown', (pointer, localX, localY, event) => {
             event?.stopPropagation?.();
-            this.tweens.killTweensOf(this.logBox.container);
-            this.logBox.container.setAlpha(0).setVisible(false);
+            pointer?.event?.stopPropagation?.();
+            this.dismissLogBox();
+        });
+    }
+    dismissLogBox() {
+        const target = this.logBox?.container;
+        if (!target?.visible) return;
+        window.GameAudio.sfx('click');
+        this.tweens.killTweensOf(target);
+        this.tweens.add({
+            targets: target,
+            alpha: 0,
+            scaleX: 0.985,
+            scaleY: 0.985,
+            duration: 80,
+            ease: 'Sine.easeIn',
+            onComplete: () => target.setVisible(false).setScale(1)
         });
     }
     async openOverlay(sceneKey) {
@@ -164,7 +179,7 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
     }
     showLog(message) {
         const text = this.logBox.layout(message);
-        const target = this.logBox.container.setAlpha(1).setVisible(true);
+        const target = this.logBox.container.setScale(1).setAlpha(1).setVisible(true);
         this.tweens.killTweensOf(target);
         this.tweens.add({
             targets: target,
