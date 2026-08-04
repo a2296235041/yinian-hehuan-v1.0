@@ -11,6 +11,15 @@
   };
   let queue = Promise.resolve();
 
+  function normalizeQuantity(value) {
+    const quantity = Math.floor(Number(value) || 0);
+    return quantity >= 1 && quantity <= 9999 ? quantity : 0;
+  }
+
+  function displayNumber(value) {
+    return Number.isInteger(value) ? String(value) : Number(value.toFixed(1)).toString();
+  }
+
   function enqueue(action) {
     const task = queue.then(action, action);
     queue = task.then(() => undefined, () => undefined);
@@ -30,13 +39,14 @@
     };
   }
 
-  function effectLabel(item) {
+  function effectLabel(item, quantity = 1) {
+    const count = normalizeQuantity(quantity) || 1;
     if (item.type === 'cultivation' && item.cultivation_percent) {
-      return `使用后当前境界修为 +${item.cultivation_percent}%`;
+      return `使用后当前境界修为 +${displayNumber(item.cultivation_percent * count)}%`;
     }
-    if (item.type === 'cultivation') return `使用后修为 +${item.cultivation_gain}`;
+    if (item.type === 'cultivation') return `使用后修为 +${item.cultivation_gain * count}`;
     if (item.type === 'attribute') {
-      return `使用后${attributeNames[item.attribute] || item.attribute} +${item.attribute_gain}`;
+      return `使用后${attributeNames[item.attribute] || item.attribute} +${item.attribute_gain * count}`;
     }
     return `赠礼好感 +${item.gift_affinity || 0}`;
   }
@@ -63,7 +73,7 @@
     });
   }
 
-  function useItem(itemId) {
+  function useItem(itemId, quantity = 1) {
     return enqueue(async () => {
       await Promise.all([
         root.GameInventory.ready(),
@@ -71,38 +81,57 @@
         root.GamePlayerGrowth.ready()
       ]);
       const item = root.GameInventory.getItem(itemId);
+      const requestedQuantity = normalizeQuantity(quantity);
+      if (!requestedQuantity) return { changed: false, reason: 'invalid_quantity', item };
       if (!item || !['cultivation', 'attribute'].includes(item.type)) {
         return { changed: false, reason: 'not_usable', item };
+      }
+      if (root.GameInventory.getQuantity(itemId) < requestedQuantity) {
+        return { changed: false, reason: 'insufficient', item };
       }
       const cultivation = root.GameCultivation.getSnapshot();
       if (item.type === 'cultivation' && (cultivation.maxRealm || cultivation.canBreakthrough)) {
         return { changed: false, reason: cultivation.maxRealm ? 'max_realm' : 'bottleneck', item };
       }
-      const removed = await root.GameInventory.remove(itemId, 1, 'use_item');
-      if (!removed.changed) return { changed: false, reason: removed.reason, item };
       const stats = root.GamePlayerStats.getSnapshot();
-      const result = item.type === 'cultivation'
+      const multiplier = 1 + Number(stats.pillGainPercent || 0) / 100;
+      const unitGain = item.type === 'cultivation'
         ? (item.cultivation_percent
-          ? await root.GameCultivation.addCultivationPercent(
-            Number(item.cultivation_percent) * (1 + Number(stats.pillGainPercent || 0) / 100),
-            'item'
-          )
-          : await root.GameCultivation.addCultivation(
-            Number(item.cultivation_gain) * (1 + Number(stats.pillGainPercent || 0) / 100),
-            'item'
-          ))
-        : await root.GamePlayerGrowth.addBonus(item.attribute, item.attribute_gain, 'item');
+          ? Math.max(1, Math.ceil(cultivation.required
+            * Number(item.cultivation_percent) * multiplier / 100))
+          : Math.max(1, Math.floor(Number(item.cultivation_gain) * multiplier)))
+        : Math.max(1, Math.floor(Number(item.attribute_gain)));
+      const remaining = item.type === 'cultivation'
+        ? cultivation.required - cultivation.progress
+        : 999 - root.GamePlayerGrowth.getBonus(item.attribute);
+      const usefulQuantity = Math.min(
+        requestedQuantity,
+        Math.max(0, Math.ceil(remaining / unitGain))
+      );
+      if (!usefulQuantity) {
+        return { changed: false, reason: item.type === 'cultivation' ? 'bottleneck' : 'max_attribute', item };
+      }
+      const removed = await root.GameInventory.remove(itemId, usefulQuantity, 'use_item');
+      if (!removed.changed) return { changed: false, reason: removed.reason, item };
+      const result = item.type === 'cultivation'
+        ? await root.GameCultivation.addCultivation(unitGain * usefulQuantity, 'item')
+        : await root.GamePlayerGrowth.addBonus(
+          item.attribute, unitGain * usefulQuantity, 'item'
+        );
       if (!result.changed) {
-        await root.GameInventory.add(itemId, 1, 'item_refund');
+        await root.GameInventory.add(itemId, usefulQuantity, 'item_refund');
         return { changed: false, reason: result.reason || 'effect_failed', item };
       }
       return {
         changed: true,
         item,
         result,
+        requestedQuantity,
+        usedQuantity: usefulQuantity,
+        partial: usefulQuantity < requestedQuantity,
         text: item.type === 'cultivation'
-          ? `服用${item.name}，修为 +${result.gain}`
-          : `使用${item.name}，${attributeNames[item.attribute]} +${result.gain}`
+          ? `服用${item.name} ×${usefulQuantity}，修为 +${result.gain}`
+          : `使用${item.name} ×${usefulQuantity}，${attributeNames[item.attribute]} +${result.gain}`
       };
     });
   }

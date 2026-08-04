@@ -67,16 +67,20 @@
       if (!allowed.includes(attribute)) return { changed: false, reason: 'invalid_attribute' };
       const gain = clamp(amount);
       if (gain <= 0) return { changed: false, reason: 'invalid_amount' };
-      state.bonuses[attribute] = clamp((state.bonuses[attribute] || 0) + gain);
+      const before = state.bonuses[attribute] || 0;
+      const next = clamp(before + gain);
+      const applied = next - before;
+      if (applied <= 0) return { changed: false, reason: 'max_attribute' };
+      state.bonuses[attribute] = next;
       const durable = await persist(true);
       root.Game.EventBus.emit('player-state-changed', {
         player: root.Game.player,
         attribute,
-        gain,
+        gain: applied,
         source,
         durable
       });
-      return { changed: true, attribute, gain, durable, snapshot: snapshot() };
+      return { changed: true, attribute, gain: applied, durable, snapshot: snapshot() };
     });
   }
 

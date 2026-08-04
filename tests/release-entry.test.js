@@ -7,7 +7,7 @@ const path = require('node:path');
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
 const version = '0.3.6';
-const build = '20260804.2';
+const build = '20260804.3';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -58,6 +58,8 @@ assert.ok(
   './src/ui/TournamentPanel.js',
   './src/ui/TournamentEntry.js',
   './src/ui/PrivateGroupDialoguePanel.v033.js',
+  './src/ui/InventoryQuantityDialog.js',
+  './src/ui/InventoryUseController.js',
   './main.v036.js'
 ].forEach((entry) => {
   assert.ok(

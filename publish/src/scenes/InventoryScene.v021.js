@@ -12,6 +12,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.useStatusText = null;
         this.busyItemId = null;
         this.requestId = 0;
+        this.quantityDialog = null;
     }
     create() {
         this.baseScenesRestored = false;
@@ -116,8 +117,8 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             }));
             if (['cultivation', 'attribute'].includes(item.type)) {
                 const use = Game.UISkin.makeButton(
-                    this, x + 185, y + 59, '使用', () => this.useItem(item),
-                    { width: 82, height: 34, fontSize: 14 }
+                    this, x + 185, y + 55, '使用', () => this.openUseDialog(item),
+                    { width: 82, height: 44, fontSize: 14 }
                 );
                 this.entryObjects.push(use);
             }
@@ -133,42 +134,18 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
             this.renderItems();
         }, { width: 62, height: 40, fontSize: 24, variant: 'secondary' });
     }
-    async useItem(item) {
+    openUseDialog(item) {
         if (this.busyItemId) return;
-        this.busyItemId = item.id;
-        const requestId = ++this.requestId;
-        this.useStatusText.setText(`正在使用${item.name}…`);
-        try {
-            const result = await window.GameShop.useItem(item.id);
-            if (requestId !== this.requestId || !this.useStatusText?.active) return;
-            if (!result.changed) {
-                window.GameAudio.sfx('deny');
-                const messages = {
-                    bottleneck: '修为已达瓶颈，请先找 NPC 双修突破。',
-                    max_realm: '当前修炼体系已达最高境界。',
-                    insufficient: '物品数量不足。'
-                };
-                this.useStatusText.setText(messages[result.reason] || '此物暂时无法使用。');
-                return;
-            }
-            window.GameAudio.sfx('success');
-            this.useStatusText.setText('物品生效，AI 正在补全这一幕…');
-            const story = await window.GameNarrative.generateDetailed('use_item', {
-                item: item.name,
-                effect: window.GameShop.effectLabel(item),
-                realm: window.GameCultivation.getSnapshot().label,
-                attributes: window.GamePlayerStats.getSnapshot()
-            }, result.text);
-            if (requestId === this.requestId && this.useStatusText.active) {
-                this.useStatusText.setText(story);
-            }
-        } finally {
-            if (requestId === this.requestId) this.busyItemId = null;
-            if (this.sys.isActive()) this.renderItems();
-        }
+        this.quantityDialog?.close();
+        this.quantityDialog = Game.InventoryQuantityDialog.open(this, item, (quantity) => {
+            this.quantityDialog = null;
+            void Game.InventoryUseController.run(this, item, quantity);
+        });
     }
     close() {
         this.requestId += 1;
+        this.quantityDialog?.close();
+        this.quantityDialog = null;
         window.GameNarrative.cancel();
         window.GameAudio.sfx('click');
         Game.SceneTransition.fadeOut(this, () => {
@@ -188,6 +165,8 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         window.GameModelUI.setMode('compact');
     }
     cleanup() {
+        this.quantityDialog?.close();
+        this.quantityDialog = null;
         window.GameCheatPanel?.close?.();
         Game.EventBus.off('inventory-changed', this.renderItems, this);
         this.restoreBaseScenes();
