@@ -58,9 +58,9 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.json('npcs', './assets/data/npcs.v025.json');
         this.load.json('tournament_npcs', './assets/data/tournament_npcs.json');
         this.load.json('npc_openings', './assets/data/npc_openings.v025.json');
-        this.load.json('items', './assets/data/items.json');
-        this.load.json('exploration_regions', './assets/data/exploration_regions.json');
-        this.load.json('enemies', './assets/data/enemies.json');
+        this.load.json('items', './assets/data/items.json?v=20260804-4');
+        this.load.json('exploration_regions', './assets/data/exploration_regions.json?v=20260804-4');
+        this.load.json('enemies', './assets/data/enemies.json?v=20260804-4');
     }
 
     createLoadingView(width, height) {

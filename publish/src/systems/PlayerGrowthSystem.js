@@ -4,19 +4,32 @@
   const allowed = [
     'strength', 'constitution', 'agility', 'intelligence', 'charisma', 'wisdom', 'luck'
   ];
+  const ATTRIBUTE_CAP = 9999;
   let state = { bonuses: {} };
   let readyPromise = null;
   let storage = null;
   let mutationQueue = Promise.resolve();
 
   function clamp(value) {
-    return Math.max(0, Math.min(999, Math.floor(Number(value) || 0)));
+    return Math.max(0, Math.min(ATTRIBUTE_CAP, Math.floor(Number(value) || 0)));
   }
 
-  function sanitize(value) {
+  function baseValue(attribute, origin = root.Game.player?.origin) {
+    const base = Number(origin?.attributes?.[attribute]);
+    const talentId = origin?.talent?.id || origin?.id || '';
+    const talentBonus = talentId === 'mindful_guest'
+      && ['intelligence', 'charisma'].includes(attribute) ? 8 : 0;
+    return Math.max(0, Math.floor(Number.isFinite(base) ? base : 0)) + talentBonus;
+  }
+
+  function maxBonus(attribute, origin) {
+    return Math.max(0, ATTRIBUTE_CAP - baseValue(attribute, origin));
+  }
+
+  function sanitize(value, origin) {
     const bonuses = {};
     allowed.forEach((key) => {
-      const amount = clamp(value?.bonuses?.[key]);
+      const amount = Math.min(clamp(value?.bonuses?.[key]), maxBonus(key, origin));
       if (amount > 0) bonuses[key] = amount;
     });
     return { bonuses };
@@ -68,7 +81,7 @@
       const gain = clamp(amount);
       if (gain <= 0) return { changed: false, reason: 'invalid_amount' };
       const before = state.bonuses[attribute] || 0;
-      const next = clamp(before + gain);
+      const next = Math.min(clamp(before + gain), maxBonus(attribute));
       const applied = next - before;
       if (applied <= 0) return { changed: false, reason: 'max_attribute' };
       state.bonuses[attribute] = next;
@@ -84,10 +97,10 @@
     });
   }
 
-  function restore(nextState) {
+  function restore(nextState, origin) {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
-      state = sanitize(nextState);
+      state = sanitize(nextState, origin);
       const durable = await persist(true);
       root.Game.EventBus.emit('player-state-changed', { player: root.Game.player, source: 'load' });
       return { durable, snapshot: snapshot() };

@@ -44,7 +44,7 @@
     await Promise.all([
       root.GameInventory.restore(snapshot?.inventory),
       root.GameCultivation.restore(snapshot?.cultivation),
-      root.GamePlayerGrowth.restore(snapshot?.growth),
+      root.GamePlayerGrowth.restore(snapshot?.growth, snapshot?.player?.origin),
       root.GameAffinity.restore(snapshot?.affinity),
       root.GameTournament.restore(snapshot?.tournament)
     ]);

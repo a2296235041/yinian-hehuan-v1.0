@@ -88,7 +88,7 @@ Game.ExplorationView = {
                 color: region.unlocked ? '#fff8fa' : '#9c7a87'
             }).setOrigin(0.5);
             const requirement = region.unlocked
-                ? `险度 ${region.danger} · 精力 -${region.stamina_cost}`
+                ? `险度 ${region.danger} · ${region.prepared ? '战力适配' : '战力偏低'}`
                 : `${window.GameCultivation.getRealmName(region.required_realm)}解锁`;
             const detail = scene.add.text(x, y - 44, requirement, {
                 fontFamily: '"Noto Serif SC", serif',
@@ -122,7 +122,8 @@ Game.ExplorationView = {
             wordWrap: { width: 850, useAdvancedWrap: true }
         }).setOrigin(0.5);
         const detail = scene.add.text(640, 174,
-            `险度 ${region.danger}　·　消耗精力 ${region.stamina_cost}　·　可遇见 ${region.npc_ids.length} 位熟人`, {
+            `险度 ${region.danger}　·　精力 ${region.stamina_cost}　·　建议攻击 ${region.recommended_attack}` +
+            ` / 气血 ${region.recommended_hp}　·　${region.prepared ? '战力适配' : '建议先提升'}`, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '16px',
                 color: '#f0a8bb'

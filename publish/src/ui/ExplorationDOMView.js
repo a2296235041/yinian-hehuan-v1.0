@@ -61,7 +61,7 @@
     name.textContent = region.name;
     const meta = document.createElement('small');
     meta.textContent = region.unlocked
-      ? `险度 ${region.danger} · 精力 -${region.stamina_cost}`
+      ? `险度 ${region.danger} · 精力 -${region.stamina_cost} · ${region.prepared ? '战力适配' : '战力偏低'}`
       : `${root.GameCultivation.getRealmName(region.required_realm)}解锁`;
     const description = document.createElement('span');
     description.textContent = region.description;
@@ -88,7 +88,8 @@
     ui.detailName.textContent = region.name;
     ui.detailDescription.textContent = region.description;
     ui.detailMeta.textContent =
-      `险度 ${region.danger}　·　消耗精力 ${region.stamina_cost}　·　可遇见 ${(region.npc_ids || []).length} 位熟人`;
+      `险度 ${region.danger}　·　消耗精力 ${region.stamina_cost}　·　建议攻击 ${region.recommended_attack}` +
+      ` / 气血 ${region.recommended_hp}　·　${region.prepared ? '当前战力适配' : '当前战力偏低，可先突破或提升属性'}`;
     ui.grid.hidden = true;
     ui.detail.hidden = false;
     ui.back.onclick = onBack;

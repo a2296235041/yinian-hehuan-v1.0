@@ -299,6 +299,186 @@
     "initial_quantity": 0
   },
   {
+    "id": "frostfang_essence",
+    "name": "霜牙精魄",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "寒月泽凶兽牙中凝成的锋锐精魄，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 6,
+    "initial_quantity": 0
+  },
+  {
+    "id": "frostbone_pearl",
+    "name": "玄霜骨珠",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "以寒泽妖骨孕育的冰润灵珠，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 6,
+    "initial_quantity": 0
+  },
+  {
+    "id": "moonstep_feather",
+    "name": "月行轻羽",
+    "type": "attribute",
+    "rarity": "珍稀",
+    "description": "沾染寒月灵息的轻羽，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 6,
+    "initial_quantity": 0
+  },
+  {
+    "id": "demon_blood_crystal",
+    "name": "妖血力晶",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "万妖岭强大妖兽遗留的血晶，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 10,
+    "initial_quantity": 0
+  },
+  {
+    "id": "vine_marrow_seed",
+    "name": "古藤髓种",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "古藤妖百年木髓结成的灵种，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 10,
+    "initial_quantity": 0
+  },
+  {
+    "id": "thunderstep_core",
+    "name": "雷步妖核",
+    "type": "attribute",
+    "rarity": "传说",
+    "description": "仍有雷芒游走的妖兽灵核，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 10,
+    "initial_quantity": 0
+  },
+  {
+    "id": "sunscar_warbone",
+    "name": "灼痕战骨",
+    "type": "attribute",
+    "rarity": "圣品",
+    "description": "历经沙海烈日淬炼的战骨，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 16,
+    "initial_quantity": 0
+  },
+  {
+    "id": "sand_drake_marrow",
+    "name": "地龙金髓",
+    "type": "attribute",
+    "rarity": "圣品",
+    "description": "吞沙地龙体内凝炼的金色骨髓，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 16,
+    "initial_quantity": 0
+  },
+  {
+    "id": "mirage_wind_core",
+    "name": "蜃风灵核",
+    "type": "attribute",
+    "rarity": "圣品",
+    "description": "能扰动风沙与幻影的灵核，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 16,
+    "initial_quantity": 0
+  },
+  {
+    "id": "war_soul_brand",
+    "name": "战魂力印",
+    "type": "attribute",
+    "rarity": "圣品",
+    "description": "上古战魂留下的不灭烙印，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 24,
+    "initial_quantity": 0
+  },
+  {
+    "id": "riftsteel_heart",
+    "name": "裂天钢心",
+    "type": "attribute",
+    "rarity": "圣品",
+    "description": "裂天战场铜傀核心中最坚韧的部分，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 24,
+    "initial_quantity": 0
+  },
+  {
+    "id": "voidwing_feather",
+    "name": "裂翼虚羽",
+    "type": "attribute",
+    "rarity": "圣品",
+    "description": "穿过空间裂隙仍未折损的凶禽翎羽，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 24,
+    "initial_quantity": 0
+  },
+  {
+    "id": "astral_force_crystal",
+    "name": "星潮力晶",
+    "type": "attribute",
+    "rarity": "神级",
+    "description": "星陨海潮汐压缩而成的力量结晶，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 36,
+    "initial_quantity": 0
+  },
+  {
+    "id": "abyssal_marrow",
+    "name": "渊海神髓",
+    "type": "attribute",
+    "rarity": "神级",
+    "description": "深海异族与巨兽体内孕生的神髓，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 36,
+    "initial_quantity": 0
+  },
+  {
+    "id": "starcurrent_fin",
+    "name": "星流幻鳍",
+    "type": "attribute",
+    "rarity": "神级",
+    "description": "可借星潮瞬息远遁的幻鳍，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 36,
+    "initial_quantity": 0
+  },
+  {
+    "id": "primordial_force_core",
+    "name": "太初力核",
+    "type": "attribute",
+    "rarity": "神级",
+    "description": "太虚遗境中凝聚原始伟力的核心，使用后永久增加力量。",
+    "attribute": "strength",
+    "attribute_gain": 55,
+    "initial_quantity": 0
+  },
+  {
+    "id": "void_origin_marrow",
+    "name": "虚源道髓",
+    "type": "attribute",
+    "rarity": "神级",
+    "description": "经历虚空规则洗炼的道髓，使用后永久增加根骨。",
+    "attribute": "constitution",
+    "attribute_gain": 55,
+    "initial_quantity": 0
+  },
+  {
+    "id": "taixu_step_feather",
+    "name": "太虚行羽",
+    "type": "attribute",
+    "rarity": "神级",
+    "description": "蕴含太虚挪移道韵的灵羽，使用后永久增加身法。",
+    "attribute": "agility",
+    "attribute_gain": 55,
+    "initial_quantity": 0
+  },
+  {
     "id": "holy_cultivation_pill",
     "name": "圣品修为丹",
     "type": "cultivation",

@@ -6,6 +6,7 @@
     '中等': 60,
     '极强': 80
   };
+  const ATTRIBUTE_CAP = 9999;
 
   function valueOf(attributes, key) {
     const rawValue = attributes?.[key];
@@ -13,7 +14,7 @@
     const base = Number.isFinite(numericValue)
       ? numericValue
       : (attributeScale[rawValue] || 50);
-    return base + (root.GamePlayerGrowth?.getBonus(key) || 0);
+    return Math.min(ATTRIBUTE_CAP, base + (root.GamePlayerGrowth?.getBonus(key) || 0));
   }
 
   // 身份属性是稳定的基础值，境界则同步提高实战属性。
@@ -41,8 +42,8 @@
       strength,
       constitution,
       agility,
-      intelligence: intelligence + insightTalentBonus,
-      charisma: charisma + insightTalentBonus,
+      intelligence: Math.min(ATTRIBUTE_CAP, intelligence + insightTalentBonus),
+      charisma: Math.min(ATTRIBUTE_CAP, charisma + insightTalentBonus),
       wisdom,
       luck,
       maxHp: 70 + constitution + cultivation.realmIndex * 70,

@@ -23,6 +23,7 @@ let cultivation = {
   canBreakthrough: false
 };
 let bonus = 0;
+const baseStrength = 5;
 const removals = [];
 const window = {
   Game: { Data: { shops: {} } },
@@ -54,12 +55,14 @@ const window = {
     ready: async () => {},
     getBonus: () => bonus,
     async addBonus(attribute, gain) {
-      const applied = Math.min(gain, 999 - bonus);
+      const applied = Math.min(gain, 9999 - baseStrength - bonus);
       bonus += applied;
       return { changed: applied > 0, attribute, gain: applied };
     }
   },
-  GamePlayerStats: { getSnapshot: () => ({ pillGainPercent: 0 }) }
+  GamePlayerStats: {
+    getSnapshot: () => ({ pillGainPercent: 0, strength: baseStrength + bonus })
+  }
 };
 vm.runInNewContext(source, { window, Promise, Math, Number, Object });
 
@@ -79,7 +82,7 @@ vm.runInNewContext(source, { window, Promise, Math, Number, Object });
     attribute_gain: 3
   };
   owned = 5;
-  bonus = 994;
+  bonus = 9989;
   const attributeResult = await window.GameShop.useItem('manual', 4);
   assert.equal(attributeResult.usedQuantity, 2);
   assert.equal(attributeResult.result.gain, 5);

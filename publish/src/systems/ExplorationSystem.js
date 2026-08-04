@@ -26,9 +26,12 @@
 
   function getRegions() {
     const realmIndex = root.GameCultivation.getSnapshot().realmIndex;
+    const stats = root.GamePlayerStats.getSnapshot();
     return [...regions.values()].map((region) => ({
       ...region,
-      unlocked: realmIndex >= Number(region.required_realm)
+      unlocked: realmIndex >= Number(region.required_realm),
+      prepared: stats.attack >= Number(region.recommended_attack || 0)
+        && stats.maxHp >= Number(region.recommended_hp || 0)
     }));
   }
 

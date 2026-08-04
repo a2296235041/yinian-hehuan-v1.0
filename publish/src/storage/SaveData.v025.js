@@ -72,7 +72,7 @@
   function sanitizeGrowth(value) {
     const bonuses = {};
     ATTRIBUTE_KEYS.forEach((key) => {
-      const amount = clamp(value?.bonuses?.[key], 0, 999);
+      const amount = clamp(value?.bonuses?.[key], 0, 9999);
       if (amount > 0) bonuses[key] = amount;
     });
     return { bonuses };
@@ -81,6 +81,12 @@
   function sanitizeAttributes(value, origin, growth) {
     const base = sanitizeAttributeMap(value?.base || origin?.attributes);
     const bonuses = sanitizeAttributeMap(value?.bonuses || growth?.bonuses);
+    const talentId = origin?.talent?.id || origin?.id || '';
+    ATTRIBUTE_KEYS.forEach((key) => {
+      const talentBonus = talentId === 'mindful_guest'
+        && ['intelligence', 'charisma'].includes(key) ? 8 : 0;
+      bonuses[key] = clamp(bonuses[key], 0, Math.max(0, 9999 - base[key] - talentBonus));
+    });
     const savedEffective = isRecord(value?.effective) ? value.effective : {};
     const effective = {};
     ATTRIBUTE_KEYS.forEach((key) => {

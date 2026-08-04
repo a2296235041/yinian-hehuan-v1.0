@@ -38,6 +38,7 @@ assert.deepEqual(plain(legacy.tournament), {
 const sanitized = window.GameSaveData.sanitizeSnapshot({
   player: { day: 8 },
   affinity: { day: 8, records: {} },
+  growth: { bonuses: { strength: 12000, agility: 37 } },
   tournament: {
     active: { mode: 'spirit', phase: 'battle' },
     cooldowns: { internal: -3, spirit: 17.8 },
@@ -49,6 +50,23 @@ assert.equal(sanitized.tournament.active.mode, 'spirit');
 assert.deepEqual(plain(sanitized.tournament.cooldowns), { internal: 0, spirit: 17 });
 assert.equal(sanitized.tournament.history.length, 12);
 assert.deepEqual(plain(sanitized.tournament.corruption), { valid_npc: 100, lowered: 0 });
+assert.equal(sanitized.growth.bonuses.strength, 9999);
+assert.equal(sanitized.growth.bonuses.agility, 37);
+
+const cappedGrowth = window.GameSaveData.sanitizeSnapshot({
+  player: {
+    day: 1,
+    origin: {
+      id: 'origin-cap',
+      name: '上限测试',
+      attributes: { strength: 52 }
+    }
+  },
+  affinity: { day: 1, records: {} },
+  growth: { bonuses: { strength: 12000 } }
+});
+assert.equal(cappedGrowth.growth.bonuses.strength, 9947);
+assert.equal(cappedGrowth.attributes.effective.strength, 9999);
 
 const fresh = window.GameSaveData.createFreshSnapshot(
   { id: 'origin-1', name: '测试弟子', attributes: {} },

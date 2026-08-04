@@ -9,6 +9,7 @@
     wisdom: '悟性',
     luck: '气运'
   };
+  const ATTRIBUTE_CAP = 9999;
   let queue = Promise.resolve();
 
   function normalizeQuantity(value) {
@@ -103,7 +104,7 @@
         : Math.max(1, Math.floor(Number(item.attribute_gain)));
       const remaining = item.type === 'cultivation'
         ? cultivation.required - cultivation.progress
-        : 999 - root.GamePlayerGrowth.getBonus(item.attribute);
+        : ATTRIBUTE_CAP - Number(stats[item.attribute] || 0);
       const usefulQuantity = Math.min(
         requestedQuantity,
         Math.max(0, Math.ceil(remaining / unitGain))
