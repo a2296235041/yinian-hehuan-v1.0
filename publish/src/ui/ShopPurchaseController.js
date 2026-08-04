@@ -34,7 +34,7 @@
       }
     } finally {
       if (requestId === scene.requestId) scene.busy = false;
-      if (button.active) button.setText(`购买 · ${offer.price} 灵石`)
+      if (button.active) button.setText('选择数量')
         .setInteractive({ useHandCursor: true });
       scene.refreshBalance();
     }

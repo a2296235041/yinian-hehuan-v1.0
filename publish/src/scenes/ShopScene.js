@@ -28,32 +28,23 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         window.GameModelUI.setMode('hidden');
         this.add.image(640, 360, 'bg-sect').setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.84).setInteractive();
-        Game.UISkin.addPanel(this, 640, 365, 1180, 630, 'card', { alpha: 0.95 });
         const shop = window.GameShop.getShop(this.buildingId);
-        this.add.text(640, 46, shop?.name || '灵石商店', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '36px',
-            color: '#fff8fa'
-        }).setOrigin(0.5);
-        this.stoneText = this.add.text(54, 42, '', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '21px',
-            color: '#f0a8bb',
-            backgroundColor: 'rgba(50,21,34,0.92)',
-            padding: { x: 14, y: 9 }
-        });
+        Game.CommerceDecor.createShell(
+            this, shop?.name || '灵石商店', `${shop?.keeper || '掌柜'} · 灵物有价，取用有度`
+        );
+        this.stoneText = Game.CommerceDecor.addCurrency(this, 174, 113);
         Game.UISkin.makeButton(this, 1170, 50, '返回', () => this.close(), {
             width: 120, height: 46, fontSize: 18, variant: 'secondary'
         });
-        this.statusText = this.add.text(640, 670, '正在整理货架…', {
+        this.statusText = this.add.text(640, 652, '正在整理货架…', {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '17px',
             color: '#fff8fa',
             backgroundColor: 'rgba(50,21,34,0.94)',
             padding: { x: 18, y: 9 },
             wordWrap: { width: 1000, useAdvancedWrap: true },
-            fixedWidth: 1050,
-            fixedHeight: 58,
+            fixedWidth: 900,
+            fixedHeight: 46,
             align: 'center'
         }).setOrigin(0.5);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
@@ -66,7 +57,9 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
     }
 
     refreshBalance() {
-        this.stoneText?.setText(`灵石 ${window.GameInventory.getSpiritStones()}`);
+        this.stoneText?.setText(
+            Game.CommerceDecor.formatNumber(window.GameInventory.getSpiritStones())
+        );
     }
 
     renderShop() {
@@ -79,34 +72,7 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
             return;
         }
         this.statusText.setText(`${shop.keeper}正在看守货架。`);
-        shop.offers.forEach((offer, index) => this.createProduct(offer, index));
-    }
-
-    createProduct(offer, index) {
-        const x = index % 2 === 0 ? 350 : 930;
-        const y = index < 2 ? 230 : 490;
-        const frame = Game.UISkin.addPanel(this, x, y, 520, 210, 'card', {
-            alpha: 0.96
-        });
-        const title = this.add.text(x - 230, y - 78, offer.item.name, {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '22px',
-            color: '#f0a8bb'
-        });
-        const detail = this.add.text(x - 230, y - 38,
-            `${offer.item.rarity} · ${window.GameShop.effectLabel(offer.item)}\n${offer.item.description}`, {
-                fontFamily: '"Noto Serif SC", serif',
-                fontSize: '15px',
-                color: '#f4dfe5',
-                lineSpacing: 6,
-                wordWrap: { width: 450, useAdvancedWrap: true }
-            });
-        const button = Game.UISkin.makeButton(
-            this, x, y + 70, `购买 · ${offer.price} 灵石`,
-            (target) => this.openPurchaseDialog(offer, target),
-            { width: 230, height: 46, fontSize: 17 }
-        );
-        this.productObjects.push(frame, title, detail, button);
+        Game.ShopGridView.render(this, shop.offers);
     }
 
     openPurchaseDialog(offer, button) {
