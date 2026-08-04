@@ -6,8 +6,8 @@ const crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const manifestPath = path.join(__dirname, 'entry-sources.v062.json');
-const outputPath = path.join(root, 'publish/main.v062.js');
+const manifestPath = path.join(__dirname, 'entry-sources.v063.json');
+const outputPath = path.join(root, 'publish/main.v063.js');
 const sources = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
   .map((file) => path.join(root, 'publish', file));
 
@@ -43,5 +43,5 @@ sources.forEach((file) => {
   sourceHash.update('\0');
 });
 const digest = sourceHash.digest('hex').slice(0, 16);
-fs.writeFileSync(outputPath, `/* release 0.6.2 sources:${digest} */\n${bundle}\n`);
+fs.writeFileSync(outputPath, `/* release 0.6.3 sources:${digest} */\n${bundle}\n`);
 console.log(`Built ${path.relative(root, outputPath)} from ${sources.length} files`);

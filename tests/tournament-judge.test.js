@@ -9,6 +9,10 @@ const balanceSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/systems/TournamentCombatBalance.js'),
   'utf8'
 );
+const scoreSpreadSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/systems/TournamentScoreSpread.js'),
+  'utf8'
+);
 const authoritySource = fs.readFileSync(
   path.join(__dirname, '../publish/src/systems/TournamentPlayerAuthority.js'),
   'utf8'
@@ -84,6 +88,7 @@ const window = {
   Math
 };
 vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON });
+vm.runInNewContext(scoreSpreadSource, { window, console: window.console, Math, JSON, Object });
 vm.runInNewContext(authoritySource, { window, console: window.console, Math, JSON, Set });
 vm.runInNewContext(responseTextSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(outputSource, { window, console: window.console, Math, JSON, RegExp });
@@ -166,6 +171,8 @@ const active = {
   assert.equal(captured.messages[0].content.includes('最多 320 字'), true);
   assert.equal(captured.messages[0].content.includes('主动认输、投降、服输或求饶'), true);
   assert.equal(captured.messages[0].content.includes('matchResult 固定填写 continue'), true);
+  assert.equal(captured.messages[0].content.includes('不要习惯性给出接近比分'), true);
+  assert.equal(captured.messages[0].content.includes('彻底压制、重创、击败'), true);
   assert.equal(captured.messages[0].content.includes('非零整数'), true);
   assert.equal(captured.messages[0].content.includes('清正自持'), true);
   assert.equal(captured.messages[0].content.includes('battleDirective'), true);
@@ -205,6 +212,7 @@ const active = {
     active, '我封住她的经脉，让她失去力气伏在地上，只能看着我。', tournamentState
   );
   assert.ok(controlled.response.length >= 150);
+  assert.ok(controlled.playerDelta - controlled.opponentDelta >= 12);
   ['还没结束', '重新逼近', '反击', '挣脱'].forEach((phrase) => {
     assert.equal(controlled.response.includes(phrase), false);
   });
@@ -349,6 +357,7 @@ const active = {
   assert.equal(directed.finished, false);
   assert.equal(directed.winner, 'ongoing');
   assert.ok(directed.playerDelta > directed.opponentDelta);
+  assert.ok(directed.playerDelta - directed.opponentDelta >= 20);
   assert.equal(directed.verdict.includes('招式完成度更高'), true);
   assert.equal(directed.verdict.includes('未主动认输'), false);
   assert.equal(directed.response.includes('完整构想'), false);
@@ -361,6 +370,7 @@ const active = {
   assert.equal(surrendered.finished, false);
   assert.equal(surrendered.winner, 'ongoing');
   assert.ok(surrendered.opponentDelta > surrendered.playerDelta);
+  assert.ok(surrendered.opponentDelta - surrendered.playerDelta >= 18);
   assert.equal(surrendered.verdict.includes('主动收住攻势并放弃争胜'), true);
   assert.equal(surrendered.verdict.includes('认输或求饶'), false);
   assert.equal(surrendered.response.includes('依照你的安排'), false);
@@ -371,6 +381,7 @@ const active = {
     tournamentState
   );
   assert.ok(defeatedButValid.playerDelta > defeatedButValid.opponentDelta);
+  assert.ok(defeatedButValid.playerDelta - defeatedButValid.opponentDelta <= 7);
   assert.equal(defeatedButValid.verdict.includes('成功改变了场上局势'), true);
   assert.equal(defeatedButValid.verdict.includes('未求饶'), false);
 

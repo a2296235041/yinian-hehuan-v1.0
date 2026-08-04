@@ -9,7 +9,7 @@ function read(relativePath) {
 }
 
 [
-  'publish/src/assets/GameScenePreload.v062.js',
+  'publish/src/assets/GameScenePreload.v063.js',
   'publish/src/scenes/CharacterCreationScene.v017.js',
   'publish/src/scenes/PreloadScene.v025.js'
 ].forEach((file) => {

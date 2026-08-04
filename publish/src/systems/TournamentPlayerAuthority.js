@@ -25,19 +25,13 @@
   }
 
   function resolve(payload, exchange) {
-    let playerDelta = Math.max(0, Math.round(Number(exchange?.playerDelta) || 0));
-    let opponentDelta = Math.max(0, Math.round(Number(exchange?.opponentDelta) || 0));
     const declaredResult = detect(payload?.move);
-    if (declaredResult === 'player') {
-      playerDelta = Math.min(45, Math.max(playerDelta, opponentDelta + 5));
-      opponentDelta = Math.min(opponentDelta, Math.max(0, playerDelta - 5));
-    } else {
-      opponentDelta = Math.min(38, Math.max(opponentDelta, playerDelta + 5));
-      playerDelta = Math.min(playerDelta, Math.max(0, opponentDelta - 5));
-    }
+    const spread = root.GameTournamentScoreSpread?.enforce?.(
+      payload, exchange, declaredResult
+    ) || exchange;
     return {
-      playerDelta,
-      opponentDelta,
+      playerDelta: Math.max(0, Math.min(45, Math.round(Number(spread?.playerDelta) || 0))),
+      opponentDelta: Math.max(0, Math.min(38, Math.round(Number(spread?.opponentDelta) || 0))),
       declaredResult,
       finished: false,
       winner: 'ongoing'
