@@ -112,8 +112,7 @@
         const active = state.active;
         if (!active || active.phase !== 'battle') throw new Error('当前没有可进行的赛事对局');
         root.GameTournamentBattleState.applyExchange(active, move, result);
-        const relationLogs = await root.GameTournamentRelations.apply(state, active, result);
-        active.logs.push(...relationLogs);
+        await root.GameTournamentRelations.apply(state, active, result);
         if (result.finished) {
           const match = currentMatch(active);
           const winnerId = result.winner === 'player'

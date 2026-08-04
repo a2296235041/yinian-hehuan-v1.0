@@ -70,14 +70,14 @@
     const generation = openGeneration;
     busy = true;
     let finalStatus = '';
-    render('裁判正在推演招式碰撞，约需 10–30 秒…');
+    render('AI 正在续写战况并进行点数判决，约需 10–30 秒…');
     elements['tournament-action-input'].value = '';
     try {
       const result = await root.GameTournamentJudge.judge(active, move, state());
       await root.GameTournament.recordExchange(move, result);
       root.GameAudio?.sfx?.(result.winner === 'opponent' ? 'deny' : 'success');
       if (generation === openGeneration && !elements['tournament-screen'].hidden) {
-        finalStatus = result.fallback ? result.fallbackMessage : 'AI 已延伸并更新整场战局。';
+        finalStatus = result.fallback ? result.fallbackMessage : '本回合战况与裁判点数已更新。';
       }
     } catch (error) {
       if (generation === openGeneration) {

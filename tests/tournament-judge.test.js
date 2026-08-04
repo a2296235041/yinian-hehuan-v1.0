@@ -33,11 +33,8 @@ const window = {
     async completions(config, callback) {
       captured = config;
       callback(JSON.stringify({
-        opponentAction: '对手借风后撤，反手斩出月弧。',
-        narration: '两股灵力在擂台中央连续碰撞。',
-        globalCommentary: '此前的试探在本回合转化为正面压制，玩家开始控制全场。',
-        battleSummary: '第一回合后，玩家掌握擂台中线。',
-        tacticalHint: '可利用对手后撤时留下的空隙。',
+        summary: '你引动桃花化作漫天剑雨，剑锋沿擂台阵纹层层展开，逼得顾清罗借风后撤。她没有贸然硬接，而是旋身斩出月弧，将最先逼近的剑光逐一拨开，随后以寒霜封住脚下三尺，试图截断灵力流转。剑雨与霜华连续碰撞，碎光映亮四周看台，观众席随之响起一阵低呼。待最后一道剑影散去，你仍占据擂台中线，顾清罗则横剑凝神，重新寻找反击时机。',
+        verdictReason: '剑雨封锁完整并迫使对手退守，本回合你占优。',
         relationshipChanges: [{
           opponentId: 'npc-1',
           delta: 9,
@@ -78,15 +75,20 @@ const active = {
   const result = await window.GameTournamentJudge.judge(
     active, '引桃花化剑雨封锁四方', tournamentState
   );
-  assert.equal(result.globalCommentary.includes('控制全场'), true);
-  assert.equal(result.battleSummary, '第一回合后，玩家掌握擂台中线。');
+  assert.equal(result.summary.includes('观众席'), true);
+  assert.ok(result.summary.length >= 150);
+  assert.ok(result.summary.length <= 200);
   assert.equal(result.finished, false);
   assert.equal(result.relationshipChanges[0].delta, 3);
   assert.ok(result.playerDelta > 31);
   assert.ok(result.opponentDelta < 12);
+  assert.equal(result.verdict.includes(`你 +${result.playerDelta} 点`), true);
+  assert.equal(result.verdict.includes(`对手 +${result.opponentDelta} 点`), true);
   assert.deepEqual(Array.from(captured.messages, (entry) => entry.role), ['user']);
   assert.equal(captured.messages[0].content.includes('双方刚刚登台'), true);
   assert.equal(captured.messages[0].content.includes('引桃花化剑雨'), true);
+  assert.equal(captured.messages[0].content.includes('150-200'), true);
+  assert.equal(captured.messages[0].content.includes('字段仅为：summary'), true);
 
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
@@ -96,7 +98,9 @@ const active = {
   );
   assert.equal(fallback.fallback, true);
   assert.equal(fallback.fallbackMessage.includes('网络连接异常'), true);
-  assert.equal(fallback.globalCommentary.length > 30, true);
+  assert.ok(fallback.summary.length >= 150);
+  assert.ok(fallback.summary.length <= 200);
+  assert.equal(fallback.verdict.includes('裁判判决'), true);
   assert.equal(fallback.relationshipChanges[0].delta >= -4, true);
   assert.equal(fallback.relationshipChanges[0].delta <= 3, true);
   console.log('tournament judge test passed');

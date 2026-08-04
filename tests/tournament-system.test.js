@@ -72,11 +72,8 @@ vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
   await window.GameTournament.recordExchange('第一招', {
-    opponentAction: '对手应招',
-    narration: '第一回合',
-    globalCommentary: '全局来看，你开始控制战斗节奏。',
-    battleSummary: '第一回合后，你暂时占优。',
-    tacticalHint: '继续压制对手。',
+    summary: '你施展第一招后迫使对手退守，灵光在擂台上持续碰撞，观众为双方的变化发出喝彩。',
+    verdict: '裁判判决：你 +30 点，对手 +10 点。你取得主动。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: 3, reason: '欣赏你的招式。' }],
     playerDelta: 30,
     opponentDelta: 10,
@@ -84,11 +81,8 @@ async function winRound() {
     winner: 'ongoing'
   });
   await window.GameTournament.recordExchange('第二招', {
-    opponentAction: '对手变招',
-    narration: '第二回合',
-    globalCommentary: '此前优势在第二回合继续扩大。',
-    battleSummary: '第二回合后，对手转入守势。',
-    tacticalHint: '抓住对手换气间隙。',
+    summary: '你顺势施展第二招，对手仓促变招应对，擂台阵纹被余波点亮，场边议论声逐渐高涨。',
+    verdict: '裁判判决：你 +30 点，对手 +10 点。优势继续扩大。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: -2, reason: '不满你的追击。' }],
     playerDelta: 30,
     opponentDelta: 10,
@@ -96,11 +90,8 @@ async function winRound() {
     winner: 'ongoing'
   });
   await window.GameTournament.recordExchange('第三招', {
-    opponentAction: '对手绝招',
-    narration: '第三回合',
-    globalCommentary: '整场比赛的连续压制最终形成胜势。',
-    battleSummary: '三回合结束，你取得胜利。',
-    tacticalHint: '等待裁判宣布结果。',
+    summary: '你以第三招完成收势，对手的绝招被正面化解，漫天灵光散去后，全场为最终交锋齐声喝彩。',
+    verdict: '裁判判决：你 +30 点，对手 +10 点。三回合总分由你领先。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: 2, reason: '认可你的胜利。' }],
     playerDelta: 30,
     opponentDelta: 10,
@@ -125,12 +116,16 @@ async function winRound() {
   await winRound();
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
   assert.equal(
-    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '全局战报'),
+    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '战况综述'),
+    true
+  );
+  assert.equal(
+    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '裁判判决'),
     true
   );
   assert.equal(
     window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '关系变化'),
-    true
+    false
   );
   const nextOpponent = window.GameTournament.getState().active.pendingEntrants
     .find((id) => id !== 'player');

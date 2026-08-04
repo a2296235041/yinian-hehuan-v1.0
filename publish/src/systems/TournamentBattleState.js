@@ -20,17 +20,15 @@
     active.scores.player += Math.max(0, Math.floor(Number(result.playerDelta) || 0));
     active.scores.opponent += Math.max(0, Math.floor(Number(result.opponentDelta) || 0));
     active.logs.push({ speaker: '你', text: String(move).slice(0, 500) });
-    active.logs.push({ speaker: '对手', text: String(result.opponentAction || '').slice(0, 300) });
-    active.logs.push({ speaker: '战局', text: String(result.narration || '').slice(0, 900) });
     active.logs.push({
-      speaker: '全局战报',
-      text: String(result.globalCommentary || result.commentary || '').slice(0, 900)
+      speaker: '战况综述',
+      text: String(result.summary || '').slice(0, 200)
     });
     active.logs.push({
-      speaker: '破局提示',
-      text: String(result.tacticalHint || '').slice(0, 240)
+      speaker: '裁判判决',
+      text: String(result.verdict || '').slice(0, 140)
     });
-    active.battleSummary = String(result.battleSummary || active.battleSummary).slice(0, 600);
+    active.battleSummary = String(result.summary || active.battleSummary).slice(0, 200);
   }
 
   root.GameTournamentBattleState = Object.freeze({ prepare, applyExchange });

@@ -43,8 +43,6 @@
     ) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
     const { playerDelta, opponentDelta } = balanced;
     const finished = payload.turn >= 3;
-    const playerTotal = payload.scores.player + playerDelta;
-    const opponentTotal = payload.scores.opponent + opponentDelta;
     const names = payload.opponents.map((item) => item.name).join('与');
     const winner = finished && playerTotal < opponentTotal ? 'opponent' : 'player';
     const relationshipChanges = payload.opponents.map((opponent, index) => {
@@ -58,12 +56,13 @@
           : '你的做法触碰了她的原则，使她重新提高戒心。'
       };
     });
+    const summary = `你施展“${text(payload.move, 42)}”，灵力随招式骤然铺开，直逼${names}立足之处。${names}没有硬接，而是依照自身战法侧身卸力，旋即借擂台阵纹回卷灵光，试图从你的攻势边缘切入。双方力量连续碰撞，碎光沿地面迸散，护阵也随之泛起层层波纹。观战席先是一静，随后因这轮迅疾变招响起低声喝彩；待余波散去，你仍守住中线，对手则重新调整气息，准备迎接下一轮交锋。`;
+    const verdictReason = playerDelta >= opponentDelta
+      ? '招式衔接完整且取得主动，本回合判你占优。'
+      : '对手化解充分并完成反制，本回合对手占优。';
     return {
-      opponentAction: `${names}循着你的灵力变化强行变招，试图夺回擂台中线。`,
-      narration: `你的构想化作真实攻势铺满擂台，${names}在灵光与罡风中连续拆招，护体灵韵被震得明灭不定。`,
-      globalCommentary: `纵观此前交锋，你始终在主动改写战斗节奏。本回合的新招不仅延续了先前积累的优势，还迫使${names}放弃原定战术。当前擂台中央由你控制，对手只能寻找反击缝隙。`,
-      battleSummary: `第${payload.turn}回合后，你以连续变化掌握主动，${names}被迫转入守势。当前比分为你${playerTotal}、对手${opponentTotal}。`,
-      tacticalHint: finished ? '三招已尽，裁判即将宣布最终结果。' : '对手阵脚已乱，可继续追击其灵力转换的空隙。',
+      summary: text(summary, 200),
+      verdict: `裁判判决：你 +${playerDelta} 点，对手 +${opponentDelta} 点。${verdictReason}`,
       playerDelta,
       opponentDelta,
       finished,
@@ -86,6 +85,14 @@
     const finished = payload.turn >= 3;
     const playerTotal = payload.scores.player + playerDelta;
     const opponentTotal = payload.scores.opponent + opponentDelta;
+    const legacySummary = [
+      raw.summary, raw.narration, raw.opponentAction, raw.globalCommentary
+    ].filter(Boolean).join('');
+    const summary = text(legacySummary, 200);
+    const verdictReason = text(raw.verdictReason, 70)
+      || (playerDelta >= opponentDelta
+        ? '招式执行更完整并取得主动，本回合判你占优。'
+        : '对手应对更有效，本回合判对手占优。');
     const relationshipChanges = payload.opponents.map((opponent, index) => {
       const source = Array.isArray(raw.relationshipChanges) ? raw.relationshipChanges : [];
       const change = source.find((entry) => entry?.opponentId === opponent.id)
@@ -99,12 +106,8 @@
       };
     });
     return {
-      opponentAction: text(raw.opponentAction, 360) || base.opponentAction,
-      narration: text(raw.narration, 1100) || base.narration,
-      globalCommentary: text(raw.globalCommentary || raw.commentary, 900)
-        || base.globalCommentary,
-      battleSummary: text(raw.battleSummary, 600) || base.battleSummary,
-      tacticalHint: text(raw.tacticalHint, 240) || base.tacticalHint,
+      summary: summary.length >= 150 ? summary : base.summary,
+      verdict: `裁判判决：你 +${playerDelta} 点，对手 +${opponentDelta} 点。${verdictReason}`,
       playerDelta,
       opponentDelta,
       finished,
@@ -115,11 +118,10 @@
 
   function buildPrompt(payload) {
     return [
-      '你是修仙武道大会的全局战局导演、首席裁判和热血解说。',
-      '玩家每次输入的是本回合行动。你必须承接此前发生的一切继续写，绝不能把每回合当作独立战斗。',
-      '先描写对手依据性格与战法作出的具体应对，再延伸双方招式碰撞、擂台环境变化、观众反应和气势消长。',
-      'globalCommentary 要从整场比赛视角复盘因果：此前布局如何影响本回合、双方战略发生了什么改变、目前谁掌握主动。',
-      '玩家创意越具体，效果越强，主打华丽爽快和以弱胜强；只有明显自相矛盾时才削弱效果。',
+      '你是修仙比武的战况叙事者与 AI 裁判。',
+      '玩家输入的是本回合释放的招式或行动。承接此前战况，围绕这次行动续写一整段连续综述，不要拆成多个段落、标题或列表。',
+      'summary 必须约 150-200 个中文字符，依次自然包含：玩家出招后的一系列后续、对手依据性格和战法作出的反应、双方碰撞与环境变化、少量观众反应、本回合结束时的局面。',
+      '不要替玩家新增未描述的第二个主动招式；可以合理延伸招式造成的连锁变化。',
       '双方战力、攻击、防御、速度和气血必须影响裁决。弱者需要更具体合理的战术才能弥补数值差距，不能仅凭一句夸张描述无条件压倒强者。',
       '比赛固定三回合，前两回合不得结束。第三回合按累计得分决胜，同分判玩家胜。',
       `当前第${payload.turn}回合，比分：玩家${payload.scores.player}，对手${payload.scores.opponent}。`,
@@ -129,12 +131,12 @@
       `此前全局战况摘要：${payload.battleSummary || '双方刚刚登台，尚未正式交锋。'}`,
       `此前完整战斗记录：\n${payload.battleHistory || '暂无'}`,
       `玩家本回合行动：${payload.move}`,
-      '只返回 JSON，不要代码块。字段：opponentAction、narration、globalCommentary、battleSummary、tacticalHint、playerDelta、opponentDelta、relationshipChanges。',
-      'globalCommentary 需有全局视角和连续性；battleSummary 用于下一回合承接；tacticalHint 给玩家明确的下一步突破口。',
+      '只返回 JSON，不要代码块。字段仅为：summary、verdictReason、playerDelta、opponentDelta、relationshipChanges。',
+      'verdictReason 是 AI 裁判的简短判分理由，15-40 字，不要自行写具体分数。',
       payload.mode === 'spirit'
         ? 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -4 到 3 的整数：魅惑、诱导、动摇道心会增加堕落，尊重、唤醒原则或失败会降低堕落。'
         : 'relationshipChanges 为每名对手返回 {opponentId,delta,reason}。delta 必须是 -3 到 4 的整数：尊重、精彩表现和手下留情增加好感，羞辱、残酷和欺骗降低好感。',
-      'playerDelta 0-45，opponentDelta 0-38。避免色情描写。'
+      'playerDelta 0-45，opponentDelta 0-38。summary 使用第二人称“你”，避免色情描写。'
     ].join('\n');
   }
 
@@ -180,7 +182,7 @@
       await root.dzmm.completions({
         model: 'default',
         messages: [{ role: 'user', content: buildPrompt(payload) }],
-        maxTokens: 1400
+        maxTokens: 800
       }, (content, done) => {
         fullText = content || '';
         if (done) completed = true;

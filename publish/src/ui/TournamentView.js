@@ -69,9 +69,9 @@
   function renderHistory(active) {
     elements['tournament-history'].replaceChildren();
     (active?.logs || []).forEach((entry) => {
-      const special = entry.speaker === '全局战报'
+      const special = entry.speaker === '战况综述'
         ? ' is-global'
-        : (entry.speaker === '破局提示'
+        : (entry.speaker === '裁判判决'
           ? ' is-hint'
           : (entry.speaker === '关系变化'
             ? ' is-relation'
