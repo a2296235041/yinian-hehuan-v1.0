@@ -3,11 +3,17 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
-const version = '0.3.6';
-const build = '20260804.4';
+const manifest = JSON.parse(fs.readFileSync(
+  path.join(__dirname, '../tools/entry-sources.v037.json'),
+  'utf8'
+));
+const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v037.js'), 'utf8');
+const version = '0.3.7';
+const build = '20260804.5';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -19,19 +25,16 @@ assert.match(html, new RegExp(`cacheName: '${cacheName}'`));
 assert.match(html, new RegExp(`entry: '${expectedEntry.replaceAll('.', '\\.')}'`));
 assert.ok(html.includes(`./${expectedEntry}`));
 assert.deepEqual(releaseEntries, [expectedEntry]);
-assert.ok(html.includes('./src/ai/AIImageService.v021.js'));
-assert.ok(html.includes('./src/assets/PlayerPortraitAssets.v002.js'));
-assert.ok(html.includes('./src/scenes/PreloadScene.v025.js'));
-assert.ok(html.includes('./src/scenes/CharacterCreationScene.v017.js'));
-assert.ok(html.includes('./src/scenes/BattleScene.v023.js'));
-assert.ok(html.includes('./src/scenes/InventoryScene.v021.js'));
-assert.ok(html.includes('./src/systems/CheatSystem.v021.js'));
-assert.ok(html.includes('./src/ui/CheatPanel.v021.js'));
+assert.deepEqual(
+  [...html.matchAll(/<script defer src="([^"]+)"><\/script>/g)].map((match) => match[1]),
+  ['./vendor/phaser.min.js?v=20260804-5', './main.v037.js?v=20260804-5']
+);
 assert.ok(html.includes('./cheat-panel.v021.css'));
 assert.ok(html.includes('./tournament.v029.css'));
 assert.ok(html.includes('./tournament-participants.v032.css'));
 assert.ok(html.includes('./private-group-dialogue.v033.css'));
-assert.ok(html.includes('./boot.v036.css'));
+assert.ok(html.includes('<style data-critical-boot>'));
+assert.ok(html.includes('GameEarlyBoot'));
 assert.ok(
   html.includes('./layout.v015.css'),
   'release entry should load the mobile layout override'
@@ -60,13 +63,27 @@ assert.ok(
   './src/ui/PrivateGroupDialoguePanel.v033.js',
   './src/ui/InventoryQuantityDialog.js',
   './src/ui/InventoryUseController.js',
-  './main.v036.js'
+  './src/assets/GameScenePreload.v037.js',
+  './src/boot/GameBootstrap.v037.js'
 ].forEach((entry) => {
   assert.ok(
-    html.includes(entry),
-    `${entry} should be loaded by the release entry`
+    manifest.includes(entry.slice(2)),
+    `${entry} should be bundled by the release entry`
   );
 });
+const sourceHash = crypto.createHash('sha256');
+manifest.forEach((file) => {
+  const fullPath = path.join(publishDirectory, file);
+  assert.ok(fs.existsSync(fullPath), `${file} should exist`);
+  sourceHash.update(path.relative(path.join(__dirname, '..'), fullPath));
+  sourceHash.update('\0');
+  sourceHash.update(fs.readFileSync(fullPath));
+  sourceHash.update('\0');
+});
+assert.ok(bundle.startsWith(
+  `/* release ${version} sources:${sourceHash.digest('hex').slice(0, 16)} */`
+));
+assert.ok(bundle.length < 500000, 'release entry should stay compact');
 assert.ok(!html.includes('DialogueInput.js'), 'removed input dispatcher must not be loaded');
 assert.ok(!html.includes('<form id="exploration-command-panel"'));
 [
@@ -96,6 +113,7 @@ assert.ok(!html.includes('<form id="exploration-command-panel"'));
   './main.v033.js',
   './main.v034.js',
   './main.v035.js',
+  './main.v036.js',
   './src/ui/TournamentOpponentView.v031.js',
   './src/ai/AIImageService.js',
   './src/scenes/CharacterCreationScene.js',

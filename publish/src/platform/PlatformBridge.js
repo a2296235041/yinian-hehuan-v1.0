@@ -30,6 +30,7 @@
     if (failed || bootComplete) return;
     bootComplete = true;
     root.GameBootPulse?.stop?.();
+    root.GameEarlyBoot?.complete?.();
     callLoading('ready');
   }
 
@@ -38,6 +39,7 @@
     failed = true;
     root.GameBootPulse?.stop?.();
     const safeMessage = message || '游戏启动失败';
+    root.GameEarlyBoot?.fail?.(safeMessage, code || 'BOOT_FAILED');
     callLoading('error', code || 'BOOT_FAILED', safeMessage);
 
     const panel = document.getElementById('boot-error');

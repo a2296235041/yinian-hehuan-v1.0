@@ -5,6 +5,7 @@ var Game = window.Game || {};
  * 不绘制卡片框，按建筑背景和人物身份给出稳定站位。
  */
 Game.NpcCardRenderer = {
+    pending: new Map(),
     layouts: {
         su_meier: { x: 320, groundY: 590, height: 400 },
         liu_hanyan: { x: 820, groundY: 580, height: 400 },
@@ -63,11 +64,59 @@ Game.NpcCardRenderer = {
         return 'npc-scholar';
     },
 
+    ensurePortrait(scene, npc) {
+        const key = this.portraitKey(npc.id);
+        if (scene.textures.exists(key)) return Promise.resolve(key);
+        if (this.pending.has(key)) return this.pending.get(key);
+        const task = new Promise((resolve, reject) => {
+            const complete = `filecomplete-image-${key}`;
+            const cleanup = () => {
+                scene.load.off(complete, onComplete);
+                scene.load.off('loaderror', onError);
+            };
+            const onComplete = () => {
+                cleanup();
+                resolve(key);
+            };
+            const onError = (file) => {
+                if (file?.key !== key) return;
+                cleanup();
+                reject(new Error(`NPC立绘加载失败：${npc.name}`));
+            };
+            scene.load.once(complete, onComplete);
+            scene.load.on('loaderror', onError);
+            scene.load.image(key, this.portraitPath(npc.id));
+            if (!scene.load.isLoading()) scene.load.start();
+        }).finally(() => this.pending.delete(key));
+        this.pending.set(key, task);
+        return task;
+    },
+
     create(scene, npc, x) {
         const layout = this.layouts[npc.id] || { x, groundY: 590, height: 440 };
+        const portraitKey = this.portraitKey(npc.id);
+        if (!scene.textures.exists(portraitKey)) {
+            const loading = scene.addViewObject(scene.add.text(
+                layout.x, layout.groundY - 180, `${npc.name}\n立绘加载中…`, {
+                    fontFamily: '"Noto Serif SC", serif',
+                    fontSize: '18px',
+                    color: '#fff8fa',
+                    align: 'center'
+                }
+            ).setOrigin(0.5));
+            this.ensurePortrait(scene, npc).then(() => {
+                if (!loading.active || !scene.currentBuilding?.npcIds?.includes(npc.id)) return;
+                loading.destroy();
+                this.create(scene, npc, x);
+            }).catch((error) => {
+                console.error('NPC立绘加载失败:', error.message, error.stack);
+                if (loading.active) loading.setText(`${npc.name}\n立绘暂不可用`);
+            });
+            return loading;
+        }
         const affinity = scene.npcSystem.getNpcStateById(npc.id);
         const portrait = scene.addViewObject(scene.add.image(
-            layout.x, layout.groundY, this.portraitKey(npc.id)
+            layout.x, layout.groundY, portraitKey
         ).setOrigin(0.5, 1));
         const scale = layout.height / portrait.height;
         portrait.setScale(scale).setDepth(4).setInteractive({ useHandCursor: true });

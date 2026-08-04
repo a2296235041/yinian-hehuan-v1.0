@@ -18,7 +18,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
     }
 
     preload() {
-        const added = Game.PlayerPortraitAssets.preload(this);
+        const added = Game.PlayerPortraitAssets.preloadFirst(this);
         if (!added) return;
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
@@ -133,8 +133,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.originInfoText.setText(
             `${origin.description}\n\n天赋 · ${origin.talent.name}\n${origin.talent.description}`
         );
-        this.originPortrait.setTexture(Game.PlayerPortraitAssets.textureKey(origin));
-        Game.PlayerPortraitAssets.fit(this.originPortrait, 190, 300);
+        this.showPortrait(origin);
         this.attributeTexts.forEach((text, index) => text.setText(attributes[index] || ''));
         this.pageText.setText(`${this.selectedOriginIndex + 1} / ${this.originsData.length}`);
     }
@@ -144,6 +143,26 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.selectedOriginIndex = (this.selectedOriginIndex + offset + length) % length;
         window.GameAudio.sfx('click');
         this.displayOriginInfo();
+    }
+
+    showPortrait(origin) {
+        const textureKey = Game.PlayerPortraitAssets.textureKey(origin);
+        if (this.textures.exists(textureKey)) {
+            this.originPortrait.setTexture(textureKey).setVisible(true);
+            Game.PlayerPortraitAssets.fit(this.originPortrait, 190, 300);
+            return;
+        }
+        this.originPortrait.setVisible(false);
+        const selectedId = origin.id;
+        Game.PlayerPortraitAssets.ensureLoaded(this, origin).then((loadedKey) => {
+            if (!this.scene.isActive() || this.originsData[this.selectedOriginIndex]?.id !== selectedId) {
+                return;
+            }
+            this.originPortrait.setTexture(loadedKey).setVisible(true);
+            Game.PlayerPortraitAssets.fit(this.originPortrait, 190, 300);
+        }).catch((error) => {
+            console.error('身份立绘加载失败:', error.message, error.stack);
+        });
     }
 
     confirmSelection(button) {

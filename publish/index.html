@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.3.6">
+  <meta name="game-version" content="0.3.7">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.3.6',
-        build: '20260804.4',
-        cacheName: 'yinian-hehuan-v0.3.6-20260804.4',
-        entry: 'main.v036.js'
+        version: '0.3.7',
+        build: '20260804.5',
+        cacheName: 'yinian-hehuan-v0.3.7-20260804.5',
+        entry: 'main.v037.js'
       });
 
       root.GameRelease = release;
@@ -75,17 +75,145 @@
       schedule();
     }(window));
   </script>
-  <link rel="preload" href="./vendor/phaser.min.js" as="script">
-  <link rel="stylesheet" href="./style.css?v=20260731-1">
-  <link rel="stylesheet" href="./boot.v036.css">
-  <link rel="stylesheet" href="./ui.css">
-  <link rel="stylesheet" href="./exploration.css?v=20260725-5">
-  <link rel="stylesheet" href="./theme.css">
-  <link rel="stylesheet" href="./layout.v015.css">
-  <link rel="stylesheet" href="./cheat-panel.v021.css">
-  <link rel="stylesheet" href="./tournament.v029.css">
-  <link rel="stylesheet" href="./tournament-participants.v032.css">
-  <link rel="stylesheet" href="./private-group-dialogue.v033.css">
+  <script>
+    (function installEarlyBootGuard(root) {
+      'use strict';
+
+      var complete = false;
+      var timer = 0;
+
+      function finish() {
+        complete = true;
+        if (timer) root.clearTimeout(timer);
+      }
+
+      function fail(message, code) {
+        if (complete) return;
+        finish();
+        root.GameBootPulse?.stop?.();
+        var splash = document.getElementById('boot-splash');
+        var panel = document.getElementById('boot-error');
+        var text = document.getElementById('boot-error-message');
+        if (splash) splash.hidden = true;
+        if (text) text.textContent = (message || '游戏启动失败') + '，请刷新后重试。';
+        if (panel) panel.hidden = false;
+        if (!root.PlatformBridge) {
+          try {
+            root.dzmm?.loading?.error?.(code || 'BOOT_FAILED', message || '游戏启动失败');
+          } catch (error) {
+            console.error('启动失败状态上报失败:', error.message || '未知错误');
+          }
+        }
+      }
+
+      function reportFailure(message, code) {
+        if (root.PlatformBridge?.fail) {
+          root.PlatformBridge.fail(code, message);
+          return;
+        }
+        fail(message, code);
+      }
+
+      root.GameEarlyBoot = { complete: finish, fail: fail };
+      root.addEventListener('error', function onResourceError(event) {
+        var target = event.target;
+        if (!target || target === root || target.tagName !== 'SCRIPT') return;
+        var source = target.getAttribute('src') || '未知脚本';
+        reportFailure('关键脚本加载失败：' + source.split('/').pop(), 'SCRIPT_LOAD_FAILED');
+      }, true);
+      timer = root.setTimeout(function onBootTimeout() {
+        reportFailure('启动时间过长，可能是资源网络异常', 'BOOT_TIMEOUT');
+      }, 25000);
+    }(window));
+  </script>
+  <style data-critical-boot>
+    html, body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      margin: 0;
+      overflow: hidden;
+      background: #09100e;
+    }
+    #game-shell, #game-container {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+    }
+    #game-shell { position: relative; overflow: hidden; }
+    #game-container { position: absolute; inset: 0; }
+    .boot-splash {
+      position: absolute;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: 14px;
+      color: #fff4f7;
+      background-color: #09100e;
+      background-image: url("./assets/generated/sect-courtyard.c4be5633.webp");
+      background-position: center;
+      background-size: cover;
+      background-blend-mode: multiply;
+    }
+    .boot-splash[hidden], .boot-error[hidden] { display: none; }
+    .boot-splash span {
+      display: grid;
+      place-items: center;
+      width: 78px;
+      height: 78px;
+      border: 1px solid rgba(232, 183, 199, 0.72);
+      border-radius: 50%;
+      color: #efd39c;
+      background: rgba(25, 10, 17, 0.86);
+      font: 20px "STKaiti", "KaiTi", serif;
+    }
+    .boot-splash strong {
+      font: 400 28px "STKaiti", "KaiTi", "Noto Serif SC", serif;
+    }
+    .boot-splash i {
+      width: 220px;
+      height: 3px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .boot-splash i::after {
+      display: block;
+      width: 42%;
+      height: 100%;
+      background: #e78da9;
+      content: "";
+      animation: boot-flow 1.1s ease-in-out infinite alternate;
+    }
+    .boot-error {
+      position: absolute;
+      z-index: 20;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      padding: 24px;
+      color: #f4ead2;
+      text-align: center;
+      background: #09100e;
+    }
+    @keyframes boot-flow {
+      from { transform: translateX(-10%); }
+      to { transform: translateX(150%); }
+    }
+  </style>
+  <link rel="preload" href="./vendor/phaser.min.js?v=20260804-5" as="script">
+  <link rel="stylesheet" href="./style.css?v=20260804-5">
+  <link rel="stylesheet" href="./ui.css?v=20260804-5">
+  <link rel="stylesheet" href="./exploration.css?v=20260804-5">
+  <link rel="stylesheet" href="./theme.css?v=20260804-5">
+  <link rel="stylesheet" href="./layout.v015.css?v=20260804-5">
+  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260804-5">
+  <link rel="stylesheet" href="./tournament.v029.css?v=20260804-5">
+  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260804-5">
+  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260804-5">
 </head>
 <body>
   <main id="game-shell">
@@ -337,109 +465,7 @@
     </section>
   </main>
 
-  <script defer src="./src/platform/PlatformBridge.js?v=20260726-2"></script>
-  <script defer src="./src/platform/AudioManager.js"></script>
-  <script defer src="./src/platform/OrientationManager.js?v=20260726-1"></script>
-  <script defer src="./vendor/phaser.min.js"></script>
-  <script defer src="./src/utils/EventBus.js"></script>
-  <script defer src="./src/utils/SceneTransition.js"></script>
-  <script defer src="./src/ui/TextBoxUtils.js"></script>
-  <script defer src="./src/systems/TimeSystem.js?v=20260803-10"></script>
-  <script defer src="./src/ui/SceneBackdrop.js"></script>
-  <script defer src="./src/ui/UISkin.js?v=20260725-2"></script>
-  <script defer src="./src/assets/BuildingAssets.js"></script>
-  <script defer src="./src/assets/ExplorationAssets.js"></script>
-  <script defer src="./src/assets/EnemyAssets.js?v=20260725-2"></script>
-  <script defer src="./src/assets/PlayerPortraitAssets.v002.js?v=20260804-1"></script>
-  <script defer src="./src/ai/ModelPicker.js"></script>
-  <script defer src="./src/ai/CompletionsSafe.v022.js"></script>
-  <script defer src="./src/ai/AIJson.js?v=20260803-10"></script>
-  <script defer src="./src/ai/AITextSanitizer.js"></script>
-  <script defer src="./src/ai/ImageWorkflow.js"></script>
-  <script defer src="./src/storage/VersionedStorageUtils.js?v=20260802-1"></script>
-  <script defer src="./src/storage/VersionedStorage.js?v=20260802-1"></script>
-  <script defer src="./src/settings/TrafficSaver.v023.js?v=20260803-10"></script>
-  <script defer src="./src/settings/TrafficSaverUI.v022.js"></script>
-  <script defer src="./src/storage/DialogueHistoryState.v024.js"></script>
-  <script defer src="./src/storage/TournamentState.js?v=20260803-5"></script>
-  <script defer src="./src/storage/SaveData.v025.js?v=20260804-4"></script>
-  <script defer src="./src/data/PlayerIdentity.v001.js"></script>
-  <script defer src="./src/data/NPCRelations.v025.js"></script>
-  <script defer src="./src/data/BuildingData.js"></script>
-  <script defer src="./src/data/CultivationData.js"></script>
-  <script defer src="./src/data/ShopData.js"></script>
-  <script defer src="./src/data/TournamentRoster.js"></script>
-  <script defer src="./src/systems/AffinityState.js"></script>
-  <script defer src="./src/systems/AffinitySystem.js?v=20260803-4"></script>
-  <script defer src="./src/systems/InventorySystem.js"></script>
-  <script defer src="./src/systems/GiftSystem.js"></script>
-  <script defer src="./src/systems/CultivationSystem.v025.js"></script>
-  <script defer src="./src/systems/PlayerGrowthSystem.js?v=20260804-4"></script>
-  <script defer src="./src/systems/ShopSystem.js?v=20260804-4"></script>
-  <script defer src="./src/systems/PlayerStatsSystem.js?v=20260804-4"></script>
-  <script defer src="./src/systems/CombatSystem.js"></script>
-  <script defer src="./src/systems/ExplorationSystem.js?v=20260804-4"></script>
-  <script defer src="./src/systems/TournamentRules.js"></script>
-  <script defer src="./src/systems/TournamentBattleState.js?v=20260803-4"></script>
-  <script defer src="./src/systems/TournamentRelations.js?v=20260803-4"></script>
-  <script defer src="./src/systems/TournamentSystem.js?v=20260803-5"></script>
-  <script defer src="./src/systems/PlayerStateSystem.js?v=20260804-4"></script>
-  <script defer src="./src/systems/SaveGameSystem.v021.js?v=20260803-5"></script>
-  <script defer src="./src/systems/AutoSaveSystem.js?v=20260802-1"></script>
-  <script defer src="./src/systems/CheatSystem.v021.js"></script>
-  <script defer src="./src/storage/SaveLifecycle.js?v=20260727-1"></script>
-  <script defer src="./src/ai/AIModels.v022.js"></script>
-  <script defer src="./src/ai/NarrativeService.v025.js?v=20260803-10"></script>
-  <script defer src="./src/ai/BattleNarrator.v001.js"></script>
-  <script defer src="./src/ai/ExplorationDialogue.v025.js"></script>
-  <script defer src="./src/ai/ModelUI.js?v=20260724-1"></script>
-  <script defer src="./src/ai/DialoguePrompts.v025.js"></script>
-  <script defer src="./src/ai/DialogueGreetingService.v024.js"></script>
-  <script defer src="./src/ai/CharacterImagePrompts.v019.js"></script>
-  <script defer src="./src/ai/AIImageService.v021.js"></script>
-  <script defer src="./src/ai/NPCGiftInteraction.js"></script>
-  <script defer src="./src/ai/PrivateGroupPrompts.v033.js?v=20260804-2"></script>
-  <script defer src="./src/ai/PrivateGroupDialogueService.v033.js?v=20260804-2"></script>
-  <script defer src="./src/ai/TournamentJudge.js?v=20260803-4"></script>
-  <script defer src="./src/ai/AIService.v016.js?v=20260803-8"></script>
-  <script defer src="./src/ai/DialoguePanel.v014.js"></script>
-  <script defer src="./src/ui/ExplorationPanel.v014.js"></script>
-  <script defer src="./src/ui/ExplorationDOMView.js?v=20260804-4"></script>
-  <script defer src="./src/ui/ExplorationDOMController.v023.js"></script>
-  <script defer src="./src/ui/GiftPanel.js"></script>
-  <script defer src="./src/ui/BreakthroughController.js"></script>
-  <script defer src="./src/ui/SaveGameUI.js?v=20260729-1"></script>
-  <script defer src="./src/ui/CheatPanel.v021.js"></script>
-  <script defer src="./src/ui/BattleUI.js?v=20260803-10"></script>
-  <script defer src="./src/ui/ExplorationView.js?v=20260804-4"></script>
-  <script defer src="./src/ui/ShopEntry.js?v=20260727-1"></script>
-  <script defer src="./src/ui/TournamentParticipantView.v032.js"></script>
-  <script defer src="./src/ui/TournamentView.js?v=20260803-7"></script>
-  <script defer src="./src/ui/TournamentPanel.js?v=20260803-4"></script>
-  <script defer src="./src/ui/TournamentEntry.js"></script>
-  <script defer src="./src/ui/PrivateGroupDialoguePanel.v033.js"></script>
-  <script defer src="./src/ui/InventoryQuantityDialog.js?v=20260804-3"></script>
-  <script defer src="./src/ui/InventoryUseController.js?v=20260804-3"></script>
-  <script defer src="./src/ui/NpcCardRenderer.js"></script>
-  <script defer src="./src/ui/MainMenuDecor.js?v=20260803-2"></script>
-  <script defer src="./src/ui/PreloadDecor.js?v=20260803-1"></script>
-  <script defer src="./src/ui/CharacterCreationDecor.js?v=20260803-1"></script>
-  <script defer src="./src/ui/SectMapDecor.js?v=20260803-1"></script>
-  <script defer src="./src/ui/PrivateSceneEffects.js?v=20260803-2"></script>
-  <script defer src="./src/systems/NPCSystem.v024.js"></script>
-  <script defer src="./src/systems/DialogueSystem.v025.js"></script>
-  <script defer src="./src/scenes/BootScene.js"></script>
-  <script defer src="./src/scenes/PreloadScene.v025.js?v=20260804-4"></script>
-  <script defer src="./src/scenes/MainMenuScene.js?v=20260804-1"></script>
-  <script defer src="./src/scenes/CharacterCreationScene.v017.js?v=20260803-11"></script>
-  <script defer src="./src/scenes/GameScene.js?v=20260803-9"></script>
-  <script defer src="./src/scenes/ShopScene.js"></script>
-  <script defer src="./src/scenes/InventoryScene.v021.js?v=20260804-3"></script>
-  <script defer src="./src/scenes/ExplorationScene.v023.js"></script>
-  <script defer src="./src/scenes/BattleScene.v023.js"></script>
-  <script defer src="./src/scenes/UIScene.js?v=20260803-10"></script>
-  <script defer src="./src/scenes/OverlayGuard.js?v=20260725-5"></script>
-  <script defer src="./src/settings/TrafficSaverPromptGuard.v023.js?v=20260803-10"></script>
-  <script defer src="./main.v036.js"></script>
+  <script defer src="./vendor/phaser.min.js?v=20260804-5"></script>
+  <script defer src="./main.v037.js?v=20260804-5"></script>
 </body>
 </html>

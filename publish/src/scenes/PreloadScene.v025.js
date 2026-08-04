@@ -5,13 +5,13 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
     constructor() {
         super('PreloadScene');
         this.loadFailed = false;
-        this.totalResources = 19;
+        this.totalResources = 2;
     }
 
     preload() {
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
-        const totalResources = 20;
+        const totalResources = 2;
         this.totalResources = totalResources;
 
         window.PlatformBridge.progress({
@@ -42,25 +42,10 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         });
 
         this.load.image('bg-sect', './assets/generated/sect-courtyard.c4be5633.webp');
-        this.load.image('bg-sect-map', './assets/generated/sect-map.2a28a8cb.webp');
-        this.load.image('npc-xiao-qingxuan', './assets/generated/npc-standee-xiao-qingxuan.7a93f059.webp');
-        this.load.image('npc-scholar', './assets/generated/scholar-disciple.e2aa08f6.webp');
-        this.load.image('npc-hu-jiuer', './assets/generated/npc-standee-hu-jiuer.a10661ad.webp');
-        this.load.image('npc-su-meier', './assets/generated/npc-standee-su-meier.a9f08237.webp');
-        this.load.image('npc-liu-hanyan', './assets/generated/npc-standee-liu-hanyan.340893ff.webp');
-        this.load.image('npc-han-yueshuang', './assets/generated/npc-standee-han-yueshuang.352ae25d.webp');
-        this.load.image('npc-yun-shuiyao', './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp');
-        this.load.image('npc-mo-qiaoer', './assets/generated/npc-standee-mo-qiaoer.webp');
-        this.load.image('npc-bai-zhi', './assets/generated/npc-standee-bai-zhi.79c8c1df.webp');
-        this.load.image('npc-qin-wanqing', './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp');
-        Game.PlayerPortraitAssets.preloadFirst(this);
-        this.load.json('character_origins', './assets/data/character_origins.v025.json');
-        this.load.json('npcs', './assets/data/npcs.v025.json');
-        this.load.json('tournament_npcs', './assets/data/tournament_npcs.json');
-        this.load.json('npc_openings', './assets/data/npc_openings.v025.json');
-        this.load.json('items', './assets/data/items.json?v=20260804-4');
-        this.load.json('exploration_regions', './assets/data/exploration_regions.json?v=20260804-4');
-        this.load.json('enemies', './assets/data/enemies.json?v=20260804-4');
+        this.load.json(
+            'character_origins',
+            './assets/data/character_origins.v025.json?v=20260804-5'
+        );
     }
 
     createLoadingView(width, height) {
