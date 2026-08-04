@@ -97,6 +97,25 @@ const active = {
   assert.equal(captured.messages[0].content.includes('字段仅为：summary'), true);
   assert.equal(captured.messages[0].content.includes('最高叙事指令'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
+  assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
+  assert.equal(captured.messages[0].content.includes('最后一个动作或结果之后'), true);
+  assert.equal(captured.messages[0].content.includes('禁止出现“按照你的描述”'), true);
+
+  const conciseSummary = '剑雨消散的刹那，顾清罗立即压低剑锋贴近中线，借残留寒气封住退路。你顺势转腕逼开霜刃，她踉跄半步后重新稳住呼吸，双方距离再次缩短。';
+  window.dzmm.completions = async (_config, callback) => {
+    callback(JSON.stringify({
+      summary: conciseSummary,
+      verdictReason: '连续压迫迫使对手后退，本回合你占优。',
+      matchResult: 'continue',
+      relationshipChanges: [],
+      playerDelta: 24,
+      opponentDelta: 14
+    }), true);
+  };
+  const concise = await window.GameTournamentJudge.judge(
+    active, '踏月追击', tournamentState
+  );
+  assert.equal(concise.summary, conciseSummary);
 
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
@@ -106,7 +125,7 @@ const active = {
   );
   assert.equal(fallback.fallback, true);
   assert.equal(fallback.fallbackMessage.includes('网络连接异常'), true);
-  assert.ok(fallback.summary.length >= 150);
+  assert.ok(fallback.summary.length >= 60);
   assert.ok(fallback.summary.length <= 200);
   assert.equal(fallback.verdict.includes('裁判判决'), true);
   assert.equal(fallback.relationshipChanges[0].delta >= -4, true);
@@ -120,7 +139,7 @@ const active = {
   assert.equal(directed.finished, true);
   assert.equal(directed.winner, 'player');
   assert.ok(directed.playerDelta > directed.opponentDelta);
-  assert.equal(directed.summary.includes('胜势已经落定'), true);
+  assert.equal(directed.summary.includes('完整构想'), false);
 
   const surrendered = await window.GameTournamentJudge.judge(
     active,
@@ -130,7 +149,7 @@ const active = {
   assert.equal(surrendered.finished, true);
   assert.equal(surrendered.winner, 'opponent');
   assert.ok(surrendered.opponentDelta > surrendered.playerDelta);
-  assert.equal(surrendered.summary.includes('败局已经落定'), true);
+  assert.equal(surrendered.summary.includes('依照你的安排'), false);
   console.log('tournament judge test passed');
 })().catch((error) => {
   console.error(error);
