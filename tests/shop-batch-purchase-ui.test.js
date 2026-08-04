@@ -15,6 +15,11 @@ const cheat = read('publish/src/ui/CheatPanel.v021.js');
 
 assert.ok(dialog.includes('Math.min(99, 9999 - owned, affordable)'));
 assert.ok(dialog.includes('批量购买'));
+assert.ok(dialog.includes('Game.CommerceDecor.addDialogFrame'));
+assert.ok(dialog.includes('可购上限'));
+assert.ok(dialog.includes('余额 '));
+assert.ok(dialog.includes('decreaseButtons'));
+assert.ok(dialog.includes('increaseButtons'));
 assert.ok(controller.includes('result.totalPrice'));
 assert.ok(controller.includes('剩余灵石'));
 assert.ok(!controller.includes('GameNarrative'));

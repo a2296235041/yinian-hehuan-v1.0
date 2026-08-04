@@ -72,6 +72,23 @@ Game.CommerceDecor = {
         }).setOrigin(1, 0.5);
     },
 
+    addDialogFrame(scene, x, y, width, height) {
+        const left = x - width / 2;
+        const top = y - height / 2;
+        const graphics = scene.add.graphics();
+        graphics.fillStyle(0x160f15, 0.99);
+        graphics.fillRect(left, top, width, height);
+        graphics.lineStyle(1, 0xe5bd78, 0.56);
+        graphics.strokeRect(left, top, width, height);
+        graphics.lineStyle(1, 0xf0a8bb, 0.28);
+        graphics.strokeRect(left + 8, top + 8, width - 16, height - 16);
+        graphics.lineStyle(1, 0xe5bd78, 0.25);
+        graphics.lineBetween(left + 24, top + 145, left + width - 24, top + 145);
+        graphics.lineBetween(left + 24, top + height - 82, left + width - 24, top + height - 82);
+        this.addCornerMarks(graphics, left, top, width, height);
+        return graphics;
+    },
+
     addSlot(scene, x, y, width, height, active) {
         const graphics = scene.add.graphics().setPosition(x, y);
         graphics.fillStyle(active ? 0x321522 : 0x201820, active ? 0.82 : 0.34);
