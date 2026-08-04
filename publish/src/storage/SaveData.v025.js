@@ -5,6 +5,7 @@
   const ATTRIBUTE_KEYS = Object.freeze([
     'strength', 'constitution', 'agility', 'intelligence', 'charisma', 'wisdom', 'luck'
   ]);
+  const SPIRIT_STONE_CAP = 999999999;
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, Math.floor(Number(value) || 0)));
@@ -65,7 +66,9 @@
     });
     return {
       quantities,
-      spiritStones: Number.isFinite(savedStones) ? clamp(savedStones, 0, 9999) : 100
+      spiritStones: Number.isFinite(savedStones)
+        ? clamp(savedStones, 0, SPIRIT_STONE_CAP)
+        : 100
     };
   }
 

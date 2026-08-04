@@ -15,6 +15,7 @@ const affinityState = {
 };
 let cultivationState = { realmIndex: 0, progress: 10 };
 let storedCheat = { unlimitedStamina: false };
+let spiritStones = 100;
 
 const root = {
   Game: {
@@ -73,6 +74,13 @@ const root = {
       cultivationState = { ...next };
       return { durable: true, snapshot: cultivationState };
     }
+  },
+  GameInventory: {
+    ready: async () => undefined,
+    async addSpiritStones(amount) {
+      spiritStones += amount;
+      return { changed: true, balance: spiritStones, durable: true };
+    }
   }
 };
 
@@ -103,6 +111,8 @@ vm.runInNewContext(
 
   await root.GameCheat.setUnlimitedStamina(false);
   assert.equal(root.GameCheat.getSnapshot().unlimitedStamina, false);
+  const stones = await root.GameCheat.addSpiritStones();
+  assert.equal(stones.balance, 10000099);
   console.log('cheat system tests passed');
 })().catch((error) => {
   console.error(error);

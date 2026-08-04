@@ -17,6 +17,11 @@
     return quantity >= 1 && quantity <= 9999 ? quantity : 0;
   }
 
+  function normalizePurchaseQuantity(value) {
+    const quantity = Math.floor(Number(value) || 0);
+    return quantity >= 1 && quantity <= 99 ? quantity : 0;
+  }
+
   function displayNumber(value) {
     return Number.isInteger(value) ? String(value) : Number(value.toFixed(1)).toString();
   }
@@ -52,23 +57,31 @@
     return `赠礼好感 +${item.gift_affinity || 0}`;
   }
 
-  function purchase(buildingId, itemId) {
+  function purchase(buildingId, itemId, quantity = 1) {
     return enqueue(async () => {
       await root.GameInventory.ready();
       const shop = getShop(buildingId);
       const offer = shop?.offers.find((entry) => entry.itemId === itemId);
       if (!offer) return { changed: false, reason: 'not_sold' };
-      const spent = await root.GameInventory.removeSpiritStones(offer.price, 'shop');
+      const purchaseQuantity = normalizePurchaseQuantity(quantity);
+      if (!purchaseQuantity) return { changed: false, reason: 'invalid_quantity', offer };
+      if (root.GameInventory.getQuantity(itemId) + purchaseQuantity > 9999) {
+        return { changed: false, reason: 'inventory_limit', offer };
+      }
+      const totalPrice = offer.price * purchaseQuantity;
+      const spent = await root.GameInventory.removeSpiritStones(totalPrice, 'shop');
       if (!spent.changed) return { changed: false, reason: spent.reason, offer };
-      const added = await root.GameInventory.add(itemId, 1, 'shop');
+      const added = await root.GameInventory.add(itemId, purchaseQuantity, 'shop');
       if (!added.changed) {
-        await root.GameInventory.addSpiritStones(offer.price, 'shop_refund');
+        await root.GameInventory.addSpiritStones(totalPrice, 'shop_refund');
         return { changed: false, reason: 'delivery_failed', offer };
       }
       return {
         changed: true,
         offer,
         item: added.item,
+        quantity: purchaseQuantity,
+        totalPrice,
         balance: root.GameInventory.getSpiritStones()
       };
     });

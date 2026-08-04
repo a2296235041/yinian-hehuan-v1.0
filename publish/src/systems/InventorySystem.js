@@ -1,19 +1,16 @@
 (function installInventorySystem(root) {
   'use strict';
-
-  // 储物袋只保存“物品 ID -> 数量”，名称和说明始终从配置表读取。
-  // 这样以后修改物品文案或新增掉落时，不需要迁移玩家存档。
   const STARTING_SPIRIT_STONES = 100;
+  const SPIRIT_STONE_CAP = 999999999;
   const catalog = new Map();
   let state = { quantities: {}, spiritStones: STARTING_SPIRIT_STONES };
   let storage = null;
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
-
-  function clampQuantity(value) {
-    return Math.max(0, Math.min(9999, Math.floor(Number(value) || 0)));
-  }
-
+  const clampQuantity = (value) => Math.max(0, Math.min(9999, Math.floor(Number(value) || 0)));
+  const clampSpiritStones = (value) => (
+    Math.max(0, Math.min(SPIRIT_STONE_CAP, Math.floor(Number(value) || 0)))
+  );
   function fallbackState() {
     const quantities = {};
     catalog.forEach((item) => {
@@ -28,7 +25,7 @@
     const clean = {
       quantities: {},
       spiritStones: Number.isFinite(savedStones)
-        ? clampQuantity(savedStones)
+        ? clampSpiritStones(savedStones)
         : STARTING_SPIRIT_STONES
     };
     Object.entries(value?.quantities || {}).forEach(([id, amount]) => {
@@ -148,11 +145,14 @@
   function addSpiritStones(amount, source = 'reward') {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
-      const delta = clampQuantity(amount);
+      const delta = clampSpiritStones(amount);
       if (delta <= 0) return { changed: false, reason: 'invalid_amount' };
-      state.spiritStones = clampQuantity(state.spiritStones + delta);
+      const next = clampSpiritStones(state.spiritStones + delta);
+      const applied = next - state.spiritStones;
+      if (applied <= 0) return { changed: false, reason: 'max_amount' };
+      state.spiritStones = next;
       const durable = await persist(false);
-      emitChange('spirit_stones', delta, durable, source);
+      emitChange('spirit_stones', applied, durable, source);
       return { changed: true, balance: state.spiritStones, durable };
     });
   }
@@ -160,7 +160,7 @@
   function removeSpiritStones(amount, source = 'purchase') {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
-      const delta = clampQuantity(amount);
+      const delta = clampSpiritStones(amount);
       if (delta <= 0) return { changed: false, reason: 'invalid_amount' };
       if (state.spiritStones < delta) {
         return { changed: false, reason: 'insufficient', balance: state.spiritStones };

@@ -49,6 +49,10 @@
               <span aria-hidden="true"></span>
             </label>
           </section>
+          <section class="cheat-section cheat-toggle-row">
+            <div><h3>灵石数量</h3><output>直接增加大量灵石</output></div>
+            <button id="cheat-stones-add" class="cheat-control" type="button">+9,999,999</button>
+          </section>
           <p id="cheat-status" class="cheat-status" aria-live="polite"></p>
         </div>
       </div>`;
@@ -164,6 +168,10 @@
     byId('cheat-unlimited').addEventListener('change', (event) => run(
       () => root.GameCheat.setUnlimitedStamina(event.target.checked),
       event.target.checked ? '无限精力已开启' : '无限精力已关闭'
+    ));
+    byId('cheat-stones-add').addEventListener('click', () => run(
+      () => root.GameCheat.addSpiritStones(9999999),
+      '灵石已增加 9,999,999'
     ));
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !panel.hidden) close();

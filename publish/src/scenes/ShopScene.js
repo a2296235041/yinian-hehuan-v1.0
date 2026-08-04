@@ -11,6 +11,7 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         this.busy = false;
         this.baseScenesRestored = false;
         this.requestId = 0;
+        this.quantityDialog = null;
     }
 
     init(data = {}) {
@@ -102,49 +103,33 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
             });
         const button = Game.UISkin.makeButton(
             this, x, y + 70, `购买 · ${offer.price} 灵石`,
-            (target) => this.purchase(offer, target),
+            (target) => this.openPurchaseDialog(offer, target),
             { width: 230, height: 46, fontSize: 17 }
         );
         this.productObjects.push(frame, title, detail, button);
     }
 
-    async purchase(offer, button) {
+    openPurchaseDialog(offer, button) {
         if (this.busy) return;
-        this.busy = true;
-        const requestId = ++this.requestId;
-        button.disableInteractive().setText('交易中…');
-        this.statusText.setText('掌柜正在清点灵石与货物…');
-        try {
-            const result = await window.GameShop.purchase(this.buildingId, offer.itemId);
-            if (requestId !== this.requestId || !this.statusText?.active) return;
-            if (!result.changed) {
-                window.GameAudio.sfx('deny');
-                this.statusText.setText(result.reason === 'insufficient'
-                    ? '灵石不足，无法购得此物。' : '交易未能完成，请稍后再试。');
-                return;
-            }
-            window.GameAudio.sfx('success');
-            const fact = `花费 ${offer.price} 灵石，购得${result.item.name} ×1。`;
-            this.statusText.setText('交易完成，AI 正在补全这一幕…');
-            const story = await window.GameNarrative.generateDetailed('shop_purchase', {
-                shop: window.GameShop.getShop(this.buildingId)?.name,
-                item: result.item.name,
-                effect: window.GameShop.effectLabel(result.item),
-                balance: result.balance
-            }, fact);
-            if (requestId === this.requestId && this.statusText?.active) {
-                this.statusText.setText(Game.TextBoxUtils.fit(story, 56, 2));
-            }
-        } finally {
-            this.busy = false;
-            if (button.active) button.setText(`购买 · ${offer.price} 灵石`)
-                .setInteractive({ useHandCursor: true });
-            this.refreshBalance();
+        this.quantityDialog?.close();
+        this.quantityDialog = Game.ShopQuantityDialog.open(this, offer, (quantity) => {
+            this.quantityDialog = null;
+            void Game.ShopPurchaseController.run(this, offer, button, quantity);
+        });
+        if (!this.quantityDialog) {
+            window.GameAudio.sfx('deny');
+            this.statusText.setText(
+                window.GameInventory.getQuantity(offer.itemId) >= 9999
+                    ? '该物品已达到背包上限。'
+                    : '灵石不足，无法购买此物。'
+            );
         }
     }
 
     close() {
         this.requestId += 1;
+        this.quantityDialog?.close();
+        this.quantityDialog = null;
         if (this.busy) window.GameNarrative.cancel();
         window.GameAudio.sfx('click');
         Game.SceneTransition.fadeOut(this, () => {
@@ -166,6 +151,8 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
     }
 
     cleanup() {
+        this.quantityDialog?.close();
+        this.quantityDialog = null;
         Game.EventBus.off('inventory-changed', this.refreshBalance, this);
         this.restoreBaseScenes();
     }

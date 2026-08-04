@@ -108,6 +108,13 @@
     return result;
   }
 
+  async function addSpiritStones(amount = 9999999) {
+    await root.GameInventory.ready();
+    const result = await root.GameInventory.addSpiritStones(amount, 'cheat');
+    if (!result.changed) throw new Error('灵石修改失败');
+    return result;
+  }
+
   function resetLocal() {
     state = { ...DEFAULT_STATE };
     root.Game.EventBus.emit('cheat-settings-changed', { ...snapshot(), durable: true });
@@ -119,6 +126,7 @@
     setUnlimitedStamina,
     setAffinity,
     setRealm,
+    addSpiritStones,
     refillUnlimited,
     resetLocal
   });
