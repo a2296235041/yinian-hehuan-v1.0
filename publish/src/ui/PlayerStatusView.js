@@ -28,30 +28,8 @@
   }
 
   function create(scene) {
-    const statusPanel = Game.UISkin.addPanel(scene, 183, 58, 340, 92, 'wide', {
-      depth: 20, alpha: 0.97
-    });
-    const avatarRing = scene.add.circle(62, 58, 31, 0x17110f, 1)
-      .setStrokeStyle(2, 0xe5bd78, 0.9).setDepth(21);
-    const maskShape = scene.make.graphics({ x: 0, y: 0, add: false });
-    maskShape.fillCircle(62, 58, 27);
-    const avatarImage = scene.add.image(62, 58, 'npc-scholar')
-      .setDisplaySize(62, 62).setMask(maskShape.createGeometryMask()).setDepth(22);
-    fitAvatar(avatarImage);
-    const nameText = addText(scene, 104, 31, '', {
-      fontSize: '16px', color: '#fff8fa', fixedWidth: 200
-    }).setDepth(21);
-    const dayText = addText(scene, 104, 63, '', {
-      fontSize: '14px', color: '#f4dfe5', fixedWidth: 128
-    }).setDepth(21);
-    const realmText = addText(scene, 226, 63, '', {
-      fontSize: '14px', color: '#e5bd78', fixedWidth: 92
-    }).setDepth(21);
-    const toggleText = addText(scene, 326, 28, '⌄', {
-      fontFamily: 'serif', fontSize: '18px', color: '#e5bd78'
-    }, 0.5).setDepth(22);
-    const hitArea = scene.add.rectangle(183, 58, 340, 92, 0xffffff, 0.001)
-      .setInteractive({ useHandCursor: true }).setDepth(23);
+    let view;
+    const header = root.Game.PlayerStatusHeader.create(scene, () => toggle(view));
     const detailContainer = scene.add.container(0, 0).setDepth(20).setVisible(false);
     const detailObjects = [
       createFrame(scene), scene.add.rectangle(212, 285, 392, 350, 0xffffff, 0.001).setInteractive()
@@ -112,15 +90,11 @@
       detailObjects.push(combatTexts[key]);
     });
     detailContainer.add(detailObjects);
-    const view = {
-      scene, statusPanel, avatarImage, maskShape, nameText, dayText, realmText,
-      toggleText, hitArea, detailContainer, identityTexts, cultivationLabel,
+    view = {
+      scene, header, detailContainer, identityTexts, cultivationLabel,
       progressFill, staminaText, practiceText, attributeTexts, combatTexts,
       visible: false, playerName: '无名修士'
     };
-    hitArea.on('pointerover', () => statusPanel.setAlpha(0.88));
-    hitArea.on('pointerout', () => statusPanel.setAlpha(1));
-    hitArea.on('pointerdown', () => toggle(view));
     return view;
   }
 
@@ -129,11 +103,11 @@
     const player = root.Game.player;
     const stats = root.GamePlayerStats.getSnapshot();
     const cultivation = root.GameCultivation.getSnapshot();
-    view.nameText.setText(root.Game.TextBoxUtils.fit(
-      view.playerName || stats.originName || '无名修士', 12, 1
-    ));
-    view.dayText.setText(root.GameTime.getSnapshot(player).label);
-    view.realmText.setText(cultivation.label);
+    root.Game.PlayerStatusHeader.update(view.header, {
+      name: view.playerName || stats.originName || '无名修士',
+      day: root.GameTime.getSnapshot(player).label,
+      realm: cultivation.label
+    });
     view.identityTexts.origin.setText(root.Game.TextBoxUtils.fit(stats.originName, 20, 1));
     view.identityTexts.talent.setText(root.Game.TextBoxUtils.fit(stats.talentName, 20, 1));
     view.identityTexts.realm.setText(cultivation.label);
@@ -156,36 +130,27 @@
     if (!view) return;
     view.visible = !view.visible;
     view.detailContainer.setVisible(view.visible);
-    view.toggleText.setText(view.visible ? '⌃' : '⌄');
+    root.Game.PlayerStatusHeader.setExpanded(view.header, view.visible);
     root.GameAudio.sfx('click');
     update(view);
-  }
-
-  function fitAvatar(image) {
-    if (!image?.active) return;
-    const size = 62;
-    const scale = Math.max(size / (Number(image.width) || size), size / (Number(image.height) || size));
-    image.setScale(scale);
   }
 
   async function loadProfile(scene, view) {
     const profile = await root.PlatformBridge.getPlayerProfile();
     view.playerName = profile.name || root.Game.player?.origin?.name || '无名修士';
     update(view);
-    if (!profile.avatarUrl || !view.avatarImage?.active) return;
+    if (!profile.avatarUrl || !view.header.avatarImage?.active) return;
     const key = 'player-avatar';
     if (scene.textures.exists(key)) {
-      view.avatarImage.setTexture(key);
-      return fitAvatar(view.avatarImage);
+      return root.Game.PlayerStatusHeader.setAvatar(view.header, key);
     }
     try {
       scene.load.once('loaderror', (file) => {
         if (file.key === key) console.warn('玩家头像加载失败，继续使用默认头像');
       });
       scene.load.once('complete', () => {
-        if (view.avatarImage?.active && scene.textures.exists(key)) {
-          view.avatarImage.setTexture(key);
-          fitAvatar(view.avatarImage);
+        if (view.header.avatarImage?.active && scene.textures.exists(key)) {
+          root.Game.PlayerStatusHeader.setAvatar(view.header, key);
         }
       });
       scene.load.image(key, profile.avatarUrl);

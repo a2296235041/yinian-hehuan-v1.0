@@ -8,12 +8,12 @@ const crypto = require('node:crypto');
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
 const manifest = JSON.parse(fs.readFileSync(
-  path.join(__dirname, '../tools/entry-sources.v046.json'),
+  path.join(__dirname, '../tools/entry-sources.v047.json'),
   'utf8'
 ));
-const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v046.js'), 'utf8');
-const version = '0.4.6';
-const build = '20260804.14';
+const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v047.js'), 'utf8');
+const version = '0.4.7';
+const build = '20260804.15';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -27,7 +27,7 @@ assert.ok(html.includes(`./${expectedEntry}`));
 assert.deepEqual(releaseEntries, [expectedEntry]);
 assert.deepEqual(
   [...html.matchAll(/<script defer src="([^"]+)"><\/script>/g)].map((match) => match[1]),
-  ['./vendor/phaser.min.js?v=20260804-14', './main.v046.js?v=20260804-14']
+  ['./vendor/phaser.min.js?v=20260804-15', './main.v047.js?v=20260804-15']
 );
 assert.ok(html.includes('./cheat-panel.v021.css'));
 assert.ok(html.includes('./tournament.v029.css'));
@@ -68,9 +68,10 @@ assert.ok(
   './src/ui/ShopQuantityDialog.js',
   './src/ui/ShopPurchaseController.js',
   './src/ui/ShopGridView.js',
+  './src/ui/PlayerStatusHeader.js',
   './src/ui/PlayerStatusView.js',
-  './src/assets/GameScenePreload.v046.js',
-  './src/boot/GameBootstrap.v046.js'
+  './src/assets/GameScenePreload.v047.js',
+  './src/boot/GameBootstrap.v047.js'
 ].forEach((entry) => {
   assert.ok(
     manifest.includes(entry.slice(2)),
@@ -129,6 +130,7 @@ assert.ok(!html.includes('<form id="exploration-command-panel"'));
   './main.v043.js',
   './main.v044.js',
   './main.v045.js',
+  './main.v046.js',
   './src/ui/TournamentOpponentView.v031.js',
   './src/ai/AIImageService.js',
   './src/scenes/CharacterCreationScene.js',
