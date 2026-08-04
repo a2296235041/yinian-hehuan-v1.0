@@ -162,7 +162,7 @@ const active = {
   assert.equal(captured.messages[0].content.includes('不得替玩家角色新增'), true);
   assert.equal(captured.messages[0].content.includes('不要以对手姓名开头'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
-  assert.equal(captured.messages[0].content.includes('至少进行十回合'), true);
+  assert.equal(captured.messages[0].content.includes('至少进行五回合'), true);
   assert.equal(captured.messages[0].content.includes('最多 320 字'), true);
   assert.equal(captured.messages[0].content.includes('主动认输、投降、服输或求饶'), true);
   assert.equal(captured.messages[0].content.includes('matchResult 固定填写 continue'), true);

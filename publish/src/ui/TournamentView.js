@@ -179,13 +179,13 @@
         ? `本届已结束 · 魁首：${champion || '待定'}`
         : (canRequestDecision
           ? `${sameMode.round.label} · 已完成 ${sameMode.turn} 回合，可请求裁判判决`
-          : `${sameMode.round.label} · 第 ${sameMode.turn + 1} 招（终判在第十回合后）`))
+          : `${sameMode.round.label} · 第 ${sameMode.turn + 1} 招（第五回合后可主动终判）`))
       : (active
         ? `当前已有进行中的${active.title}，请从山门进入对应赛事。`
         : '赛事当前可开启，完成后需等待十天再次举办。'));
     elements['tournament-score'].textContent = sameMode
       ? `你 ${sameMode.scores?.player || 0} : ${sameMode.scores?.opponent || 0} 对手`
-      : '第十回合后主动终判';
+      : '第五回合后主动终判';
     renderRoster(sameMode, mode, state);
     renderBracket(sameMode);
     root.GameTournamentParticipantView.renderOpponents(

@@ -1,4 +1,4 @@
-/* bootstrap 0.6.1 */ (function startGame(root) {
+/* bootstrap 0.6.2 */ (function startGame(root) {
   'use strict';
 
   function runService(label, action) {

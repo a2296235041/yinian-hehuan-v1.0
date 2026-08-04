@@ -73,7 +73,7 @@ vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
   const opponentId = window.GameTournament.getState().active.opponentIds[0];
-  for (let turn = 1; turn <= 9; turn += 1) {
+  for (let turn = 1; turn <= 4; turn += 1) {
     await window.GameTournament.recordExchange(`第${turn}招`, {
       response: turn === 1
         ? '对手退守后立即稳住架势，抬眼向你回应：“这一招我接下了，继续。”'
@@ -92,11 +92,11 @@ async function winRound() {
   }
   await assert.rejects(
     () => window.GameTournament.requestDecision(),
-    /至少完成 10 回合/
+    /至少完成 5 回合/
   );
-  await window.GameTournament.recordExchange('第10招', {
+  await window.GameTournament.recordExchange('第5招', {
     response: '对手承受最后一轮攻势后稳住身形，等待你是否请求裁判作出终判。',
-    verdict: '裁判判决：你 +30 点，对手 +10 点。第10回合由你占优。',
+    verdict: '裁判判决：你 +30 点，对手 +10 点。第5回合由你占优。',
     relationshipChanges: [{
       opponentId,
       delta: 3,
@@ -108,7 +108,7 @@ async function winRound() {
     winner: 'player'
   });
   const pending = window.GameTournament.getState().active;
-  assert.equal(pending.turn, 10);
+  assert.equal(pending.turn, 5);
   assert.equal(pending.phase, 'battle');
   await window.GameTournament.requestDecision();
 }
@@ -127,7 +127,7 @@ async function winRound() {
   );
   await assert.rejects(
     () => window.GameTournament.requestDecision(),
-    /至少完成 10 回合/
+    /至少完成 5 回合/
   );
 
   await winRound();

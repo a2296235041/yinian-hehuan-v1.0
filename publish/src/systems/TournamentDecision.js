@@ -1,7 +1,7 @@
 (function installTournamentDecision(root) {
   'use strict';
 
-  const MIN_TURNS = 10;
+  const MIN_TURNS = 5;
 
   function profile(active, id) {
     return (active.roster || []).find((entry) => entry.id === id) || null;
