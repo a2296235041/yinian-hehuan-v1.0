@@ -239,12 +239,45 @@
   border-radius: 4px;
 }
 
-.tournament-opponents {
+.tournament-opponent-stage {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
-  min-height: 132px;
+  min-height: 66px;
   margin: 8px 0 10px;
+}
+
+.tournament-opponents {
+  display: contents;
+}
+
+.tournament-draw-moment {
+  grid-column: 2;
+  align-self: center;
+  justify-self: end;
+  width: 214px;
+  min-height: 46px;
+  padding: 8px 14px;
+  color: #f7e8ed;
+  font: 15px "Noto Serif SC", serif;
+  background: rgba(75, 29, 53, 0.86);
+  border: 1px solid rgba(240, 168, 187, 0.68);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tournament-draw-moment:hover,
+.tournament-draw-moment:focus-visible {
+  color: #321522;
+  background: #e5bd78;
+  outline: none;
+}
+
+.tournament-draw-moment:disabled {
+  color: #82747a;
+  background: #302b2d;
+  border-color: rgba(130, 116, 122, 0.45);
+  cursor: not-allowed;
 }
 
 .tournament-opponent-card {
@@ -483,6 +516,10 @@
 @media (max-width: 900px) {
   .tournament-layout {
     grid-template-columns: 250px minmax(0, 1fr);
+  }
+
+  .tournament-draw-moment {
+    width: 154px;
   }
 
   .tournament-opponent-card {

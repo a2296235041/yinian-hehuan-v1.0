@@ -429,7 +429,7 @@ body {
 
 .ai-image-modal {
   position: absolute;
-  z-index: 9;
+  z-index: 120;
   inset: 0;
   display: grid;
   place-items: center;

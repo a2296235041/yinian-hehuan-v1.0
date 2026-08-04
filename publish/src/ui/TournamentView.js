@@ -6,7 +6,7 @@
     'tournament-roster', 'tournament-bracket', 'tournament-opponents',
     'tournament-history', 'tournament-score', 'tournament-start',
     'tournament-action-area', 'tournament-action-input', 'tournament-submit',
-    'tournament-decision',
+    'tournament-decision', 'tournament-draw-moment',
     'tournament-advance', 'tournament-claim', 'tournament-finish',
     'tournament-matchmaking', 'tournament-draw-mode', 'tournament-opponent-field',
     'tournament-opponent-select', 'tournament-matchmaking-note'
@@ -121,7 +121,7 @@
         : '听从正常抽签，对手将由签表随机决定。');
   }
 
-  function renderControls(active, mode, busy) {
+  function renderControls(active, mode, busy, drawing) {
     const day = Math.max(1, Number(root.Game?.player?.day) || 1);
     const cooldown = root.GameTournament.getState().cooldowns[mode] || 0;
     const sameMode = active?.mode === mode;
@@ -137,6 +137,17 @@
     elements['tournament-action-area'].hidden = !sameMode || active.phase !== 'battle';
     elements['tournament-submit'].disabled = busy;
     elements['tournament-submit'].textContent = busy ? 'AI 裁决中 · 约 10–30 秒' : '施展此招';
+    const canDraw = sameMode && active.phase === 'battle';
+    const hasScene = canDraw && (active.logs || [])
+      .some((entry) => entry.kind === 'opponent-response');
+    elements['tournament-draw-moment'].hidden = !canDraw;
+    elements['tournament-draw-moment'].disabled = busy || drawing || !hasScene;
+    elements['tournament-draw-moment'].textContent = drawing
+      ? '绘制中 · 约 30 秒'
+      : '绘制此刻';
+    elements['tournament-draw-moment'].title = hasScene
+      ? '根据最近的交锋内容绘制当前场景'
+      : '至少完成一次交锋后即可绘制';
     const canRequestDecision = sameMode && active.phase === 'battle'
       && active.turn >= root.GameTournamentDecision.MIN_TURNS;
     elements['tournament-decision'].hidden = !canRequestDecision;
@@ -182,7 +193,7 @@
     );
     renderHistory(sameMode);
     renderMatchmaking(active, mode, options.busy === true);
-    renderControls(active, mode, options.busy === true);
+    renderControls(active, mode, options.busy === true, options.drawing === true);
   }
 
   root.GameTournamentView = Object.freeze({ init, render });

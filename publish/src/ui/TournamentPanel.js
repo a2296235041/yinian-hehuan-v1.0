@@ -4,6 +4,7 @@
   let elements = null;
   let mode = 'internal';
   let busy = false;
+  let drawing = false;
   let openGeneration = 0;
 
   function state() {
@@ -11,7 +12,8 @@
   }
 
   function render(status = '') {
-    root.GameTournamentView.render(state(), mode, { busy, status });
+    const imageBusy = drawing || root.GameAIImage?.isBusy?.() === true;
+    root.GameTournamentView.render(state(), mode, { busy, drawing: imageBusy, status });
   }
 
   function errorMessage(error, fallback) {
@@ -125,6 +127,27 @@
     );
   }
 
+  async function drawMoment() {
+    if (busy || drawing) return;
+    const active = state().active;
+    if (!active || active.mode !== mode || active.phase !== 'battle') return;
+    const generation = openGeneration;
+    let finalStatus = '';
+    drawing = true;
+    render('正在提炼最近交锋并绘制当前场景，预计约 30 秒…');
+    root.GameAudio?.sfx?.('click');
+    try {
+      await root.GameTournamentImage.generate(active);
+    } catch (error) {
+      if (generation === openGeneration) {
+        finalStatus = errorMessage(error, '当前场景绘制失败，请稍后再次点击');
+      }
+    } finally {
+      drawing = false;
+      if (generation === openGeneration && !elements['tournament-screen'].hidden) render(finalStatus);
+    }
+  }
+
   async function claim() {
     await run(() => root.GameTournament.claimReward(), '正在发放魁首奖励…');
     root.GameAudio?.sfx?.('score');
@@ -155,6 +178,7 @@
     document.getElementById('tournament-close').addEventListener('click', close);
     elements['tournament-start'].addEventListener('click', start);
     elements['tournament-submit'].addEventListener('click', submit);
+    elements['tournament-draw-moment'].addEventListener('click', drawMoment);
     elements['tournament-decision'].addEventListener('click', decide);
     elements['tournament-advance'].addEventListener('click', advance);
     elements['tournament-claim'].addEventListener('click', claim);
