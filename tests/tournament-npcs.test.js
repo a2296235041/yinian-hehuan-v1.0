@@ -13,6 +13,19 @@ assert.equal(records.length, 16);
 assert.equal(records.filter((entry) => entry.group === 'internal').length, 4);
 assert.equal(records.filter((entry) => entry.group === 'external').length, 12);
 assert.equal(new Set(records.map((entry) => entry.id)).size, 16);
+const righteousSect = records.filter((entry) => entry.faction === '昭明道宗');
+assert.deepEqual(
+  righteousSect.map((entry) => entry.id),
+  ['jiang_zhaoyue', 'gu_yunzheng', 'shen_jingchen']
+);
+assert.equal(records.some((entry) => entry.faction === '万兽岭'), false);
+righteousSect.forEach((entry) => {
+  const profile = [
+    entry.title, entry.appearance, entry.physique, entry.personality,
+    entry.combat_style, entry.signature_move
+  ].join('');
+  assert.doesNotMatch(profile, /兽|狼|熊|貂|灵宠|御兽|兽魂/);
+});
 
 records.forEach((entry) => {
   [
