@@ -12,6 +12,7 @@
     "combat_style": "以合欢绫和魅心幻术牵引节奏，擅长借力化力与反制。",
     "signature_move": "桃烟缚月",
     "power": 73,
+    "combat_bias": "control",
     "portrait_key": ""
   },
   {
@@ -27,6 +28,7 @@
     "combat_style": "双短剑贴身快攻，依靠身法连续改变攻击角度。",
     "signature_move": "寒香七折",
     "power": 70,
+    "combat_bias": "swift",
     "portrait_key": ""
   },
   {
@@ -42,6 +44,7 @@
     "combat_style": "笛音扰乱神识，玉铃制造错位幻听，再以短距离灵爆收尾。",
     "signature_move": "醉梦千铃",
     "power": 66,
+    "combat_bias": "control",
     "portrait_key": ""
   },
   {
@@ -57,6 +60,7 @@
     "combat_style": "影遁、擒拿和爆发突袭结合，擅长在对手出招瞬间贴近破势。",
     "signature_move": "照影无声",
     "power": 75,
+    "combat_bias": "assault",
     "portrait_key": ""
   },
   {
@@ -72,6 +76,7 @@
     "combat_style": "剑势简洁精准，以寒气封锁退路后正面决胜。",
     "signature_move": "一线霜天",
     "power": 82,
+    "combat_bias": "balanced",
     "portrait_key": ""
   },
   {
@@ -87,6 +92,7 @@
     "combat_style": "重剑蓄势与震地剑气，牺牲速度换取正面压制。",
     "signature_move": "断岳沉锋",
     "power": 80,
+    "combat_bias": "guard",
     "portrait_key": ""
   },
   {
@@ -102,6 +108,7 @@
     "combat_style": "高速御剑与连续变向，擅长从空中发动密集突刺。",
     "signature_move": "星坠十三闪",
     "power": 76,
+    "combat_bias": "swift",
     "portrait_key": ""
   },
   {
@@ -117,6 +124,7 @@
     "combat_style": "药雾、护体生机与封脉银针并用，擅长拖入持久战。",
     "signature_move": "百草回天域",
     "power": 78,
+    "combat_bias": "guard",
     "portrait_key": ""
   },
   {
@@ -132,6 +140,7 @@
     "combat_style": "叠加毒印、假动作和细针偷袭，迫使对手在时间压力下犯错。",
     "signature_move": "绯蝎噬心",
     "power": 77,
+    "combat_bias": "swift",
     "portrait_key": ""
   },
   {
@@ -147,6 +156,7 @@
     "combat_style": "操纵多枚丹火灵珠布阵，可爆破、追踪或临时强化自身。",
     "signature_move": "九曜丹火轮",
     "power": 81,
+    "combat_bias": "assault",
     "portrait_key": ""
   },
   {
@@ -162,6 +172,7 @@
     "combat_style": "琴音化刃、震荡神识并捕捉节奏，越了解对手越难被突破。",
     "signature_move": "听潮忘弦",
     "power": 83,
+    "combat_bias": "control",
     "portrait_key": ""
   },
   {
@@ -177,6 +188,7 @@
     "combat_style": "以舞步构筑音杀阵，飘带既能束缚也能切割灵力。",
     "signature_move": "焚音天舞",
     "power": 80,
+    "combat_bias": "swift",
     "portrait_key": ""
   },
   {
@@ -192,6 +204,7 @@
     "combat_style": "鼓点叠加雷震，节奏越快爆发越强，但被打乱拍子后会短暂失衡。",
     "signature_move": "青雀惊雷拍",
     "power": 74,
+    "combat_bias": "assault",
     "portrait_key": ""
   },
   {
@@ -207,6 +220,7 @@
     "combat_style": "以浩然剑气正面破除邪术，先设护阵隔绝观战者，再用堂正剑势压制对手，不取侥幸之胜。",
     "signature_move": "昭明问心剑",
     "power": 84,
+    "combat_bias": "balanced",
     "portrait_key": ""
   },
   {
@@ -222,6 +236,7 @@
     "combat_style": "剑光化作层叠屏障护住周围，再以精准点穴和卸力剑招制止攻势，追求止战而非伤敌。",
     "signature_move": "清平护世诀",
     "power": 75,
+    "combat_bias": "guard",
     "portrait_key": ""
   },
   {
@@ -237,6 +252,7 @@
     "combat_style": "展开山河正阵限制破坏范围，以净化符削弱邪气，再用厚重阵光封锁对手行动并迫使其停战。",
     "signature_move": "山河济世阵",
     "power": 79,
+    "combat_bias": "control",
     "portrait_key": ""
   }
 ]

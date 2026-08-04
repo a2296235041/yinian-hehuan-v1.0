@@ -32,6 +32,17 @@
     const talentId = origin.talent?.id || origin.id || '';
     const speedTalentBonus = talentId === 'battle_hunter' ? 8 : 0;
     const insightTalentBonus = talentId === 'mindful_guest' ? 8 : 0;
+    const finalIntelligence = Math.min(ATTRIBUTE_CAP, intelligence + insightTalentBonus);
+    const finalCharisma = Math.min(ATTRIBUTE_CAP, charisma + insightTalentBonus);
+    const combat = root.GameCombatStats.derive({
+      strength,
+      constitution,
+      agility,
+      intelligence: finalIntelligence,
+      charisma: finalCharisma,
+      wisdom,
+      luck
+    }, cultivation.realmIndex, { speed: speedTalentBonus });
     return {
       originName: origin.name || '无名弟子',
       talentName: origin.talent?.name || '未觉醒天赋',
@@ -42,14 +53,11 @@
       strength,
       constitution,
       agility,
-      intelligence: Math.min(ATTRIBUTE_CAP, intelligence + insightTalentBonus),
-      charisma: Math.min(ATTRIBUTE_CAP, charisma + insightTalentBonus),
+      intelligence: finalIntelligence,
+      charisma: finalCharisma,
       wisdom,
       luck,
-      maxHp: 70 + constitution + cultivation.realmIndex * 70,
-      attack: 8 + Math.round(strength * 0.2) + cultivation.realmIndex * 18,
-      defense: Math.round(constitution * 0.06) + cultivation.realmIndex * 3,
-      speed: 8 + Math.round(agility * 0.1) + cultivation.realmIndex * 2 + speedTalentBonus,
+      ...combat,
       cultivationGainPercent: talentId === 'spirit_resonance' ? 15 : 0,
       pillGainPercent: talentId === 'alchemy_heir' ? 10 : 0,
       breakthroughAffinityDiscount: talentId === 'hehuan_descendant' ? 5 : 0,

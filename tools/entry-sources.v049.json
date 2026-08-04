@@ -29,6 +29,8 @@
   "src/data/BuildingData.js",
   "src/data/CultivationData.js",
   "src/data/ShopData.js",
+  "src/systems/CombatStatFormula.js",
+  "src/systems/TournamentCombatBalance.js",
   "src/data/TournamentRoster.js",
   "src/systems/AffinityState.js",
   "src/systems/AffinitySystem.js",
@@ -101,7 +103,7 @@
   "src/scenes/MainMenuScene.js",
   "src/scenes/CharacterCreationScene.v017.js",
   "src/scenes/GameScene.js",
-  "src/assets/GameScenePreload.v048.js",
+  "src/assets/GameScenePreload.v049.js",
   "src/scenes/ShopScene.js",
   "src/scenes/InventoryScene.v021.js",
   "src/scenes/ExplorationScene.v023.js",
@@ -109,5 +111,5 @@
   "src/scenes/UIScene.js",
   "src/scenes/OverlayGuard.js",
   "src/settings/TrafficSaverPromptGuard.v023.js",
-  "src/boot/GameBootstrap.v048.js"
+  "src/boot/GameBootstrap.v049.js"
 ]

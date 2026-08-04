@@ -18,10 +18,15 @@ const combatSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/systems/CombatSystem.js'),
   'utf8'
 );
+const formulaSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/systems/CombatStatFormula.js'),
+  'utf8'
+);
 const window = {};
 const fixedMath = Object.create(Math);
 fixedMath.random = () => 0.5;
 const context = { window, Math: fixedMath, Number, Object };
+vm.runInNewContext(formulaSource, context);
 vm.runInNewContext(combatSource, context);
 
 function wins(stats, enemy) {
@@ -32,17 +37,38 @@ function wins(stats, enemy) {
 
 let previousAttack = 0;
 let previousHp = 0;
+let previousDefense = 0;
+let previousSpeed = 0;
 let previousGain = 0;
 regions.forEach((region, index) => {
   assert.ok(region.recommended_attack > previousAttack);
   assert.ok(region.recommended_hp > previousHp);
+  assert.ok(region.recommended_defense > previousDefense);
+  assert.ok(region.recommended_speed > previousSpeed);
   previousAttack = region.recommended_attack;
   previousHp = region.recommended_hp;
+  previousDefense = region.recommended_defense;
+  previousSpeed = region.recommended_speed;
   region.loot_ids.forEach((id) => assert.ok(itemById.has(id), `missing region loot ${id}`));
   region.enemy_ids.forEach((id) => assert.ok(enemyById.has(id), `missing enemy ${id}`));
-  if (index < 2) return;
 
   const regionEnemies = region.enemy_ids.map((id) => enemyById.get(id));
+  const realm = Number(region.required_realm);
+  const newlyUnlocked = window.GameCombatStats.derive({
+    strength: 60,
+    constitution: 60,
+    agility: 60,
+    intelligence: 60,
+    charisma: 60,
+    wisdom: 60,
+    luck: 60
+  }, realm);
+  const unlockedWins = regionEnemies.filter((enemy) => wins(newlyUnlocked, enemy)).length;
+  if (index < 2) {
+    assert.equal(unlockedWins, regionEnemies.length, `${region.name} should stay welcoming`);
+    return;
+  }
+
   const battleItems = regionEnemies.map((enemy) => itemById.get(enemy.loot_id));
   battleItems.forEach((item) => {
     assert.ok(item, `missing battle loot in ${region.name}`);
@@ -53,25 +79,15 @@ regions.forEach((region, index) => {
   assert.ok(gains[0] > previousGain, `${region.name} reward gain should increase`);
   previousGain = gains[0];
 
-  const realm = Number(region.required_realm);
-  const newlyUnlocked = {
-    maxHp: 110 + realm * 70,
-    attack: 16 + realm * 18,
-    defense: 2 + realm * 3,
-    speed: 12 + realm * 2
-  };
-  assert.ok(
-    regionEnemies.some((enemy) => !wins(newlyUnlocked, enemy)),
-    `${region.name} should stop a weak newly unlocked player`
-  );
+  assert.ok(unlockedWins <= 2, `${region.name} should stop a weak newly unlocked player`);
   const prepared = {
     maxHp: region.recommended_hp,
     attack: region.recommended_attack,
-    defense: 8 + realm * 5,
-    speed: 16 + realm * 4
+    defense: region.recommended_defense,
+    speed: region.recommended_speed
   };
   assert.ok(
-    regionEnemies.some((enemy) => wins(prepared, enemy)),
+    regionEnemies.filter((enemy) => wins(prepared, enemy)).length >= 2,
     `${region.name} should reward reaching its recommended stats`
   );
 });

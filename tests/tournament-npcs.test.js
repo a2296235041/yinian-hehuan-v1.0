@@ -34,6 +34,7 @@ records.forEach((entry) => {
   ].forEach((key) => assert.equal(typeof entry[key], 'string', `${entry.id}.${key}`));
   assert.equal(entry.adult, true);
   assert.ok(entry.power >= 1 && entry.power <= 120);
+  assert.ok(['balanced', 'assault', 'swift', 'guard', 'control'].includes(entry.combat_bias));
 });
 
 console.log('tournament npc data test passed');

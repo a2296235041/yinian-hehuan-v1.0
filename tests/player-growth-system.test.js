@@ -13,6 +13,10 @@ const statsSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/systems/PlayerStatsSystem.js'),
   'utf8'
 );
+const formulaSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/systems/CombatStatFormula.js'),
+  'utf8'
+);
 const events = [];
 const window = {
   Game: {
@@ -30,6 +34,7 @@ const window = {
   }
 };
 vm.runInNewContext(source, { window, Promise, Math, Number, Object });
+vm.runInNewContext(formulaSource, { window, Promise, Math, Number, Object });
 vm.runInNewContext(statsSource, { window, Promise, Math, Number, Object });
 
 (async () => {

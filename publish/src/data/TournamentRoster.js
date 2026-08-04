@@ -2,6 +2,11 @@
   'use strict';
 
   const PLAYER_ID = 'player';
+  const npcBiases = Object.freeze({
+    su_meier: 'control', liu_hanyan: 'assault', han_yueshuang: 'guard',
+    yun_shuiyao: 'control', qin_wanqing: 'assault', mo_qiaoer: 'swift',
+    bai_zhi: 'control', hu_jiuer: 'swift', xiao_qingxuan: 'balanced'
+  });
 
   function shuffle(items, random = Math.random) {
     const result = items.slice();
@@ -23,7 +28,7 @@
 
   function existingProfile(npc) {
     const realm = Math.max(0, Math.floor(Number(npc.realm_index) || 0));
-    return {
+    return root.GameTournamentCombatBalance.decorate({
       id: npc.id,
       group: 'internal',
       name: npc.name,
@@ -36,14 +41,15 @@
       combat_style: `${npc.title}一脉的合欢宗秘术，擅长因势制宜。`,
       signature_move: `${npc.name}秘传`,
       power: Math.min(96, 50 + realm * 6),
+      combat_bias: npcBiases[npc.id] || 'balanced',
       portrait_key: `npc-${String(npc.id).replaceAll('_', '-')}`
-    };
+    });
   }
 
   function newProfiles(group) {
     return cacheData('tournament_npcs')
       .filter((npc) => npc?.group === group)
-      .map((npc) => ({ ...npc }));
+      .map((npc) => root.GameTournamentCombatBalance.decorate(npc));
   }
 
   function internalPool() {
@@ -57,9 +63,7 @@
 
   function playerProfile() {
     const stats = root.GamePlayerStats?.getSnapshot?.() || {};
-    const score = 48
-      + Math.floor(Number(stats.realmIndex) || 0) * 7
-      + Math.floor(((Number(stats.strength) || 50) + (Number(stats.agility) || 50)) / 20);
+    const combat = root.GameTournamentCombatBalance.playerProfile(stats);
     return {
       id: PLAYER_ID,
       group: 'player',
@@ -72,7 +76,7 @@
       personality: '由玩家在比试中的言行决定',
       combat_style: '不拘一格，一切招式与战术均由玩家亲自描述。',
       signature_move: '由玩家自创',
-      power: Math.max(45, Math.min(98, score)),
+      ...combat,
       realm: stats.realmLabel || '炼气初期'
     };
   }

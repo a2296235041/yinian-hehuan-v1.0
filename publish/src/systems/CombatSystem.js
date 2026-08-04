@@ -23,6 +23,10 @@ Game.Systems.CombatSystem = class CombatSystem {
         return Math.floor(min + Math.random() * (max - min + 1));
     }
 
+    tempoScale(attackerSpeed, defenderSpeed) {
+        return Math.max(0.82, Math.min(1.22, 1 + (attackerSpeed - defenderSpeed) * 0.012));
+    }
+
     snapshot(log = '') {
         return {
             playerHp: Math.max(0, this.playerHp),
@@ -45,7 +49,11 @@ Game.Systems.CombatSystem = class CombatSystem {
 
     enemyTurn(reduction = 0) {
         if (this.enemyHp <= 0) return 0;
-        const raw = this.random(Math.floor(this.enemyAttack * 0.8), Math.ceil(this.enemyAttack * 1.15));
+        const tempo = this.tempoScale(this.enemySpeed, this.playerSpeed);
+        const raw = this.random(
+            Math.floor(this.enemyAttack * 0.8),
+            Math.ceil(this.enemyAttack * 1.15)
+        ) * tempo;
         const damage = Math.max(1, Math.floor((raw - this.playerDefense) * (1 - reduction)));
         this.playerHp = Math.max(0, this.playerHp - damage);
         if (this.playerHp <= 0) this.over = true;
@@ -55,14 +63,19 @@ Game.Systems.CombatSystem = class CombatSystem {
     act(type) {
         if (this.over) return this.snapshot('战斗已经结束。');
         if (type === 'defend') {
-            const damage = this.enemyTurn(0.65);
+            const reduction = Math.max(
+                0.5,
+                Math.min(0.78, 0.62 + (this.playerSpeed - this.enemySpeed) * 0.008)
+            );
+            const damage = this.enemyTurn(reduction);
             return this.snapshot(`你凝神防御，将来袭伤害压低至 ${damage} 点。`);
         }
         const rawDamage = this.random(
             Math.floor(this.playerAttack * 0.8),
             Math.ceil(this.playerAttack * 1.2)
         );
-        const damage = Math.max(1, rawDamage - this.enemyDefense);
+        const tempo = this.tempoScale(this.playerSpeed, this.enemySpeed);
+        const damage = Math.max(1, Math.floor(rawDamage * tempo - this.enemyDefense));
         this.enemyHp = Math.max(0, this.enemyHp - damage);
         if (this.enemyHp <= 0) {
             this.over = true;

@@ -5,7 +5,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const source = fs.readFileSync(
+const balanceSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/systems/TournamentCombatBalance.js'),
+  'utf8'
+);
+const judgeSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentJudge.js'),
   'utf8'
 );
@@ -47,7 +51,8 @@ const window = {
   console: { error() {} },
   Math
 };
-vm.runInNewContext(source, { window, console: window.console, Math, JSON });
+vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON });
+vm.runInNewContext(judgeSource, { window, console: window.console, Math, JSON });
 
 const active = {
   mode: 'spirit',
@@ -55,8 +60,14 @@ const active = {
   scores: { player: 0, opponent: 0 },
   opponentIds: ['npc-1'],
   roster: [
-    { id: 'player', name: '你', title: '弟子' },
-    { id: 'npc-1', name: '顾清罗', personality: '严谨', combat_style: '寒霜剑法' }
+    { id: 'player', name: '你', title: '弟子', power: 90 },
+    {
+      id: 'npc-1',
+      name: '顾清罗',
+      personality: '严谨',
+      combat_style: '寒霜剑法',
+      power: 75
+    }
   ],
   battleSummary: '双方刚刚登台。',
   logs: [{ speaker: '裁判', text: '比试开始。' }]
@@ -71,6 +82,8 @@ const active = {
   assert.equal(result.battleSummary, '第一回合后，玩家掌握擂台中线。');
   assert.equal(result.finished, false);
   assert.equal(result.relationshipChanges[0].delta, 3);
+  assert.ok(result.playerDelta > 31);
+  assert.ok(result.opponentDelta < 12);
   assert.deepEqual(Array.from(captured.messages, (entry) => entry.role), ['user']);
   assert.equal(captured.messages[0].content.includes('双方刚刚登台'), true);
   assert.equal(captured.messages[0].content.includes('引桃花化剑雨'), true);

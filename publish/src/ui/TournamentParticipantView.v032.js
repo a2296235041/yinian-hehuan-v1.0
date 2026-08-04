@@ -60,6 +60,12 @@
     if (relation) summary.append(relation);
     const fields = node('div', 'tournament-opponent-fields');
     fields.append(
+      field(
+        '战斗',
+        `战力 ${profile.power} · 气血 ${profile.maxHp} · 攻 ${profile.attack}`
+        + ` · 防 ${profile.defense} · 速 ${profile.speed}`,
+        true
+      ),
       field('体态', profile.physique),
       field('招牌式', profile.signature_move),
       field('外貌', profile.appearance, true),

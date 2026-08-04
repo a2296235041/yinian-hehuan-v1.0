@@ -35,9 +35,13 @@
 
   function deterministicFallback(payload, reason) {
     const seed = hash(`${payload.turn}:${payload.move}:${payload.battleSummary}`);
-    const creative = Math.min(12, Math.floor(payload.move.length / 24));
-    const playerDelta = 19 + creative + (seed % 7);
-    const opponentDelta = 7 + ((seed >>> 4) % 11);
+    const creative = Math.min(9, Math.floor(payload.move.length / 28));
+    const proposedPlayer = 15 + creative + (seed % 7);
+    const proposedOpponent = 14 + ((seed >>> 4) % 8);
+    const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
+      payload, proposedPlayer, proposedOpponent
+    ) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
+    const { playerDelta, opponentDelta } = balanced;
     const finished = payload.turn >= 3;
     const playerTotal = payload.scores.player + playerDelta;
     const opponentTotal = payload.scores.opponent + opponentDelta;
@@ -73,8 +77,12 @@
   function normalize(raw, payload) {
     const base = deterministicFallback(payload, '');
     if (!raw || typeof raw !== 'object') return base;
-    const playerDelta = number(raw.playerDelta, 0, 45, base.playerDelta);
-    const opponentDelta = number(raw.opponentDelta, 0, 38, base.opponentDelta);
+    const proposedPlayer = number(raw.playerDelta, 0, 45, base.playerDelta);
+    const proposedOpponent = number(raw.opponentDelta, 0, 38, base.opponentDelta);
+    const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
+      payload, proposedPlayer, proposedOpponent
+    ) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
+    const { playerDelta, opponentDelta } = balanced;
     const finished = payload.turn >= 3;
     const playerTotal = payload.scores.player + playerDelta;
     const opponentTotal = payload.scores.opponent + opponentDelta;
@@ -112,6 +120,7 @@
       '先描写对手依据性格与战法作出的具体应对，再延伸双方招式碰撞、擂台环境变化、观众反应和气势消长。',
       'globalCommentary 要从整场比赛视角复盘因果：此前布局如何影响本回合、双方战略发生了什么改变、目前谁掌握主动。',
       '玩家创意越具体，效果越强，主打华丽爽快和以弱胜强；只有明显自相矛盾时才削弱效果。',
+      '双方战力、攻击、防御、速度和气血必须影响裁决。弱者需要更具体合理的战术才能弥补数值差距，不能仅凭一句夸张描述无条件压倒强者。',
       '比赛固定三回合，前两回合不得结束。第三回合按累计得分决胜，同分判玩家胜。',
       `当前第${payload.turn}回合，比分：玩家${payload.scores.player}，对手${payload.scores.opponent}。`,
       `玩家资料：${JSON.stringify(payload.player)}。`,

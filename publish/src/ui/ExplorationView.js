@@ -66,7 +66,7 @@ Game.ExplorationView = {
         view.playerInfo.setText(
             `${stats.originName}　${stats.realmLabel}\n` +
             `精力 ${player.stamina}/${player.maxStamina}　气血 ${stats.maxHp}　攻击 ${stats.attack}\n` +
-            `力量 ${stats.strength}　根骨 ${stats.constitution}　身法 ${stats.agility}\n` +
+            `防御 ${stats.defense}　速度 ${stats.speed}　力量 ${stats.strength}　根骨 ${stats.constitution}\n` +
             `神识 ${stats.intelligence}　悟性 ${stats.wisdom}　气运 ${stats.luck}`
         );
     },
@@ -123,7 +123,10 @@ Game.ExplorationView = {
         }).setOrigin(0.5);
         const detail = scene.add.text(640, 174,
             `险度 ${region.danger}　·　精力 ${region.stamina_cost}　·　建议攻击 ${region.recommended_attack}` +
-            ` / 气血 ${region.recommended_hp}　·　${region.prepared ? '战力适配' : '建议先提升'}`, {
+            ` / 气血 ${region.recommended_hp} / 防御 ${region.recommended_defense}` +
+            ` / 速度 ${region.recommended_speed}　·　${region.prepared
+                ? '战力适配'
+                : `需提升${region.missingStats.join('、')}`}`, {
                 fontFamily: '"Noto Serif SC", serif',
                 fontSize: '16px',
                 color: '#f0a8bb'

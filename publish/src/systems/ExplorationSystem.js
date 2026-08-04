@@ -1,8 +1,7 @@
 (function installExplorationSystem(root) {
   'use strict';
 
-  const regions = new Map();
-  const enemies = new Map();
+  const regions = new Map(), enemies = new Map();
   let npcSystem = null;
   let busy = false;
 
@@ -27,12 +26,23 @@
   function getRegions() {
     const realmIndex = root.GameCultivation.getSnapshot().realmIndex;
     const stats = root.GamePlayerStats.getSnapshot();
-    return [...regions.values()].map((region) => ({
-      ...region,
-      unlocked: realmIndex >= Number(region.required_realm),
-      prepared: stats.attack >= Number(region.recommended_attack || 0)
-        && stats.maxHp >= Number(region.recommended_hp || 0)
-    }));
+    return [...regions.values()].map((region) => {
+      const requirements = [
+        ['攻击', stats.attack, region.recommended_attack],
+        ['气血', stats.maxHp, region.recommended_hp],
+        ['防御', stats.defense, region.recommended_defense],
+        ['速度', stats.speed, region.recommended_speed]
+      ];
+      const missingStats = requirements
+        .filter(([, current, target]) => Number(current) < Number(target || 0))
+        .map(([label]) => label);
+      return {
+        ...region,
+        unlocked: realmIndex >= Number(region.required_realm),
+        prepared: missingStats.length === 0,
+        missingStats
+      };
+    });
   }
 
   function consumeStamina(region) {
@@ -79,7 +89,6 @@
     };
   }
 
-  // 稀有修为丹独立于普通遭遇判定：
   // 神级丹 5%，圣品丹 15%，二者互斥，剩余概率继续走普通遭遇。
   async function rarePillEncounter(itemId) {
     const added = await root.GameInventory.add(itemId, 1, 'exploration');
@@ -111,7 +120,7 @@
     };
   }
 
-  // 每次点击只结算一次探索，不设置自动重试或定时循环，避免重复扣除精力。
+  // 每次点击只结算一次探索，避免重复扣除精力。
   async function explore(regionId, intent = '') {
     if (busy) return { type: 'error', text: '上一次探索仍在结算。' };
     busy = true;
@@ -166,10 +175,7 @@
   async function completeBattle(encounter) {
     const enemy = encounter?.enemy;
     if (!enemy) return { text: '战斗奖励结算失败。' };
-    const cultivation = await root.GameCultivation.addCultivation(
-      enemy.cultivation_reward,
-      'battle'
-    );
+    const cultivation = await root.GameCultivation.addCultivation(enemy.cultivation_reward, 'battle');
     const extraLoot = hasTalent('battle_hunter') && Math.random() < 0.35 ? 1 : 0;
     const loot = await root.GameInventory.add(enemy.loot_id, 1 + extraLoot, 'battle');
     const stones = Math.max(0, Math.floor(Number(enemy.stone_reward) || 0));
