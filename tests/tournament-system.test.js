@@ -72,7 +72,7 @@ vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
   await window.GameTournament.recordExchange('第一招', {
-    summary: '你施展第一招后迫使对手退守，灵光在擂台上持续碰撞，观众为双方的变化发出喝彩。',
+    response: '对手退守后立即稳住架势，抬眼向你回应：“这一招我接下了，继续。”',
     verdict: '裁判判决：你 +30 点，对手 +10 点。你取得主动。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: 3, reason: '欣赏你的招式。' }],
     playerDelta: 30,
@@ -81,7 +81,7 @@ async function winRound() {
     winner: 'ongoing'
   });
   await window.GameTournament.recordExchange('第二招', {
-    summary: '你顺势施展第二招，对手仓促变招应对，擂台阵纹被余波点亮，场边议论声逐渐高涨。',
+    response: '对手仓促变招后重新贴近，沉声说道：“别以为我会一直后退。”',
     verdict: '裁判判决：你 +30 点，对手 +10 点。优势继续扩大。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: -2, reason: '不满你的追击。' }],
     playerDelta: 30,
@@ -90,7 +90,7 @@ async function winRound() {
     winner: 'ongoing'
   });
   await window.GameTournament.recordExchange('第三招', {
-    summary: '你以第三招完成收势，对手的绝招被正面化解，漫天灵光散去后，全场为最终交锋齐声喝彩。',
+    response: '对手的绝招被化解后缓缓收势，直视着你承认：“这一场，是你赢了。”',
     verdict: '裁判判决：你 +30 点，对手 +10 点。三回合总分由你领先。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: 2, reason: '认可你的胜利。' }],
     playerDelta: 30,
@@ -116,7 +116,9 @@ async function winRound() {
   await winRound();
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
   assert.equal(
-    window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '战况综述'),
+    window.GameTournament.getState().active.logs.some((entry) => (
+      entry.kind === 'opponent-response' && entry.speaker === 'NPC 7'
+    )),
     true
   );
   assert.equal(

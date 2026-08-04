@@ -15,20 +15,30 @@
     active.opponentIds = (match?.participants || []).filter((id) => id !== 'player');
   }
 
+  function responseSpeaker(active) {
+    const names = (active.opponentIds || []).map((id) => (
+      (active.roster || []).find((profile) => profile.id === id)?.name
+    )).filter(Boolean);
+    return names.join('与') || '对手';
+  }
+
   function applyExchange(active, move, result) {
     active.turn += 1;
     active.scores.player += Math.max(0, Math.floor(Number(result.playerDelta) || 0));
     active.scores.opponent += Math.max(0, Math.floor(Number(result.opponentDelta) || 0));
     active.logs.push({ speaker: '你', text: String(move).slice(0, 500) });
     active.logs.push({
-      speaker: '战况综述',
-      text: String(result.summary || '').slice(0, 200)
+      speaker: responseSpeaker(active),
+      kind: 'opponent-response',
+      text: String(result.response || result.summary || '').slice(0, 240)
     });
     active.logs.push({
       speaker: '裁判判决',
       text: String(result.verdict || '').slice(0, 140)
     });
-    active.battleSummary = String(result.summary || active.battleSummary).slice(0, 200);
+    active.battleSummary = String(
+      result.response || result.summary || active.battleSummary
+    ).slice(0, 240);
   }
 
   root.GameTournamentBattleState = Object.freeze({ prepare, applyExchange });

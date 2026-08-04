@@ -17,6 +17,10 @@ const judgeSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentJudge.js'),
   'utf8'
 );
+const responseTextSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/TournamentResponseText.js'),
+  'utf8'
+);
 let captured = null;
 const window = {
   navigator: { onLine: true },
@@ -37,7 +41,7 @@ const window = {
     async completions(config, callback) {
       captured = config;
       callback(JSON.stringify({
-        summary: '你引动桃花化作漫天剑雨，剑锋沿擂台阵纹层层展开，逼得顾清罗借风后撤。她没有贸然硬接，而是旋身斩出月弧，将最先逼近的剑光逐一拨开，随后以寒霜封住脚下三尺，试图截断灵力流转。剑雨与霜华连续碰撞，碎光映亮四周看台，观众席随之响起一阵低呼。待最后一道剑影散去，你仍占据擂台中线，顾清罗则横剑凝神，重新寻找反击时机。',
+        response: '顾清罗旋身斩开逼近的剑光，寒霜沿着她的剑锋迅速覆上擂台。她在退到阵纹边缘前猛然止步，抬眼盯住你：“剑势确实凌厉，但想让我就这样退出中线，还差最后一步。”话音落下，她借残留霜气贴地前掠，剑尖连续点向你灵力运转的节点，逼你正面回应。两人的气机再度撞在一起，她的呼吸虽已变急，手腕却仍稳稳压着剑锋。看台近处传来几声低呼，她没有分神，只在与你错身时再次压低声音：“继续，我会看清你下一招。”',
         verdictReason: '剑雨封锁完整并迫使对手退守，本回合你占优。',
         matchResult: 'continue',
         relationshipChanges: [{
@@ -55,6 +59,7 @@ const window = {
 };
 vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(authoritySource, { window, console: window.console, Math, JSON, Set });
+vm.runInNewContext(responseTextSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(judgeSource, { window, console: window.console, Math, JSON });
 
 const active = {
@@ -81,9 +86,11 @@ const active = {
   const result = await window.GameTournamentJudge.judge(
     active, '引桃花化剑雨封锁四方', tournamentState
   );
-  assert.equal(result.summary.includes('观众席'), true);
-  assert.ok(result.summary.length >= 150);
-  assert.ok(result.summary.length <= 200);
+  assert.equal(result.response.includes('顾清罗'), true);
+  assert.equal(result.response.includes('：“'), true);
+  assert.ok(result.response.length >= 150);
+  assert.ok(result.response.length <= 240);
+  assert.equal(result.summary, result.response);
   assert.equal(result.finished, false);
   assert.equal(result.relationshipChanges[0].delta, 3);
   assert.ok(result.playerDelta > 31);
@@ -93,8 +100,10 @@ const active = {
   assert.deepEqual(Array.from(captured.messages, (entry) => entry.role), ['user']);
   assert.equal(captured.messages[0].content.includes('双方刚刚登台'), true);
   assert.equal(captured.messages[0].content.includes('引桃花化剑雨'), true);
-  assert.equal(captured.messages[0].content.includes('150-200'), true);
-  assert.equal(captured.messages[0].content.includes('字段仅为：summary'), true);
+  assert.equal(captured.messages[0].content.includes('不少于 150'), true);
+  assert.equal(captured.messages[0].content.includes('字段仅为：response'), true);
+  assert.equal(captured.messages[0].content.includes('不要写战报、综述'), true);
+  assert.equal(captured.messages[0].content.includes('观众反应只能偶尔出现'), true);
   assert.equal(captured.messages[0].content.includes('最高叙事指令'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
   assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
@@ -115,7 +124,9 @@ const active = {
   const concise = await window.GameTournamentJudge.judge(
     active, '踏月追击', tournamentState
   );
-  assert.equal(concise.summary, conciseSummary);
+  assert.equal(concise.response.startsWith(conciseSummary), true);
+  assert.ok(concise.response.length >= 150);
+  assert.equal(concise.summary, concise.response);
 
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
@@ -125,8 +136,9 @@ const active = {
   );
   assert.equal(fallback.fallback, true);
   assert.equal(fallback.fallbackMessage.includes('网络连接异常'), true);
-  assert.ok(fallback.summary.length >= 60);
-  assert.ok(fallback.summary.length <= 200);
+  assert.ok(fallback.response.length >= 150);
+  assert.ok(fallback.response.length <= 240);
+  assert.equal(fallback.response.includes('：“'), true);
   assert.equal(fallback.verdict.includes('裁判判决'), true);
   assert.equal(fallback.relationshipChanges[0].delta >= -4, true);
   assert.equal(fallback.relationshipChanges[0].delta <= 3, true);
@@ -139,7 +151,7 @@ const active = {
   assert.equal(directed.finished, true);
   assert.equal(directed.winner, 'player');
   assert.ok(directed.playerDelta > directed.opponentDelta);
-  assert.equal(directed.summary.includes('完整构想'), false);
+  assert.equal(directed.response.includes('完整构想'), false);
 
   const surrendered = await window.GameTournamentJudge.judge(
     active,
@@ -149,7 +161,7 @@ const active = {
   assert.equal(surrendered.finished, true);
   assert.equal(surrendered.winner, 'opponent');
   assert.ok(surrendered.opponentDelta > surrendered.playerDelta);
-  assert.equal(surrendered.summary.includes('依照你的安排'), false);
+  assert.equal(surrendered.response.includes('依照你的安排'), false);
   console.log('tournament judge test passed');
 })().catch((error) => {
   console.error(error);
