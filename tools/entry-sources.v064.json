@@ -94,6 +94,7 @@
   "src/ui/InventoryQuantityDialog.js",
   "src/ui/InventoryUseController.js",
   "src/ui/CommerceDecor.js",
+  "src/assets/ItemIconAssets.js",
   "src/ui/InventoryGridView.js",
   "src/ui/ShopQuantityDialog.js",
   "src/ui/ShopPurchaseController.js",
@@ -113,7 +114,7 @@
   "src/scenes/MainMenuScene.js",
   "src/scenes/CharacterCreationScene.v017.js",
   "src/scenes/GameScene.js",
-  "src/assets/GameScenePreload.v063.js",
+  "src/assets/GameScenePreload.v064.js",
   "src/scenes/ShopScene.js",
   "src/scenes/InventoryScene.v021.js",
   "src/scenes/ExplorationScene.v023.js",
@@ -121,5 +122,5 @@
   "src/scenes/UIScene.js",
   "src/scenes/OverlayGuard.js",
   "src/settings/TrafficSaverPromptGuard.v023.js",
-  "src/boot/GameBootstrap.v063.js"
+  "src/boot/GameBootstrap.v064.js"
 ]

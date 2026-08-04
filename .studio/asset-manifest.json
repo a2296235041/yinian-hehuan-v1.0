@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-07-31T00:00:00Z",
+  "updatedAt": "2026-08-04T10:44:33.590Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -1029,6 +1029,1358 @@
         "dimensions": "832x1248"
       },
       "createdAt": "2026-07-31T00:00:00Z"
+    },
+    {
+      "name": "item-spirit-herb",
+      "status": "success",
+      "path": "publish/assets/items/item-spirit-herb.05ed07ef.webp",
+      "contentHash": "05ed07ef",
+      "revisedPrompt": "Create a square 1024x1024 game inventory icon of exactly one isolated object: the Chinese xianxia fantasy herb item “凝露灵草” (Ninglu Spirit Herb), depicted as a physical object only. Show a delicate, elegant medicinal spirit herb with dew-laden leaves and tender stems, subtly adorned with restrained silver and pale green accents to imply rarity. The herb should look like a refined giftable item, suitable for an RPG inventory icon, instantly readable at 56x56 px. Composition: centered, three-quarter front view, object fills about 72% of the canvas, consistent scale, no perspective exaggeration. Style: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, gentle upper-left soft studio light. Background must be a perfectly flat uniform chroma-key magenta #FF00FF filling all non-object pixels; no gradient, no texture, no shadow, no scenery, no ground, no frame, no environment. No hand, no person, no second object, no text, no logo, no watermark. The object must be the only thing visible besides the flat magenta background.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 73.8,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1709158,
+      "finalBytes": 142154,
+      "usage": {
+        "inputTokens": 251,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseh6ijq_upkmtj0o",
+      "createdAt": "2026-08-04T09:49:42.218Z"
+    },
+    {
+      "name": "item-fragrant-jade",
+      "status": "success",
+      "path": "publish/assets/items/item-fragrant-jade.eacec364.webp",
+      "contentHash": "eacec364",
+      "revisedPrompt": "Create a 1024x1024 single-object game item icon on a perfectly uniform solid #FF00FF chroma key background, with exactly one isolated object and no other elements. Subject: an elegant Chinese xianxia fantasy jade pendant named “凝香玉佩” represented as a physical object only. Design it as a refined gift item with delicate craftsmanship: a warm, translucent jade pendant in teal-green jade with soft gold accents, subtly preserving the idea of faint floral fragrance. The item should be instantly recognizable at 56x56 pixels, centered, filling about 72% of the canvas, shown in a three-quarter front view. Style: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, elegant and sober. Lighting: soft studio light from upper-left, gentle highlights and form shading only. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame, no text, no logo, no watermark. Background must be 100% flat uniform #FF00FF with no gradient, no texture, no shadow, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 67.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1650785,
+      "finalBytes": 99860,
+      "usage": {
+        "inputTokens": 244,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseh8afq_5i5o1o9a",
+      "createdAt": "2026-08-04T09:50:59.095Z"
+    },
+    {
+      "name": "item-peach-wine",
+      "status": "success",
+      "path": "publish/assets/items/item-peach-wine.e73dec4c.webp",
+      "contentHash": "e73dec4c",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is “百年桃花酿” represented as a physical object, an elegant gift object with delicate craftsmanship, instantly recognizable at 56x56 pixels. Depict a single isolated object only: a refined small jade-and-teal ceramic wine vessel / bottle with soft gold accents, designed to suggest a century-aged peach blossom wine. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Three-quarter front view, centered, object fills about 72% of the 1024x1024 canvas, consistent scale, upper-left soft studio light. Make it look delicate, premium, and auspicious, with subtle peach-blossom-inspired motifs as abstract ornamental shapes only, no legible writing. No hand holding it, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly place the object on a SOLID UNIFORM #00B140 chroma key flat color background filling all non-object pixels exactly, with no gradient, no shadow, no texture, no environmental elements. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 73.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1581470,
+      "finalBytes": 104644,
+      "usage": {
+        "inputTokens": 257,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseh9xr4_c43qvm88",
+      "createdAt": "2026-08-04T09:52:09.243Z"
+    },
+    {
+      "name": "item-moon-silk",
+      "status": "success",
+      "path": "publish/assets/items/item-moon-silk.c010a5c9.webp",
+      "contentHash": "c010a5c9",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: a physical object named “月华灵绸” (Moonlight Spirit Silk), depicted as an elegant gift object with delicate craftsmanship, instantly recognizable at 56x56 pixels. One isolated object only, centered, filling about 72% of the 1024x1024 canvas, three-quarter front view. The item should look like a refined rolled-and-folded silk brocade gift piece or ceremonial silk bundle, made of softly flowing luminous fabric with subtle layered ribbons and an ornamental clasp, expressing moonlit silver radiance with cool moonlight, rose, and refined gold accents. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Upper-left soft studio light. No human, no hand, no second object, no scenery, no ground, no cast shadow, no frame. No text, no logo, no watermark, no legible writing; only abstract non-readable marks if any. Strictly on a solid uniform chroma key background color #00B140 filling all non-object pixels exactly, pure flat green screen, no gradient, no texture, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 64.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1898812,
+      "finalBytes": 153534,
+      "usage": {
+        "inputTokens": 255,
+        "outputImageTokens": 915
+      },
+      "traceId": "trace_msehbfvm_8ceaycdb",
+      "createdAt": "2026-08-04T09:52:59.219Z"
+    },
+    {
+      "name": "item-frost-lotus",
+      "status": "success",
+      "path": "publish/assets/items/item-frost-lotus.a490fca9.webp",
+      "contentHash": "a490fca9",
+      "revisedPrompt": "A reusable inventory icon for a Chinese xianxia fantasy RPG: the item is exactly the physical object '玄霜莲' (Xuan Shuang Lian / Mysterious Frost Lotus), depicted as a delicate, elegant gift object with exquisite craftsmanship. One isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, instantly recognizable at 56x56 pixels. Painterly Chinese fantasy game art with a crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. The lotus should evoke extreme cold and pure spiritual power in the core, with cool moonlight tones, subtle rose accents, and refined gold accents. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform chroma key flat background #00B140 filling all non-object pixels, no gradient, no shadow, no texture, no environmental elements. No text, no logo, no watermark. The object should look like a physical lotus artifact rather than a flower in a landscape: a sculpted frost lotus with layered translucent petals of pale icy jade and moonlit silver, a luminous crystal-like lotus heart, delicate rose-tinted edges, fine gold filigree detailing, subtle frost sheen, refined and collectible.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 66.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1886042,
+      "finalBytes": 164858,
+      "usage": {
+        "inputTokens": 291,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehcifu_lio9gen8",
+      "createdAt": "2026-08-04T09:54:09.546Z"
+    },
+    {
+      "name": "item-beast-core",
+      "status": "success",
+      "path": "publish/assets/items/item-beast-core.2a253939.webp",
+      "contentHash": "2a253939",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is exactly the physical object named “凶兽内丹” (a crystallized spiritual core formed inside a ferocious beast). Depict it as a rare crafting material with a raw but valuable silhouette, instantly recognizable at 56x56 pixels. Composition: exactly one isolated object, centered, three-quarter front view, fills about 72% of a 1024x1024 canvas, consistent scale, upper-left soft studio light. Art style: painterly Chinese fantasy game art with crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Materials/colors: jade, teal, and soft gold accents, glowing but restrained, with a polished gem-like core and subtle organic beast-core structure. Ensure it looks like a tangible item icon, not a symbol or a container. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a perfectly uniform flat chroma key green #00B140 filling all non-object pixels, with no gradient, no texture, no environmental elements. No text, no logo, no watermark. Do not include any legible writing.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 63.5,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1884090,
+      "finalBytes": 296276,
+      "usage": {
+        "inputTokens": 260,
+        "outputImageTokens": 515
+      },
+      "traceId": "trace_msehe0pd_8m13ghmw",
+      "createdAt": "2026-08-04T09:54:57.588Z"
+    },
+    {
+      "name": "item-star-fragment",
+      "status": "success",
+      "path": "publish/assets/items/item-star-fragment.593d000b.webp",
+      "contentHash": "593d000b",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is ‘星陨残片’ depicted exactly as a physical object, a rare crafting material shaped like a raw but valuable meteor fragment. Composition: one single isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, instantly readable at 56x56 pixels. Appearance: an astral ore shard that has fallen from the heavens, jagged but elegant silhouette, polished material rendering with soft dark painted edges, refined ink-wash texture, restrained ornament, subtle cool moonlight with rose and refined gold accents, faint internal glow suggesting lingering celestial energy. Art style: painterly Chinese fantasy game art, crisp silhouette, clean readable shape, soft studio lighting from upper-left, high detail but minimal clutter. IMPORTANT: place the object on a perfectly flat, solid uniform chroma key background of exactly #00B140 filling all empty space; no gradient, no shadow, no texture, no scenery, no ground, no frame, no extra objects, no hands, no people, no text, no logo, no watermark. The background must be pure uniform green screen color in every pixel not occupied by the object.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 72.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1662375,
+      "finalBytes": 113480,
+      "usage": {
+        "inputTokens": 262,
+        "outputImageTokens": 515
+      },
+      "traceId": "trace_msehf1ru_lddmfdz7",
+      "createdAt": "2026-08-04T09:55:40.689Z"
+    },
+    {
+      "name": "item-void-orchid",
+      "status": "success",
+      "path": "publish/assets/items/item-void-orchid.e5e622ec.webp",
+      "contentHash": "e5e622ec",
+      "revisedPrompt": "Create a 1024x1024 reusable inventory item icon for a Chinese xianxia fantasy RPG: exactly one isolated object, the rare spiritual flower item named “太虚幽兰” depicted as a physical object. Show a delicate, elegant gift-like flower with refined craftsmanship, readable at 56x56 px, three-quarter front view, centered, filling about 72% of the canvas. The flower should feel like it blooms only briefly near spatial rifts: graceful orchid-like petals with subtle ethereal, fractured-space motifs, but still clearly a physical fantasy item. Rarity treatment: radiant warm gold with a subtle spiritual aura. Art direction: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform #00B140 chroma key flat color background filling all non-object pixels, no gradient, no texture. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 72.4,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1643568,
+      "finalBytes": 134936,
+      "usage": {
+        "inputTokens": 232,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehfz14_84bke01c",
+      "createdAt": "2026-08-04T09:56:51.926Z"
+    },
+    {
+      "name": "item-welcome-charm",
+      "status": "success",
+      "path": "publish/assets/items/item-welcome-charm.226bfb08.webp",
+      "contentHash": "226bfb08",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG, exactly one isolated object on a flat solid #00B140 chroma key background. Depict the item named “迎仙平安符” as a physical object: a delicate, elegant gift charm/talisman carefully tied by a disciple, appropriate as a first-meeting present. Design it as a refined hanging peace charm with a slender pale silk cord, a small carefully folded talisman pouch or charm plaque, restrained silver and pale green accents, subtle polished materials, and abstract non-readable marks only (no legible writing). Three-quarter front view, centered, filling about 72% of the canvas, instantly recognizable at 56x56 pixels. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame, no text, no logo, no watermark. Background must be a single uniform chroma green #00B140 with no gradient, no texture, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 83.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1467550,
+      "finalBytes": 90168,
+      "usage": {
+        "inputTokens": 243,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehhhzw_k57uwxke",
+      "createdAt": "2026-08-04T09:58:00.829Z"
+    },
+    {
+      "name": "item-cloud-spirit-tea",
+      "status": "success",
+      "path": "publish/assets/items/item-cloud-spirit-tea.39199bf9.webp",
+      "contentHash": "39199bf9",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object is “云芽灵茶” (Yun Ya Spirit Tea), depicted exactly as a consumable cultivation treasure with visibly stored spiritual energy. Single isolated object only, no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Centered and filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, upper-left soft studio light. The object should read instantly at 56x56 pixels with a crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Rarity accents: restrained silver and pale green. Visual meaning: drinking it clears the mind and gently increases cultivation. Depict as a tasteful fantasy tea treasure container or tea vessel representing spiritual tea, with subtle visible spiritual energy within or emanating from the item, but still clearly a physical object. Painterly Chinese fantasy game art. No legible writing; if any marks appear, they must be abstract non-readable marks only. Strictly place the object on a SOLID UNIFORM #FF00FF chroma key flat color background, filling all remaining pixels exactly with pure magenta, no gradient, no texture, no decoration, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 62.7,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1846100,
+      "finalBytes": 143450,
+      "usage": {
+        "inputTokens": 277,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehiz5w_xymc0ykp",
+      "createdAt": "2026-08-04T09:59:21.680Z"
+    },
+    {
+      "name": "item-silk-fan",
+      "status": "success",
+      "path": "publish/assets/items/item-silk-fan.3d78c546.webp",
+      "contentHash": "3d78c546",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object is an elegant gift item named “流云绢扇” (depict only as a real object, not as text). One isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view. The item is a refined silk folding fan with delicate craftsmanship; the fan surface is painted with a subtle mountain gate and cloud-scape motif, tasteful and understated, not flashy. Rarity treatment with jade, teal, and soft gold accents, polished material rendering, restrained ornament, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture. Upper-left soft studio light. Absolutely no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a perfectly uniform solid chroma key green #00B140 filling all remaining pixels, flat and textureless, with no gradient, no shadow, no decoration. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 61.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1899386,
+      "finalBytes": 160662,
+      "usage": {
+        "inputTokens": 229,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehkpjr_vgpszpiw",
+      "createdAt": "2026-08-04T10:00:32.800Z"
+    },
+    {
+      "name": "item-junior-insight-note",
+      "status": "success",
+      "path": "publish/assets/items/item-junior-insight-note.6a1a91db.webp",
+      "contentHash": "6a1a91db",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object is an \"入门悟道札\" (a beginner enlightenment manual/notes booklet), depicted exactly as a tangible item. Design it as a permanent enhancement treasure with a strong symbolic silhouette, instantly readable at 56x56 pixels. Canvas 1024x1024, exactly one isolated object, centered, filling about 72% of the canvas, three-quarter front view. Appearance: a compact jade-bound booklet or folded manual with layered pages and a refined clasp, featuring teal jade surfaces and soft gold accents, polished material rendering, restrained ornament, refined ink-wash texture, painterly Chinese fantasy game art. Include abstract non-readable marks only—no legible writing. Add subtle soft dark painted edge definition and upper-left soft studio light for form clarity. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly place on a solid uniform #00B140 chroma key flat color background, pure flat color filling all non-object pixels, no gradient, no texture, no environmental elements. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 56.2,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1824575,
+      "finalBytes": 129534,
+      "usage": {
+        "inputTokens": 245,
+        "outputImageTokens": 915
+      },
+      "traceId": "trace_msehm8fc_gwbfl10h",
+      "createdAt": "2026-08-04T10:01:40.847Z"
+    },
+    {
+      "name": "item-grand-gathering-pill",
+      "status": "success",
+      "path": "publish/assets/items/item-grand-gathering-pill.06330482.webp",
+      "contentHash": "06330482",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object is a consumable cultivation treasure named “大聚灵丹” (do not render any legible text). Depict it as a single isolated object only, centered, filling about 72% of a 1024x1024 canvas, in three-quarter front view. The item should read clearly at 56x56 pixels with a crisp readable silhouette. Visual form: a refined, polished jade-and-teal spiritual pill or elixir orb with soft gold accents, conveying abundant stored spiritual energy visible inside—swirling condensed aura, luminous core, subtle layered jade shell, restrained ornamental filigree, polished material rendering, painterly Chinese fantasy game art. Include soft dark painted edge treatment and refined ink-wash texture. Upper-left soft studio lighting. Strictly no hands, no person, no second object, no scenery, no ground, no cast shadow, no frame. Place the object on a perfectly flat uniform chroma-key background of exactly #00B140 filling all remaining pixels. No gradient, no texture, no decoration, no environmental elements, no text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 65.4,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1792080,
+      "finalBytes": 241570,
+      "usage": {
+        "inputTokens": 245,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehnoxm_wxsowps0",
+      "createdAt": "2026-08-04T10:02:54.012Z"
+    },
+    {
+      "name": "item-marrow-jade-pill",
+      "status": "success",
+      "path": "publish/assets/items/item-marrow-jade-pill.a0810cf3.webp",
+      "contentHash": "a0810cf3",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: a single isolated physical object named “玉髓淬体丹” depicted exactly as a treasure pill/elixir item, physically rendered as a polished, round-to-oval alchemical pill or layered jade-cured medicinal pellet with a strong symbolic silhouette. Visual meaning: refined from jade marrow spiritual liquid, permanently enhances the body's constitution. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Rarity accents in cool moonlight, rose, and refined gold. Three-quarter front view, centered, object fills about 72% of a 1024x1024 canvas, consistent scale, upper-left soft studio light. Exactly one object only, no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. No text, no logo, no watermark, no legible writing. Strictly on a pure flat uniform #FF00FF chroma key magenta background filling all non-object pixels, no gradient, no texture, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 57.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1735989,
+      "finalBytes": 107510,
+      "usage": {
+        "inputTokens": 238,
+        "outputImageTokens": 229
+      },
+      "traceId": "trace_msehp9dy_5o4avqx1",
+      "createdAt": "2026-08-04T10:03:23.289Z"
+    },
+    {
+      "name": "item-phoenix-hairpin",
+      "status": "success",
+      "path": "publish/assets/items/item-phoenix-hairpin.4c1b12f7.webp",
+      "contentHash": "4c1b12f7",
+      "revisedPrompt": "Create a single isolated inventory item icon on a pure flat chroma-key background #00B140, filling 100% of all non-object pixels. Subject: the physical object '凤纹金簪' (phoenix-pattern gold hairpin), elegant and regal, as an intact ornamental hairpin used in an inner palace collection. One object only, no hands, no person, no second object, no scenery, no ground, no cast shadow, no frame, no text. Composition: centered, three-quarter front view, object fills about 72% of a 1024x1024 canvas, consistent scale, instantly recognizable at 56x56 pixels. Style: painterly Chinese fantasy RPG item art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished metal rendering. Material and design: refined gold hairpin with delicate phoenix motifs and elegant curves, subtle rose accents and cool moonlight sheen, dignified and luxurious, delicate craftsmanship, polished and believable as a collectible artifact. Lighting: soft studio light from upper-left, gentle highlights, no dramatic cast shadow. Background must be a single uniform #00B140 chroma key green with no gradient, no texture, no variation.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 87.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1448335,
+      "finalBytes": 120096,
+      "usage": {
+        "inputTokens": 254,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehpvz5_8hoiycwe",
+      "createdAt": "2026-08-04T10:04:30.486Z"
+    },
+    {
+      "name": "item-spirit-focus-seal",
+      "status": "success",
+      "path": "publish/assets/items/item-spirit-focus-seal.5370f343.webp",
+      "contentHash": "5370f343",
+      "revisedPrompt": "Create a single isolated inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “凝神法印” (a permanent enhancement treasure that increases spiritual sense). Depict it as a ceremonial mystical seal/token: a compact, symbolic imperial-style talisman seal with layered carved lacquer, polished jade-like core, refined gold framing, subtle rose enamel accents, and cool moonlit highlights. It should feel like a real, physical treasure object, not a flat icon. Strong, instantly readable silhouette at 56x56 px, centered, filling about 72% of a 1024x1024 canvas, shown in a three-quarter front view. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, restrained ornament, polished material rendering, refined ink-wash texture, elegant and rare. Upper-left soft studio light. Use only abstract non-readable marks on the seal surface; no legible writing or symbols that read as text. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform chroma key flat background color #00B140 filling all empty space, with absolutely no gradient, texture, shadow, or environmental variation.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 61.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1924492,
+      "finalBytes": 153882,
+      "usage": {
+        "inputTokens": 257,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehrbtp_uafgd5bc",
+      "createdAt": "2026-08-04T10:05:40.940Z"
+    },
+    {
+      "name": "item-cold-incense",
+      "status": "success",
+      "path": "publish/assets/items/item-cold-incense.d6b84144.webp",
+      "contentHash": "d6b84144",
+      "revisedPrompt": "1024x1024 square fantasy game inventory icon, exactly one isolated object centered on a pure flat chroma key background #00B140. Subject: the physical item '戒心冷香' — an elegant Chinese xianxia cold-incense gift object, rendered as a refined small incense vessel/pendant-like keepsake with jade core, teal enamel or lacquer, and soft gold accents. The design should feel delicate, ceremonial, and instantly recognizable at 56x56 pixels. Three-quarter front view, centered, object fills about 72% of the canvas. Painterly Chinese fantasy game art, crisp readable silhouette, polished material rendering, restrained ornament, subtle ink-wash texture, soft dark painted edge. Upper-left soft studio light, but NO cast shadow. No hand, no person, no second object, no scenery, no ground, no frame. No text or legible writing; any markings must be abstract decorative marks only. Background must be a single uniform solid #00B140 green screen color filling every pixel not occupied by the object, with absolutely no gradient, texture, decoration, or environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 64.7,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1810426,
+      "finalBytes": 143166,
+      "usage": {
+        "inputTokens": 232,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehsu6q_43ehdqv0",
+      "createdAt": "2026-08-04T10:07:00.391Z"
+    },
+    {
+      "name": "item-iron-body-talisman",
+      "status": "success",
+      "path": "publish/assets/items/item-iron-body-talisman.e722061f.webp",
+      "contentHash": "e722061f",
+      "revisedPrompt": "Create a single isolated inventory item icon for a Chinese xianxia fantasy RPG, on a pure flat chroma key background #00B140 filling the entire canvas. Canvas 1024x1024. Exactly one object, centered, filling about 72% of the frame, three-quarter front view, no second object, no scenery, no ground, no shadow, no frame, no text, no logo, no watermark.\n\nSubject: the physical treasure item named “金刚炼力符” as a permanent enhancement treasure symbolizing martial-body tempering and permanent strength increase. Depict it as a refined talisman artifact: a compact ceremonial talisman/seal charm with a strong symbolic silhouette, layered paper-and-metal talisman structure, subtly embossed guardian-strength motifs, angular protective geometry, a central opaque seal core, and restrained ornamental details. It should feel like a powerful enhancement item rather than a readable document.\n\nImportant: for any talisman markings, use only abstract non-readable magical glyph-like strokes and seals, never legible writing or numbers. The object should be instantly recognizable at 56x56 pixels, with a crisp readable silhouette, polished material rendering, soft dark painted edge, refined ink-wash texture, restrained ornament, painterly Chinese fantasy game art. Rarity treatment: cool moonlight highlights, rose-toned accents, refined gold trim and inlays. Upper-left soft studio light. No human hand, no person, no environment. Object only.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 58.7,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2126813,
+      "finalBytes": 207768,
+      "usage": {
+        "inputTokens": 300,
+        "outputImageTokens": 915
+      },
+      "traceId": "trace_msehujhu_laucm1vs",
+      "createdAt": "2026-08-04T10:08:02.927Z"
+    },
+    {
+      "name": "item-shadow-step-talisman",
+      "status": "success",
+      "path": "publish/assets/items/item-shadow-step-talisman.ea299e6e.webp",
+      "contentHash": "ea299e6e",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “无影步符” depicted exactly as a tangible talisman item, not text. One isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, instantly readable at 56x56. The item should look like a permanent enhancement treasure with a strong symbolic silhouette, representing a movement/footwork talisman used to pursue violators and permanently increase agility. Design it as a refined physical talisman token/amulet with layered paper-seal geometry, compact elegant folded forms, and subtle attached ornamentation that suggests speed and movement. Use only abstract non-readable marks on any talisman surfaces; no legible writing. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Rarity treatment with cool moonlight tones, rose accents, and refined gold accents. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform chroma key background #00B140 filling all remaining pixels, pure flat color, no gradient, no shadow, no texture, no environmental elements. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 71.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1747897,
+      "finalBytes": 136824,
+      "usage": {
+        "inputTokens": 286,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehvvqw_b04i30nz",
+      "createdAt": "2026-08-04T10:09:12.844Z"
+    },
+    {
+      "name": "item-discipline-elixir",
+      "status": "success",
+      "path": "publish/assets/items/item-discipline-elixir.0476c7d2.webp",
+      "contentHash": "0476c7d2",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “静律丹” (Jinglü Dan), depicted as a single isolated consumable cultivation treasure with stored spiritual energy visibly contained inside. The item should read as a premium medicinal pill/dan: a polished translucent jade-and-amber pill or small pill vessel with an inner spiritual core glow, subtle swirling energy currents, and refined gold accents, suggesting it can suppress distracting thoughts and stabilize inner breath while noticeably increasing cultivation power. Style: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. View: three-quarter front view, centered, fills about 72% of a 1024x1024 canvas, consistent scale, upper-left soft studio light. Rarity treatment: cool moonlight tones with rose highlights and refined gold accents. Ensure the object is instantly recognizable at 56x56 pixels. Absolutely no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame, no text, no logo, no watermark. Put the object on a perfectly flat solid chroma key background #00B140, uniform and uninterrupted across all empty pixels, with no gradient, no texture, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 57,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1935105,
+      "finalBytes": 153400,
+      "usage": {
+        "inputTokens": 272,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehxdp0_ogkrfpxz",
+      "createdAt": "2026-08-04T10:10:23.887Z"
+    },
+    {
+      "name": "item-ancient-inkstone",
+      "status": "success",
+      "path": "publish/assets/items/item-ancient-inkstone.3fc15244.webp",
+      "contentHash": "3fc15244",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “古法灵砚”. Depict it as an elegant, delicately crafted ancient inkstone gift object, instantly readable at 56x56 pixels. One isolated object only, centered, three-quarter front view, filling about 72% of a 1024x1024 canvas. Painterly Chinese fantasy game art with crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Rarity treatment: cool moonlight, rose, and refined gold accents. The object should visibly convey that the ink inside never dries over a hundred years, cherished by lovers of classic texts; include a subtle contained dark ink sheen/pool within the inkstone, but no legible writing. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform #00B140 chroma key flat color background filling all non-object pixels, perfectly flat with no gradient, no shadow, no texture. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 65.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1778522,
+      "finalBytes": 123572,
+      "usage": {
+        "inputTokens": 243,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msehywie_7r79mc2u",
+      "createdAt": "2026-08-04T10:11:32.373Z"
+    },
+    {
+      "name": "item-insight-scroll",
+      "status": "success",
+      "path": "publish/assets/items/item-insight-scroll.567812fc.webp",
+      "contentHash": "567812fc",
+      "revisedPrompt": "1024x1024 game inventory icon illustration of exactly one isolated physical object: a permanent enhancement treasure scroll named “问心悟道卷” represented as a three-quarter front view ancient Chinese xianxia daoist scroll-manual artifact. The object should have a strong symbolic silhouette for instant recognition at 56x56: a slightly unfurled sealed scroll with layered parchment and elegant bound ends, refined gold trim, moonlit cool silver highlights, subtle rose gemstone or rose lacquer accent details, and restrained ornamental rings. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, polished material rendering, understated but premium. The scroll should visually imply a悟道残卷 preserved by a library spirit, but use only abstract non-readable marks and symbolic seal patterns—NO legible writing, NO characters. Centered, fills about 72% of the canvas, consistent scale, upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a perfectly flat uniform chroma key green #00B140 filling all empty pixels exactly, with no gradient, no texture, no lighting variation, no decoration.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 61.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1997833,
+      "finalBytes": 174656,
+      "usage": {
+        "inputTokens": 255,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msei0dcr_ub8rtatv",
+      "createdAt": "2026-08-04T10:12:49.047Z"
+    },
+    {
+      "name": "item-soul-lamp-oil",
+      "status": "success",
+      "path": "publish/assets/items/item-soul-lamp-oil.d923d94e.webp",
+      "contentHash": "d923d94e",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is \"照神灯油\" depicted exactly as a physical object, a permanent enhancement treasure with a strong symbolic silhouette, instantly recognizable at 56x56 pixels. Render as painterly Chinese fantasy game art with polished material rendering, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, cool moonlight, rose, and refined gold accents. Show the item in a three-quarter front view, centered, filling about 72% of the canvas, consistent scale, lit by soft studio light from the upper-left. The object should look like a treasure oil container/bottle for sacred lamp oil, elegant and mystical, with subtle ornate details and a sealed vessel form, but no text or legible writing. Exactly one isolated object. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly place the object on a SOLID UNIFORM #00B140 chroma key flat color background that fills all remaining pixels. No gradient, no shadow, no texture, no environmental elements. Pure flat chroma green background, exactly #00B140. No logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 78.6,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1480325,
+      "finalBytes": 90350,
+      "usage": {
+        "inputTokens": 257,
+        "outputImageTokens": 515
+      },
+      "traceId": "trace_msei20il_ijkwuh1k",
+      "createdAt": "2026-08-04T10:13:23.276Z"
+    },
+    {
+      "name": "item-secret-manual-fragment",
+      "status": "success",
+      "path": "publish/assets/items/item-secret-manual-fragment.8811e489.webp",
+      "contentHash": "8811e489",
+      "revisedPrompt": "Reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is exactly a physical object named “合欢秘卷残页”, depicted as a single isolated ancient secret-manual page fragment, physical manuscript sheet with curled torn edges and a small remnant of scroll binding, three-quarter front view, centered, filling about 72% of a 1024x1024 canvas. Visual meaning: a library-held secret volume fragment that grants large cultivation power when comprehended. The page should visibly store spiritual energy through subtle glowing vein-like flow inside the material, with cool moonlight highlights, rose-tinted energy accents, and refined gold details. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, high readability at 56x56. Upper-left soft studio light. For the surface markings use only abstract non-readable symbols and ornamental patterns; no legible writing. No hands, no person, no second object, no scenery, no ground, no cast shadow, no frame. Place strictly on a solid uniform #00B140 chroma key flat background filling all non-object pixels, pure flat green screen, no gradient, no texture, no environmental elements, no text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 62.6,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1963046,
+      "finalBytes": 169810,
+      "usage": {
+        "inputTokens": 267,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msei2qxg_tptb73k0",
+      "createdAt": "2026-08-04T10:14:38.249Z"
+    },
+    {
+      "name": "item-jade-hair-comb",
+      "status": "success",
+      "path": "publish/assets/items/item-jade-hair-comb.ece692be.webp",
+      "contentHash": "ece692be",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object '百炼玉梳' (a refined jade comb) depicted exactly as an elegant gift object with delicate craftsmanship, instantly recognizable at 56x56 pixels. One isolated object only, centered, filling about 72% of the 1024x1024 canvas, three-quarter front view, consistent scale. The comb should be made of warm refined jade with subtle moonlight translucency, delicate rose accents, and refined gold filigree highlights, conveying a polished artisan-crafted treasure from a magical workshop. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Pure flat uniform chroma-key background #FF00FF filling all non-object pixels exactly; absolutely no gradient, no texture, no environment. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 68.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1710607,
+      "finalBytes": 147192,
+      "usage": {
+        "inputTokens": 221,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msei4crz_4lfzr7v3",
+      "createdAt": "2026-08-04T10:15:43.494Z"
+    },
+    {
+      "name": "item-foundation-pill",
+      "status": "success",
+      "path": "publish/assets/items/item-foundation-pill.8f9a9a3c.webp",
+      "contentHash": "8f9a9a3c",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG, exactly one isolated object on a pure flat chroma key background #00B140. Subject: the physical item '固元筑基丹' portrayed as a refined medicinal pill treasure from a丹器坊, visually implying stored spiritual energy. The item should be instantly recognizable at 56x56 pixels. Composition: 1024x1024 canvas, centered, object fills about 72% of the frame, three-quarter front view, consistent scale, upper-left soft studio light. Style: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, cool moonlight with subtle rose and refined gold accents. Depict as an ornate, premium cultivation pill: a luminous round elixir bead or capsule with layered translucent jade-like shell, faint internal swirling spiritual energy glow, subtle gold filigree bands and rose highlights, elegant but restrained, physically plausible object. No text or legible writing; if any marks appear on the item, they must be abstract and non-readable only. No hands, no people, no second object, no scenery, no ground, no cast shadow, no frame. Background must be exactly uniform #00B140 filling all non-object pixels, pure flat green screen, no gradient, no texture, no decoration, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 62.4,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1811785,
+      "finalBytes": 128324,
+      "usage": {
+        "inputTokens": 290,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msei5r4c_57tx80kj",
+      "createdAt": "2026-08-04T10:16:54.904Z"
+    },
+    {
+      "name": "item-body-refining-pill",
+      "status": "success",
+      "path": "publish/assets/items/item-body-refining-pill.9dfc4d02.webp",
+      "contentHash": "9dfc4d02",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “龙骨炼体丹” (Dragon Bone Body-Refining Pill), depicted exactly as an object and nothing else. Composition: one isolated object only, centered, three-quarter front view, fills about 72% of a 1024x1024 canvas, instantly readable at 56x56. Visual design: a permanent enhancement treasure with a strong symbolic silhouette; a refined, polished pill/treasure form inspired by dragon bone marrow refinement, suggesting strength and marrow essence through the shape and surface. Material/rendering: radiant warm gold with subtle spiritual aura, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, upper-left soft studio light. The object should feel like a precious alchemical treasure, warm luminous gold, with subtle dragon-bone motifs and condensed spiritual energy, but still clearly a single physical pill object. Background: pure flat solid chroma key green #00B140, uniform across 100% of pixels not occupied by the object. No gradient, no shadow, no texture, no scenery, no ground, no frame, no cast shadow. No text, no logo, no watermark. No people, hands, or extra objects.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 61.6,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1727313,
+      "finalBytes": 111950,
+      "usage": {
+        "inputTokens": 276,
+        "outputImageTokens": 229
+      },
+      "traceId": "trace_msei7a7z_3owwsk1m",
+      "createdAt": "2026-08-04T10:17:28.791Z"
+    },
+    {
+      "name": "item-weapon-essence",
+      "status": "success",
+      "path": "publish/assets/items/item-weapon-essence.e234eb34.webp",
+      "contentHash": "e234eb34",
+      "revisedPrompt": "Create a reusable RPG inventory item icon on a 1024x1024 canvas with exactly one isolated object, centered and filling about 72% of the frame. Subject: the item named “百兵精魄” depicted exactly as a physical object, a permanent enhancement treasure symbolizing the sharpened essence distilled from a hundred magical weapons. Design it as a single ornate-but-restrained fantasy treasure object with a strong, instantly recognizable silhouette for 56x56 readability: a radiant warm-gold core shaped like a condensed spiritual crystal / emblem of blade essence, with subtle surrounding blade-like facets and a refined circular-chi aura integrated into the object itself, not separate objects. Three-quarter front view, polished material rendering, painterly Chinese xianxia fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, subtle spiritual aura, upper-left soft studio light. No text or legible writing, no logo, no watermark. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Place the object strictly on a solid uniform chroma key flat background of exact #00B140, with 100% of non-object pixels being that single flat color, no gradient, no texture, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 67.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1918527,
+      "finalBytes": 193680,
+      "usage": {
+        "inputTokens": 269,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msei80d9_rzpvrrvz",
+      "createdAt": "2026-08-04T10:18:39.272Z"
+    },
+    {
+      "name": "item-fox-bell",
+      "status": "success",
+      "path": "publish/assets/items/item-fox-bell.c18c9723.webp",
+      "contentHash": "c18c9723",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “九尾灵铃” (a delicate spirit bell crafted by mountain-demon artisans, whose ringing soothes the mind). Depict exactly one isolated object, centered, three-quarter front view, filling about 72% of a 1024x1024 canvas, instantly readable at 56x56 pixels. The object should be an elegant gift item with delicate craftsmanship, radiant warm gold rarity treatment with a subtle spiritual aura, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Upper-left soft studio light. The bell should be ornate and refined, inspired by nine-tailed fox motifs, with nine subtle tail-like filigree or tassel elements integrated into the object design, but still clearly a physical bell with no hands, no person, no second object, no scenery, no ground, no cast shadow, no frame. No text or legible writing. Background must be a single flat uniform chroma key green #00B140 filling all non-object pixels, with no gradient, no texture, no decoration, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 70.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1896324,
+      "finalBytes": 185724,
+      "usage": {
+        "inputTokens": 252,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msei9ir3_3uaxjjbb",
+      "createdAt": "2026-08-04T10:19:49.035Z"
+    },
+    {
+      "name": "item-wind-spirit-dew",
+      "status": "success",
+      "path": "publish/assets/items/item-wind-spirit-dew.0bbcc424.webp",
+      "contentHash": "0bbcc424",
+      "revisedPrompt": "1024x1024 square game icon illustration, exactly one isolated physical object centered on a pure flat chroma key background #00B140, no gradient, no texture, no shadow, no scenery, no ground, no frame. Subject: the Chinese xianxia treasure item “御风灵露” as a single physical artifact, depicted as a radiant warm-gold spiritual dew vessel: a compact three-quarter front view ornate treasure flask/vial with a strong iconic silhouette, shaped like a refined pear-and-gourd hybrid of polished jade crystal and hammered gold, with a luminous dew core suspended inside, subtle wind-like curved filigree integrated into the body, restrained ornament, elegant but readable at 56x56 px. Rarity treatment: warm gold glow with a subtle spiritual aura, refined material rendering, painterly Chinese fantasy game art, crisp silhouette, soft dark painted edge, delicate ink-wash texture, polished highlights, upper-left soft studio light. The object should occupy about 72% of the canvas, centered, consistent scale, isolated, no hand, no person, no second object. No text, no logo, no watermark, no legible writing, no scenery elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 69.2,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1739823,
+      "finalBytes": 135960,
+      "usage": {
+        "inputTokens": 246,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseib0kx_9ddothf4",
+      "createdAt": "2026-08-04T10:21:03.350Z"
+    },
+    {
+      "name": "item-fortune-berry",
+      "status": "success",
+      "path": "publish/assets/items/item-fortune-berry.3b48a291.webp",
+      "contentHash": "3b48a291",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item named “紫运灵果” depicted exactly as a physical object, a permanent enhancement treasure symbolizing luck. Single isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, upper-left soft studio light. The object should be a radiant warm-gold spiritual fruit with a strong, instantly recognizable silhouette, subtle purple undertones suggesting auspicious qi, refined polished material rendering, soft dark painted edge, painterly Chinese fantasy game art, crisp readable silhouette, restrained ornament, refined ink-wash texture, subtle spiritual aura. Make it look like a precious mystical fruit, slightly asymmetrical and organic, with a luminous core and elegant leaf/calyx accents, but no extra objects. Strictly on a solid uniform #00B140 chroma key flat background filling all negative space, no gradient, no shadow, no ground, no scenery, no texture, no frame, no text, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 65.8,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1760116,
+      "finalBytes": 127548,
+      "usage": {
+        "inputTokens": 219,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseiclxb_7qdvanun",
+      "createdAt": "2026-08-04T10:22:10.920Z"
+    },
+    {
+      "name": "item-thousand-year-fruit",
+      "status": "success",
+      "path": "publish/assets/items/item-thousand-year-fruit.e008b7db.webp",
+      "contentHash": "e008b7db",
+      "revisedPrompt": "Create a 1024x1024 game inventory icon of exactly one isolated object: the Chinese xianxia treasure “千年朱果” rendered as a physical object, not text. Depict a single mature spiritual fruit from the deep back mountains, visually rich with extremely abundant cultivated energy. The object should read instantly at 56x56 pixels, centered, filling about 72% of the canvas, in a three-quarter front view. Style: painterly Chinese fantasy game art with a crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, and polished material rendering. Rarity treatment: radiant warm gold with subtle spiritual aura, warm luminous highlights, refined red-tinged fruit body and gold essence glow, making the stored spiritual energy visibly present inside the fruit. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a perfectly uniform flat chroma key green #00B140 filling all remaining pixels, with no gradient, no texture, no environmental effects, no decoration. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 67.8,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1837955,
+      "finalBytes": 164184,
+      "usage": {
+        "inputTokens": 239,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseie228_n1aokas5",
+      "createdAt": "2026-08-04T10:23:21.622Z"
+    },
+    {
+      "name": "item-frostfang-essence",
+      "status": "success",
+      "path": "publish/assets/items/item-frostfang-essence.7dcd8b99.webp",
+      "contentHash": "7dcd8b99",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG, 1024x1024, exactly one isolated physical object on a pure flat chroma key background #00B140 with no gradient, texture, shadow, scenery, ground, frame, or environmental elements. Subject: the item named “霜牙精魄” as a physical object — a permanent enhancement treasure representing a sharp essence凝成 from the fang of a ferocious beast in 寒月泽, used to permanently increase strength. Depict it as a stylized beast fang essence relic: a crystalline fang-shaped core with refined, polished material rendering, cool moonlight translucence, subtle rose accents, and elegant gold trimming/inlays, with a strong symbolic silhouette instantly recognizable at 56x56 pixels. Painterly Chinese fantasy game art style, crisp readable silhouette, soft dark painted edge, restrained ornament, refined ink-wash texture, three-quarter front view, centered, object fills about 72% of the canvas, upper-left soft studio light. No text, no logo, no watermark, no hand, no person, no second object, no scenery. Background must be a uniform #00B140 green screen filling all non-object pixels exactly.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 77.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1607252,
+      "finalBytes": 111798,
+      "usage": {
+        "inputTokens": 255,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseifkm6_wmgu5rh2",
+      "createdAt": "2026-08-04T10:24:25.374Z"
+    },
+    {
+      "name": "item-frostbone-pearl",
+      "status": "success",
+      "path": "publish/assets/items/item-frostbone-pearl.c3adc423.webp",
+      "contentHash": "c3adc423",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: a single isolated physical object named “玄霜骨珠”. Depict it exactly as a treasure object, not a symbol or scene: a moonlit icy-lustrous spirit pearl grown from frosty demon bones, meant to permanently increase bone constitution. The object should have a strong, instantly recognizable silhouette for 56x56 readability, filling about 72% of a 1024x1024 canvas, centered, three-quarter front view. Painterly Chinese fantasy game art with crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. Use cool moonlight, subtle rose highlights, and refined gold accents. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Absolutely no text or legible writing. Strictly on a solid uniform #00B140 chroma key green background, flat and featureless, filling every pixel not occupied by the object. No gradient, no shadow, no texture, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 59.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1875787,
+      "finalBytes": 141858,
+      "usage": {
+        "inputTokens": 234,
+        "outputImageTokens": 229
+      },
+      "traceId": "trace_mseigxt3_n85vr56i",
+      "createdAt": "2026-08-04T10:24:59.364Z"
+    },
+    {
+      "name": "item-moonstep-feather",
+      "status": "success",
+      "path": "publish/assets/items/item-moonstep-feather.2c6cd2b3.webp",
+      "contentHash": "2c6cd2b3",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is named “月行轻羽” and must be depicted exactly as a physical object, a permanent enhancement treasure with a strong symbolic silhouette, instantly recognizable at 56x56 pixels. Subject: a single isolated treasure object representing a moon-infused feather that grants permanent agility/footwork enhancement. Design it as an elegant, physical feather talisman/treasure object with a clearly defined feather shape, slightly curved and layered, with a refined core or clasp suggesting a precious artifact, not a literal bird feather alone. Visual meaning: a feather soaked in cold moon essence, cool moonlight glow, subtle rose highlights, refined gold accents, polished material rendering, restrained ornament, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, delicate ink-wash texture. Three-quarter front view, centered, object fills about 72% of the canvas, consistent scale, upper-left soft studio light. IMPORTANT: exactly one isolated object, no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform #00B140 chroma key flat color background filling all non-object pixels; no gradient, no shadow, no texture, no environmental elements. No text, no logo, no watermark. Ensure the object is fully contained within the canvas and stands out strongly against the green screen background.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 84.2,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1473666,
+      "finalBytes": 107234,
+      "usage": {
+        "inputTokens": 298,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseiho16_qf3qvxaq",
+      "createdAt": "2026-08-04T10:26:02.139Z"
+    },
+    {
+      "name": "item-demon-blood-crystal",
+      "status": "success",
+      "path": "publish/assets/items/item-demon-blood-crystal.7b504e65.webp",
+      "contentHash": "7b504e65",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “妖血力晶”. Depict it exactly as a tangible treasure item: a permanent enhancement blood crystal left behind by a powerful demon beast from 万妖岭, symbolizing increased strength after use. One isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, instantly readable at 56x56 pixels. Visual design: a radiant warm gold blood-crystal treasure with a subtle spiritual aura, painterly Chinese fantasy game art, crisp strong silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, upper-left soft studio light. The object should feel like a crystalline blood relic with inner warmth and power, elegant but formidable, with no readable text or symbols. Background must be a pure flat uniform chroma key green #00B140 filling every pixel not occupied by the object; absolutely no gradient, no shadow, no texture, no scenery, no ground, no frame, no decoration, no environmental elements. No people, no hands, no second object, no cast shadow, no watermark, no logo, no text.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 64.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1839825,
+      "finalBytes": 150134,
+      "usage": {
+        "inputTokens": 255,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseij0gz_xt0df31b",
+      "createdAt": "2026-08-04T10:27:09.716Z"
+    },
+    {
+      "name": "item-vine-marrow-seed",
+      "status": "success",
+      "path": "publish/assets/items/item-vine-marrow-seed.dc2efa16.webp",
+      "contentHash": "dc2efa16",
+      "revisedPrompt": "Create a 1024x1024 game icon of exactly one isolated object for a Chinese xianxia fantasy RPG inventory item named “古藤髓种” (depict the item as a physical object, not text). The object is a permanent enhancement treasure: a seed-like spiritual core formed from ancient vine marrow, symbolizing increased root bone/constitution. Design it as a strong, instantly readable silhouette at 56x56 pixels. Painterly Chinese fantasy game art with refined ink-wash texture, polished material rendering, restrained ornament, crisp readable silhouette, and a soft dark painted edge. Warm radiant gold rarity treatment with a subtle spiritual aura. Three-quarter front view, centered, object fills about 72% of the canvas, consistent scale, upper-left soft studio light. The object should resemble a mystical organic seed/capsule made of ancient vine marrow, with subtle vine-like striations and luminous golden core, elegant but simple. No hands, no person, no second object, no scenery, no ground, no cast shadow, no frame. Absolutely no legible writing, no logo, no watermark, no scrolls or talismans with text—only abstract non-readable marks if any. Strictly on a solid uniform #FF00FF chroma key flat background filling all empty pixels, with no gradient, no texture, no shadow, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#FF00FF",
+        "alphaZeroPct": 72.7,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1706237,
+      "finalBytes": 143932,
+      "usage": {
+        "inputTokens": 283,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseikgm3_xuj2psjv",
+      "createdAt": "2026-08-04T10:28:16.400Z"
+    },
+    {
+      "name": "item-thunderstep-core",
+      "status": "success",
+      "path": "publish/assets/items/item-thunderstep-core.fa40c83b.webp",
+      "contentHash": "fa40c83b",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is called “雷步妖核” and must be depicted exactly as a physical object, not as text. Show a single isolated treasure core, a permanent enhancement item with a strong symbolic silhouette, instantly readable at 56x56 pixels. The object should look like a refined demon-beast spirit nucleus: a warm radiant gold core with subtle spiritual aura, with faint electric lightning threads and lingering thunder sparks circulating around and within it, implying agility/footwork enhancement. Painterly Chinese fantasy game art, polished material rendering, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, elegant and powerful. Three-quarter front view, centered, fills about 72% of the canvas, consistent scale, upper-left soft studio light. Exactly one object, no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform chroma key flat background color #00B140, pure flat green screen, 100% uniform with no gradient, no texture, no shadow, no decoration. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 61,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1883207,
+      "finalBytes": 174496,
+      "usage": {
+        "inputTokens": 249,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseilw2f_ddwd56r5",
+      "createdAt": "2026-08-04T10:29:23.146Z"
+    },
+    {
+      "name": "item-sunscar-warbone",
+      "status": "success",
+      "path": "publish/assets/items/item-sunscar-warbone.03441afa.webp",
+      "contentHash": "03441afa",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “灼痕战骨”. Depict it as a single isolated treasure item, a permanent enhancement relic that visually suggests a battle bone forged and tempered by relentless desert sun, granting permanent strength. One object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view. Strong symbolic silhouette instantly readable at 56x56 pixels. Luminous ivory-gold palette with powerful sacred energy, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. The object should feel like an ancient warrior bone relic: pale ivory bone with golden radiant veins, subtle ceremonial cracks, sacred aura implied through material glow only (no effects extending far). Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Strictly on a solid uniform chroma key flat background #00B140 filling all remaining pixels, absolutely no gradient, no texture, no shadow, no environment, no decoration. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 78.5,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1576145,
+      "finalBytes": 112906,
+      "usage": {
+        "inputTokens": 253,
+        "outputImageTokens": 229
+      },
+      "traceId": "trace_mseinbkh_aytukpki",
+      "createdAt": "2026-08-04T10:29:54.745Z"
+    },
+    {
+      "name": "item-sand-drake-marrow",
+      "status": "success",
+      "path": "publish/assets/items/item-sand-drake-marrow.6319c505.webp",
+      "contentHash": "6319c505",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG, 1024x1024. Exactly one isolated object, centered, filling about 72% of the canvas, three-quarter front view, consistent scale. Subject: the physical treasure named “地龙金髓” — depict as an exquisite sacred mineral/bone-marrow treasure: an ivory-gold crystalline marrow core formed from swallowed earth-dragon essence, with the visual meaning of permanent root bone enhancement. Make it instantly recognizable at 56x56 pixels with a strong symbolic silhouette. Style: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering, luminous ivory-gold with powerful sacred energy. Upper-left soft studio light, subtle internal glow, no cast shadow. Object only, no hand, no person, no second object, no scenery, no ground, no frame. Background must be a pure flat uniform chroma key green #00B140, 100% of non-object pixels, no gradient, no texture, no environmental elements. No text, no logo, no watermark. Avoid any legible writing or symbols that resemble text.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 67.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1865838,
+      "finalBytes": 158162,
+      "usage": {
+        "inputTokens": 249,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseinzyc_o1vha4tb",
+      "createdAt": "2026-08-04T10:32:25.068Z"
+    },
+    {
+      "name": "item-mirage-wind-core",
+      "status": "success",
+      "path": "publish/assets/items/item-mirage-wind-core.71630541.webp",
+      "contentHash": "71630541",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is named “蜃风灵核” and must be depicted exactly as a physical object, not as text. One isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, consistent scale, upper-left soft studio light. Design it as a permanent enhancement treasure with a strong symbolic silhouette that reads instantly at 56x56: a sacred wind-and-mirage spirit core, luminous ivory-gold, polished material rendering, refined ink-wash texture, restrained ornament, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge. Visual impression: a radiant core or crystal-like relic capable of disturbing wind, sand, and illusion, granting permanent agility/footwork enhancement after use. Make it feel powerful and sacred, with subtle swirling wind-ribbon forms and mirage-like inner glow, but keep it as a single physical treasure object. No readable writing, no symbols that resemble text, no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a pure flat uniform chroma key green exactly #00B140, filling every pixel not occupied by the object, with no gradient, no texture, no decoration, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 68,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1674889,
+      "finalBytes": 112872,
+      "usage": {
+        "inputTokens": 281,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseir7xx_tzsvskmf",
+      "createdAt": "2026-08-04T10:33:34.731Z"
+    },
+    {
+      "name": "item-war-soul-brand",
+      "status": "success",
+      "path": "publish/assets/items/item-war-soul-brand.cd645b06.webp",
+      "contentHash": "cd645b06",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “战魂力印” (war-soul power imprint), depicted exactly as an ancient permanent enhancement treasure. One isolated object only, centered, filling about 72% of a 1024x1024 canvas, three-quarter front view, crisp readable silhouette for 56x56px readability. Design it as a sacred ivory-gold artifact with powerful spiritual energy: a compact seal-emblem relic combining a stylized ancient battle insignia and imprint-like talismanic form, with layered engraved motifs, restrained ornament, polished material rendering, soft luminous highlights, subtle inner glow, and refined Chinese ink-wash texture. It should feel like an unbreakable imprint left by an ancient war soul, symbolizing permanent strength increase. Painterly Chinese fantasy game art, soft dark painted edge, elegant but not busy, strong symbolic silhouette, no readable text, only abstract non-readable marks if any. Upper-left soft studio light. Strictly isolated on a solid uniform chroma key background #00B140, pure flat color filling all non-object pixels, no gradient, no shadow, no texture, no scenery, no ground, no frame, no extra objects, no hands, no person, no watermark, no logo, no text.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 60.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1926150,
+      "finalBytes": 160100,
+      "usage": {
+        "inputTokens": 272,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseispoz_e0fj76c2",
+      "createdAt": "2026-08-04T10:34:40.558Z"
+    },
+    {
+      "name": "item-riftsteel-heart",
+      "status": "success",
+      "path": "publish/assets/items/item-riftsteel-heart.a6606d66.webp",
+      "contentHash": "a6606d66",
+      "revisedPrompt": "Create a single isolated fantasy inventory item icon for a Chinese xianxia RPG, 1024x1024 canvas. Subject: the physical object named “裂天钢心” (a permanent enhancement treasure; the strongest, most resilient core fragment of a battlefield bronze golem core, used to permanently increase root bone/inner constitution). Depict it as one exact object only, no hands, no person, no second object, no scenery, no ground, no cast shadow, no frame. Centered three-quarter front view, object fills about 72% of the canvas, consistent scale, instantly readable at 56x56 px. Design: a polished sacred core gem/metallic heart-like relic with a strong symbolic silhouette, refined Chinese fantasy game art, painterly, crisp readable silhouette, soft dark painted edge, subtle ink-wash texture, restrained ornament, polished material rendering. Color/material: luminous ivory-gold with powerful sacred energy, antique holy metal and pearl-like sheen, elegant but not overly ornate. Lighting: upper-left soft studio light, gentle highlights and depth, but no visible shadow outside the object. Background must be a pure flat solid chroma key green #00B140 filling 100% of all non-object pixels, perfectly uniform, no gradient, no texture, no scenery, no environmental elements. No text, no logo, no watermark, no legible writing, no symbols that resemble letters. The object should feel like a treasured enhancement artifact from a xianxia fantasy game, with a compact, iconic silhouette and a mystical, durable core appearance.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 59.7,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2088700,
+      "finalBytes": 205130,
+      "usage": {
+        "inputTokens": 323,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseiu4hk_qyz8byj3",
+      "createdAt": "2026-08-04T10:35:54.543Z"
+    },
+    {
+      "name": "item-voidwing-feather",
+      "status": "success",
+      "path": "publish/assets/items/item-voidwing-feather.c6383757.webp",
+      "contentHash": "c6383757",
+      "revisedPrompt": "Create a single isolated reusable inventory item icon for a Chinese xianxia fantasy RPG: the item is called “裂翼虚羽” and must be depicted exactly as a physical object, not symbolic text. Subject: a permanent enhancement treasure, a fierce avian feather that has passed through spatial rifts without breaking, used to permanently increase agility. Visual design: one large, elegant, sacred feather with a strong iconic silhouette, ivory-gold luminous material, refined ink-wash texture, polished material rendering, restrained ornament, subtle rift-worn edges, slightly ethereal sacred energy. Art style: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, centered three-quarter front view, consistent scale, object fills about 72% of the canvas, upper-left soft studio light. Composition: exactly one object, isolated, no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background: pure flat uniform chroma key green #00B140 filling every pixel not occupied by the object, no gradient, no texture, no shadow, no decoration, no environmental elements. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 74.7,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1705125,
+      "finalBytes": 150564,
+      "usage": {
+        "inputTokens": 245,
+        "outputImageTokens": 915
+      },
+      "traceId": "trace_mseivpkq_amkd6et3",
+      "createdAt": "2026-08-04T10:36:38.977Z"
+    },
+    {
+      "name": "item-astral-force-crystal",
+      "status": "success",
+      "path": "publish/assets/items/item-astral-force-crystal.312b5acd.webp",
+      "contentHash": "312b5acd",
+      "revisedPrompt": "1024x1024 square game item icon, exactly one isolated object centered on a perfectly flat uniform chroma key background #00B140 filling the entire canvas outside the object, no gradients, no texture in background, no scenery, no ground, no shadow, no frame, no extra objects. Depict the Chinese xianxia treasure item “星潮力晶” as a physical object: a permanent enhancement treasure crystallized from starfall ocean tides, symbolizing permanent strength increase. The object should have a strong instantly recognizable silhouette readable at 56x56: a large faceted cosmic crystal core with tidal spiral massing, star-like facets, wave-like compressed energy layers, subtle celestial orbit rings integrated into the object, and a powerful gem-like form. Painterly Chinese fantasy game art, polished material rendering, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, luminous cosmic violet, star blue, and brilliant divine gold accents, three-quarter front view, centered, fills about 72% of the canvas, upper-left soft studio light, subtle specular highlights, elegant mystical aura kept within the object shape, no text, no symbols that look like readable writing, no people, no hands, no second object.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 64.8,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2147502,
+      "finalBytes": 252588,
+      "usage": {
+        "inputTokens": 258,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseiwnux_n07nrb3d",
+      "createdAt": "2026-08-04T10:37:51.047Z"
+    },
+    {
+      "name": "item-abyssal-marrow",
+      "status": "success",
+      "path": "publish/assets/items/item-abyssal-marrow.d839b394.webp",
+      "contentHash": "d839b394",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “渊海神髓” (a divine marrow formed inside deep-sea alien beings and giant monsters, used to permanently increase bone roots). Depict it as exactly one isolated object on a solid uniform chroma key background #00B140, with no gradients, no texture, no scenery, no ground, no shadow, no frame, no extra elements. The object should be centered, fill about 72% of the 1024x1024 canvas, shown in three-quarter front view, with a strong instantly recognizable silhouette for 56x56 readability. Visual style: painterly Chinese fantasy game art, polished material rendering, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament. Rarity treatment: cosmic violet, star blue, brilliant divine gold. Subject design: a mysterious condensed marrow treasure—an ornate organic crystalline core or sac-like relic with deep-sea bioluminescent contours, subtle beastly anatomical inspiration, and sacred divine energy motifs, but still clearly a single physical item. Upper-left soft studio lighting. No text, no logo, no watermark, no legible writing, and if any markings are included they must be abstract, non-readable decorative marks only.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 66.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1885194,
+      "finalBytes": 164768,
+      "usage": {
+        "inputTokens": 272,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_mseiy7gt_zvxu66z9",
+      "createdAt": "2026-08-04T10:38:59.033Z"
+    },
+    {
+      "name": "item-starcurrent-fin",
+      "status": "success",
+      "path": "publish/assets/items/item-starcurrent-fin.b32f88a5.webp",
+      "contentHash": "b32f88a5",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: a single isolated physical object named “星流幻鳍” (Star-Flow Illusory Fin). Depict it as a permanent enhancement treasure with a strong, symbolic silhouette instantly readable at 56x56. The object should look like a refined, ornate fin-like treasure formed from cosmic violet, star blue, and brilliant divine gold materials, with a physical sculpted presence and polished rendering. Three-quarter front view, centered, filling about 72% of the 1024x1024 canvas. Painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, subtle luminous accents, and polished material rendering. Upper-left soft studio light. No text, no logo, no watermark. No person, no hand, no second object, no scenery, no ground, no cast shadow, no frame. Place strictly on a solid uniform #00B140 chroma key green background filling all remaining pixels, with absolutely no gradients, shadows, textures, or environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 70.6,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1797064,
+      "finalBytes": 169378,
+      "usage": {
+        "inputTokens": 228,
+        "outputImageTokens": 515
+      },
+      "traceId": "trace_mseiznxc_4b93ube1",
+      "createdAt": "2026-08-04T10:39:34.126Z"
+    },
+    {
+      "name": "item-primordial-force-core",
+      "status": "success",
+      "path": "publish/assets/items/item-primordial-force-core.1ac11d0f.webp",
+      "contentHash": "1ac11d0f",
+      "revisedPrompt": "Create a reusable inventory icon for a Chinese xianxia fantasy RPG: the item is named “太初力核” and must be depicted exactly as a physical object, not text. Single isolated object only on a flat solid chroma key background #00B140, filling 100% of all non-object pixels. Canvas 1024x1024. No scenery, no ground, no shadow, no frame, no extra objects, no hands, no people. Subject: a permanent enhancement treasure representing primordial force condensed in the Taixu remnant realm. Design it as a strong symbolic silhouette instantly readable at 56x56 pixels: a compact core/crystal/orb-like treasure with a central nucleus, layered angular shell, and subtle power ring motifs; refined Chinese fantasy material rendering. Art direction: painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished materials. Rarity treatment: cosmic violet, star blue, brilliant divine gold, with luminous but controlled highlights. View/framing: three-quarter front view, centered, object fills about 72% of canvas, consistent scale, upper-left soft studio light. Absolutely no legible writing, no logos, no watermark, no background gradient or texture.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 58.3,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2084313,
+      "finalBytes": 198330,
+      "usage": {
+        "inputTokens": 263,
+        "outputImageTokens": 229
+      },
+      "traceId": "trace_msej0f07_w5e3i57h",
+      "createdAt": "2026-08-04T10:40:06.877Z"
+    },
+    {
+      "name": "item-void-origin-marrow",
+      "status": "success",
+      "path": "publish/assets/items/item-void-origin-marrow.16220ee4.webp",
+      "contentHash": "16220ee4",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: the physical object named “虚源道髓” depicted exactly as a treasure-like material essence, symbolizing a dao marrow refined by void rules that permanently increases foundation/root bones. One isolated object only, centered on a 1024x1024 canvas, filling about 72% of the frame, three-quarter front view, consistent scale, instantly recognizable at 56x56 pixels. Design a strong symbolic silhouette with restrained ornament: a polished, sacred crystallized marrow core or relic-form treasure with cosmic violet, star blue, and brilliant divine gold accents, painterly Chinese fantasy game art, crisp readable silhouette, soft dark painted edge, refined ink-wash texture, polished material rendering, subtle luminous internal veins and facets, upper-left soft studio light. No human, no hand, no second object, no scenery, no ground, no cast shadow, no frame, no text, no logo, no watermark. Strictly isolated on a perfectly uniform solid #00B140 chroma key green background, flat and textureless, no gradient, no environmental elements.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 69.9,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1893746,
+      "finalBytes": 179102,
+      "usage": {
+        "inputTokens": 234,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msej149x_4d87f1yq",
+      "createdAt": "2026-08-04T10:41:14.389Z"
+    },
+    {
+      "name": "item-taixu-step-feather",
+      "status": "success",
+      "path": "publish/assets/items/item-taixu-step-feather.01b91de1.webp",
+      "contentHash": "01b91de1",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG, exactly one isolated object on a pure flat chroma key background #00B140, filling about 72% of a 1024x1024 canvas. Subject: the physical object named “太虚行羽” — a mystical feather treasure embodying 太虚 (void/astral) movement dao-rhythm, permanently increasing agility/mobility when used. Depict it as a single ornate feather-like talisman relic with a strong symbolic silhouette, instantly readable at 56x56 pixels. Three-quarter front view, centered, with polished material rendering and refined ink-wash texture. Color treatment: cosmic violet, star blue, brilliant divine gold accents, with subtle luminous veining and restrained ornament. Painterly Chinese fantasy game art, crisp silhouette, soft dark painted edge, elegant yet compact form. Upper-left soft studio light. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. No text, no logo, no watermark. Background must be a perfectly uniform solid #00B140 with no gradient, no texture, no noise, no shadow, no environment. The object should be a physical treasure item, not a flat icon, with graceful feather blades and a central core suggesting divine movement power.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 78.1,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1581362,
+      "finalBytes": 122012,
+      "usage": {
+        "inputTokens": 274,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msej2kde_9jh8chpq",
+      "createdAt": "2026-08-04T10:42:18.443Z"
+    },
+    {
+      "name": "item-holy-cultivation-pill",
+      "status": "success",
+      "path": "publish/assets/items/item-holy-cultivation-pill.91841660.webp",
+      "contentHash": "91841660",
+      "revisedPrompt": "Create a single isolated inventory item icon for a Chinese xianxia fantasy RPG: the consumable cultivation treasure named “圣品修为丹”, depicted as a physical object only. Canvas 1024x1024, one object centered and filling about 72% of the frame, three-quarter front view, instantly readable at 56x56 pixels. Visual design: luminous ivory-gold sacred pill/dan, polished material rendering, powerful internal spiritual energy visible as subtle radiant core glow, refined Chinese fantasy game art with painterly brushwork, crisp silhouette, soft dark painted edge, restrained ornament, subtle ink-wash texture. Upper-left soft studio light. The item should look like an elite rare spiritual medicine pill, round or slightly domed with elegant carved abstract marks only (no legible writing), sacred and valuable. No hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a perfectly uniform flat chroma green #00B140 filling all empty pixels, no gradient, no texture, no decoration, no environment. No text, no logo, no watermark.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 60.8,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 1713345,
+      "finalBytes": 103574,
+      "usage": {
+        "inputTokens": 234,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msej3xsi_sh7j9bsm",
+      "createdAt": "2026-08-04T10:43:24.008Z"
+    },
+    {
+      "name": "item-divine-cultivation-pill",
+      "status": "success",
+      "path": "publish/assets/items/item-divine-cultivation-pill.9a8928cf.webp",
+      "contentHash": "9a8928cf",
+      "revisedPrompt": "Create a reusable inventory item icon for a Chinese xianxia fantasy RPG: a single isolated physical object representing the consumable cultivation treasure named “神级修为丹” as a real object, not text. Depict a divine pill/dan medicine with visible stored spiritual energy, implying it grants 10% cultivation progress upon use. Style: painterly Chinese fantasy game art with crisp readable silhouette, soft dark painted edge, refined ink-wash texture, restrained ornament, polished material rendering. The object should be cosmic violet, star blue, and brilliant divine gold, with subtle swirling internal energy and a polished pill-like form, instantly recognizable at 56x56 pixels. View: three-quarter front view, centered, object fills about 72% of the canvas, consistent scale, upper-left soft studio light. Exactly one object only; no hand, no person, no second object, no scenery, no ground, no cast shadow, no frame. Background must be a perfectly uniform solid chroma key green #00B140, flat and featureless, filling all non-object pixels. No text, no logo, no watermark, no readable writing, no extra symbols beyond abstract non-readable decorative marks if any.",
+      "model": "gpt-image-2",
+      "size": "1254x1254",
+      "wantsTransparent": true,
+      "chromaKey": {
+        "color": "#00B140",
+        "alphaZeroPct": 56.2,
+        "edgeGreenBiasPct": 0,
+        "verdict": "PASS"
+      },
+      "outputFormat": "webp",
+      "compressionProfile": "lossy_q85_alpha",
+      "originalBytes": 2043197,
+      "finalBytes": 183436,
+      "usage": {
+        "inputTokens": 248,
+        "outputImageTokens": 2058
+      },
+      "traceId": "trace_msej5cdu_ta0ns7w9",
+      "createdAt": "2026-08-04T10:44:33.590Z"
     }
   ]
 }

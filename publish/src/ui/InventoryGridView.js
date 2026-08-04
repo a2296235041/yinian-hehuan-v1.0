@@ -1,7 +1,11 @@
 (function installInventoryGridView(root) {
   'use strict';
 
-  const labels = { cultivation: '丹', attribute: '诀', gift: '礼' };
+  const labels = { cultivation: '丹', attribute: '诀', gift: '礼', material: '材' };
+
+  function typeLabel(type) {
+    return labels[type] || '物';
+  }
 
   function add(scene, object) {
     scene.entryObjects.push(object);
@@ -20,9 +24,7 @@
 
   function addItem(scene, item, x, y) {
     add(scene, root.Game.CommerceDecor.addSlot(scene, x, y, 500, 92, true));
-    root.Game.CommerceDecor.addSeal(
-      scene, x - 210, y, labels[item.type] || '物', item.rarity
-    ).forEach((object) => add(scene, object));
+    root.Game.ItemIconAssets.create(scene, item, x - 210, y, (object) => add(scene, object));
     add(scene, scene.add.text(x - 170, y - 30, item.name, {
       fontFamily: '"Noto Serif SC", serif',
       fontSize: '19px',
@@ -86,5 +88,5 @@
     }
   }
 
-  root.Game.InventoryGridView = Object.freeze({ render });
+  root.Game.InventoryGridView = Object.freeze({ typeLabel, render });
 }(window));

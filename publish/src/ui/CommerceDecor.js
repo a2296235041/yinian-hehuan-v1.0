@@ -5,8 +5,11 @@ Game.CommerceDecor = {
         普通: 0xaeb8ae,
         精良: 0x79b99d,
         稀有: 0x8db8e8,
+        珍稀: 0xd989a5,
         珍品: 0xd989a5,
-        传说: 0xe5bd78
+        传说: 0xe5bd78,
+        圣品: 0xf3e7b4,
+        神级: 0xb997ff
     }),
 
     createShell(scene, title, subtitle) {

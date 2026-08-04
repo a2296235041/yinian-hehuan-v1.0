@@ -6,7 +6,8 @@
     "rarity": "普通",
     "description": "带着清晨露水的温和灵草，可入药也可赠人。",
     "gift_affinity": 2,
-    "initial_quantity": 4
+    "initial_quantity": 4,
+    "icon": "./assets/items/item-spirit-herb.05ed07ef.webp"
   },
   {
     "id": "fragrant_jade",
@@ -15,7 +16,8 @@
     "rarity": "精良",
     "description": "温润玉佩中封存着淡雅花香，是稳妥的见面礼。",
     "gift_affinity": 3,
-    "initial_quantity": 2
+    "initial_quantity": 2,
+    "icon": "./assets/items/item-fragrant-jade.eacec364.webp"
   },
   {
     "id": "peach_wine",
@@ -24,7 +26,8 @@
     "rarity": "精良",
     "description": "入口绵甜、灵气悠长，适合与知己共饮。",
     "gift_affinity": 4,
-    "initial_quantity": 1
+    "initial_quantity": 1,
+    "icon": "./assets/items/item-peach-wine.e73dec4c.webp"
   },
   {
     "id": "moon_silk",
@@ -33,7 +36,8 @@
     "rarity": "珍稀",
     "description": "月下才会泛起银辉的轻柔灵绸。",
     "gift_affinity": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-moon-silk.c010a5c9.webp"
   },
   {
     "id": "frost_lotus",
@@ -42,7 +46,8 @@
     "rarity": "珍稀",
     "description": "生于极寒之地，莲心蕴含澄澈灵力。",
     "gift_affinity": 6,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-frost-lotus.a490fca9.webp"
   },
   {
     "id": "beast_core",
@@ -51,7 +56,8 @@
     "rarity": "精良",
     "description": "凶兽体内凝成的灵力结晶，可用于炼丹与炼器。",
     "gift_affinity": 2,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-beast-core.2a253939.webp"
   },
   {
     "id": "star_fragment",
@@ -60,7 +66,8 @@
     "rarity": "珍稀",
     "description": "从天外坠落的奇异矿石，触碰时仍有微光流转。",
     "gift_affinity": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-star-fragment.593d000b.webp"
   },
   {
     "id": "void_orchid",
@@ -69,7 +76,8 @@
     "rarity": "传说",
     "description": "只在空间裂隙附近短暂开放的罕见灵花。",
     "gift_affinity": 8,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-void-orchid.e5e622ec.webp"
   },
   {
     "id": "welcome_charm",
@@ -78,7 +86,8 @@
     "rarity": "普通",
     "description": "接引弟子亲手系好的平安符，适合作为初次见面的礼物。",
     "gift_affinity": 2,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-welcome-charm.226bfb08.webp"
   },
   {
     "id": "cloud_spirit_tea",
@@ -87,7 +96,8 @@
     "rarity": "普通",
     "description": "饮下后灵台清明，可温和增进修为。",
     "cultivation_gain": 18,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-cloud-spirit-tea.39199bf9.webp"
   },
   {
     "id": "silk_fan",
@@ -96,7 +106,8 @@
     "rarity": "精良",
     "description": "扇面绘着山门云景，雅致而不显张扬。",
     "gift_affinity": 3,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-silk-fan.3d78c546.webp"
   },
   {
     "id": "junior_insight_note",
@@ -106,7 +117,8 @@
     "description": "记录前辈入门心得的手札，使用后永久增加悟性。",
     "attribute": "wisdom",
     "attribute_gain": 2,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-junior-insight-note.6a1a91db.webp"
   },
   {
     "id": "grand_gathering_pill",
@@ -115,7 +127,8 @@
     "rarity": "精良",
     "description": "宗主殿按功勋发放的聚灵丹，药力浑厚。",
     "cultivation_gain": 55,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-grand-gathering-pill.06330482.webp"
   },
   {
     "id": "marrow_jade_pill",
@@ -125,7 +138,8 @@
     "description": "以玉髓灵液炼制，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 3,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-marrow-jade-pill.a0810cf3.webp"
   },
   {
     "id": "phoenix_hairpin",
@@ -134,7 +148,8 @@
     "rarity": "珍稀",
     "description": "内殿珍藏的凤纹金簪，端庄华贵。",
     "gift_affinity": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-phoenix-hairpin.4c1b12f7.webp"
   },
   {
     "id": "spirit_focus_seal",
@@ -144,7 +159,8 @@
     "description": "宗主亲定的凝神法印，使用后永久增加神识。",
     "attribute": "intelligence",
     "attribute_gain": 3,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-spirit-focus-seal.5370f343.webp"
   },
   {
     "id": "cold_incense",
@@ -153,7 +169,8 @@
     "rarity": "精良",
     "description": "戒律堂常燃的冷香，气息清冽持久。",
     "gift_affinity": 4,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-cold-incense.d6b84144.webp"
   },
   {
     "id": "iron_body_talisman",
@@ -163,7 +180,8 @@
     "description": "执法弟子锤炼肉身所用，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 3,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-iron-body-talisman.e722061f.webp"
   },
   {
     "id": "shadow_step_talisman",
@@ -173,7 +191,8 @@
     "description": "追捕违令者时使用的身法符，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 3,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-shadow-step-talisman.ea299e6e.webp"
   },
   {
     "id": "discipline_elixir",
@@ -182,7 +201,8 @@
     "rarity": "珍稀",
     "description": "压下杂念、稳固灵息的丹药，可明显增进修为。",
     "cultivation_gain": 75,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-discipline-elixir.0476c7d2.webp"
   },
   {
     "id": "ancient_inkstone",
@@ -191,7 +211,8 @@
     "rarity": "珍稀",
     "description": "砚中墨色百年不干，深受喜爱典籍之人珍视。",
     "gift_affinity": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-ancient-inkstone.3fc15244.webp"
   },
   {
     "id": "insight_scroll",
@@ -201,7 +222,8 @@
     "description": "守阁书灵拓印的悟道残卷，使用后永久增加悟性。",
     "attribute": "wisdom",
     "attribute_gain": 4,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-insight-scroll.567812fc.webp"
   },
   {
     "id": "soul_lamp_oil",
@@ -211,7 +233,8 @@
     "description": "点燃后照见识海杂念，使用后永久增加神识。",
     "attribute": "intelligence",
     "attribute_gain": 4,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-soul-lamp-oil.d923d94e.webp"
   },
   {
     "id": "secret_manual_fragment",
@@ -220,7 +243,8 @@
     "rarity": "珍稀",
     "description": "藏书阁收录的秘卷残页，参悟后可获得大量修为。",
     "cultivation_gain": 100,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-secret-manual-fragment.8811e489.webp"
   },
   {
     "id": "jade_hair_comb",
@@ -229,7 +253,8 @@
     "rarity": "珍稀",
     "description": "丹器坊以温玉精炼而成，灵光细腻柔和。",
     "gift_affinity": 6,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-jade-hair-comb.ece692be.webp"
   },
   {
     "id": "foundation_pill",
@@ -238,7 +263,8 @@
     "rarity": "珍稀",
     "description": "丹器坊的招牌丹药，可大幅增进当前境界修为。",
     "cultivation_gain": 140,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-foundation-pill.8f9a9a3c.webp"
   },
   {
     "id": "body_refining_pill",
@@ -248,7 +274,8 @@
     "description": "以凶兽骨髓炼成，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-body-refining-pill.9dfc4d02.webp"
   },
   {
     "id": "weapon_essence",
@@ -258,7 +285,8 @@
     "description": "百件法器淬出的锋锐精魄，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-weapon-essence.e234eb34.webp"
   },
   {
     "id": "fox_bell",
@@ -267,7 +295,8 @@
     "rarity": "传说",
     "description": "后山妖族工匠制作的灵铃，铃音能安抚心神。",
     "gift_affinity": 7,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-fox-bell.c18c9723.webp"
   },
   {
     "id": "wind_spirit_dew",
@@ -277,7 +306,8 @@
     "description": "采自瀑布逆流处的灵露，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-wind-spirit-dew.0bbcc424.webp"
   },
   {
     "id": "fortune_berry",
@@ -287,7 +317,8 @@
     "description": "只在灵境气运汇聚时结果，使用后永久增加气运。",
     "attribute": "luck",
     "attribute_gain": 5,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-fortune-berry.3b48a291.webp"
   },
   {
     "id": "thousand_year_fruit",
@@ -296,7 +327,8 @@
     "rarity": "传说",
     "description": "后山深处成熟的千年灵果，蕴含极为充沛的修为。",
     "cultivation_gain": 220,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-thousand-year-fruit.e008b7db.webp"
   },
   {
     "id": "frostfang_essence",
@@ -306,7 +338,8 @@
     "description": "寒月泽凶兽牙中凝成的锋锐精魄，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 6,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-frostfang-essence.7dcd8b99.webp"
   },
   {
     "id": "frostbone_pearl",
@@ -316,7 +349,8 @@
     "description": "以寒泽妖骨孕育的冰润灵珠，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 6,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-frostbone-pearl.c3adc423.webp"
   },
   {
     "id": "moonstep_feather",
@@ -326,7 +360,8 @@
     "description": "沾染寒月灵息的轻羽，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 6,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-moonstep-feather.2c6cd2b3.webp"
   },
   {
     "id": "demon_blood_crystal",
@@ -336,7 +371,8 @@
     "description": "万妖岭强大妖兽遗留的血晶，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 10,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-demon-blood-crystal.7b504e65.webp"
   },
   {
     "id": "vine_marrow_seed",
@@ -346,7 +382,8 @@
     "description": "古藤妖百年木髓结成的灵种，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 10,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-vine-marrow-seed.dc2efa16.webp"
   },
   {
     "id": "thunderstep_core",
@@ -356,7 +393,8 @@
     "description": "仍有雷芒游走的妖兽灵核，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 10,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-thunderstep-core.fa40c83b.webp"
   },
   {
     "id": "sunscar_warbone",
@@ -366,7 +404,8 @@
     "description": "历经沙海烈日淬炼的战骨，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 16,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-sunscar-warbone.03441afa.webp"
   },
   {
     "id": "sand_drake_marrow",
@@ -376,7 +415,8 @@
     "description": "吞沙地龙体内凝炼的金色骨髓，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 16,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-sand-drake-marrow.6319c505.webp"
   },
   {
     "id": "mirage_wind_core",
@@ -386,7 +426,8 @@
     "description": "能扰动风沙与幻影的灵核，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 16,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-mirage-wind-core.71630541.webp"
   },
   {
     "id": "war_soul_brand",
@@ -396,7 +437,8 @@
     "description": "上古战魂留下的不灭烙印，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 24,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-war-soul-brand.cd645b06.webp"
   },
   {
     "id": "riftsteel_heart",
@@ -406,7 +448,8 @@
     "description": "裂天战场铜傀核心中最坚韧的部分，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 24,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-riftsteel-heart.a6606d66.webp"
   },
   {
     "id": "voidwing_feather",
@@ -416,7 +459,8 @@
     "description": "穿过空间裂隙仍未折损的凶禽翎羽，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 24,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-voidwing-feather.c6383757.webp"
   },
   {
     "id": "astral_force_crystal",
@@ -426,7 +470,8 @@
     "description": "星陨海潮汐压缩而成的力量结晶，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 36,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-astral-force-crystal.312b5acd.webp"
   },
   {
     "id": "abyssal_marrow",
@@ -436,7 +481,8 @@
     "description": "深海异族与巨兽体内孕生的神髓，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 36,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-abyssal-marrow.d839b394.webp"
   },
   {
     "id": "starcurrent_fin",
@@ -446,7 +492,8 @@
     "description": "可借星潮瞬息远遁的幻鳍，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 36,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-starcurrent-fin.b32f88a5.webp"
   },
   {
     "id": "primordial_force_core",
@@ -456,7 +503,8 @@
     "description": "太虚遗境中凝聚原始伟力的核心，使用后永久增加力量。",
     "attribute": "strength",
     "attribute_gain": 55,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-primordial-force-core.1ac11d0f.webp"
   },
   {
     "id": "void_origin_marrow",
@@ -466,7 +514,8 @@
     "description": "经历虚空规则洗炼的道髓，使用后永久增加根骨。",
     "attribute": "constitution",
     "attribute_gain": 55,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-void-origin-marrow.16220ee4.webp"
   },
   {
     "id": "taixu_step_feather",
@@ -476,7 +525,8 @@
     "description": "蕴含太虚挪移道韵的灵羽，使用后永久增加身法。",
     "attribute": "agility",
     "attribute_gain": 55,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-taixu-step-feather.01b91de1.webp"
   },
   {
     "id": "holy_cultivation_pill",
@@ -485,7 +535,8 @@
     "rarity": "圣品",
     "description": "探险中偶然获得的圣品丹药，服下后直接增加当前境界的 1% 修为。",
     "cultivation_percent": 1,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-holy-cultivation-pill.91841660.webp"
   },
   {
     "id": "divine_cultivation_pill",
@@ -494,6 +545,7 @@
     "rarity": "神级",
     "description": "蕴含浓郁天地道韵的神级丹药，服下后直接增加当前境界的 10% 修为。",
     "cultivation_percent": 10,
-    "initial_quantity": 0
+    "initial_quantity": 0,
+    "icon": "./assets/items/item-divine-cultivation-pill.9a8928cf.webp"
   }
 ]
