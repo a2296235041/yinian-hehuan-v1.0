@@ -13,9 +13,9 @@ const preload = read('publish/src/scenes/PreloadScene.v025.js');
 const mainMenu = read('publish/src/scenes/MainMenuScene.js');
 const characterCreation = read('publish/src/scenes/CharacterCreationScene.v017.js');
 const portraitAssets = read('publish/src/assets/PlayerPortraitAssets.v002.js');
-const gameScenePreload = read('publish/src/assets/GameScenePreload.v056.js');
+const gameScenePreload = read('publish/src/assets/GameScenePreload.v057.js');
 const npcCards = read('publish/src/ui/NpcCardRenderer.js');
-const main = read('publish/src/boot/GameBootstrap.v056.js');
+const main = read('publish/src/boot/GameBootstrap.v057.js');
 
 assert.ok(html.includes('id="boot-splash"'));
 assert.ok(html.includes('<style data-critical-boot>'));

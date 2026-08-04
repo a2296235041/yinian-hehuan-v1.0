@@ -77,7 +77,11 @@
       await root.GameTournament.recordExchange(move, result);
       root.GameAudio?.sfx?.(result.winner === 'opponent' ? 'deny' : 'success');
       if (generation === openGeneration && !elements['tournament-screen'].hidden) {
-        finalStatus = result.fallback ? result.fallbackMessage : '对手回应与裁判点数已更新。';
+        finalStatus = result.fallback
+          ? result.fallbackMessage
+          : (result.source === 'ai-text'
+            ? '已采用 AI 正文，裁判点数由赛事规则补全。'
+            : '对手回应与裁判点数已更新。');
       }
     } catch (error) {
       if (generation === openGeneration) {

@@ -21,6 +21,10 @@ const responseTextSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentResponseText.js'),
   'utf8'
 );
+const outputSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/TournamentOutput.js'),
+  'utf8'
+);
 const promptSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentPrompt.js'),
   'utf8'
@@ -68,6 +72,7 @@ const window = {
 vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(authoritySource, { window, console: window.console, Math, JSON, Set });
 vm.runInNewContext(responseTextSource, { window, console: window.console, Math, JSON });
+vm.runInNewContext(outputSource, { window, console: window.console, Math, JSON, RegExp });
 vm.runInNewContext(promptSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(intentSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(judgeSource, { window, console: window.console, Math, JSON });
@@ -107,6 +112,8 @@ const active = {
   assert.ok(result.response.length >= 150);
   assert.ok(result.response.length <= 240);
   assert.equal(result.summary, result.response);
+  assert.equal(result.source, 'ai-json');
+  assert.equal(result.fallback, false);
   assert.equal(result.finished, false);
   assert.equal(result.relationshipChanges[0].delta, 3);
   assert.ok(result.playerDelta > 31);
@@ -185,6 +192,52 @@ const active = {
   assert.ok(adultAi.playerDelta > adultAi.opponentDelta);
   assert.equal(adultAi.verdict.includes('本回合判你占优'), true);
 
+  const plainAiText = '她借着交错的灵光向前踏出半步，剑锋没有立刻落下，而是在你肩侧停住。短暂的沉默后，她收紧手指，低声追问你是否还要继续，同时顺着当前距离调整呼吸与站位。看台上传来几声压低的议论，她却始终没有移开视线，只把尚未结束的回应留在你们之间。';
+  window.dzmm.completions = async (_config, callback) => {
+    callback(plainAiText, true);
+  };
+  const plainTextResult = await window.GameTournamentJudge.judge(
+    active, '我逼近中线，等待她接招。', tournamentState
+  );
+  assert.equal(plainTextResult.source, 'ai-text');
+  assert.equal(plainTextResult.fallback, false);
+  assert.equal(plainTextResult.response.startsWith(plainAiText), true);
+
+  window.dzmm.completions = async (_config, callback) => {
+    callback(`\`\`\`text\nresponse：${plainAiText}\n\`\`\``, true);
+  };
+  const fencedTextResult = await window.GameTournamentJudge.judge(
+    active, '我逼近中线，等待她接招。', tournamentState
+  );
+  assert.equal(fencedTextResult.source, 'ai-text');
+  assert.equal(fencedTextResult.response.startsWith(plainAiText), true);
+
+  window.dzmm.completions = async (_config, callback) => {
+    callback(`以下为结果：\n${JSON.stringify({
+      response: plainAiText,
+      verdictReason: '玩家占据中线主动。',
+      playerDelta: 25,
+      opponentDelta: 16,
+      matchResult: 'continue',
+      relationshipChanges: []
+    })}\n请查收。`, true);
+  };
+  const commentedJsonResult = await window.GameTournamentJudge.judge(
+    active, '我逼近中线，等待她接招。', tournamentState
+  );
+  assert.equal(commentedJsonResult.source, 'ai-json');
+  assert.equal(commentedJsonResult.response.startsWith(plainAiText), true);
+
+  window.dzmm.completions = async (_config, callback) => {
+    callback('```json\n{"playerDelta": 20}\n```', true);
+  };
+  const unusableResult = await window.GameTournamentJudge.judge(
+    active, '我逼近中线，等待她接招。', tournamentState
+  );
+  assert.equal(unusableResult.source, 'local-fallback');
+  assert.equal(unusableResult.fallback, true);
+  assert.equal(unusableResult.fallbackMessage.includes('未返回可用正文'), true);
+
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
   };
@@ -200,6 +253,18 @@ const active = {
   assert.equal(fallback.relationshipChanges[0].delta >= -4, true);
   assert.equal(fallback.relationshipChanges[0].delta <= 3, true);
 
+  window.dzmm.completions = async () => {
+    throw Object.assign(new Error('Request rejected'), { code: 'INVALID_REQUEST' });
+  };
+  const rejected = await window.GameTournamentJudge.judge(
+    active, '踏月追击', tournamentState
+  );
+  assert.equal(rejected.source, 'local-fallback');
+  assert.equal(rejected.fallbackMessage.includes('未被模型服务接受'), true);
+
+  window.dzmm.completions = async () => {
+    throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
+  };
   const controlledFallback = await window.GameTournamentJudge.judge(
     active, '我用吸奶神功贴身压制她，让她当场破防，手中兵刃也快拿不住。', tournamentState
   );

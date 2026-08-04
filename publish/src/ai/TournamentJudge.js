@@ -13,19 +13,6 @@
     }
     return value >>> 0;
   }
-  function parseJson(raw) {
-    const cleaned = text(raw, 8000)
-      .replace(/^```(?:json)?\s*/i, '')
-      .replace(/\s*```$/i, '');
-    try {
-      return JSON.parse(cleaned);
-    } catch (_) {
-      const start = cleaned.indexOf('{');
-      const end = cleaned.lastIndexOf('}');
-      if (start < 0 || end <= start) return null;
-      try { return JSON.parse(cleaned.slice(start, end + 1)); } catch (_) { return null; }
-    }
-  }
   function deterministicFallback(payload, reason) {
     const seed = hash(`${payload.turn}:${payload.move}:${payload.battleSummary}`);
     const intent = root.GameTournamentIntent.analyze(payload.move);
@@ -76,11 +63,12 @@
       finished,
       winner,
       relationshipChanges,
+      source: 'local-fallback',
       fallback: true,
       fallbackMessage: reason
     };
   }
-  function normalize(raw, payload) {
+  function normalize(raw, payload, source) {
     const base = deterministicFallback(payload, '');
     if (!raw || typeof raw !== 'object') return base;
     const proposedPlayer = number(raw.playerDelta, 0, 45, base.playerDelta);
@@ -119,7 +107,9 @@
       opponentDelta,
       finished,
       winner,
-      relationshipChanges
+      relationshipChanges,
+      source,
+      fallback: false
     };
   }
   function fallbackReason(error) {
@@ -133,6 +123,9 @@
     }
     if (code === 'RATE_LIMITED') {
       return 'AI 请求较多，本回合已由离线裁判完成，稍后可继续尝试。';
+    }
+    if (code === 'SENSITIVE_CONTENT_DETECTED' || code === 'INVALID_REQUEST') {
+      return '本次 AI 请求未被模型服务接受，本回合已由离线裁判完成。';
     }
     return 'AI 暂时不可用，本回合已由离线裁判完成。';
   }
@@ -167,9 +160,27 @@
         if (done) completed = true;
       });
       if (!completed) throw new Error('AI 响应未完整结束');
-      return normalize(parseJson(fullText), payload);
+      const output = root.GameTournamentOutput.parse(fullText);
+      if (!output) {
+        root.GameTrace?.('TournamentAI', 'empty-output', {
+          rawChars: fullText.length,
+          source: 'local-fallback'
+        });
+        return deterministicFallback(payload, 'AI 未返回可用正文，本回合已由离线裁判完成。');
+      }
+      const result = normalize(output.value, payload, output.source);
+      root.GameTrace?.('TournamentAI', 'response-resolved', {
+        rawChars: fullText.length,
+        responseChars: result.response.length,
+        source: result.source
+      });
+      return result;
     } catch (error) {
       console.error('武道解说失败:', error?.code || '', error?.message || '未知错误', error?.stack || '');
+      root.GameTrace?.('TournamentAI', 'request-fallback', {
+        code: error?.code || 'UNKNOWN_ERROR',
+        source: 'local-fallback'
+      });
       return deterministicFallback(payload, fallbackReason(error));
     }
   }

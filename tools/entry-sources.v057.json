@@ -66,6 +66,7 @@
   "src/ai/PrivateGroupDialogueService.v033.js",
   "src/ai/TournamentIntent.js",
   "src/ai/TournamentPrompt.js",
+  "src/ai/TournamentOutput.js",
   "src/ai/TournamentResponseText.js",
   "src/ai/TournamentJudge.js",
   "src/ai/AIService.v016.js",
@@ -107,7 +108,7 @@
   "src/scenes/MainMenuScene.js",
   "src/scenes/CharacterCreationScene.v017.js",
   "src/scenes/GameScene.js",
-  "src/assets/GameScenePreload.v056.js",
+  "src/assets/GameScenePreload.v057.js",
   "src/scenes/ShopScene.js",
   "src/scenes/InventoryScene.v021.js",
   "src/scenes/ExplorationScene.v023.js",
@@ -115,5 +116,5 @@
   "src/scenes/UIScene.js",
   "src/scenes/OverlayGuard.js",
   "src/settings/TrafficSaverPromptGuard.v023.js",
-  "src/boot/GameBootstrap.v056.js"
+  "src/boot/GameBootstrap.v057.js"
 ]
