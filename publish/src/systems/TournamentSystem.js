@@ -1,8 +1,12 @@
 (function installTournamentSystem(root) {
   'use strict';
   const MODE_INFO = Object.freeze({
-    internal: Object.freeze({ title: '宗门大比', reward: 120 }),
-    spirit: Object.freeze({ title: '灵界武道大会', reward: 300 })
+    internal: Object.freeze({
+      title: '宗门大比', reward: 120, requiredRealmIndex: 1, requiredRealmName: '筑基期'
+    }),
+    spirit: Object.freeze({
+      title: '灵界武道大会', reward: 300, requiredRealmIndex: 3, requiredRealmName: '元婴期'
+    })
   });
   const State = root.GameTournamentState;
   let state = State.fresh();
@@ -23,6 +27,18 @@
   }
   function currentDay() {
     return Math.max(1, Math.floor(Number(root.Game?.player?.day) || 1));
+  }
+  function getAccess(mode) {
+    const info = MODE_INFO[mode];
+    const realmIndex = Math.max(
+      0, Math.floor(Number(root.GameCultivation?.getSnapshot?.().realmIndex) || 0)
+    );
+    return {
+      unlocked: Boolean(info) && realmIndex >= info.requiredRealmIndex,
+      realmIndex,
+      requiredRealmIndex: info?.requiredRealmIndex ?? Number.POSITIVE_INFINITY,
+      requiredRealmName: info?.requiredRealmName || '未知境界'
+    };
   }
   function currentMatch(active = state.active) {
     return active?.round?.matches?.find((match) => match.id === active.round.playerMatchId) || null;
@@ -63,6 +79,10 @@
     return queue(async () => {
       await initialize();
       if (!MODE_INFO[mode]) throw new Error('未知赛事类型');
+      const access = getAccess(mode);
+      if (!access.unlocked) {
+        throw new Error(`${MODE_INFO[mode].title}需达到${access.requiredRealmName}后解锁`);
+      }
       if (state.active && state.active.phase !== 'event_complete') {
         throw new Error(`已有进行中的${MODE_INFO[state.active.mode].title}`);
       }
@@ -96,6 +116,7 @@
   }
   root.GameTournament = {
     MODE_INFO,
+    getAccess,
     initialize,
     getState: () => State.clone(state),
     exportState: () => State.clone(state),

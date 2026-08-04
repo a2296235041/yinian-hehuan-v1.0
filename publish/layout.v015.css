@@ -52,6 +52,24 @@
 }
 
 @media (max-width: 900px) and (max-height: 600px) {
+  .exploration-screen.is-detail .exploration-screen-main {
+    padding-bottom: calc(clamp(210px, 68dvh, 300px) + 16px);
+  }
+
+  .exploration-region-detail {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .exploration-region-detail h2 {
+    font-size: 22px;
+  }
+
+  .exploration-region-detail p {
+    margin: 2px 0;
+    font-size: 12px;
+  }
+
   .ai-dialogue-panel,
   .exploration-dialogue-panel {
     top: auto;

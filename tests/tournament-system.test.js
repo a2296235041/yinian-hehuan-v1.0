@@ -11,6 +11,7 @@ function source(file) {
 
 let saved = null;
 let stones = 0;
+let realmIndex = 0;
 const affinities = {};
 const roster = Array.from({ length: 12 }, (_, index) => ({
   id: index === 0 ? 'player' : `npc-${index}`,
@@ -46,6 +47,9 @@ const window = {
   GameTournamentRoster: {
     PLAYER_ID: 'player',
     build() { return JSON.parse(JSON.stringify(roster)); }
+  },
+  GameCultivation: {
+    getSnapshot: () => ({ realmIndex })
   },
   GameInventory: {
     async addSpiritStones(amount) {
@@ -115,6 +119,18 @@ async function winRound() {
 
 (async () => {
   await window.GameTournament.initialize();
+  assert.equal(window.GameTournament.getAccess('internal').unlocked, false);
+  await assert.rejects(
+    () => window.GameTournament.start('internal'),
+    /筑基期/
+  );
+  realmIndex = 1;
+  assert.equal(window.GameTournament.getAccess('internal').unlocked, true);
+  assert.equal(window.GameTournament.getAccess('spirit').unlocked, false);
+  await assert.rejects(
+    () => window.GameTournament.start('spirit'),
+    /元婴期/
+  );
   await window.GameTournament.start('internal', 'npc-7');
   assert.equal(window.GameTournament.getState().active.round.matches.length, 6);
   assert.deepEqual(

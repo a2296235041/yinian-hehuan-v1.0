@@ -75,6 +75,7 @@
 
   function showOverview(regions, onSelect) {
     const ui = elements();
+    ui.screen.classList.remove('is-detail');
     ui.title.textContent = '出山探险';
     ui.status.textContent = '选择一处区域，查看其中的机缘与风险。';
     ui.detail.hidden = true;
@@ -86,6 +87,7 @@
 
   function showDetail(region, onBack) {
     const ui = elements();
+    ui.screen.classList.add('is-detail');
     ui.title.textContent = `出山探险 · ${region.name}`;
     ui.detailName.textContent = region.name;
     ui.detailDescription.textContent = region.description;

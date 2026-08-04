@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.6.4">
+  <meta name="game-version" content="0.6.5">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.6.4',
-        build: '20260804.32',
-        cacheName: 'yinian-hehuan-v0.6.4-20260804.32',
-        entry: 'main.v064.js'
+        version: '0.6.5',
+        build: '20260804.33',
+        cacheName: 'yinian-hehuan-v0.6.5-20260804.33',
+        entry: 'main.v065.js'
       });
 
       root.GameRelease = release;
@@ -204,16 +204,16 @@
       to { transform: translateX(150%); }
     }
   </style>
-  <link rel="preload" href="./vendor/phaser.min.js?v=20260804-32" as="script">
-  <link rel="stylesheet" href="./style.css?v=20260804-32">
-  <link rel="stylesheet" href="./ui.css?v=20260804-32">
-  <link rel="stylesheet" href="./exploration.css?v=20260804-32">
-  <link rel="stylesheet" href="./theme.css?v=20260804-32">
-  <link rel="stylesheet" href="./layout.v015.css?v=20260804-32">
-  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260804-32">
-  <link rel="stylesheet" href="./tournament.v029.css?v=20260804-32">
-  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260804-32">
-  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260804-32">
+  <link rel="preload" href="./vendor/phaser.min.js?v=20260804-33" as="script">
+  <link rel="stylesheet" href="./style.css?v=20260804-33">
+  <link rel="stylesheet" href="./ui.css?v=20260804-33">
+  <link rel="stylesheet" href="./exploration.css?v=20260804-33">
+  <link rel="stylesheet" href="./theme.css?v=20260804-33">
+  <link rel="stylesheet" href="./layout.v015.css?v=20260804-33">
+  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260804-33">
+  <link rel="stylesheet" href="./tournament.v029.css?v=20260804-33">
+  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260804-33">
+  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260804-33">
 </head>
 <body>
   <main id="game-shell">
@@ -395,6 +395,9 @@
         <p id="exploration-screen-status" class="exploration-screen-status"></p>
         <div id="exploration-region-grid" class="exploration-region-grid"></div>
         <section id="exploration-region-detail" class="exploration-region-detail" hidden>
+          <div class="exploration-detail-ornament" aria-hidden="true">
+            <i></i><span>山行简报</span><i></i>
+          </div>
           <h2 id="exploration-region-name"></h2>
           <p id="exploration-region-description"></p>
           <p id="exploration-region-meta"></p>
@@ -484,7 +487,7 @@
     </section>
   </main>
 
-  <script defer src="./vendor/phaser.min.js?v=20260804-32"></script>
-  <script defer src="./main.v064.js?v=20260804-32"></script>
+  <script defer src="./vendor/phaser.min.js?v=20260804-33"></script>
+  <script defer src="./main.v065.js?v=20260804-33"></script>
 </body>
 </html>
