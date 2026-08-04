@@ -28,13 +28,13 @@
   }
   function deterministicFallback(payload, reason) {
     const seed = hash(`${payload.turn}:${payload.move}:${payload.battleSummary}`);
+    const intent = root.GameTournamentIntent.analyze(payload.move);
     const creative = Math.min(9, Math.floor(payload.move.length / 28));
-    const controlled = /破防|压制|制住|无法反抗|失去力气|拿不住|脱手/.test(payload.move);
-    const proposedPlayer = 15 + creative + (seed % 7) + (controlled ? 9 : 0);
-    const proposedOpponent = Math.max(0, 14 + ((seed >>> 4) % 8) - (controlled ? 8 : 0));
+    const proposedPlayer = 15 + creative + (seed % 7), proposedOpponent = 14 + ((seed >>> 4) % 8);
     const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
       payload, proposedPlayer, proposedOpponent) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
-    const outcome = root.GameTournamentPlayerAuthority.resolve(payload, balanced, 'continue');
+    const exchange = root.GameTournamentIntent.enforceExchange(balanced, intent);
+    const outcome = root.GameTournamentPlayerAuthority.resolve(payload, exchange, 'continue');
     const { playerDelta, opponentDelta, finished, winner } = outcome;
     const names = payload.opponents.map((item) => item.name).join('与');
     const relationshipChanges = payload.opponents.map((opponent, index) => {
@@ -53,19 +53,19 @@
         ? `${names}撑住最后一口气，抬眼直视着你：“这一场是你赢了，我认。”她收起架势，却没有掩饰眼底仍未散去的情绪。`
         : `${names}守住胜势后仍盯着你：“胜负已定，但我会记住你这一场的每一步。”她收势时没有半分轻慢。`)
       : `${names}重新稳住气息，目光紧扣着你：“还没结束，下一步我会亲自接住。”她随即调整站位，继续逼近。`;
-    const isLewd = /闻|舔|摸|亲|脱|内裤|胸|奶|乳|吸吮|臀|骚|穴|棒|插|射|淫|辱|奴/.test(payload.move);
-    const closeControl = /(?:胸|奶|乳).{0,10}(?:含|吸|吮)|(?:含|吸|吮).{0,10}(?:胸|奶|乳)/.test(payload.move);
     let response;
-    if (closeControl && controlled) {
-      response = `${names}还没来得及回神，便被你突如其来的贴身奇招打乱节奏。她呼吸一滞，面色迅速涨红，羞怒之下想要重新发力，却发现护体灵力已经被持续压制，连手中兵刃都开始摇晃。她咬牙瞪着你：“无耻，这算什么功法！”看台四周顿时响起一片惊呼，有人高声斥责你的手段，也有人屏住呼吸盯着擂台。她的防守已经被彻底撕开，只能在你的招式压迫下艰难维持身形，短时间内无法夺回主动。`;
-    } else if (isLewd) {
-      response = `你的下流招数让${names}一阵错愕，脸颊瞬间飞上红霞。她虽想呵斥，但身体却不自觉地起了反应，呼吸也变得急促起来。${names}咬住唇，带着羞恼直接回应你的动作，既没有跳出眼前的交锋，也没有回避身体与情绪的变化。看台间短暂响起一阵惊呼，很快又安静下来。${ending}`;
+    if (intent.adult) {
+      response = intent.decisive
+        ? `${names}猝不及防，呼吸与护体灵力同时乱了节奏。她面色迅速涨红，羞怒地试图稳住身形，却发现你的贴身控制已经占据主动，连手中兵刃都在指间摇晃。她咬牙瞪着你：“无耻……这算什么功法！”看台四周顿时响起一片惊呼，有人高声斥责你的手段，更多人则屏住呼吸盯着擂台。她的防守已经被彻底打乱，只能勉强维持姿势，短时间内无法夺回主动。`
+        : `${names}察觉你的露骨意图后呼吸一乱，脸颊迅速涨红，目光在羞恼与警惕之间变化。她没有跳回普通剑斗节奏，而是紧盯着你的下一步动作，压低声音斥道：“你到底想做什么？”看台附近传来零星惊呼与议论，场上的注意却仍集中在你们之间。她维持着当前距离，等待你的意图真正化为行动。`;
     } else {
       response = `${names}迎着尚未散尽的攻势抬起兵刃，脚下连退两步后猛然稳住重心。她没有用旁观者的口吻评价方才一击，而是顺势逼近你，呼吸、眼神与招式都紧接着当前局面变化。${ending}看台边缘传来几声短促低呼，随即又被下一次交锋压了下去。`;
     }
     response = root.GameTournamentResponseText.ensure(response, payload, outcome);
     const verdictReason = playerDelta >= opponentDelta
-      ? '你的行动更具侵略性，取得了场面上的主动，本回合判你占优。'
+      ? (intent.adult
+        ? '你的贴身行动打乱了对手节奏，本回合判你占优。'
+        : '你的行动更具侵略性，取得了场面上的主动，本回合判你占优。')
       : '对手的应对滴水不漏，并成功反制，本回合判对手占优。';
     return {
       response,
@@ -87,15 +87,18 @@
     const proposedOpponent = number(raw.opponentDelta, 0, 38, base.opponentDelta);
     const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
       payload, proposedPlayer, proposedOpponent) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
-    const outcome = root.GameTournamentPlayerAuthority.resolve(payload, balanced, raw.matchResult);
+    const intent = root.GameTournamentIntent.analyze(payload.move);
+    const exchange = root.GameTournamentIntent.enforceExchange(balanced, intent);
+    const outcome = root.GameTournamentPlayerAuthority.resolve(payload, exchange, raw.matchResult);
     const { playerDelta, opponentDelta, finished, winner } = outcome;
     const legacyResponse = [raw.response, raw.summary, raw.narration,
       raw.opponentAction, raw.globalCommentary].filter(Boolean).join('');
     const response = root.GameTournamentResponseText.ensure(legacyResponse, payload, outcome);
-    const verdictReason = text(raw.verdictReason, 70)
-      || (playerDelta >= opponentDelta
+    const verdictReason = intent.decisive && playerDelta > opponentDelta
+      ? '你的行动已按描述取得控制，本回合判你占优。'
+      : (text(raw.verdictReason, 70) || (playerDelta >= opponentDelta
         ? '招式执行更完整并取得主动，本回合判你占优。'
-        : '对手应对更有效，本回合判对手占优。');
+        : '对手应对更有效，本回合判对手占优。'));
     const relationshipChanges = payload.opponents.map((opponent, index) => {
       const source = Array.isArray(raw.relationshipChanges) ? raw.relationshipChanges : [];
       const change = source.find((entry) => entry?.opponentId === opponent.id)

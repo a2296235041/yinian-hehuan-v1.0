@@ -64,6 +64,7 @@
   "src/ai/NPCGiftInteraction.js",
   "src/ai/PrivateGroupPrompts.v033.js",
   "src/ai/PrivateGroupDialogueService.v033.js",
+  "src/ai/TournamentIntent.js",
   "src/ai/TournamentPrompt.js",
   "src/ai/TournamentResponseText.js",
   "src/ai/TournamentJudge.js",
@@ -106,7 +107,7 @@
   "src/scenes/MainMenuScene.js",
   "src/scenes/CharacterCreationScene.v017.js",
   "src/scenes/GameScene.js",
-  "src/assets/GameScenePreload.v055.js",
+  "src/assets/GameScenePreload.v056.js",
   "src/scenes/ShopScene.js",
   "src/scenes/InventoryScene.v021.js",
   "src/scenes/ExplorationScene.v023.js",
@@ -114,5 +115,5 @@
   "src/scenes/UIScene.js",
   "src/scenes/OverlayGuard.js",
   "src/settings/TrafficSaverPromptGuard.v023.js",
-  "src/boot/GameBootstrap.v055.js"
+  "src/boot/GameBootstrap.v056.js"
 ]

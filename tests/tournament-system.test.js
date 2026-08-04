@@ -128,6 +128,12 @@ async function winRound() {
     true
   );
   assert.equal(
+    window.GameTournament.getState().active.logs.some((entry) => (
+      entry.speaker === '裁判判决' && entry.text.startsWith('裁判判决')
+    )),
+    false
+  );
+  assert.equal(
     window.GameTournament.getState().active.logs.some((entry) => entry.speaker === '关系变化'),
     false
   );

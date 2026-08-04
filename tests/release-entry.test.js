@@ -8,12 +8,12 @@ const crypto = require('node:crypto');
 const html = fs.readFileSync(path.join(__dirname, '../publish/index.html'), 'utf8');
 const publishDirectory = path.join(__dirname, '../publish');
 const manifest = JSON.parse(fs.readFileSync(
-  path.join(__dirname, '../tools/entry-sources.v055.json'),
+  path.join(__dirname, '../tools/entry-sources.v056.json'),
   'utf8'
 ));
-const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v055.js'), 'utf8');
-const version = '0.5.5';
-const build = '20260804.23';
+const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v056.js'), 'utf8');
+const version = '0.5.6';
+const build = '20260804.24';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -27,7 +27,7 @@ assert.ok(html.includes(`./${expectedEntry}`));
 assert.deepEqual(releaseEntries, [expectedEntry]);
 assert.deepEqual(
   [...html.matchAll(/<script defer src="([^"]+)"><\/script>/g)].map((match) => match[1]),
-  ['./vendor/phaser.min.js?v=20260804-23', './main.v055.js?v=20260804-23']
+  ['./vendor/phaser.min.js?v=20260804-24', './main.v056.js?v=20260804-24']
 );
 assert.ok(html.includes('./cheat-panel.v021.css'));
 assert.ok(html.includes('./tournament.v029.css'));
@@ -58,6 +58,7 @@ assert.ok(
   './src/systems/TournamentBattleState.js',
   './src/systems/TournamentRelations.js',
   './src/systems/TournamentSystem.js',
+  './src/ai/TournamentIntent.js',
   './src/ai/TournamentPrompt.js',
   './src/ai/TournamentResponseText.js',
   './src/ai/TournamentJudge.js',
@@ -75,8 +76,8 @@ assert.ok(
   './src/ui/ShopGridView.js',
   './src/ui/PlayerStatusHeader.js',
   './src/ui/PlayerStatusView.js',
-  './src/assets/GameScenePreload.v055.js',
-  './src/boot/GameBootstrap.v055.js'
+  './src/assets/GameScenePreload.v056.js',
+  './src/boot/GameBootstrap.v056.js'
 ].forEach((entry) => {
   assert.ok(
     manifest.includes(entry.slice(2)),

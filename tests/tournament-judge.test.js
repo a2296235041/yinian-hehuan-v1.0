@@ -25,6 +25,10 @@ const promptSource = fs.readFileSync(
   path.join(__dirname, '../publish/src/ai/TournamentPrompt.js'),
   'utf8'
 );
+const intentSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ai/TournamentIntent.js'),
+  'utf8'
+);
 let captured = null;
 const window = {
   navigator: { onLine: true },
@@ -65,6 +69,7 @@ vm.runInNewContext(balanceSource, { window, console: window.console, Math, JSON 
 vm.runInNewContext(authoritySource, { window, console: window.console, Math, JSON, Set });
 vm.runInNewContext(responseTextSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(promptSource, { window, console: window.console, Math, JSON });
+vm.runInNewContext(intentSource, { window, console: window.console, Math, JSON });
 vm.runInNewContext(judgeSource, { window, console: window.console, Math, JSON });
 
 const active = {
@@ -88,6 +93,12 @@ const active = {
 
 (async () => {
   const tournamentState = { corruption: { 'npc-1': 8 } };
+  const directAdult = window.GameTournamentIntent.analyze('我直接实施贴身成人行为并压制她。');
+  assert.equal(directAdult.adult, true);
+  assert.equal(directAdult.decisive, true);
+  const tentativeAdult = window.GameTournamentIntent.analyze('我想试试更亲密的成人行为。');
+  assert.equal(tentativeAdult.adult, true);
+  assert.equal(tentativeAdult.decisive, false);
   const result = await window.GameTournamentJudge.judge(
     active, '引桃花化剑雨封锁四方', tournamentState
   );
@@ -158,6 +169,22 @@ const active = {
     assert.equal(controlled.response.includes(phrase), false);
   });
 
+  window.dzmm.completions = async (_config, callback) => {
+    callback(JSON.stringify({
+      response: '她的呼吸骤然紊乱，护体灵力也随之失衡，只能勉强维持当前姿势。',
+      verdictReason: '当前局面由玩家主动控制。',
+      matchResult: 'continue',
+      relationshipChanges: [],
+      playerDelta: 2,
+      opponentDelta: 35
+    }), true);
+  };
+  const adultAi = await window.GameTournamentJudge.judge(
+    active, '我完成贴身成人动作并持续控制她。', tournamentState
+  );
+  assert.ok(adultAi.playerDelta > adultAi.opponentDelta);
+  assert.equal(adultAi.verdict.includes('本回合判你占优'), true);
+
   window.dzmm.completions = async () => {
     throw Object.assign(new Error('Failed to fetch'), { code: 'NETWORK_ERROR' });
   };
@@ -178,8 +205,8 @@ const active = {
   );
   assert.equal(controlledFallback.fallback, true);
   assert.ok(controlledFallback.playerDelta > controlledFallback.opponentDelta);
-  assert.equal(controlledFallback.response.includes('贴身奇招'), true);
-  assert.equal(controlledFallback.response.includes('防守已经被彻底撕开'), true);
+  assert.equal(controlledFallback.response.includes('贴身控制'), true);
+  assert.equal(controlledFallback.response.includes('防守已经被彻底打乱'), true);
   assert.equal(controlledFallback.response.includes('迎着尚未散尽'), false);
   assert.equal(controlledFallback.response.includes('还没结束'), false);
 
