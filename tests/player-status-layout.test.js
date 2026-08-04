@@ -11,12 +11,13 @@ function read(relativePath) {
 const view = read('publish/src/ui/PlayerStatusView.js');
 const header = read('publish/src/ui/PlayerStatusHeader.js');
 const scene = read('publish/src/scenes/UIScene.js');
-const manifest = read('tools/entry-sources.v047.json');
+const manifest = read('tools/entry-sources.v048.json');
 
-assert.ok(header.includes("text(scene, 104, 65, '历程'"));
-assert.ok(header.includes("text(scene, 260, 65, '境界'"));
-assert.ok(header.includes('lineBetween(246, 53, 246, 80)'));
-assert.ok(header.includes('Game.TextBoxUtils.fit(values.name, 16, 1)'));
+assert.ok(header.includes('fillRoundedRect(12, 11, 360, 78, 7)'));
+assert.ok(header.includes("text(scene, 84, 61, '历程'"));
+assert.ok(header.includes("text(scene, 238, 61, '境界'"));
+assert.ok(header.includes('lineBetween(224, 48, 224, 73)'));
+assert.ok(header.includes('Game.TextBoxUtils.fit(values.name, 17, 1)'));
 assert.ok(view.includes("'修行档案'"));
 assert.ok(view.includes("'基础属性'"));
 assert.ok(view.includes('progressFill.setScale'));

@@ -9,12 +9,12 @@
     originalPreload?.call(this);
     const resources = [
       ['image', 'bg-sect-map', './assets/generated/sect-map.2a28a8cb.webp'],
-      ['json', 'npcs', './assets/data/npcs.v025.json?v=20260804-15'],
-      ['json', 'tournament_npcs', './assets/data/tournament_npcs.json?v=20260804-15'],
-      ['json', 'npc_openings', './assets/data/npc_openings.v025.json?v=20260804-15'],
-      ['json', 'items', './assets/data/items.json?v=20260804-15'],
-      ['json', 'exploration_regions', './assets/data/exploration_regions.json?v=20260804-15'],
-      ['json', 'enemies', './assets/data/enemies.json?v=20260804-15']
+      ['json', 'npcs', './assets/data/npcs.v025.json?v=20260804-16'],
+      ['json', 'tournament_npcs', './assets/data/tournament_npcs.json?v=20260804-16'],
+      ['json', 'npc_openings', './assets/data/npc_openings.v025.json?v=20260804-16'],
+      ['json', 'items', './assets/data/items.json?v=20260804-16'],
+      ['json', 'exploration_regions', './assets/data/exploration_regions.json?v=20260804-16'],
+      ['json', 'enemies', './assets/data/enemies.json?v=20260804-16']
     ];
     this.cameras.main.setBackgroundColor('#09100e');
     const label = this.add.text(640, 330, '正在布置宗门地图', {
