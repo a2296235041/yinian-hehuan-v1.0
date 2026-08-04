@@ -48,7 +48,7 @@ Game.Scenes.PreloadScene = class PreloadScene extends Phaser.Scene {
         this.load.image('bg-sect', './assets/generated/sect-courtyard.c4be5633.webp');
         this.load.json(
             'character_origins',
-            './assets/data/character_origins.v025.json?v=20260804-8'
+            './assets/data/character_origins.v025.json?v=20260804-9'
         );
     }
 

@@ -56,6 +56,9 @@
     const companions = Array.isArray(context?.companions)
       ? context.companions.map((item) => item?.name).filter(Boolean)
       : [];
+    const playerReference = ['cultivation', 'new_day', 'time_shift'].includes(kind)
+      ? `玩家身份：${playerIdentity.role}。本事件必须以玩家为叙事主语，始终使用第二人称“你”或“你的”；严禁用“他、她、它、该弟子、玩家”代称玩家，也不得切换为第三人称。`
+      : `玩家身份：${playerIdentity.role}，叙事中使用“${playerIdentity.pronoun}”指代玩家。`;
     const companionInstruction = longMode && companions.length
       ? `本次参与合修的角色有：${companions.join('、')}。${companions.map((name) => {
           const npc = root.GameNPCRelations.getByName(name);
@@ -67,7 +70,7 @@
         ? '你正在扮演遭遇信息中的成年女性NPC。'
         : '你是仙侠养成游戏的叙事导演，只负责补充氛围和动作描写。',
       `当前事件：${eventNames[kind] || kind}。`,
-      `玩家身份：${playerIdentity.role}，叙事中使用“${playerIdentity.pronoun}”指代玩家。`,
+      playerReference,
       playerIdentity.intimacyRule,
       `已经确定的事实与数值：${facts}`,
       '不得修改、虚构或重新计算任何属性、伤害、奖励、好感和修为数值。',
