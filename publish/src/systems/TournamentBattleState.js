@@ -22,23 +22,31 @@
     return names.join('与') || '对手';
   }
 
+  function responseText(result, speaker) {
+    let value = String(result.response || result.summary || '').trim();
+    while (speaker && value.startsWith(speaker)) {
+      value = value.slice(speaker.length).trimStart();
+    }
+    return value.slice(0, 240);
+  }
+
   function applyExchange(active, move, result) {
     active.turn += 1;
     active.scores.player += Math.max(0, Math.floor(Number(result.playerDelta) || 0));
     active.scores.opponent += Math.max(0, Math.floor(Number(result.opponentDelta) || 0));
+    const speaker = responseSpeaker(active);
+    const response = responseText(result, speaker);
     active.logs.push({ speaker: '你', text: String(move).slice(0, 500) });
     active.logs.push({
-      speaker: responseSpeaker(active),
+      speaker,
       kind: 'opponent-response',
-      text: String(result.response || result.summary || '').slice(0, 240)
+      text: response
     });
     active.logs.push({
       speaker: '裁判判决',
       text: String(result.verdict || '').slice(0, 140)
     });
-    active.battleSummary = String(
-      result.response || result.summary || active.battleSummary
-    ).slice(0, 240);
+    active.battleSummary = response || String(active.battleSummary).slice(0, 240);
   }
 
   root.GameTournamentBattleState = Object.freeze({ prepare, applyExchange });

@@ -72,7 +72,7 @@ vm.runInNewContext(source('publish/src/systems/TournamentSystem.js'), context);
 
 async function winRound() {
   await window.GameTournament.recordExchange('第一招', {
-    response: '对手退守后立即稳住架势，抬眼向你回应：“这一招我接下了，继续。”',
+    response: 'NPC 7退守后立即稳住架势，抬眼向你回应：“这一招我接下了，继续。”',
     verdict: '裁判判决：你 +30 点，对手 +10 点。你取得主动。',
     relationshipChanges: [{ opponentId: 'npc-1', delta: 3, reason: '欣赏你的招式。' }],
     playerDelta: 30,
@@ -117,7 +117,9 @@ async function winRound() {
   assert.equal(window.GameTournament.getState().active.phase, 'round_complete');
   assert.equal(
     window.GameTournament.getState().active.logs.some((entry) => (
-      entry.kind === 'opponent-response' && entry.speaker === 'NPC 7'
+      entry.kind === 'opponent-response'
+        && entry.speaker === 'NPC 7'
+        && entry.text.startsWith('退守后')
     )),
     true
   );

@@ -116,6 +116,7 @@ const active = {
   assert.equal(captured.messages[0].content.includes('合理续写的定义'), true);
   assert.equal(captured.messages[0].content.includes('禁止新增与之冲突的拒绝'), true);
   assert.equal(captured.messages[0].content.includes('不得替玩家角色新增'), true);
+  assert.equal(captured.messages[0].content.includes('不要以对手姓名开头'), true);
   assert.equal(captured.messages[0].content.includes('matchResult'), true);
   assert.equal(captured.messages[0].content.includes('不要复述、引用'), true);
   assert.equal(captured.messages[1].content.includes('最后一个瞬间之后'), true);
@@ -171,6 +172,16 @@ const active = {
   assert.equal(fallback.verdict.includes('裁判判决'), true);
   assert.equal(fallback.relationshipChanges[0].delta >= -4, true);
   assert.equal(fallback.relationshipChanges[0].delta <= 3, true);
+
+  const controlledFallback = await window.GameTournamentJudge.judge(
+    active, '我用吸奶神功贴身压制她，让她当场破防，手中兵刃也快拿不住。', tournamentState
+  );
+  assert.equal(controlledFallback.fallback, true);
+  assert.ok(controlledFallback.playerDelta > controlledFallback.opponentDelta);
+  assert.equal(controlledFallback.response.includes('贴身奇招'), true);
+  assert.equal(controlledFallback.response.includes('防守已经被彻底撕开'), true);
+  assert.equal(controlledFallback.response.includes('迎着尚未散尽'), false);
+  assert.equal(controlledFallback.response.includes('还没结束'), false);
 
   const directed = await window.GameTournamentJudge.judge(
     active,

@@ -78,7 +78,10 @@
             ? ' is-relation'
             : (entry.speaker === '签表异动' ? ' is-tamper' : '')));
       const row = node('p', `tournament-log${special}`);
-      row.append(node('strong', '', entry.speaker), document.createTextNode(entry.text));
+      row.append(
+        node('strong', '', entry.speaker),
+        document.createTextNode(`：${entry.text}`)
+      );
       elements['tournament-history'].append(row);
     });
     elements['tournament-history'].scrollTop = elements['tournament-history'].scrollHeight;

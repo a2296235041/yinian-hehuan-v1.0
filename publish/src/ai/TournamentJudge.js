@@ -29,7 +29,9 @@
   function deterministicFallback(payload, reason) {
     const seed = hash(`${payload.turn}:${payload.move}:${payload.battleSummary}`);
     const creative = Math.min(9, Math.floor(payload.move.length / 28));
-    const proposedPlayer = 15 + creative + (seed % 7), proposedOpponent = 14 + ((seed >>> 4) % 8);
+    const controlled = /破防|压制|制住|无法反抗|失去力气|拿不住|脱手/.test(payload.move);
+    const proposedPlayer = 15 + creative + (seed % 7) + (controlled ? 9 : 0);
+    const proposedOpponent = Math.max(0, 14 + ((seed >>> 4) % 8) - (controlled ? 8 : 0));
     const balanced = root.GameTournamentCombatBalance?.adjustExchange?.(
       payload, proposedPlayer, proposedOpponent) || { playerDelta: proposedPlayer, opponentDelta: proposedOpponent };
     const outcome = root.GameTournamentPlayerAuthority.resolve(payload, balanced, 'continue');
@@ -51,9 +53,12 @@
         ? `${names}撑住最后一口气，抬眼直视着你：“这一场是你赢了，我认。”她收起架势，却没有掩饰眼底仍未散去的情绪。`
         : `${names}守住胜势后仍盯着你：“胜负已定，但我会记住你这一场的每一步。”她收势时没有半分轻慢。`)
       : `${names}重新稳住气息，目光紧扣着你：“还没结束，下一步我会亲自接住。”她随即调整站位，继续逼近。`;
-    const isLewd = /闻|舔|摸|亲|脱|内裤|胸|臀|骚|穴|棒|插|射|淫|辱|奴/.test(payload.move);
+    const isLewd = /闻|舔|摸|亲|脱|内裤|胸|奶|乳|吸吮|臀|骚|穴|棒|插|射|淫|辱|奴/.test(payload.move);
+    const closeControl = /(?:胸|奶|乳).{0,10}(?:含|吸|吮)|(?:含|吸|吮).{0,10}(?:胸|奶|乳)/.test(payload.move);
     let response;
-    if (isLewd) {
+    if (closeControl && controlled) {
+      response = `${names}还没来得及回神，便被你突如其来的贴身奇招打乱节奏。她呼吸一滞，面色迅速涨红，羞怒之下想要重新发力，却发现护体灵力已经被持续压制，连手中兵刃都开始摇晃。她咬牙瞪着你：“无耻，这算什么功法！”看台四周顿时响起一片惊呼，有人高声斥责你的手段，也有人屏住呼吸盯着擂台。她的防守已经被彻底撕开，只能在你的招式压迫下艰难维持身形，短时间内无法夺回主动。`;
+    } else if (isLewd) {
       response = `你的下流招数让${names}一阵错愕，脸颊瞬间飞上红霞。她虽想呵斥，但身体却不自觉地起了反应，呼吸也变得急促起来。${names}咬住唇，带着羞恼直接回应你的动作，既没有跳出眼前的交锋，也没有回避身体与情绪的变化。看台间短暂响起一阵惊呼，很快又安静下来。${ending}`;
     } else {
       response = `${names}迎着尚未散尽的攻势抬起兵刃，脚下连退两步后猛然稳住重心。她没有用旁观者的口吻评价方才一击，而是顺势逼近你，呼吸、眼神与招式都紧接着当前局面变化。${ending}看台边缘传来几声短促低呼，随即又被下一次交锋压了下去。`;
@@ -118,7 +123,7 @@
     const code = error?.code || '';
     const message = error?.message || '';
     if (code === 'NETWORK_ERROR' || code === 'TIMEOUT' || /failed to fetch/i.test(message)) {
-      return '网络连接异常，本回合已由离线裁判完成；下一招会再次尝试 AI 全局解说。';
+      return '网络连接异常，本回合已由离线裁判完成；下一招会再次尝试 AI 对手回应。';
     }
     if (code === 'QUOTA_EXHAUSTED' || code === 'VIP_REQUIRED') {
       return '当前 AI 额度不足，本回合已由离线裁判完成。';
