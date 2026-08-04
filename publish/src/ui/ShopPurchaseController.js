@@ -23,18 +23,9 @@
         return;
       }
       root.GameAudio.sfx('success');
-      const fact = `花费 ${result.totalPrice} 灵石，购得${result.item.name} ×${result.quantity}。`;
-      scene.statusText.setText('交易完成，AI 正在补全这一幕…');
-      const story = await root.GameNarrative.generateDetailed('shop_purchase', {
-        shop: root.GameShop.getShop(scene.buildingId)?.name,
-        item: result.item.name,
-        quantity: result.quantity,
-        effect: root.GameShop.effectLabel(result.item, result.quantity),
-        balance: result.balance
-      }, fact);
-      if (requestId === scene.requestId && scene.statusText?.active) {
-        scene.statusText.setText(root.Game.TextBoxUtils.fit(story, 56, 2));
-      }
+      scene.statusText.setText(
+        `交易完成：花费 ${result.totalPrice} 灵石，购得${result.item.name} ×${result.quantity}，剩余灵石 ${result.balance}。`
+      );
     } catch (error) {
       console.error('批量购买失败:', error.code || '', error.message, error.stack);
       if (requestId === scene.requestId && scene.statusText?.active) {

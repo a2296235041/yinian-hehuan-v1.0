@@ -130,7 +130,6 @@ Game.Scenes.ShopScene = class ShopScene extends Phaser.Scene {
         this.requestId += 1;
         this.quantityDialog?.close();
         this.quantityDialog = null;
-        if (this.busy) window.GameNarrative.cancel();
         window.GameAudio.sfx('click');
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
