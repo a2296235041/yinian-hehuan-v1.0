@@ -2,6 +2,7 @@
   'use strict';
 
   const font = '"Noto Serif SC", serif';
+  const cropCache = new WeakMap();
 
   function text(scene, x, y, value, style, originX = 0) {
     return scene.add.text(x, y, value, { fontFamily: font, ...style })
@@ -11,22 +12,83 @@
   function avatarSourceRect(source) {
     const width = Number(source?.width) || 1;
     const height = Number(source?.height) || 1;
-    if (width / height > 1) {
-      const cropWidth = height;
-      return {
-        x: Math.floor((width - cropWidth) / 2),
+    const cached = cropCache.get(source);
+    if (cached) return cached;
+
+    const fallback = width / height > 1
+      ? {
+        x: Math.floor((width - height) / 2),
         y: 0,
-        width: cropWidth,
+        width: height,
         height
+      }
+      : {
+        x: 0,
+        y: Math.floor((height - width) * 0.12),
+        width,
+        height: width
       };
+
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      context.drawImage(source, 0, 0, width, height);
+      const pixels = context.getImageData(0, 0, width, height).data;
+      const bounds = (startY, endY) => {
+        let minX = width;
+        let minY = endY;
+        let maxX = -1;
+        let maxY = -1;
+        for (let y = startY; y < endY; y += 2) {
+          for (let x = 0; x < width; x += 2) {
+            if (pixels[(y * width + x) * 4 + 3] < 16) continue;
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+          }
+        }
+        return { minX, minY, maxX, maxY };
+      };
+      const full = bounds(0, height);
+      if (full.maxX >= full.minX && full.maxY >= full.minY) {
+        const contentHeight = full.maxY - full.minY + 1;
+        const focus = bounds(
+          full.minY,
+          Math.min(height, full.minY + Math.floor(contentHeight * 0.38))
+        );
+        const focusWidth = Math.max(1, focus.maxX - focus.minX + 1);
+        const contentWidth = Math.max(1, full.maxX - full.minX + 1);
+        const cropSize = Math.min(
+          width,
+          height,
+          Math.max(focusWidth * 1.42, contentWidth * 0.58)
+        );
+        const centerX = (focus.minX + focus.maxX) / 2;
+        const x = Math.max(0, Math.min(
+          width - cropSize,
+          centerX - cropSize / 2
+        ));
+        const y = Math.max(0, Math.min(
+          height - cropSize,
+          full.minY - cropSize * 0.04
+        ));
+        const rect = {
+          x: Math.floor(x),
+          y: Math.floor(y),
+          width: Math.floor(cropSize),
+          height: Math.floor(cropSize)
+        };
+        cropCache.set(source, rect);
+        return rect;
+      }
+    } catch (error) {
+      console.warn('头像透明边界分析失败，使用等比裁切:', error.message);
     }
-    const cropHeight = width;
-    return {
-      x: 0,
-      y: Math.floor((height - cropHeight) * 0.12),
-      width,
-      height: cropHeight
-    };
+    cropCache.set(source, fallback);
+    return fallback;
   }
 
   function fitAvatar(image) {
@@ -62,7 +124,7 @@
     scene.add.circle(50, 50, 26, 0x17110f, 1)
       .setStrokeStyle(1, 0xe5bd78, 0.86).setDepth(21);
     const maskShape = scene.make.graphics({ x: 0, y: 0, add: false });
-    maskShape.fillCircle(50, 50, 22);
+    maskShape.fillCircle(50, 50, 24);
     const avatarImage = scene.add.image(50, 50, 'npc-scholar')
       .setDisplaySize(52, 52).setMask(maskShape.createGeometryMask()).setDepth(22);
     fitAvatar(avatarImage);
