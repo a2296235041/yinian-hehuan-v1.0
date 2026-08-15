@@ -24,8 +24,8 @@ const window = {
 vm.runInNewContext(source, { window, Set, Map, Math, JSON });
 
 const prompts = window.GamePrivateGroupPrompts;
-const minimumReply = '回应'.repeat(35);
-const maximumReply = '动作'.repeat(75);
+const minimumReply = '回应'.repeat(60);
+const maximumReply = '动作'.repeat(100);
 const result = {
   sceneBeat: '三人交换目光。',
   responses: [
@@ -36,11 +36,11 @@ const result = {
 assert.equal(prompts.validate(result, companions.map((npc) => npc.id)), true);
 assert.equal(prompts.validate({
   sceneBeat: '',
-  responses: [{ speakerId: 'npc_a', type: 'dialogue', content: '短'.repeat(69) }]
+  responses: [{ speakerId: 'npc_a', type: 'dialogue', content: '短'.repeat(119) }]
 }, companions.map((npc) => npc.id)), false);
 assert.equal(prompts.validate({
   sceneBeat: '',
-  responses: [{ speakerId: 'npc_a', type: 'dialogue', content: '长'.repeat(151) }]
+  responses: [{ speakerId: 'npc_a', type: 'dialogue', content: '长'.repeat(201) }]
 }, companions.map((npc) => npc.id)), false);
 assert.equal(prompts.validate({
   sceneBeat: '',
@@ -51,9 +51,9 @@ const stored = prompts.format(result, companions);
 const parsed = prompts.parse(stored, companions);
 assert.equal(parsed.some((entry) => entry.speakerName === '沈玉枝'), true);
 assert.equal(parsed.some((entry) => entry.type === 'action'), true);
-assert.equal(parsed.find((entry) => entry.speakerId === 'npc_a').content.length, 70);
-assert.equal(parsed.find((entry) => entry.speakerId === 'npc_b').content.length, 150);
-assert.match(prompts.instructions(companions, { name: '听竹林' }), /不少于70字且不多于150字/);
+assert.equal(parsed.find((entry) => entry.speakerId === 'npc_a').content.length, 120);
+assert.equal(parsed.find((entry) => entry.speakerId === 'npc_b').content.length, 200);
+assert.match(prompts.instructions(companions, { name: '听竹林' }), /不少于120字且不多于200字/);
 assert.match(prompts.sessionId(companions), /^private_group_[a-z0-9]+$/);
 assert.equal('fallback' in prompts, false);
 console.log('private group prompts test passed');
