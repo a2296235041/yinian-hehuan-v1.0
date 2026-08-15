@@ -8,7 +8,12 @@
   let currentNpcId = null;
 
   function close() {
+    if (!modal) return;
     modal.hidden = true;
+    modal.setAttribute('hidden', '');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.style.display = 'none';
+    list?.replaceChildren();
     currentNpcId = null;
   }
 
@@ -29,7 +34,11 @@
         button.disabled = true;
         const npcId = currentNpcId;
         close();
-        await root.GameAI.giveGift(item.id, npcId);
+        try {
+          await root.GameAI.giveGift(item.id, npcId);
+        } finally {
+          close();
+        }
       });
       fragment.append(button);
     });
@@ -41,6 +50,9 @@
     currentNpcId = npcId;
     render();
     modal.hidden = false;
+    modal.removeAttribute('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    modal.style.removeProperty('display');
   }
 
   function init() {

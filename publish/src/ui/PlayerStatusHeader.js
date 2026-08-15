@@ -54,12 +54,14 @@
   }
 
   function createHeadTexture(header, textureKey) {
-    const source = header.scene.textures.get(textureKey)?.getSourceImage?.();
+    const scene = header?.scene;
+    if (!scene?.textures) return textureKey;
+    const source = scene.textures.get(textureKey)?.getSourceImage?.();
     if (!source) return textureKey;
     const headKey = `player-avatar-head-${textureKey}`;
-    const texture = header.scene.textures.exists(headKey)
-      ? header.scene.textures.get(headKey)
-      : header.scene.textures.createCanvas(headKey, 104, 104);
+    const texture = scene.textures.exists(headKey)
+      ? scene.textures.get(headKey)
+      : scene.textures.createCanvas(headKey, 104, 104);
     const context = texture.getContext();
     const rect = avatarSourceRect(source);
     context.clearRect(0, 0, 104, 104);
@@ -125,7 +127,7 @@
     hitArea.on('pointerout', () => panel.setAlpha(1));
     hitArea.on('pointerdown', onToggle);
     return {
-      panel, decor, maskShape, avatarImage, nameText, dayText, realmText,
+      scene, panel, decor, maskShape, avatarImage, nameText, dayText, realmText,
       toggleText, hitArea
     };
   }

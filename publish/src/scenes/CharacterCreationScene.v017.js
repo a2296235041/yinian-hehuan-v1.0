@@ -11,6 +11,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         this.originPortrait = null;
         this.attributeTexts = [];
         this.pageText = null;
+        this.portraitWarmupScheduled = false;
     }
 
     init() {
@@ -18,30 +19,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
     }
 
     preload() {
-        const added = Game.PlayerPortraitAssets.preloadFirst(this);
-        if (!added) return;
-        const width = this.cameras.main.width;
-        const height = this.cameras.main.height;
         this.cameras.main.setBackgroundColor('#09100e');
-        const label = this.add.text(width / 2, height / 2 - 18, '正在展开命格画卷', {
-            fontFamily: '"STKaiti", "KaiTi", "Noto Serif SC", serif',
-            fontSize: '28px',
-            color: '#fff4f7'
-        }).setOrigin(0.5);
-        const progress = this.add.text(width / 2, height / 2 + 28, '0%', {
-            fontFamily: '"Noto Serif SC", serif',
-            fontSize: '15px',
-            color: '#e8b7c7'
-        }).setOrigin(0.5);
-        const onProgress = (value) => {
-            if (progress.active) progress.setText(`${Math.round(value * 100)}%`);
-        };
-        this.load.on('progress', onProgress);
-        this.load.once('complete', () => {
-            this.load.off('progress', onProgress);
-            if (label.active) label.destroy();
-            if (progress.active) progress.destroy();
-        });
     }
 
     create() {
@@ -126,6 +104,21 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         Game.SceneTransition.fadeIn(this);
     }
 
+    schedulePortraitWarmup() {
+        if (this.portraitWarmupScheduled) return;
+        this.portraitWarmupScheduled = true;
+        this.time.delayedCall(900, () => {
+            if (!this.scene.isActive()) return;
+            if (this.load.isLoading()) {
+                this.portraitWarmupScheduled = false;
+                this.schedulePortraitWarmup();
+                return;
+            }
+            const added = Game.PlayerPortraitAssets.preloadRemaining(this);
+            if (added) this.load.start();
+        });
+    }
+
     makeArrow(x, y, label, action) {
         return Game.UISkin.makeButton(this, x, y, label, action, {
             width: 72, height: 58, fontSize: 34, variant: 'secondary'
@@ -157,6 +150,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
         if (this.textures.exists(textureKey)) {
             this.originPortrait.setTexture(textureKey).setVisible(true);
             Game.PlayerPortraitAssets.fit(this.originPortrait, 190, 300);
+            this.schedulePortraitWarmup();
             return;
         }
         this.originPortrait.setVisible(false);
@@ -167,6 +161,7 @@ Game.Scenes.CharacterCreationScene = class CharacterCreationScene extends Phaser
             }
             this.originPortrait.setTexture(loadedKey).setVisible(true);
             Game.PlayerPortraitAssets.fit(this.originPortrait, 190, 300);
+            this.schedulePortraitWarmup();
         }).catch((error) => {
             console.error('身份立绘加载失败:', error.message, error.stack);
         });
