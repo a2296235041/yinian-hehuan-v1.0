@@ -20,7 +20,7 @@
       : '';
     if (portraitPath) {
       const image = node('img');
-      image.src = portraitPath;
+      image.src = root.Game?.AssetUrl?.withVersion?.(portraitPath) || portraitPath;
       image.alt = '';
       frame.append(image);
     } else {

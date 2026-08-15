@@ -13,7 +13,7 @@
     "signature_move": "桃烟缚月",
     "power": 73,
     "combat_bias": "control",
-    "portrait_key": ""
+    "portrait_key": "npc-shen-yuzhi"
   },
   {
     "id": "lu_qianxue",
@@ -29,7 +29,7 @@
     "signature_move": "寒香七折",
     "power": 70,
     "combat_bias": "swift",
-    "portrait_key": ""
+    "portrait_key": "npc-lu-qianxue"
   },
   {
     "id": "tang_miaoyin",
@@ -45,7 +45,7 @@
     "signature_move": "醉梦千铃",
     "power": 66,
     "combat_bias": "control",
-    "portrait_key": ""
+    "portrait_key": "npc-tang-miaoyin"
   },
   {
     "id": "pei_zhaoying",
@@ -61,7 +61,7 @@
     "signature_move": "照影无声",
     "power": 75,
     "combat_bias": "assault",
-    "portrait_key": ""
+    "portrait_key": "npc-pei-zhaoying"
   },
   {
     "id": "gu_qingluo",
@@ -77,7 +77,7 @@
     "signature_move": "一线霜天",
     "power": 82,
     "combat_bias": "balanced",
-    "portrait_key": ""
+    "portrait_key": "npc-gu-qingluo"
   },
   {
     "id": "jiang_yechun",
@@ -93,7 +93,7 @@
     "signature_move": "断岳沉锋",
     "power": 80,
     "combat_bias": "guard",
-    "portrait_key": ""
+    "portrait_key": "npc-jiang-yechun"
   },
   {
     "id": "ning_feixing",
@@ -109,7 +109,7 @@
     "signature_move": "星坠十三闪",
     "power": 76,
     "combat_bias": "swift",
-    "portrait_key": ""
+    "portrait_key": "npc-ning-feixing"
   },
   {
     "id": "wen_yaosu",
@@ -125,7 +125,7 @@
     "signature_move": "百草回天域",
     "power": 78,
     "combat_bias": "guard",
-    "portrait_key": ""
+    "portrait_key": "npc-wen-yaosu"
   },
   {
     "id": "luo_feihong",
@@ -141,7 +141,7 @@
     "signature_move": "绯蝎噬心",
     "power": 77,
     "combat_bias": "swift",
-    "portrait_key": ""
+    "portrait_key": "npc-luo-feihong"
   },
   {
     "id": "ji_mingzhu",
@@ -157,7 +157,7 @@
     "signature_move": "九曜丹火轮",
     "power": 81,
     "combat_bias": "assault",
-    "portrait_key": ""
+    "portrait_key": "npc-ji-mingzhu"
   },
   {
     "id": "yue_tinglan",
@@ -173,7 +173,7 @@
     "signature_move": "听潮忘弦",
     "power": 83,
     "combat_bias": "control",
-    "portrait_key": ""
+    "portrait_key": "npc-yue-tinglan"
   },
   {
     "id": "shangguan_zhiyin",
@@ -189,7 +189,7 @@
     "signature_move": "焚音天舞",
     "power": 80,
     "combat_bias": "swift",
-    "portrait_key": ""
+    "portrait_key": "npc-shangguan-zhiyin"
   },
   {
     "id": "su_qingque",
@@ -205,7 +205,7 @@
     "signature_move": "青雀惊雷拍",
     "power": 74,
     "combat_bias": "assault",
-    "portrait_key": ""
+    "portrait_key": "npc-su-qingque"
   },
   {
     "id": "jiang_zhaoyue",
@@ -221,7 +221,7 @@
     "signature_move": "昭明问心剑",
     "power": 84,
     "combat_bias": "balanced",
-    "portrait_key": ""
+    "portrait_key": "npc-jiang-zhaoyue"
   },
   {
     "id": "gu_yunzheng",
@@ -237,7 +237,7 @@
     "signature_move": "清平护世诀",
     "power": 75,
     "combat_bias": "guard",
-    "portrait_key": ""
+    "portrait_key": "npc-gu-yunzheng"
   },
   {
     "id": "shen_jingchen",
@@ -253,6 +253,6 @@
     "signature_move": "山河济世阵",
     "power": 79,
     "combat_bias": "control",
-    "portrait_key": ""
+    "portrait_key": "npc-shen-jingchen"
   }
 ]

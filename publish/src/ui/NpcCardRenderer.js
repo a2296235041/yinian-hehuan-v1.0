@@ -46,6 +46,54 @@ Game.NpcCardRenderer = {
         if (npcId === 'xiao_qingxuan') {
             return './assets/generated/npc-standee-xiao-qingxuan.7a93f059.v070.webp';
         }
+        if (npcId === 'shen_yuzhi') {
+            return './assets/generated/npc-standee-shen-yuzhi.c1c8214b.v071.png';
+        }
+        if (npcId === 'lu_qianxue') {
+            return './assets/generated/npc-standee-lu-qianxue.c3166763.v071.png';
+        }
+        if (npcId === 'tang_miaoyin') {
+            return './assets/generated/npc-standee-tang-miaoyin.e1f1a9be.v071.png';
+        }
+        if (npcId === 'pei_zhaoying') {
+            return './assets/generated/npc-standee-pei-zhaoying.5a0aa77e.v071.png';
+        }
+        if (npcId === 'gu_qingluo') {
+            return './assets/generated/npc-standee-gu-qingluo.0b001be5.v071.png';
+        }
+        if (npcId === 'jiang_yechun') {
+            return './assets/generated/npc-standee-jiang-yechun.4ff3d3a8.v071.png';
+        }
+        if (npcId === 'ning_feixing') {
+            return './assets/generated/npc-standee-ning-feixing.173d4662.v071.png';
+        }
+        if (npcId === 'wen_yaosu') {
+            return './assets/generated/npc-standee-wen-yaosu.667562ad.v071.png';
+        }
+        if (npcId === 'luo_feihong') {
+            return './assets/generated/npc-standee-luo-feihong.62eb13f5.v071.png';
+        }
+        if (npcId === 'ji_mingzhu') {
+            return './assets/generated/npc-standee-ji-mingzhu.c8c0d813.v071.png';
+        }
+        if (npcId === 'yue_tinglan') {
+            return './assets/generated/npc-standee-yue-tinglan.5376b0e9.v071.png';
+        }
+        if (npcId === 'shangguan_zhiyin') {
+            return './assets/generated/npc-standee-shangguan-zhiyin.e3930001.v071.png';
+        }
+        if (npcId === 'su_qingque') {
+            return './assets/generated/npc-standee-su-qingque.e51229af.v071.png';
+        }
+        if (npcId === 'jiang_zhaoyue') {
+            return './assets/generated/npc-standee-jiang-zhaoyue.7495384c.v071.png';
+        }
+        if (npcId === 'gu_yunzheng') {
+            return './assets/generated/npc-standee-gu-yunzheng.14102b9d.v071.png';
+        }
+        if (npcId === 'shen_jingchen') {
+            return './assets/generated/npc-standee-shen-jingchen.77ae0aa7.v071.png';
+        }
         return './assets/generated/scholar-disciple.e2aa08f6.webp';
     },
 

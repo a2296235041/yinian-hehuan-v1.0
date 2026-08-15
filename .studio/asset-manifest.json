@@ -1,7 +1,7 @@
 {
   "version": 1,
   "createdAt": "2026-07-23T12:36:05Z",
-  "updatedAt": "2026-08-15T08:30:00Z",
+  "updatedAt": "2026-08-15T08:45:00Z",
   "assets": [
     {
       "name": "sect-courtyard",
@@ -2381,6 +2381,182 @@
       },
       "traceId": "trace_msej5cdu_ta0ns7w9",
       "createdAt": "2026-08-04T10:44:33.590Z"
+    },
+    {
+      "name": "npc-standee-shen-yuzhi",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-shen-yuzhi.c1c8214b.v071.png",
+      "contentHash": "c1c8214b",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-lu-qianxue",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-lu-qianxue.c3166763.v071.png",
+      "contentHash": "c3166763",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-tang-miaoyin",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-tang-miaoyin.e1f1a9be.v071.png",
+      "contentHash": "e1f1a9be",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-pei-zhaoying",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-pei-zhaoying.5a0aa77e.v071.png",
+      "contentHash": "5a0aa77e",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-gu-qingluo",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-gu-qingluo.0b001be5.v071.png",
+      "contentHash": "0b001be5",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-jiang-yechun",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-jiang-yechun.4ff3d3a8.v071.png",
+      "contentHash": "4ff3d3a8",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-ning-feixing",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-ning-feixing.173d4662.v071.png",
+      "contentHash": "173d4662",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-wen-yaosu",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-wen-yaosu.667562ad.v071.png",
+      "contentHash": "667562ad",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-luo-feihong",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-luo-feihong.62eb13f5.v071.png",
+      "contentHash": "62eb13f5",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-ji-mingzhu",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-ji-mingzhu.c8c0d813.v071.png",
+      "contentHash": "c8c0d813",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-yue-tinglan",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-yue-tinglan.5376b0e9.v071.png",
+      "contentHash": "5376b0e9",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-shangguan-zhiyin",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-shangguan-zhiyin.e3930001.v071.png",
+      "contentHash": "e3930001",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-su-qingque",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-su-qingque.e51229af.v071.png",
+      "contentHash": "e51229af",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-jiang-zhaoyue",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-jiang-zhaoyue.7495384c.v071.png",
+      "contentHash": "7495384c",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-gu-yunzheng",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-gu-yunzheng.14102b9d.v071.png",
+      "contentHash": "14102b9d",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
+    },
+    {
+      "name": "npc-standee-shen-jingchen",
+      "status": "success",
+      "path": "publish/assets/generated/npc-standee-shen-jingchen.77ae0aa7.v071.png",
+      "contentHash": "77ae0aa7",
+      "model": "uploaded",
+      "size": "832x1248",
+      "wantsTransparent": true,
+      "outputFormat": "png",
+      "createdAt": "2026-08-15T08:45:00Z"
     }
   ]
 }
