@@ -243,6 +243,7 @@
       }
       pending = true;
       input.value = '';
+      root.Game?.EventBus?.emit?.('tutorial-dialogue-sent', { npcId: currentNpcId });
       try {
         const result = await sendCurrentMessage(text);
         if (result?.ok === false && !input.value) input.value = text;

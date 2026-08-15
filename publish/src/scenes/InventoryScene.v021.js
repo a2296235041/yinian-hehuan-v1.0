@@ -22,6 +22,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.scene.setVisible(false, 'GameScene');
         this.scene.setVisible(false, 'UIScene');
         window.GameModelUI.setMode('hidden');
+        Game.EventBus.emit('tutorial-inventory-opened');
         this.add.image(640, 360, 'bg-sect').setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.8)
             .setInteractive();
@@ -87,6 +88,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.quantityDialog = null;
         window.GameNarrative.cancel();
         window.GameAudio.sfx('click');
+        Game.EventBus.emit('tutorial-inventory-closed');
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
             this.scene.stop();

@@ -40,6 +40,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             Game.SceneTransition.fadeIn(this);
             this.scene.launch('UIScene');
             if (this.savedSnapshot) this.showSavedLocation(this.savedSnapshot.location);
+            Game.EventBus.emit('tutorial-game-ready', { newGame: this.newGame });
         }).catch((error) => {
             console.error('玩家状态读取失败:', error.code || '', error.message, error.stack);
             window.GameSaveRecovery?.reportStorageReadFailure?.('player-state', error, '玩家状态');
@@ -191,6 +192,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         npcs.forEach((npc, index) => {
             Game.NpcCardRenderer.create(this, npc, startX + index * gap);
         });
+        Game.EventBus.emit('tutorial-building-opened', { id: building.id });
     }
 
     showSavedLocation(location) {

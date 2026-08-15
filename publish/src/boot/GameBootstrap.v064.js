@@ -22,6 +22,7 @@
     runService('突破面板', () => root.GameBreakthrough.init());
     runService('存档恢复界面', () => root.GameSaveRecovery.init());
     runService('存档界面', () => root.GameSaveUI.init());
+    runService('新手引导', () => root.GameTutorial.init());
     runService('赛事面板', () => root.GameTournamentPanel.init());
     runService('赛事进度', () => root.GameTournament.initialize());
     runService('自动存档', () => root.GameAutoSave.init());
