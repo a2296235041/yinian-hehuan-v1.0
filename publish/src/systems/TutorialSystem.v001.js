@@ -61,7 +61,7 @@
     {
       title: '第九步 · 送出一份心意',
       body: '打开赠礼面板，选择一件礼物送给她。好感提升后，会解锁更多互动与突破机会。',
-      target: { type: 'dom', selector: '#dialogue-gift' }
+      target: null
     }
   ];
   let active = false;
