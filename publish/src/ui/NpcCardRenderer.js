@@ -135,7 +135,7 @@ Game.NpcCardRenderer = {
             scene.load.on('loaderror', onError);
             scene.load.image(
                 key,
-                root.Game.AssetUrl.withVersion(this.portraitPath(npc.id))
+                Game.AssetUrl.withVersion(this.portraitPath(npc.id))
             );
             if (!scene.load.isLoading()) scene.load.start();
         }).finally(() => this.pending.delete(key));

@@ -7,7 +7,7 @@ const { spawnSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
 const manifestPath = path.join(__dirname, 'entry-sources.v067.json');
-const outputPath = path.join(root, 'publish/main.v071.js');
+const outputPath = path.join(root, 'publish/main.v072.js');
 const sources = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
   .map((file) => path.join(root, 'publish', file));
 
@@ -43,5 +43,5 @@ sources.forEach((file) => {
   sourceHash.update('\0');
 });
 const digest = sourceHash.digest('hex').slice(0, 16);
-fs.writeFileSync(outputPath, `/* release 0.7.1 sources:${digest} */\n${bundle}\n`);
+fs.writeFileSync(outputPath, `/* release 0.7.2 sources:${digest} */\n${bundle}\n`);
 console.log(`Built ${path.relative(root, outputPath)} from ${sources.length} files`);

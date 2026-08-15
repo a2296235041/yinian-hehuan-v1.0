@@ -38,7 +38,7 @@ Game.BuildingAssets = {
             };
             scene.load.once(eventName, onComplete);
             scene.load.on('loaderror', onError);
-            scene.load.image(textureKey, root.Game.AssetUrl.withVersion(path));
+            scene.load.image(textureKey, Game.AssetUrl.withVersion(path));
             if (!scene.load.isLoading()) scene.load.start();
         }).finally(() => this.pending.delete(textureKey));
 
