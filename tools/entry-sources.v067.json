@@ -4,6 +4,7 @@
   "src/platform/OrientationManager.js",
   "src/utils/EventBus.js",
   "src/utils/SceneTransition.js",
+  "src/assets/AssetUrl.js",
   "src/ui/TextBoxUtils.js",
   "src/systems/TimeSystem.js",
   "src/ui/SceneBackdrop.js",

@@ -29,7 +29,7 @@
       };
       scene.load.once(complete, onComplete);
       scene.load.on('loaderror', onError);
-      scene.load.image(textureKey, item.icon);
+      scene.load.image(textureKey, root.Game.AssetUrl.withVersion(item.icon));
       if (!scene.load.isLoading()) scene.load.start();
     }).finally(() => pending.delete(textureKey));
     pending.set(textureKey, task);

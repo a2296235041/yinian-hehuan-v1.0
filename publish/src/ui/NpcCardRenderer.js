@@ -20,31 +20,31 @@ Game.NpcCardRenderer = {
 
     portraitPath(npcId) {
         if (npcId === 'su_meier') {
-            return './assets/generated/npc-standee-su-meier.a9f08237.webp';
+            return './assets/generated/npc-standee-su-meier.a9f08237.v070.webp';
         }
         if (npcId === 'liu_hanyan') {
-            return './assets/generated/npc-standee-liu-hanyan.340893ff.webp';
+            return './assets/generated/npc-standee-liu-hanyan.340893ff.v070.webp';
         }
         if (npcId === 'han_yueshuang') {
-            return './assets/generated/npc-standee-han-yueshuang.352ae25d.webp';
+            return './assets/generated/npc-standee-han-yueshuang.352ae25d.v070.webp';
         }
         if (npcId === 'hu_jiuer') {
-            return './assets/generated/npc-standee-hu-jiuer.a10661ad.webp';
+            return './assets/generated/npc-standee-hu-jiuer.a10661ad.v070.webp';
         }
         if (npcId === 'yun_shuiyao') {
-            return './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp';
+            return './assets/generated/npc-standee-yun-shuiyao.38bab51c.v070.webp';
         }
         if (npcId === 'mo_qiaoer') {
-            return './assets/generated/npc-standee-mo-qiaoer.webp';
+            return './assets/generated/npc-standee-mo-qiaoer.64f6011d.v070.webp';
         }
         if (npcId === 'bai_zhi') {
-            return './assets/generated/npc-standee-bai-zhi.79c8c1df.webp';
+            return './assets/generated/npc-standee-bai-zhi.79c8c1df.v070.webp';
         }
         if (npcId === 'qin_wanqing') {
-            return './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp';
+            return './assets/generated/npc-standee-qin-wanqing.f515aa6e.v070.webp';
         }
         if (npcId === 'xiao_qingxuan') {
-            return './assets/generated/npc-standee-xiao-qingxuan.7a93f059.webp';
+            return './assets/generated/npc-standee-xiao-qingxuan.7a93f059.v070.webp';
         }
         return './assets/generated/scholar-disciple.e2aa08f6.webp';
     },
@@ -85,7 +85,10 @@ Game.NpcCardRenderer = {
             };
             scene.load.once(complete, onComplete);
             scene.load.on('loaderror', onError);
-            scene.load.image(key, this.portraitPath(npc.id));
+            scene.load.image(
+                key,
+                root.Game.AssetUrl.withVersion(this.portraitPath(npc.id))
+            );
             if (!scene.load.isLoading()) scene.load.start();
         }).finally(() => this.pending.delete(key));
         this.pending.set(key, task);

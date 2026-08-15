@@ -20,7 +20,7 @@
         'anklet. Do not add weapons or dark armor. This clause overrides conflicting accessory details.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：金色镂空侧发饰、白色低胸内裙、水绿透明长袖外袍、青色腰带、金色脚链。',
-      referenceAsset: './assets/generated/npc-standee-su-meier.a9f08237.webp'
+      referenceAsset: './assets/generated/npc-standee-su-meier.a9f08237.v070.webp'
     },
     liu_hanyan: {
       prompt: [
@@ -40,7 +40,7 @@
         'cloak sleeves, black gloves, and gold-edged wing-shaped shoulders. Preserve this silhouette.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：蓝紫长发、深蓝花饰与小金冠、黑蓝金深领礼服、披风长袖、黑手套、金边翼肩。',
-      referenceAsset: './assets/generated/npc-standee-liu-hanyan.340893ff.webp'
+      referenceAsset: './assets/generated/npc-standee-liu-hanyan.340893ff.v070.webp'
     },
     han_yueshuang: {
       prompt: [
@@ -60,7 +60,7 @@
         'brown discipline rod, and one coiled red whip. No visible sword and no shoulder armor.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：丰盈高挑、黑棕盘发与小金冠、红眸、黑红绳结执法裙、黑丝袜、戒尺与红鞭；不出现剑和肩甲。',
-      referenceAsset: './assets/generated/npc-standee-han-yueshuang.352ae25d.webp'
+      referenceAsset: './assets/generated/npc-standee-han-yueshuang.352ae25d.v070.webp'
     },
     yun_shuiyao: {
       prompt: [
@@ -80,7 +80,7 @@
         'calligraphy scroll with dark-green jade rollers. Do not add shoes, armor, or weapons.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：金色短卷发、蓝眸、白色透明露肩长裙、浅蓝绣边与腰间蓝宝石、赤足、绿色玉轴书卷。',
-      referenceAsset: './assets/generated/npc-standee-yun-shuiyao.38bab51c.webp'
+      referenceAsset: './assets/generated/npc-standee-yun-shuiyao.38bab51c.v070.webp'
     },
     qin_wanqing: {
       prompt: [
@@ -100,7 +100,7 @@
         'garters, and silver high heels. Do not add goggles, a tool belt, or a visible weapon.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：玫红长卷发遮住一侧眼睛、绿眸、黑棕短披肩、银蓝裹胸与短裙、深色长袜、金链腿饰、银色高跟鞋。',
-      referenceAsset: './assets/generated/npc-standee-qin-wanqing.f515aa6e.webp'
+      referenceAsset: './assets/generated/npc-standee-qin-wanqing.f515aa6e.v070.webp'
     },
     mo_qiaoer: {
       prompt: [
@@ -120,7 +120,7 @@
         'armored boots, and a turquoise pendant. Keep the energetic raised-hand pose and adult features.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：成年娇小、暖棕肤色、金色短发带珊瑚色发梢、红琥珀眼、铜护目镜、绿色工匠短装、毛边短裤与不对称护靴。',
-      referenceAsset: './assets/generated/npc-standee-mo-qiaoer.64f6011d.webp'
+      referenceAsset: './assets/generated/npc-standee-mo-qiaoer.64f6011d.v070.webp'
     },
     bai_zhi: {
       prompt: [
@@ -140,7 +140,7 @@
         'bare feet. No crown, no weapon, no visible medicine pouch, and no elaborate hair ornaments.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：苍白纤细但胸部丰满、黑色披发、低眉羞红、近透明白纱裙、浅蓝披袖、小型蓝色腰饰、赤足。',
-      referenceAsset: './assets/generated/npc-standee-bai-zhi.79c8c1df.webp'
+      referenceAsset: './assets/generated/npc-standee-bai-zhi.79c8c1df.v070.webp'
     },
     hu_jiuer: {
       prompt: [
@@ -160,7 +160,7 @@
         'gold sandals, and exactly nine enormous fluffy lavender tails forming a full fan behind her.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：紫色长发与巨大狐耳、额心紫宝石金链、闭眼狡黠笑、紫色舞衣与金色链饰、金凉鞋、九条巨大薰衣草色狐尾。',
-      referenceAsset: './assets/generated/npc-standee-hu-jiuer.a10661ad.webp'
+      referenceAsset: './assets/generated/npc-standee-hu-jiuer.a10661ad.v070.webp'
     },
     xiao_qingxuan: {
       prompt: [
@@ -180,7 +180,7 @@
         'delicate silver wrist ornament, and bare feet. No visible sword, armor, scroll, or fox traits.'
       ].join(' '),
       portraitNotes: '以现有立绘为最终准则：浅金超长卷发、青绿眸、羞红矛盾神情、白色透明长裙与浅青边、高开衩露出红色内衬、青色吊坠、赤足。',
-      referenceAsset: './assets/generated/npc-standee-xiao-qingxuan.7a93f059.webp'
+      referenceAsset: './assets/generated/npc-standee-xiao-qingxuan.7a93f059.v070.webp'
     }
   });
   function getProfile(npcId) {

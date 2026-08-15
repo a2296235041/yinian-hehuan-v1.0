@@ -6,12 +6,12 @@ var Game = window.Game || {};
  */
 Game.BuildingAssets = {
     paths: Object.freeze({
-        'bg-welcome-pavilion': './assets/generated/bg-welcome-pavilion.98ecba18.webp',
-        'bg-master-palace': './assets/generated/bg-master-palace.02e6fa03.webp',
-        'bg-discipline-hall': './assets/generated/bg-discipline-hall.da2025ff.webp',
-        'bg-archive-tower': './assets/generated/bg-archive-tower.4610c08f.webp',
-        'bg-craft-workshop': './assets/generated/bg-craft-workshop.89c3e161.webp',
-        'bg-rear-sanctuary': './assets/generated/bg-rear-sanctuary.0abf97c6.webp'
+        'bg-welcome-pavilion': './assets/generated/bg-welcome-pavilion.98ecba18.v070.webp',
+        'bg-master-palace': './assets/generated/bg-master-palace.02e6fa03.v070.webp',
+        'bg-discipline-hall': './assets/generated/bg-discipline-hall.da2025ff.v070.webp',
+        'bg-archive-tower': './assets/generated/bg-archive-tower.4610c08f.v070.webp',
+        'bg-craft-workshop': './assets/generated/bg-craft-workshop.89c3e161.v070.webp',
+        'bg-rear-sanctuary': './assets/generated/bg-rear-sanctuary.0abf97c6.v070.webp'
     }),
     pending: new Map(),
 
@@ -38,7 +38,7 @@ Game.BuildingAssets = {
             };
             scene.load.once(eventName, onComplete);
             scene.load.on('loaderror', onError);
-            scene.load.image(textureKey, path);
+            scene.load.image(textureKey, root.Game.AssetUrl.withVersion(path));
             if (!scene.load.isLoading()) scene.load.start();
         }).finally(() => this.pending.delete(textureKey));
 
