@@ -26,7 +26,8 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.add.image(640, 360, 'bg-sect').setDisplaySize(1280, 720);
         this.add.rectangle(640, 360, 1280, 720, 0x06100d, 0.8)
             .setInteractive();
-        Game.CommerceDecor.createShell(this, '储物袋', '灵物归藏 · 随取随用');
+        const shell = Game.CommerceDecor.createShell(this, '储物袋', '灵物归藏 · 随取随用');
+        Game.TutorialAnchors?.set?.('inventory-panel', shell);
         this.spiritStoneText = Game.CommerceDecor.addCurrency(this, 174, 113);
         Game.UISkin.makeButton(this, 1170, 54, '返回', () => this.close(), {
             width: 120, height: 46, fontSize: 19, variant: 'secondary'
@@ -90,6 +91,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         window.GameAudio.sfx('click');
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
+            Game.TutorialAnchors?.clear?.('inventory-panel');
             // 只有底层场景恢复后才通知引导，避免第八步显示在建筑内部。
             Game.EventBus.emit('tutorial-inventory-closed');
             this.scene.stop();
@@ -110,6 +112,7 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.quantityDialog?.close();
         this.quantityDialog = null;
         window.GameCheatPanel?.close?.();
+        Game.TutorialAnchors?.clear?.('inventory-panel');
         Game.EventBus.off('inventory-changed', this.renderItems, this);
         this.restoreBaseScenes();
     }

@@ -5,12 +5,20 @@
     {
       title: '第一步 · 认识山门',
       body: '先去迎仙阁报到。这里是你在合欢宗遇见第一位师姐的地方。',
-      target: { x: 70, y: 100, width: 310, height: 250 }
+      target: {
+        type: 'anchor',
+        name: 'welcome-pavilion',
+        fallback: { x: 70, y: 100, width: 310, height: 250 }
+      }
     },
     {
       title: '第二步 · 结识苏媚儿',
       body: '点击苏媚儿的立绘，打开人物对话。她会成为你认识宗门的第一扇门。',
-      target: { x: 125, y: 125, width: 400, height: 485 }
+      target: {
+        type: 'anchor',
+        name: 'su-meier',
+        fallback: { x: 125, y: 125, width: 400, height: 485 }
+      }
     },
     {
       title: '第三步 · 说出第一句话',
@@ -25,30 +33,33 @@
     {
       title: '第五步 · 先让自己变强',
       body: '回到山门后点击修炼。修为会增长，但会消耗今日精力与修炼次数。',
-      target: { x: 885, y: 642, width: 125, height: 70 }
+      target: { type: 'anchor', name: 'hud-cultivate', fallback: { x: 885, y: 642, width: 125, height: 70 } }
     },
     {
       title: '第六步 · 查看储物袋',
       body: '打开储物袋，看看你随身携带的灵物。物品可以用于修炼，也可以赠予 NPC。',
-      target: { x: 1115, y: 642, width: 125, height: 70 }
+      target: { type: 'anchor', name: 'hud-inventory', fallback: { x: 1115, y: 642, width: 125, height: 70 } }
     },
     {
       title: '第七步 · 认识你的灵物',
       body: '这里会显示灵石、丹药和礼物。点击右上角返回，继续完成今天的拜访。',
-      target: { x: 245, y: 120, width: 790, height: 480 }
+      target: {
+        type: 'anchor',
+        name: 'inventory-panel',
+        fallback: { x: 245, y: 120, width: 790, height: 480 }
+      }
     },
     {
-      title: '第八步 · 回到山门总览',
-      body: '储物袋关闭后会回到山门总览。点击迎仙阁的标记，继续去见苏媚儿。',
-      target: { x: 70, y: 100, width: 310, height: 250 }
+      title: '第八步 · 再见苏媚儿',
+      body: '储物袋关闭后仍会留在迎仙阁。直接点击苏媚儿的立绘，继续今天的拜访。',
+      target: {
+        type: 'anchor',
+        name: 'su-meier',
+        fallback: { x: 125, y: 125, width: 400, height: 485 }
+      }
     },
     {
-      title: '第九步 · 再见苏媚儿',
-      body: '再次点击苏媚儿的立绘，打开刚才熟悉的对话面板。',
-      target: { x: 125, y: 125, width: 400, height: 485 }
-    },
-    {
-      title: '第十步 · 送出一份心意',
+      title: '第九步 · 送出一份心意',
       body: '打开赠礼面板，选择一件礼物送给她。好感提升后，会解锁更多互动与突破机会。',
       target: { type: 'dom', selector: '#dialogue-gift' }
     }
@@ -93,7 +104,9 @@
       if (!payload?.newGame && !saved.started) return;
       if (saved.completed) return;
       active = true;
-      stepIndex = Math.min(saved.step, steps.length - 1);
+      // 兼容旧版十步引导：旧第八步只是返回地图提示，直接并入新版第八步。
+      const migratedStep = saved.step === 8 ? 7 : (saved.step >= 9 ? saved.step - 1 : saved.step);
+      stepIndex = Math.min(Math.max(0, migratedStep), steps.length - 1);
       void save(stepIndex);
       render();
     });
@@ -115,12 +128,11 @@
 
   function onBuilding(data) {
     if (data?.id === 'welcome-pavilion' && stepIndex === 0) move(1);
-    else if (data?.id === 'welcome-pavilion' && stepIndex === 7) move(8);
   }
 
   function onDialogueOpen(data) {
     if (data?.npcId === 'su_meier' && stepIndex === 1) move(2);
-    else if (data?.npcId === 'su_meier' && stepIndex === 8) move(9);
+    else if (data?.npcId === 'su_meier' && stepIndex === 7) move(8);
   }
 
   function init() {
@@ -142,12 +154,10 @@
       if (stepIndex === 5) move(6);
     });
     root.Game.EventBus.on('tutorial-inventory-closed', () => {
-      if (stepIndex !== 6) return;
-      root.Game.EventBus.emit('tutorial-return-to-sect-map');
-      move(7);
+      if (stepIndex === 6) move(7);
     });
     root.Game.EventBus.on('affinity-changed', (data) => {
-      if (data?.npcId === 'su_meier' && data?.source === 'gift' && stepIndex === 9) {
+      if (data?.npcId === 'su_meier' && data?.source === 'gift' && stepIndex === 8) {
         move(steps.length);
       }
     });

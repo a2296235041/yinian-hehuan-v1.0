@@ -14,6 +14,35 @@
   let target = null;
   let onSkip = () => {};
   let doneMode = false;
+  const anchors = new Map();
+
+  root.GameTutorialAnchors = Object.freeze({
+    set(name, object) {
+      if (name && object) anchors.set(name, object);
+      root.GameTutorialOverlay?.position?.();
+      return object;
+    },
+    clear(name) {
+      anchors.delete(name);
+      root.GameTutorialOverlay?.position?.();
+    },
+    get(name) {
+      const object = anchors.get(name);
+      if (!object || object.destroyed || object.active === false) return null;
+      try {
+        const bounds = object.getBounds?.();
+        if (!bounds || bounds.width <= 0 || bounds.height <= 0) return null;
+        return {
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height
+        };
+      } catch (_) {
+        return null;
+      }
+    }
+  });
 
   function create() {
     if (layer) return;
@@ -78,14 +107,29 @@
     };
   }
 
+  function anchorRect(value) {
+    const anchor = root.GameTutorialAnchors?.get?.(value.name);
+    if (anchor) return canvasRect(anchor);
+    return value.fallback ? canvasRect(value.fallback) : null;
+  }
+
   function position() {
     if (!spotlight || !target) return;
-    const rect = target.type === 'dom' ? domRect(target.selector) : canvasRect(target);
-    if (!rect) return;
-    spotlight.style.left = `${rect.left - 8}px`;
-    spotlight.style.top = `${rect.top - 8}px`;
-    spotlight.style.width = `${rect.width + 16}px`;
-    spotlight.style.height = `${rect.height + 16}px`;
+    const rect = target.type === 'dom'
+      ? domRect(target.selector)
+      : (target.type === 'anchor' ? anchorRect(target) : canvasRect(target));
+    if (!rect) {
+      spotlight.hidden = true;
+      return;
+    }
+    const padding = Number.isFinite(Number(target.padding))
+      ? Number(target.padding)
+      : 6;
+    spotlight.hidden = false;
+    spotlight.style.left = `${rect.left - padding}px`;
+    spotlight.style.top = `${rect.top - padding}px`;
+    spotlight.style.width = `${rect.width + padding * 2}px`;
+    spotlight.style.height = `${rect.height + padding * 2}px`;
   }
 
   function show(data, skip, done = false) {
@@ -100,6 +144,7 @@
     closeButton.textContent = done ? '开始自由探索' : '知道了';
     skipButton.hidden = done;
     layer.hidden = false;
+    spotlight.hidden = false;
     position();
   }
 

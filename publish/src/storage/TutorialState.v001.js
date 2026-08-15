@@ -13,7 +13,7 @@
       version: VERSION,
       started: Boolean(value?.started),
       completed: Boolean(value?.completed),
-      step: Math.max(0, Math.min(10, Math.floor(Number(value?.step) || 0)))
+      step: Math.max(0, Math.min(9, Math.floor(Number(value?.step) || 0)))
     };
   }
 

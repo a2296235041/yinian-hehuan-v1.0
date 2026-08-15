@@ -15,9 +15,10 @@
 
   function portraitPath(profile) {
     if (profile?.id === 'player') {
-      return root.Game?.PlayerPortraitAssets?.entry?.(
-        root.Game?.player?.origin
-      )?.path || '';
+      const origin = profile.originId
+        ? { id: profile.originId }
+        : root.Game?.player?.origin;
+      return root.Game?.PlayerPortraitAssets?.entry?.(origin)?.path || '';
     }
     return root.Game?.NpcCardRenderer?.portraitPath?.(profile?.id) || '';
   }
@@ -27,8 +28,21 @@
     const source = portraitPath(profile);
     if (source) {
       const image = node('img');
-      image.src = root.Game?.AssetUrl?.withVersion?.(source) || source;
+      image.loading = 'eager';
       image.alt = '';
+      let retried = false;
+      const showFallback = () => {
+        frame.replaceChildren(node('strong', '', profile.name.slice(0, 1)));
+      };
+      image.addEventListener('error', () => {
+        if (!retried) {
+          retried = true;
+          image.src = source;
+          return;
+        }
+        showFallback();
+      });
+      image.src = root.Game?.AssetUrl?.withVersion?.(source) || source;
       frame.append(image);
     } else {
       frame.append(node('strong', '', profile.name.slice(0, 1)));

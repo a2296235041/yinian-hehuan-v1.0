@@ -26,14 +26,13 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.npcSystem.init();
         Game.systemsReady = window.GamePlayerState.initialize(
             this,
-            this.playerData,
+        this.playerData,
             this.npcSystem,
             this.savedSnapshot,
             this.newGame
         );
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         Game.EventBus.on('time-period-changed', this.refreshLighting, this);
-        Game.EventBus.on('tutorial-return-to-sect-map', this.handleTutorialReturnToSectMap, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         Game.systemsReady.then(() => {
             if (!this.scene.isActive()) return;
@@ -55,6 +54,8 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     clearView() {
         if (this.dialogueSystem?.isActive()) this.dialogueSystem.endDialogue();
+        Game.TutorialAnchors?.clear?.('welcome-pavilion');
+        Game.TutorialAnchors?.clear?.('su-meier');
         this.viewObjects.forEach((object) => object.destroy());
         this.viewObjects = [];
     }
@@ -65,12 +66,6 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     cleanup() {
         Game.EventBus.off('time-period-changed', this.refreshLighting, this);
-        Game.EventBus.off('tutorial-return-to-sect-map', this.handleTutorialReturnToSectMap, this);
-    }
-
-    handleTutorialReturnToSectMap() {
-        if (!this.scene.isActive()) return;
-        this.showSectMap();
     }
 
     showSectMap() {
@@ -99,6 +94,9 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
             this.add.ellipse(building.mapX, building.mapY + 30, 270, 198, 0x321522, 0)
                 .setInteractive({ useHandCursor: true })
         );
+        if (building.id === 'welcome-pavilion') {
+            Game.TutorialAnchors?.set?.('welcome-pavilion', marker);
+        }
         this.addViewObject(this.add.text(building.mapX, building.mapY + 48, building.name, {
             fontFamily: '"Noto Serif SC", serif',
             fontSize: '22px',

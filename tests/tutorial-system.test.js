@@ -11,7 +11,6 @@ const source = fs.readFileSync(
 );
 const listeners = new Map();
 const shown = [];
-let returnedToSectMap = false;
 const window = {
   Game: {
     EventBus: {
@@ -39,10 +38,6 @@ const window = {
   GameAudio: { sfx() {} }
 };
 
-listeners.set('tutorial-return-to-sect-map', () => {
-  returnedToSectMap = true;
-});
-
 function emit(name, value) {
   listeners.get(name)?.(value);
 }
@@ -56,27 +51,24 @@ function flush() {
   window.GameTutorial.init();
   emit('tutorial-game-ready', { newGame: true });
   await flush();
-  assert.equal(shown.at(-1).progress, '1 / 10');
+  assert.equal(shown.at(-1).progress, '1 / 9');
 
   emit('tutorial-building-opened', { id: 'welcome-pavilion' });
-  assert.equal(shown.at(-1).progress, '2 / 10');
+  assert.equal(shown.at(-1).progress, '2 / 9');
   emit('ai-dialogue-open', { npcId: 'su_meier' });
-  assert.equal(shown.at(-1).progress, '3 / 10');
+  assert.equal(shown.at(-1).progress, '3 / 9');
   emit('tutorial-dialogue-sent', { npcId: 'su_meier' });
-  assert.equal(shown.at(-1).progress, '4 / 10');
+  assert.equal(shown.at(-1).progress, '4 / 9');
   emit('ai-dialogue-close');
-  assert.equal(shown.at(-1).progress, '5 / 10');
+  assert.equal(shown.at(-1).progress, '5 / 9');
   emit('cultivation-changed', { source: 'cultivate' });
-  assert.equal(shown.at(-1).progress, '6 / 10');
+  assert.equal(shown.at(-1).progress, '6 / 9');
   emit('tutorial-inventory-opened');
-  assert.equal(shown.at(-1).progress, '7 / 10');
+  assert.equal(shown.at(-1).progress, '7 / 9');
   emit('tutorial-inventory-closed');
-  assert.equal(returnedToSectMap, true);
-  assert.equal(shown.at(-1).progress, '8 / 10');
-  emit('tutorial-building-opened', { id: 'welcome-pavilion' });
-  assert.equal(shown.at(-1).progress, '9 / 10');
+  assert.equal(shown.at(-1).progress, '8 / 9');
   emit('ai-dialogue-open', { npcId: 'su_meier' });
-  assert.equal(shown.at(-1).progress, '10 / 10');
+  assert.equal(shown.at(-1).progress, '9 / 9');
   emit('affinity-changed', { npcId: 'su_meier', source: 'gift' });
   assert.equal(shown.at(-1).progress, '引导完成');
   console.log('tutorial system test passed');

@@ -169,6 +169,9 @@ Game.NpcCardRenderer = {
         const portrait = scene.addViewObject(scene.add.image(
             layout.x, layout.groundY, portraitKey
         ).setOrigin(0.5, 1));
+        if (npc.id === 'su_meier') {
+            Game.TutorialAnchors?.set?.('su-meier', portrait);
+        }
         const scale = layout.height / portrait.height;
         portrait.setScale(scale).setDepth(4).setInteractive({ useHandCursor: true });
         const nameText = scene.addViewObject(scene.add.text(layout.x, layout.groundY + 4, npc.name, {

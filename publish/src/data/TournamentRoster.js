@@ -64,6 +64,7 @@
   function playerProfile() {
     const stats = root.GamePlayerStats?.getSnapshot?.() || {};
     const combat = root.GameTournamentCombatBalance.playerProfile(stats);
+    const originId = root.Game?.player?.origin?.id || '';
     return {
       id: PLAYER_ID,
       group: 'player',
@@ -72,6 +73,7 @@
       title: stats.originName || '合欢宗弟子',
       adult: true,
       appearance: '由玩家当前身份与立绘决定。',
+      originId,
       physique: '由玩家当前身份决定',
       personality: '由玩家在比试中的言行决定',
       combat_style: '不拘一格，一切招式与战术均由玩家亲自描述。',

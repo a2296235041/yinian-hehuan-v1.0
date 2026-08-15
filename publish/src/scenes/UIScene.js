@@ -29,9 +29,15 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         const y = 680;
         this.makeButton(714, y, '下一天', () => this.handleNextDay());
         this.makeButton(830, y, '下一时段', () => this.handleNextPeriod());
-        this.makeButton(946, y, '修炼', () => this.handleCultivate());
+        Game.TutorialAnchors?.set?.(
+            'hud-cultivate',
+            this.makeButton(946, y, '修炼', () => this.handleCultivate())
+        );
         this.makeButton(1062, y, '出山', () => this.openOverlay('ExplorationScene'));
-        this.makeButton(1178, y, '储物袋', () => this.openOverlay('InventoryScene'));
+        Game.TutorialAnchors?.set?.(
+            'hud-inventory',
+            this.makeButton(1178, y, '储物袋', () => this.openOverlay('InventoryScene'))
+        );
     }
     makeButton(x, y, label, action) {
         return Game.UISkin.makeButton(this, x, y, label, () => {
