@@ -19,6 +19,7 @@
     const safety = { rejectDataUrls: options.rejectDataUrls !== false };
     const localKey = String(options.localKey || `dzmm:${namespace}${key}`);
     let remoteWriteQueue = Promise.resolve(); const remoteWriteGate = createSettlementGate(writeTimeoutMs);
+    let activeRemoteTarget = null;
     let mutationGeneration = 0;
     let currentEnvelope = null;
     if (!key) throw new Error('versioned-storage 需要非空 key');
@@ -86,23 +87,46 @@
         return storage.getItem(localKey) === null;
       } catch (_) { return false; }
     }
+    function isRemoteStore(store) {
+      return store && typeof store.get === 'function'
+        && typeof store.put === 'function' && typeof store.delete === 'function';
+    }
     function remoteTarget() {
+      if (activeRemoteTarget) return activeRemoteTarget;
       try {
         const kv = dzmmRef()?.kv;
         if (!kv) return null;
-        if (namespace && typeof kv.namespace === 'function') return { store: kv.namespace(namespace), key };
-        return { store: kv, key: `${namespace}${key}` };
-      } catch (_) {
-        return null;
-      }
+        const rootTarget = isRemoteStore(kv)
+          ? { store: kv, key: `${namespace}${key}`, kind: 'root' } : null;
+        if (namespace && typeof kv.namespace === 'function') {
+          try {
+            const store = kv.namespace(namespace);
+            if (isRemoteStore(store)) {
+              return { store, key, kind: 'namespace', fallback: rootTarget };
+            }
+          } catch (_) {}
+        }
+        return rootTarget;
+      } catch (_) { return null; }
     }
     function unwrapRemote(value) {
-      if (isPlainRecord(value) && Object.prototype.hasOwnProperty.call(value, 'value')) return { value: value.value, miss: value.value === null && value.updated_at == null };
+      if (value && typeof value === 'object' && !Array.isArray(value)
+        && Object.prototype.hasOwnProperty.call(value, 'value')) {
+        const updatedAt = value.updated_at ?? value.updatedAt;
+        return { value: value.value, miss: value.value === null && updatedAt == null };
+      }
       return { value, miss: value == null };
     }
     async function readRemote(target) {
-      if (!target || typeof target.store?.get !== 'function') return { ok: false };
-      return withDeadline(() => target.store.get(target.key), readTimeoutMs);
+      if (!target) return { ok: false };
+      for (const candidate of [target, target.fallback].filter(Boolean)) {
+        if (typeof candidate.store?.get !== 'function') continue;
+        const result = await withDeadline(
+          () => candidate.store.get(candidate.key), readTimeoutMs
+        );
+        if (result.ok) { activeRemoteTarget = candidate; return result; }
+      }
+      return { ok: false };
     }
     function queueRemoteMutation(operation) {
       const pending = remoteWriteQueue.then(() => Promise.resolve().then(operation));
