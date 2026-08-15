@@ -1,0 +1,108 @@
+.save-recovery {
+  position: absolute;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #fff8fa;
+  background: rgba(9, 16, 14, 0.98);
+}
+
+.save-recovery[hidden] {
+  display: none;
+}
+
+.save-recovery-panel {
+  width: min(620px, 100%);
+  max-height: min(620px, 90%);
+  overflow: auto;
+  padding: 28px;
+  border: 1px solid rgba(240, 168, 187, 0.64);
+  border-radius: 8px;
+  background: rgba(41, 18, 30, 0.96);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+
+.save-recovery-panel h1 {
+  margin: 0 0 12px;
+  font: 400 30px "STKaiti", "KaiTi", "Noto Serif SC", serif;
+  color: #f6dca9;
+}
+
+.save-recovery-panel p {
+  margin: 10px 0;
+  line-height: 1.7;
+}
+
+.save-recovery-errors {
+  margin: 16px 0;
+  padding-left: 22px;
+  color: #f2c9d3;
+  line-height: 1.7;
+}
+
+.save-recovery-details {
+  margin: 12px 0 20px;
+}
+
+.save-recovery-details summary {
+  cursor: pointer;
+  color: #e8b7c7;
+}
+
+.save-recovery-details pre {
+  max-height: 180px;
+  overflow: auto;
+  padding: 12px;
+  color: #d9c9ce;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.save-recovery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.save-recovery-actions button {
+  min-width: 150px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(240, 168, 187, 0.7);
+  border-radius: 6px;
+  color: #fff8fa;
+  background: #6d2842;
+  cursor: pointer;
+}
+
+.save-recovery-actions button + button {
+  color: #321522;
+  background: #efd39c;
+}
+
+.save-recovery-actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (max-width: 640px) {
+  .save-recovery {
+    padding: 14px;
+  }
+
+  .save-recovery-panel {
+    padding: 22px 18px;
+  }
+
+  .save-recovery-panel h1 {
+    font-size: 25px;
+  }
+
+  .save-recovery-actions button {
+    flex: 1 1 100%;
+  }
+}

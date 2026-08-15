@@ -21,6 +21,7 @@
   "src/ai/ImageWorkflow.js",
   "src/storage/VersionedStorageUtils.js",
   "src/storage/VersionedStorage.js",
+  "src/storage/SaveRecovery.js",
   "src/settings/TrafficSaver.v023.js",
   "src/settings/TrafficSaverUI.v022.js",
   "src/storage/DialogueHistoryState.v024.js",

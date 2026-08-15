@@ -20,6 +20,7 @@
     runService('多人互动面板', () => root.GamePrivateGroupDialoguePanel.init());
     runService('赠礼面板', () => root.GameGiftPanel.init());
     runService('突破面板', () => root.GameBreakthrough.init());
+    runService('存档恢复界面', () => root.GameSaveRecovery.init());
     runService('存档界面', () => root.GameSaveUI.init());
     runService('赛事面板', () => root.GameTournamentPanel.init());
     runService('赛事进度', () => root.GameTournament.initialize());

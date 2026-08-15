@@ -85,7 +85,9 @@
       return root.Game.player;
     }).catch((error) => {
       console.error('玩家状态初始化失败:', error.code || '', error.message, error.stack);
-      return root.Game.player;
+      root.GameSaveRecovery?.reportStorageReadFailure?.('player-state', error, '玩家状态');
+      if (newGame && root.GameSaveRecovery?.isNewGameMode?.()) return root.Game.player;
+      throw error;
     });
     return readyPromise;
   }

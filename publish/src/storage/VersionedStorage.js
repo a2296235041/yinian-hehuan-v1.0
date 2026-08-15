@@ -185,7 +185,16 @@
       const remoteEnvelope = remoteRead.ok && !remote.miss ? decodeCandidate(remote.value, false) : null;
       const remoteMiss = remoteRead.ok && remote.miss;
       const noKnownState = target ? !remoteEnvelope && !remoteMiss && !localEnvelope : !localEnvelope && !localRead.ok;
-      if (noKnownState) throw backendError('读取存档失败：远端 KV 不可用且没有有效本地副本', remoteRead.error, localRead.error);
+      if (noKnownState) {
+        const error = backendError(
+          '读取存档失败：远端 KV 不可用且没有有效本地副本',
+          remoteRead.error,
+          localRead.error
+        );
+        error.storageKey = `${namespace}${key}`;
+        root.GameSaveRecovery?.reportStorageReadFailure?.(error.storageKey, error);
+        throw error;
+      }
       const selected = remoteEnvelope || localEnvelope || makeEnvelope(fallback);
       // load 等待远端期间如果发生了 save/clear，旧快照不能再覆盖本地或排队初始化远端。
       if (loadGeneration !== mutationGeneration) {

@@ -34,12 +34,16 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         Game.EventBus.on('time-period-changed', this.refreshLighting, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
-        this.showSectMap();
-        Game.SceneTransition.fadeIn(this);
-        this.scene.launch('UIScene');
-        if (this.savedSnapshot) {
-            Game.systemsReady.then(() => this.showSavedLocation(this.savedSnapshot.location));
-        }
+        Game.systemsReady.then(() => {
+            if (!this.scene.isActive()) return;
+            this.showSectMap();
+            Game.SceneTransition.fadeIn(this);
+            this.scene.launch('UIScene');
+            if (this.savedSnapshot) this.showSavedLocation(this.savedSnapshot.location);
+        }).catch((error) => {
+            console.error('玩家状态读取失败:', error.code || '', error.message, error.stack);
+            window.GameSaveRecovery?.reportStorageReadFailure?.('player-state', error, '玩家状态');
+        });
     }
 
     addViewObject(object) {

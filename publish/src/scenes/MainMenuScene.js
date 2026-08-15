@@ -8,6 +8,10 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
 
     create() {
         window.GameModelUI.setMode('compact');
+        Game.EventBus.on('save-recovery-new-game', this.startNewGameFromRecovery, this);
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            Game.EventBus.off('save-recovery-new-game', this.startNewGameFromRecovery, this);
+        });
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
         const background = this.add.image(width / 2, height / 2, 'bg-sect');
@@ -43,6 +47,13 @@ Game.Scenes.MainMenuScene = class MainMenuScene extends Phaser.Scene {
         requestAnimationFrame(() => {
             window.PlatformBridge.ready();
         });
+    }
+
+    startNewGameFromRecovery() {
+        if (!this.scene.isActive('MainMenuScene')) return;
+        window.GameAudio.start();
+        window.GameAudio.sfx('success');
+        Game.SceneTransition.start(this, 'CharacterCreationScene');
     }
 
     createMenuDecor(width, height) {

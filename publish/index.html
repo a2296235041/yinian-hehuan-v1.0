@@ -13,8 +13,8 @@
 
       var release = Object.freeze({
         version: '0.7.5',
-        build: '20260815.08',
-        cacheName: 'yinian-hehuan-v0.7.5-20260815.08',
+        build: '20260815.09',
+        cacheName: 'yinian-hehuan-v0.7.5-20260815.09',
         entry: 'main.v075.js'
       });
 
@@ -153,7 +153,7 @@
       gap: 14px;
       color: #fff4f7;
       background-color: #09100e;
-      background-image: url("./assets/generated/sect-courtyard.c4be5633.webp?v=20260815-08");
+      background-image: url("./assets/generated/sect-courtyard.c4be5633.webp?v=20260815-09");
       background-position: center;
       background-size: cover;
       background-blend-mode: multiply;
@@ -205,15 +205,16 @@
     }
   </style>
   <link rel="preload" href="./vendor/phaser.min.js" as="script">
-  <link rel="stylesheet" href="./style.css?v=20260815-08">
-  <link rel="stylesheet" href="./ui.css?v=20260815-08">
-  <link rel="stylesheet" href="./exploration.css?v=20260815-08">
-  <link rel="stylesheet" href="./theme.css?v=20260815-08">
-  <link rel="stylesheet" href="./layout.v015.css?v=20260815-08">
-  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260815-08">
-  <link rel="stylesheet" href="./tournament.v029.css?v=20260815-08">
-  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260815-08">
-  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260815-08">
+  <link rel="stylesheet" href="./style.css?v=20260815-09">
+  <link rel="stylesheet" href="./ui.css?v=20260815-09">
+  <link rel="stylesheet" href="./exploration.css?v=20260815-09">
+  <link rel="stylesheet" href="./theme.css?v=20260815-09">
+  <link rel="stylesheet" href="./layout.v015.css?v=20260815-09">
+  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260815-09">
+  <link rel="stylesheet" href="./tournament.v029.css?v=20260815-09">
+  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260815-09">
+  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260815-09">
+  <link rel="stylesheet" href="./save-recovery.css?v=20260815-09">
 </head>
 <body>
   <main id="game-shell">
@@ -488,6 +489,23 @@
         </section>
       </main>
     </section>
+    <section id="save-recovery" class="save-recovery" hidden aria-live="assertive">
+      <div class="save-recovery-panel" role="dialog" aria-modal="true"
+           aria-labelledby="save-recovery-title">
+        <h1 id="save-recovery-title">存档读取异常</h1>
+        <p id="save-recovery-summary">正在检查存档状态…</p>
+        <ul id="save-recovery-errors" class="save-recovery-errors"></ul>
+        <details id="save-recovery-details" class="save-recovery-details">
+          <summary>查看错误详情</summary>
+          <pre id="save-recovery-detail-text"></pre>
+        </details>
+        <p>请先重新读取。若只想体验新游戏，可以跳过旧存档，但本次异常期间的进度可能无法同步。</p>
+        <div class="save-recovery-actions">
+          <button id="save-recovery-retry" type="button">重新读取存档</button>
+          <button id="save-recovery-new-game" type="button">跳过旧存档，开始新游戏</button>
+        </div>
+      </div>
+    </section>
     <section id="boot-error" class="boot-error" hidden>
       <h1>游戏未能启动</h1>
       <p id="boot-error-message">请刷新后重试。</p>
@@ -496,6 +514,6 @@
   </main>
 
   <script defer src="./vendor/phaser.min.js"></script>
-  <script defer src="./main.v075.js?v=20260815-08"></script>
+  <script defer src="./main.v075.js?v=20260815-09"></script>
 </body>
 </html>

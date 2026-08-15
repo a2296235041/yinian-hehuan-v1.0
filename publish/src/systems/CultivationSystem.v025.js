@@ -93,6 +93,9 @@
       .then((saved) => { state = saved; })
       .catch((error) => {
         console.error('修为进度读取失败:', error.code || '', error.message, error.stack);
+        root.GameSaveRecovery?.reportStorageReadFailure?.('hehuan:cultivation', error, '修为进度');
+        if (root.GameSaveRecovery?.isNewGameMode?.()) return snapshot();
+        throw error;
       })
       .then(() => {
         emitChange(0, 'load', true);

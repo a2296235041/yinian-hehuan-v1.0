@@ -98,13 +98,11 @@
     readyPromise = storage.load()
       .then((saved) => { state = saved; })
       .catch((error) => {
-        state = fallbackState();
         console.error('储物袋读取失败:', error.code || '', error.message, error.stack);
+        if (root.GameSaveRecovery?.isNewGameMode?.()) return state = fallbackState();
+        throw error;
       })
-      .then(() => {
-        root.Game.EventBus.emit('inventory-ready', snapshot());
-        return snapshot();
-      });
+      .then((saved) => { root.Game.EventBus.emit('inventory-ready', snapshot()); return saved || snapshot(); });
     return readyPromise;
   }
 

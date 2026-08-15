@@ -92,11 +92,9 @@
       .then((saved) => { state = saved; })
       .catch((error) => {
         console.error('好感度读取失败:', error.code || '', error.message, error.stack);
+        if (!root.GameSaveRecovery?.isNewGameMode?.()) throw error;
       })
-      .then(() => {
-        initialAffinity.forEach((_, id) => ensureRecord(id));
-        return state;
-    });
+      .then(() => { initialAffinity.forEach((_, id) => ensureRecord(id)); return state; });
     return readyPromise;
   }
   function recordDialogue(id) {

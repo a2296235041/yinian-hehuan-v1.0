@@ -69,8 +69,11 @@
       .then((saved) => { state = saved; })
       .catch((error) => {
         console.error('永久属性读取失败:', error.code || '', error.message, error.stack);
+        root.GameSaveRecovery?.reportStorageReadFailure?.('hehuan:player-growth', error, '永久属性');
+        if (root.GameSaveRecovery?.isNewGameMode?.()) return snapshot();
+        throw error;
       })
-      .then(() => snapshot());
+      .then((saved) => saved || snapshot());
     return readyPromise;
   }
 
