@@ -21,6 +21,16 @@ const window = {
       captured = session;
     }
   },
+  GamePlayerIdentity: {
+    get() {
+      return {
+        name: '玩家',
+        appearance: '白衣',
+        physique: '修长',
+        combat_style: '灵活应变'
+      };
+    }
+  },
   Game: { EventBus: { emit() {} } }
 };
 vm.runInNewContext(source, { window, Object, String });
@@ -53,11 +63,12 @@ const active = {
   const session = window.GameTournamentImage.sessionFor(active);
   assert.equal(session.npc.name, '顾清罗');
   assert.equal(session.building.name.includes('Spirit Realm'), true);
-  assert.equal(session.messages.length, 2);
-  assert.equal(session.messages[0].content.includes('成人意图'), true);
+  assert.equal(session.messages.length, 3);
+  assert.equal(session.messages[1].content.includes('成人意图'), true);
   assert.equal(session.messages.some((message) => message.content.includes('裁判')), false);
   await window.GameTournamentImage.generate(active);
   assert.equal(captured.messages[0].content, session.messages[0].content);
+  assert.equal(captured.messages[1].content, session.messages[1].content);
   console.log('tournament image test passed');
 })().catch((error) => {
   console.error(error);

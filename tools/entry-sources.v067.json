@@ -65,6 +65,7 @@
   "src/ai/DialogueGreetingService.v024.js",
   "src/ai/CharacterImagePrompts.v019.js",
   "src/ai/TournamentCharacterImagePrompts.js",
+  "src/ai/ImageDimensionSettings.js",
   "src/ai/AIImageService.v021.js",
   "src/ai/NPCGiftInteraction.js",
   "src/ai/PrivateGroupPrompts.v033.js",

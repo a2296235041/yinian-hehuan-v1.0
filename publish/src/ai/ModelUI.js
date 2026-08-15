@@ -10,6 +10,7 @@
   let blocker;
   let dialogueSelect;
   let drawSelect;
+  let dimensionSelect;
   let status;
   let audioToggle;
   let audioState;
@@ -60,6 +61,7 @@
   function renderModels(state) {
     fillDialogueSelect(state);
     fillDrawSelect(state);
+    dimensionSelect.value = root.GameAIImage?.getDimension?.() || '2:3';
     dialogueSelect.disabled = state.loading;
     drawSelect.disabled = state.loading;
     status.textContent = state.loading ? '正在读取可用模型…' : '模型选择会自动保存';
@@ -131,6 +133,7 @@
     blocker = document.getElementById('settings-blocker');
     dialogueSelect = document.getElementById('dialogue-model');
     drawSelect = document.getElementById('draw-model');
+    dimensionSelect = document.getElementById('draw-dimension');
     status = document.getElementById('model-status');
     audioToggle = document.getElementById('audio-toggle');
     audioState = document.getElementById('audio-state');
@@ -153,6 +156,9 @@
     });
     drawSelect.addEventListener('change', () => {
       root.GameAIModels.selectDrawModel(drawSelect.value);
+    });
+    dimensionSelect.addEventListener('change', () => {
+      root.GameAIImage?.setDimension?.(dimensionSelect.value);
     });
     audioToggle.addEventListener('change', async () => {
       await root.GameAudio.start();

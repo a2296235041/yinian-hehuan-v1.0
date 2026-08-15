@@ -5,17 +5,17 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1, viewport-fit=cover,
                  interactive-widget=resizes-content, user-scalable=no">
-  <meta name="game-version" content="0.7.4">
+  <meta name="game-version" content="0.7.5">
   <title>一念逍遥，一念合欢</title>
   <script>
     (function installReleaseInfo(root) {
       'use strict';
 
       var release = Object.freeze({
-        version: '0.7.4',
-        build: '20260815.07',
-        cacheName: 'yinian-hehuan-v0.7.4-20260815.07',
-        entry: 'main.v074.js'
+        version: '0.7.5',
+        build: '20260815.08',
+        cacheName: 'yinian-hehuan-v0.7.5-20260815.08',
+        entry: 'main.v075.js'
       });
 
       root.GameRelease = release;
@@ -153,7 +153,7 @@
       gap: 14px;
       color: #fff4f7;
       background-color: #09100e;
-      background-image: url("./assets/generated/sect-courtyard.c4be5633.webp?v=20260815-07");
+      background-image: url("./assets/generated/sect-courtyard.c4be5633.webp?v=20260815-08");
       background-position: center;
       background-size: cover;
       background-blend-mode: multiply;
@@ -205,15 +205,15 @@
     }
   </style>
   <link rel="preload" href="./vendor/phaser.min.js" as="script">
-  <link rel="stylesheet" href="./style.css?v=20260815-07">
-  <link rel="stylesheet" href="./ui.css?v=20260815-07">
-  <link rel="stylesheet" href="./exploration.css?v=20260815-07">
-  <link rel="stylesheet" href="./theme.css?v=20260815-07">
-  <link rel="stylesheet" href="./layout.v015.css?v=20260815-07">
-  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260815-07">
-  <link rel="stylesheet" href="./tournament.v029.css?v=20260815-07">
-  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260815-07">
-  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260815-07">
+  <link rel="stylesheet" href="./style.css?v=20260815-08">
+  <link rel="stylesheet" href="./ui.css?v=20260815-08">
+  <link rel="stylesheet" href="./exploration.css?v=20260815-08">
+  <link rel="stylesheet" href="./theme.css?v=20260815-08">
+  <link rel="stylesheet" href="./layout.v015.css?v=20260815-08">
+  <link rel="stylesheet" href="./cheat-panel.v021.css?v=20260815-08">
+  <link rel="stylesheet" href="./tournament.v029.css?v=20260815-08">
+  <link rel="stylesheet" href="./tournament-participants.v032.css?v=20260815-08">
+  <link rel="stylesheet" href="./private-group-dialogue.v033.css?v=20260815-08">
 </head>
 <body>
   <main id="game-shell">
@@ -296,6 +296,14 @@
         <label class="settings-field">
           <span>画图模型</span>
           <select id="draw-model" aria-label="画图模型"></select>
+        </label>
+        <label class="settings-field">
+          <span>生图比例</span>
+          <select id="draw-dimension" aria-label="选择 AI 生图画面比例">
+            <option value="2:3" selected>竖向 2:3</option>
+            <option value="1:1">方形 1:1</option>
+            <option value="3:2">横向 3:2</option>
+          </select>
         </label>
         <small id="model-status" aria-live="polite">正在读取可用模型…</small>
         <div id="settings-save-actions" class="settings-save-actions" hidden>
@@ -488,6 +496,6 @@
   </main>
 
   <script defer src="./vendor/phaser.min.js"></script>
-  <script defer src="./main.v074.js?v=20260815-07"></script>
+  <script defer src="./main.v075.js?v=20260815-08"></script>
 </body>
 </html>

@@ -11,9 +11,9 @@ const manifest = JSON.parse(fs.readFileSync(
   path.join(__dirname, '../tools/entry-sources.v067.json'),
   'utf8'
 ));
-const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v074.js'), 'utf8');
-const version = '0.7.4';
-const build = '20260815.07';
+const bundle = fs.readFileSync(path.join(publishDirectory, 'main.v075.js'), 'utf8');
+const version = '0.7.5';
+const build = '20260815.08';
 const cacheName = `yinian-hehuan-v${version}-${build}`;
 const expectedEntry = `main.v${version.replaceAll('.', '')}.js`;
 const releaseEntries = fs.readdirSync(publishDirectory)
@@ -27,7 +27,7 @@ assert.ok(html.includes(`./${expectedEntry}`));
 assert.deepEqual(releaseEntries, [expectedEntry]);
 assert.deepEqual(
   [...html.matchAll(/<script defer src="([^"]+)"><\/script>/g)].map((match) => match[1]),
-  ['./vendor/phaser.min.js', './main.v074.js?v=20260815-07']
+  ['./vendor/phaser.min.js', './main.v075.js?v=20260815-08']
 );
 assert.ok(html.includes('./cheat-panel.v021.css'));
 assert.ok(html.includes('./tournament.v029.css'));
@@ -85,6 +85,7 @@ assert.ok(
   './src/ui/TournamentPortraitModal.js',
   './src/assets/AssetUrl.js',
   './src/ai/TournamentCharacterImagePrompts.js',
+  './src/ai/ImageDimensionSettings.js',
   './src/ui/PlayerStatusHeader.js',
   './src/ui/PlayerStatusView.js',
   './src/assets/GameScenePreload.v064.js',

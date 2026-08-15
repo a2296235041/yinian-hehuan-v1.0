@@ -159,7 +159,7 @@
         building: session.building,
         sceneDescription,
         model: root.GameAIModels.getDrawModel(),
-        dimension: '3:2',
+        dimension: root.GameImageDimensions?.get?.() || '2:3',
         negativePrompt: 'lazyneg, lazyhand, censored, mosaic censoring, (photorealistic, realistic), artist name, signature, lowres, bad anatomy, bad hands, text, error, missing fingers, extra fingers, extra limbs, fewer digits, cropped, worst quality, low quality, jpeg artifacts, watermark, username, conjoined, bad ai-generated, score_1, score_2, score_3,bad anatomy, bad proportions, deformed anatomy, deformed face, deformed eyes, text, multiple fingers, artist name,extra hands,strong, musclur, pubic hair'
       });
       if (!result.ignored && result.image) {
@@ -187,6 +187,8 @@
   root.GameAIImage = {
     generate,
     cancel: () => workflow.cancel(),
-    isBusy: () => workflow.isBusy()
+    isBusy: () => workflow.isBusy(),
+    getDimension: () => root.GameImageDimensions?.get?.() || '2:3',
+    setDimension: (value) => root.GameImageDimensions?.set?.(value) || '2:3'
   };
 }(window));
