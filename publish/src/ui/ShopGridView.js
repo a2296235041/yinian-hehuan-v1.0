@@ -19,8 +19,9 @@
   function addProduct(scene, offer, x, y) {
     const item = offer.item;
     add(scene, root.Game.CommerceDecor.addSlot(scene, x, y, 520, 202, true));
-    root.Game.CommerceDecor.addSeal(scene, x - 208, y - 38, item.name[0], item.rarity)
-      .forEach((object) => add(scene, object));
+    root.Game.ItemIconAssets.create(
+      scene, item, x - 208, y - 38, (object) => add(scene, object)
+    );
     add(scene, scene.add.text(x - 166, y - 82, item.name, {
       fontFamily: '"Noto Serif SC", serif',
       fontSize: '21px',

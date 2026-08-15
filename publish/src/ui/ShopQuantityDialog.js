@@ -44,9 +44,7 @@
       fontSize: '28px',
       color: '#fff8fa'
     }).setOrigin(0.5));
-    root.Game.CommerceDecor.addSeal(
-      scene, 382, 268, offer.item.name[0], offer.item.rarity
-    ).forEach(add);
+    root.Game.ItemIconAssets.create(scene, offer.item, 382, 268, add);
     add(scene.add.text(425, 246, offer.item.name, {
       fontFamily: '"Noto Serif SC", serif',
       fontSize: '20px',
