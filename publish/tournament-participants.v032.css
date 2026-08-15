@@ -156,6 +156,83 @@
   user-select: text;
 }
 
+.tournament-portrait-button {
+  min-width: 44px;
+  min-height: 36px;
+  margin-top: 9px;
+  padding: 5px 11px;
+  color: #321522;
+  font: 13px "Noto Serif SC", serif;
+  background: #e5bd78;
+  border: 1px solid rgba(255, 248, 250, 0.7);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tournament-portrait-button:active {
+  transform: scale(0.97);
+}
+
+.tournament-portrait-modal {
+  position: absolute;
+  z-index: 140;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(4, 9, 8, 0.84);
+}
+
+.tournament-portrait-modal[hidden] {
+  display: none;
+}
+
+.tournament-portrait-panel {
+  position: relative;
+  display: grid;
+  width: min(620px, 94vw);
+  max-height: 92dvh;
+  gap: 10px;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(229, 189, 120, 0.72);
+  border-radius: 6px;
+  background: rgba(38, 19, 31, 0.98);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.58);
+}
+
+.tournament-portrait-heading {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #f4d18c;
+  font: 17px "Noto Serif SC", serif;
+}
+
+.tournament-portrait-close {
+  width: 44px;
+  height: 44px;
+  color: #fff8fa;
+  font-size: 28px;
+  line-height: 1;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.tournament-portrait-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: calc(92dvh - 92px);
+  margin: 0 auto;
+  object-fit: contain;
+  border: 1px solid rgba(240, 168, 187, 0.28);
+  background: #fff;
+}
+
 .tournament-roster-card {
   display: block;
   padding: 0;
@@ -243,6 +320,10 @@
   font-size: 10px;
 }
 
+.tournament-roster-card .tournament-portrait-button {
+  margin-top: 8px;
+}
+
 @media (max-height: 620px) {
   .tournament-opponent-details {
     padding-bottom: 9px;
@@ -255,6 +336,14 @@
 
   .tournament-opponent-fields {
     gap-block: 3px;
+  }
+
+  .tournament-portrait-panel {
+    max-height: 96dvh;
+  }
+
+  .tournament-portrait-image {
+    max-height: calc(96dvh - 92px);
   }
 }
 

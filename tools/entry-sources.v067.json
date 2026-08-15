@@ -89,6 +89,7 @@
   "src/ui/BattleUI.js",
   "src/ui/ExplorationView.js",
   "src/ui/ShopEntry.js",
+  "src/ui/TournamentPortraitModal.js",
   "src/ui/TournamentParticipantView.v032.js",
   "src/ui/TournamentView.js",
   "src/ui/TournamentPanel.js",

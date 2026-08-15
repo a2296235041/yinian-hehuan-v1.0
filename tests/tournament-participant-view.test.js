@@ -47,7 +47,7 @@ class FakeElement {
   }
 
   click() {
-    this.listeners.click();
+    this.listeners.click({ stopPropagation() {} });
   }
 }
 
@@ -55,6 +55,10 @@ function textOf(element) {
   return `${element.textContent}${element.children.map(textOf).join('')}`;
 }
 
+const modalSource = fs.readFileSync(
+  path.join(__dirname, '../publish/src/ui/TournamentPortraitModal.js'),
+  'utf8'
+);
 const source = fs.readFileSync(
   path.join(__dirname, '../publish/src/ui/TournamentParticipantView.v032.js'),
   'utf8'
@@ -72,6 +76,18 @@ const profiles = [{
   portrait_key: ''
 }];
 const window = {
+  Game: {
+    NpcCardRenderer: {
+      portraitPath() {
+        return './assets/generated/npc-standee-gu-qingluo.png';
+      }
+    },
+    AssetUrl: {
+      withVersion(sourcePath) {
+        return `${sourcePath}?v=test`;
+      }
+    }
+  },
   GameTournamentRoster: {
     getProfile(id) { return profiles.find((profile) => profile.id === id); }
   },
@@ -88,7 +104,11 @@ const window = {
   },
   GameAudio: { sfx() {} }
 };
-const document = { createElement: (tag) => new FakeElement(tag) };
+const document = {
+  body: new FakeElement('body'),
+  createElement: (tag) => new FakeElement(tag)
+};
+vm.runInNewContext(modalSource, { window, document, Set, Object });
 vm.runInNewContext(source, { window, document, Set, Object });
 
 const container = new FakeElement('div');
@@ -101,6 +121,7 @@ assert.equal(container.children.length, 1);
 assert.equal(container.children[0].children[1].hidden, true);
 assert.equal(container.children[0].children[0].attributes['aria-expanded'], 'false');
 assert.equal(textOf(container.children[0].children[0]).includes('顾清罗'), true);
+assert.equal(container.children[0].children[0].children[0].children[0].tag, 'img');
 
 container.children[0].children[0].click();
 assert.equal(container.children[0].className.includes('is-expanded'), true);
@@ -109,6 +130,11 @@ assert.equal(container.children[0].children[0].attributes['aria-expanded'], 'tru
 const expandedText = textOf(container.children[0]);
 ['高挑纤长', '墨发齐腰', '自律严谨', '寒气封锁', '一线霜天', '堕落值 12', '清正自持']
   .forEach((value) => assert.equal(expandedText.includes(value), true));
+container.children[0].children[1].children[2].click();
+assert.equal(document.body.children.length, 1);
+assert.equal(document.body.children[0].children[0].children[1].src,
+  './assets/generated/npc-standee-gu-qingluo.png?v=test');
+assert.equal(document.body.children[0].children[0].children[1].hidden, false);
 
 container.children[0].children[0].click();
 assert.equal(container.children[0].children[1].hidden, true);

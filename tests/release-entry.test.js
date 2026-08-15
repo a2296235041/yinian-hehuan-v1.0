@@ -82,6 +82,7 @@ assert.ok(
   './src/ui/ShopQuantityDialog.js',
   './src/ui/ShopPurchaseController.js',
   './src/ui/ShopGridView.js',
+  './src/ui/TournamentPortraitModal.js',
   './src/assets/AssetUrl.js',
   './src/ai/TournamentCharacterImagePrompts.js',
   './src/ui/PlayerStatusHeader.js',

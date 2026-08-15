@@ -13,14 +13,16 @@
     return element;
   }
 
+  function portraitPath(profile) {
+    return root.Game?.NpcCardRenderer?.portraitPath?.(profile?.id) || '';
+  }
+
   function avatar(profile, className = 'tournament-opponent-avatar') {
     const frame = node('span', className);
-    const portraitPath = profile.portrait_key
-      ? root.Game?.NpcCardRenderer?.portraitPath?.(profile.id)
-      : '';
-    if (portraitPath) {
+    const source = portraitPath(profile);
+    if (source) {
       const image = node('img');
-      image.src = root.Game?.AssetUrl?.withVersion?.(portraitPath) || portraitPath;
+      image.src = root.Game?.AssetUrl?.withVersion?.(source) || source;
       image.alt = '';
       frame.append(image);
     } else {
@@ -74,6 +76,18 @@
       field('战法', profile.combat_style, true)
     );
     details.append(summary, fields);
+    const source = portraitPath(profile);
+    if (source) {
+      const action = node('button', 'tournament-portrait-button', '查看高清立绘');
+      action.type = 'button';
+      action.title = `查看${profile.name}的高清立绘`;
+      action.addEventListener('click', (event) => {
+        event.stopPropagation();
+        root.GameAudio?.sfx?.('click');
+        root.GameTournamentPortraitModal?.open?.(profile, source);
+      });
+      details.append(action);
+    }
     return details;
   }
 
