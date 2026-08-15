@@ -57,14 +57,13 @@
         const contentHeight = full.maxY - full.minY + 1;
         const focus = bounds(
           full.minY,
-          Math.min(height, full.minY + Math.floor(contentHeight * 0.38))
+          Math.min(height, full.minY + Math.floor(contentHeight * 0.18))
         );
         const focusWidth = Math.max(1, focus.maxX - focus.minX + 1);
-        const contentWidth = Math.max(1, full.maxX - full.minX + 1);
         const cropSize = Math.min(
           width,
           height,
-          Math.max(focusWidth * 1.42, contentWidth * 0.58)
+          Math.max(360, Math.min(500, focusWidth * 1.65))
         );
         const centerX = (focus.minX + focus.maxX) / 2;
         const x = Math.max(0, Math.min(
@@ -91,17 +90,35 @@
     return fallback;
   }
 
+  function createAvatarTexture(header, textureKey) {
+    const scene = header?.scene;
+    if (!scene?.textures) return textureKey;
+    const source = scene.textures.get(textureKey)?.getSourceImage?.();
+    if (!source) return textureKey;
+    const avatarKey = `player-avatar-frame-${textureKey}`;
+    try {
+      const texture = scene.textures.exists(avatarKey)
+        ? scene.textures.get(avatarKey)
+        : scene.textures.createCanvas(avatarKey, 104, 104);
+      const context = texture.getContext();
+      const rect = avatarSourceRect(source);
+      context.clearRect(0, 0, 104, 104);
+      context.fillStyle = '#b88978';
+      context.fillRect(0, 0, 104, 104);
+      context.drawImage(
+        source, rect.x, rect.y, rect.width, rect.height, 0, 0, 104, 104
+      );
+      texture.refresh();
+      return avatarKey;
+    } catch (error) {
+      console.warn('玩家头像纹理生成失败，使用原始立绘:', error.message);
+      return textureKey;
+    }
+  }
+
   function fitAvatar(image) {
     if (!image?.active) return;
-    const size = 52;
-    const source = image.texture?.getSourceImage?.();
-    if (source) {
-      const rect = avatarSourceRect(source);
-      image.setCrop(rect.x, rect.y, rect.width, rect.height);
-    } else {
-      image.setCrop();
-    }
-    image.setDisplaySize(size, size);
+    image.setCrop().setDisplaySize(52, 52);
   }
 
   function createPanel(scene) {
@@ -168,7 +185,7 @@
   }
 
   function setAvatar(header, textureKey) {
-    header.avatarImage.setTexture(textureKey);
+    header.avatarImage.setTexture(createAvatarTexture(header, textureKey));
     fitAvatar(header.avatarImage);
   }
 
