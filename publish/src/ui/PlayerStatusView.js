@@ -146,7 +146,7 @@
       try {
         const key = await root.Game.PlayerPortraitAssets.ensureLoaded(scene, origin);
         if (view.header.avatarImage?.active) {
-          root.Game.PlayerStatusHeader.setAvatar(view.header, key, { headOnly: true });
+          root.Game.PlayerStatusHeader.setAvatar(view.header, key);
         }
       } catch (error) {
         console.error('玩家身份头像加载失败:', error.code || '', error.message, error.stack);

@@ -8,17 +8,72 @@
       .setOrigin(originX, 0.5);
   }
 
-  function fitAvatar(image, headOnly = false) {
+  function avatarSourceRect(source) {
+    const width = Number(source?.width) || 1;
+    const height = Number(source?.height) || 1;
+    if (width / height < 1.25) {
+      return { x: 0, y: 0, width, height };
+    }
+    const fallback = {
+      x: Math.floor(width * 0.12),
+      y: 0,
+      width: Math.floor(width * 0.76),
+      height: Math.floor(height * 0.34)
+    };
+    try {
+      const probe = document.createElement('canvas');
+      probe.width = width;
+      probe.height = height;
+      const context = probe.getContext('2d', { willReadFrequently: true });
+      context.drawImage(source, 0, 0, width, height);
+      const pixels = context.getImageData(0, 0, width, height).data;
+      let minX = width; let minY = height; let maxX = -1; let maxY = -1;
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          if (pixels[(y * width + x) * 4 + 3] < 12) continue;
+          minX = Math.min(minX, x); minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+        }
+      }
+      if (maxX >= minX && maxY >= minY) {
+        const contentHeight = Math.max(1, maxY - minY + 1);
+        return {
+          x: minX,
+          y: minY,
+          width: Math.max(1, maxX - minX + 1),
+          height: Math.min(
+            Math.floor(height * 0.36),
+            Math.max(220, Math.floor(contentHeight * 0.3))
+          )
+        };
+      }
+    } catch (error) {
+      console.warn('头像头部区域分析失败，使用默认裁切:', error.message);
+    }
+    return fallback;
+  }
+
+  function createHeadTexture(header, textureKey) {
+    const source = header.scene.textures.get(textureKey)?.getSourceImage?.();
+    if (!source) return textureKey;
+    const headKey = `player-avatar-head-${textureKey}`;
+    const texture = header.scene.textures.exists(headKey)
+      ? header.scene.textures.get(headKey)
+      : header.scene.textures.createCanvas(headKey, 104, 104);
+    const context = texture.getContext();
+    const rect = avatarSourceRect(source);
+    context.clearRect(0, 0, 104, 104);
+    context.drawImage(
+      source, rect.x, rect.y, rect.width, rect.height, 0, 0, 104, 104
+    );
+    texture.refresh();
+    return headKey;
+  }
+
+  function fitAvatar(image) {
     if (!image?.active) return;
     const size = 52;
-    const source = image.texture?.getSourceImage?.();
-    const width = Number(source?.width || image.width) || size;
-    const height = Number(source?.height || image.height) || size;
-    if (headOnly) {
-      image.setCrop(0, 0, width, Math.max(1, Math.floor(height * 0.38)));
-    } else {
-      image.setCrop();
-    }
+    image.setCrop();
     image.setDisplaySize(size, size);
   }
 
@@ -85,9 +140,9 @@
     header.toggleText.setText(expanded ? '⌃' : '⌄');
   }
 
-  function setAvatar(header, textureKey, options = {}) {
-    header.avatarImage.setTexture(textureKey);
-    fitAvatar(header.avatarImage, options.headOnly === true);
+  function setAvatar(header, textureKey) {
+    header.avatarImage.setTexture(createHeadTexture(header, textureKey));
+    fitAvatar(header.avatarImage);
   }
 
   root.Game.PlayerStatusHeader = Object.freeze({ create, update, setExpanded, setAvatar });

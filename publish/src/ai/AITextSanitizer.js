@@ -24,5 +24,18 @@
     return value || String(fallback || '').trim();
   }
 
-  root.GameAIText = Object.freeze({ clean });
+  function limit(text, maxCharacters = 240) {
+    const value = String(text || '').trim();
+    if (value.length <= maxCharacters) return value;
+    const clipped = value.slice(0, maxCharacters);
+    const punctuation = /[。！？!?；;]/g;
+    let match;
+    let lastEnd = -1;
+    while ((match = punctuation.exec(clipped))) lastEnd = match.index + 1;
+    const cutoff = lastEnd >= Math.floor(maxCharacters * 0.65)
+      ? lastEnd : maxCharacters;
+    return clipped.slice(0, cutoff).trim();
+  }
+
+  root.GameAIText = Object.freeze({ clean, limit });
 }(window));

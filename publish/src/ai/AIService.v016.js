@@ -15,6 +15,12 @@
     timeoutFallback: '她沉默片刻，似乎正在斟酌接下来该说什么。'
   });
   function affinityFor(session) { return root.GameAffinity.getSnapshot(session.npc.id); }
+  function limitReply(text, fallback = '') {
+    const cleaned = root.GameAIText.clean(text, fallback);
+    return root.GameAIText.limit
+      ? root.GameAIText.limit(cleaned, 240)
+      : cleaned.slice(0, 240);
+  }
   function emitRender() {
     if (!current) return;
     root.Game.EventBus.emit('ai-dialogue-render', {
@@ -113,10 +119,10 @@
     draft = '';
     emitRender();
     emitStatus('thinking', '对方正在回应…');
-    trace('request-start', { historyLength: session.messages.length, maxTokens: 500 });
+    trace('request-start', { historyLength: session.messages.length, maxTokens: 340 });
     let completed = false;
     function finish(fullText) {
-      const reply = root.GameAIText.clean(
+      const reply = limitReply(
         fullText,
         '她略作沉吟，换了一种更直接的说法。'
       );
@@ -131,10 +137,10 @@
     try {
       const result = await completions.run({
         messages: root.GameDialoguePrompts.conversation(session, affinityFor(session)),
-        maxTokens: 500,
+        maxTokens: 340,
         onUpdate(fullText) {
           if (current !== session) return;
-          draft = root.GameAIText.clean(fullText);
+          draft = limitReply(fullText);
           emitRender();
         },
         onDone: finish

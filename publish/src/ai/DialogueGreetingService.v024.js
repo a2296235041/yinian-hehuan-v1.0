@@ -2,7 +2,7 @@
   'use strict';
 
   function clean(text, fallback) {
-    return root.GameAIText.clean(text, fallback);
+    return root.GameAIText.limit(root.GameAIText.clean(text, fallback), 240);
   }
 
   function returnFallback(affinity, npc) {
@@ -29,7 +29,7 @@
     try {
       const result = await completions.run({
         messages,
-        maxTokens: returning ? 220 : 300,
+        maxTokens: returning ? 220 : 340,
         timeoutFallback: fallback,
         onUpdate(fullText) {
           finalText = clean(fullText, fallback);
