@@ -27,24 +27,37 @@
       const context = probe.getContext('2d', { willReadFrequently: true });
       context.drawImage(source, 0, 0, width, height);
       const pixels = context.getImageData(0, 0, width, height).data;
-      let minX = width; let minY = height; let maxX = -1; let maxY = -1;
-      for (let y = 0; y < height; y += 1) {
-        for (let x = 0; x < width; x += 1) {
-          if (pixels[(y * width + x) * 4 + 3] < 12) continue;
-          minX = Math.min(minX, x); minY = Math.min(minY, y);
-          maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+      const alphaBounds = (startY, endY) => {
+        let minX = width; let minY = endY; let maxX = -1; let maxY = -1;
+        for (let y = startY; y < endY; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            if (pixels[(y * width + x) * 4 + 3] < 12) continue;
+            minX = Math.min(minX, x); minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+          }
         }
-      }
-      if (maxX >= minX && maxY >= minY) {
-        const contentHeight = Math.max(1, maxY - minY + 1);
+        return { minX, minY, maxX, maxY };
+      };
+      const full = alphaBounds(0, height);
+      if (full.maxX >= full.minX && full.maxY >= full.minY) {
+        const contentHeight = Math.max(1, full.maxY - full.minY + 1);
+        const headEnd = Math.min(
+          height,
+          full.minY + Math.max(190, Math.floor(contentHeight * 0.18))
+        );
+        const head = alphaBounds(full.minY, headEnd);
+        const headHeight = Math.max(1, head.maxY - head.minY + 1);
+        const cropHeight = headHeight + 14;
+        const cropWidth = Math.min(width, Math.max(220, Math.floor(cropHeight * 1.35)));
+        const centerX = (head.minX + head.maxX) / 2;
+        const x = Math.max(0, Math.min(
+          width - cropWidth,
+          Math.floor(centerX - cropWidth / 2)
+        ));
+        const y = Math.max(0, head.minY - 6);
         return {
-          x: minX,
-          y: minY,
-          width: Math.max(1, maxX - minX + 1),
-          height: Math.min(
-            Math.floor(height * 0.36),
-            Math.max(220, Math.floor(contentHeight * 0.3))
-          )
+          x, y, width: cropWidth,
+          height: Math.min(height - y, cropHeight)
         };
       }
     } catch (error) {
