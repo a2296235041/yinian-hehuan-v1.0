@@ -11,84 +11,34 @@
   function avatarSourceRect(source) {
     const width = Number(source?.width) || 1;
     const height = Number(source?.height) || 1;
-    if (width / height < 1.25) {
-      return { x: 0, y: 0, width, height };
-    }
-    const fallback = {
-      x: Math.floor(width * 0.12),
-      y: 0,
-      width: Math.floor(width * 0.76),
-      height: Math.floor(height * 0.34)
-    };
-    try {
-      const probe = document.createElement('canvas');
-      probe.width = width;
-      probe.height = height;
-      const context = probe.getContext('2d', { willReadFrequently: true });
-      context.drawImage(source, 0, 0, width, height);
-      const pixels = context.getImageData(0, 0, width, height).data;
-      const alphaBounds = (startY, endY) => {
-        let minX = width; let minY = endY; let maxX = -1; let maxY = -1;
-        for (let y = startY; y < endY; y += 1) {
-          for (let x = 0; x < width; x += 1) {
-            if (pixels[(y * width + x) * 4 + 3] < 12) continue;
-            minX = Math.min(minX, x); minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
-          }
-        }
-        return { minX, minY, maxX, maxY };
+    if (width / height > 1) {
+      const cropWidth = height;
+      return {
+        x: Math.floor((width - cropWidth) / 2),
+        y: 0,
+        width: cropWidth,
+        height
       };
-      const full = alphaBounds(0, height);
-      if (full.maxX >= full.minX && full.maxY >= full.minY) {
-        const contentHeight = Math.max(1, full.maxY - full.minY + 1);
-        const headEnd = Math.min(
-          height,
-          full.minY + Math.max(190, Math.floor(contentHeight * 0.18))
-        );
-        const head = alphaBounds(full.minY, headEnd);
-        const headHeight = Math.max(1, head.maxY - head.minY + 1);
-        const cropHeight = headHeight + 14;
-        const cropWidth = Math.min(width, Math.max(220, Math.floor(cropHeight * 1.35)));
-        const centerX = (head.minX + head.maxX) / 2;
-        const x = Math.max(0, Math.min(
-          width - cropWidth,
-          Math.floor(centerX - cropWidth / 2)
-        ));
-        const y = Math.max(0, head.minY - 6);
-        return {
-          x, y, width: cropWidth,
-          height: Math.min(height - y, cropHeight)
-        };
-      }
-    } catch (error) {
-      console.warn('头像头部区域分析失败，使用默认裁切:', error.message);
     }
-    return fallback;
-  }
-
-  function createHeadTexture(header, textureKey) {
-    const scene = header?.scene;
-    if (!scene?.textures) return textureKey;
-    const source = scene.textures.get(textureKey)?.getSourceImage?.();
-    if (!source) return textureKey;
-    const headKey = `player-avatar-head-${textureKey}`;
-    const texture = scene.textures.exists(headKey)
-      ? scene.textures.get(headKey)
-      : scene.textures.createCanvas(headKey, 104, 104);
-    const context = texture.getContext();
-    const rect = avatarSourceRect(source);
-    context.clearRect(0, 0, 104, 104);
-    context.drawImage(
-      source, rect.x, rect.y, rect.width, rect.height, 0, 0, 104, 104
-    );
-    texture.refresh();
-    return headKey;
+    const cropHeight = width;
+    return {
+      x: 0,
+      y: Math.floor((height - cropHeight) * 0.12),
+      width,
+      height: cropHeight
+    };
   }
 
   function fitAvatar(image) {
     if (!image?.active) return;
     const size = 52;
-    image.setCrop();
+    const source = image.texture?.getSourceImage?.();
+    if (source) {
+      const rect = avatarSourceRect(source);
+      image.setCrop(rect.x, rect.y, rect.width, rect.height);
+    } else {
+      image.setCrop();
+    }
     image.setDisplaySize(size, size);
   }
 
@@ -156,7 +106,7 @@
   }
 
   function setAvatar(header, textureKey) {
-    header.avatarImage.setTexture(createHeadTexture(header, textureKey));
+    header.avatarImage.setTexture(textureKey);
     fitAvatar(header.avatarImage);
   }
 
