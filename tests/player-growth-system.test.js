@@ -33,6 +33,10 @@ const window = {
     })
   }
 };
+vm.runInNewContext(
+  fs.readFileSync(path.join(__dirname, '../publish/src/storage/PersistenceStatus.js'), 'utf8'),
+  { window, console, Promise, Math, Number, Object }
+);
 vm.runInNewContext(source, { window, Promise, Math, Number, Object });
 vm.runInNewContext(formulaSource, { window, Promise, Math, Number, Object });
 vm.runInNewContext(statsSource, { window, Promise, Math, Number, Object });

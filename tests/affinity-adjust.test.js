@@ -29,6 +29,7 @@ const window = {
   console
 };
 const context = { window, console, Math, JSON, Promise };
+vm.runInNewContext(source('publish/src/storage/PersistenceStatus.js'), context);
 vm.runInNewContext(source('publish/src/systems/AffinityState.js'), context);
 vm.runInNewContext(source('publish/src/systems/AffinitySystem.js'), context);
 

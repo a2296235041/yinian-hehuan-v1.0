@@ -19,12 +19,18 @@
       if (requestId !== scene.requestId || !scene.statusText?.active) return;
       if (!result.changed) {
         root.GameAudio.sfx('deny');
-        scene.statusText.setText(failures[result.reason] || '交易未能完成，请稍后再试。');
+        root.GamePersistenceStatus?.report?.('商店交易', result);
+        const syncNotice = result.syncMessage ? ` ${result.syncMessage}` : '';
+        scene.statusText.setText(
+          `${failures[result.reason] || '交易未能完成，请稍后再试。'}${syncNotice}`
+        );
         return;
       }
+      root.GamePersistenceStatus?.report?.('商店交易', result);
       root.GameAudio.sfx('success');
+      const syncNotice = result.syncMessage ? ` ${result.syncMessage}` : '';
       scene.statusText.setText(
-        `交易完成：花费 ${result.totalPrice} 灵石，购得${result.item.name} ×${result.quantity}，剩余灵石 ${result.balance}。`
+        `交易完成：花费 ${result.totalPrice} 灵石，购得${result.item.name} ×${result.quantity}，剩余灵石 ${result.balance}。${syncNotice}`
       );
     } catch (error) {
       console.error('批量购买失败:', error.code || '', error.message, error.stack);

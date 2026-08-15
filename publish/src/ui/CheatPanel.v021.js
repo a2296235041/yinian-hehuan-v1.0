@@ -124,7 +124,8 @@
     try {
       const result = await action();
       root.GameAudio?.sfx?.('success');
-      setStatus(result?.durable === false ? `${successText}，暂未同步` : successText, 'success');
+      root.GamePersistenceStatus?.report?.('攻略系统操作', result);
+      setStatus(result?.syncMessage ? `${successText}，${result.syncMessage}` : successText, 'success');
     } catch (error) {
       console.error('攻略系统操作失败:', error.code || '', error.message, error.stack);
       root.GameAudio?.sfx?.('deny');

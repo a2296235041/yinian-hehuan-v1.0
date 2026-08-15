@@ -10,8 +10,9 @@
 
   function resultMessage(result) {
     if (!result.changed) return failedMessages[result.reason] || '赠礼失败，请稍后重试。';
+    root.GamePersistenceStatus?.report?.('赠礼', result);
     return `赠送${result.item.name}，好感 +${result.gain}` +
-      `${result.durable ? '' : '，本次进度暂未同步'}`;
+      `${result.syncMessage ? `，${result.syncMessage}` : ''}`;
   }
 
   function interactionPrompt(session, result, message) {

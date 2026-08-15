@@ -107,8 +107,16 @@
       root.GameExplorationPanel.setMode(true);
       if (result.type === 'battle') return startBattle(result, id);
       root.GameAudio.sfx('success');
+      root.GamePersistenceStatus?.report?.(
+        result.type === 'curio' || result.type === 'pill' ? '探索奖励' : '探索遭遇',
+        result
+      );
       root.GameExplorationPanel.setBusy(false,
-        generated.failed ? 'AI 暂时不可用，已显示固定探索结果。' : '');
+        [
+          generated.failed ? 'AI 暂时不可用，已显示固定探索结果。' : '',
+          result.syncMessage
+        ].filter(Boolean).join('，')
+      );
     } catch (error) {
       console.error('DOM 探险结算失败:', error.code || '', error.message, error.stack);
       root.GameExplorationPanel.setBusy(false, '这次探索未能完成，请稍后重试。');
@@ -122,6 +130,7 @@
 
   function handleBattleResult(result) {
     if (!active || !session) return;
+    root.GamePersistenceStatus?.report?.('战斗奖励', result);
     root.GameExplorationDialogue.add(session, 'assistant', result?.text || '战斗结束。');
     root.GameExplorationPanel.render(session);
     root.GameExplorationDOMView.updatePlayer();

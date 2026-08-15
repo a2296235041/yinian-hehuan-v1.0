@@ -7,6 +7,7 @@
   let readyPromise = null;
   let listenersInstalled = false;
   let refilling = false;
+  const persistence = root.GamePersistenceStatus;
 
   const storage = root.GamefyRecipes.createVersionedStorage({
     namespace: 'hehuan:',
@@ -81,7 +82,7 @@
     if (state.unlimitedStamina) refillUnlimited();
     const durable = await persist();
     root.Game.EventBus.emit('cheat-settings-changed', { ...snapshot(), durable });
-    return { ...snapshot(), durable };
+    return persistence.result('攻略系统设置', true, durable, snapshot());
   }
 
   async function setAffinity(npcId, value) {
@@ -92,7 +93,9 @@
     };
     next.records[npcId] = { ...record, affinity: clamp(value, -100, 100) };
     const result = await root.GameAffinity.restore(next);
-    return { durable: result.durable, snapshot: root.GameAffinity.getSnapshot(npcId) };
+    return persistence.result('攻略系统好感', true, result.durable, {
+      snapshot: root.GameAffinity.getSnapshot(npcId)
+    });
   }
 
   async function setRealm(realmIndex, phase = 'early') {

@@ -68,6 +68,7 @@ const window = {
   Date
 };
 const context = { window, console, Math, Date };
+vm.runInNewContext(source('publish/src/storage/PersistenceStatus.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentRules.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentBattleState.js'), context);
 vm.runInNewContext(source('publish/src/systems/TournamentDecision.js'), context);

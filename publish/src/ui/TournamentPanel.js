@@ -42,6 +42,10 @@
       finalStatus = errorMessage(error, '赛事操作失败，请稍后重试');
     } finally {
       busy = false;
+      if (result?.syncMessage) {
+        finalStatus = result.syncMessage;
+        root.GamePersistenceStatus?.report?.('赛事操作', result);
+      }
       render(finalStatus);
     }
     return result;

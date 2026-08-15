@@ -7,6 +7,7 @@
   let storage = null;
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
+  const persistence = root.GamePersistenceStatus;
   const clampQuantity = (value) => Math.max(0, Math.min(9999, Math.floor(Number(value) || 0)));
   const clampSpiritStones = (value) => (
     Math.max(0, Math.min(SPIRIT_STONE_CAP, Math.floor(Number(value) || 0)))
@@ -111,11 +112,11 @@
       await (readyPromise || Promise.resolve());
       const item = catalog.get(itemId);
       const delta = clampQuantity(amount);
-      if (!item || delta <= 0) return { changed: false, reason: 'invalid_item' };
+      if (!item || delta <= 0) return persistence.result('物品变更', false, true, { reason: 'invalid_item' });
       state.quantities[itemId] = clampQuantity((state.quantities[itemId] || 0) + delta);
       const durable = await persist(false);
       emitChange(itemId, delta, durable, source);
-      return { changed: true, item, quantity: state.quantities[itemId], durable };
+      return persistence.result('物品变更', true, durable, { item, quantity: state.quantities[itemId] });
     });
   }
 
@@ -125,14 +126,14 @@
       const item = catalog.get(itemId);
       const delta = clampQuantity(amount);
       const owned = state.quantities[itemId] || 0;
-      if (!item || delta <= 0) return { changed: false, reason: 'invalid_item' };
-      if (owned < delta) return { changed: false, reason: 'insufficient', item, quantity: owned };
+      if (!item || delta <= 0) return persistence.result('物品变更', false, true, { reason: 'invalid_item' });
+      if (owned < delta) return persistence.result('物品变更', false, true, { reason: 'insufficient', item, quantity: owned });
       const next = owned - delta;
       if (next > 0) state.quantities[itemId] = next;
       else delete state.quantities[itemId];
       const durable = await persist(true);
       emitChange(itemId, -delta, durable, source);
-      return { changed: true, item, quantity: next, durable };
+      return persistence.result('物品变更', true, durable, { item, quantity: next });
     });
   }
 
@@ -144,14 +145,14 @@
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       const delta = clampSpiritStones(amount);
-      if (delta <= 0) return { changed: false, reason: 'invalid_amount' };
+      if (delta <= 0) return persistence.result('灵石变更', false, true, { reason: 'invalid_amount' });
       const next = clampSpiritStones(state.spiritStones + delta);
       const applied = next - state.spiritStones;
-      if (applied <= 0) return { changed: false, reason: 'max_amount' };
+      if (applied <= 0) return persistence.result('灵石变更', false, true, { reason: 'max_amount' });
       state.spiritStones = next;
       const durable = await persist(false);
       emitChange('spirit_stones', applied, durable, source);
-      return { changed: true, balance: state.spiritStones, durable };
+      return persistence.result('灵石变更', true, durable, { balance: state.spiritStones });
     });
   }
 
@@ -159,14 +160,12 @@
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       const delta = clampSpiritStones(amount);
-      if (delta <= 0) return { changed: false, reason: 'invalid_amount' };
-      if (state.spiritStones < delta) {
-        return { changed: false, reason: 'insufficient', balance: state.spiritStones };
-      }
+      if (delta <= 0) return persistence.result('灵石变更', false, true, { reason: 'invalid_amount' });
+      if (state.spiritStones < delta) return persistence.result('灵石变更', false, true, { reason: 'insufficient', balance: state.spiritStones });
       state.spiritStones -= delta;
       const durable = await persist(true);
       emitChange('spirit_stones', -delta, durable, source);
-      return { changed: true, balance: state.spiritStones, durable };
+      return persistence.result('灵石变更', true, durable, { balance: state.spiritStones });
     });
   }
 
@@ -176,7 +175,7 @@
       state = sanitize(nextState);
       const durable = await persist(true);
       emitChange(null, 0, durable, 'load');
-      return { durable, snapshot: snapshot() };
+      return persistence.result('储物袋恢复', true, durable, { snapshot: snapshot() });
     });
   }
   root.GameInventory = {

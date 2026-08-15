@@ -13,21 +13,19 @@
   let storage = null;
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
-  function queue(action) {
-    const task = mutationQueue.then(action, action);
-    mutationQueue = task.then(() => undefined, () => undefined);
-    return task;
-  }
-  async function persist(flush = true) {
+  const persistence = root.GamePersistenceStatus;
+  function queue(action) { const task = mutationQueue.then(action, action); mutationQueue = task.then(() => undefined, () => undefined); return task; }
+  async function persist(flush = true, prerequisites = []) {
     const result = await storage.save(state, { flush });
-    if (result.remote !== true) throw new Error('赛事进度未能同步到平台');
     state = result.value;
-    root.Game?.EventBus?.emit('tournament-changed', State.clone(state));
-    return State.clone(state);
+    const status = persistence.combine('赛事操作', [
+      persistence.result('赛事进度', true, result.remote === true), ...prerequisites
+    ]);
+    const snapshot = State.clone(state);
+    root.Game?.EventBus?.emit('tournament-changed', { ...snapshot, ...status });
+    return { ...snapshot, ...status };
   }
-  function currentDay() {
-    return Math.max(1, Math.floor(Number(root.Game?.player?.day) || 1));
-  }
+  function currentDay() { return Math.max(1, Math.floor(Number(root.Game?.player?.day) || 1)); }
   function getAccess(mode) {
     const info = MODE_INFO[mode];
     const realmIndex = Math.max(
@@ -40,9 +38,7 @@
       requiredRealmName: info?.requiredRealmName || '未知境界'
     };
   }
-  function currentMatch(active = state.active) {
-    return active?.round?.matches?.find((match) => match.id === active.round.playerMatchId) || null;
-  }
+  function currentMatch(active = state.active) { return active?.round?.matches?.find((match) => match.id === active.round.playerMatchId) || null; }
   function recordTampering(active, opponentId) {
     if (!opponentId) return;
     const profile = active.roster.find((entry) => entry.id === opponentId);
@@ -177,7 +173,7 @@
         state.history.push({
           mode: active.mode, day: currentDay(), championId: active.championId, reward: active.reward
         });
-        return persist();
+        return persist(true, [reward]);
       });
     },
     abandonCompleted() {

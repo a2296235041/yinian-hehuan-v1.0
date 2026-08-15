@@ -19,16 +19,21 @@
       if (requestId !== scene.requestId || !scene.useStatusText?.active) return;
       if (!result.changed) {
         root.GameAudio.sfx('deny');
+        root.GamePersistenceStatus?.report?.('物品使用', result);
+        const syncNotice = result.syncMessage ? ` ${result.syncMessage}` : '';
         scene.useStatusText.setText(
-          failureMessages[result.reason] || '此物暂时无法使用。'
+          `${failureMessages[result.reason] || '此物暂时无法使用。'}${syncNotice}`
         );
         return;
       }
+      root.GamePersistenceStatus?.report?.('物品使用', result);
       root.GameAudio.sfx('success');
       const partial = result.partial
         ? `临近当前上限，实际使用 ${result.usedQuantity} 个。`
         : '';
-      scene.useStatusText.setText(`${partial}物品生效，AI 正在补全这一幕…`);
+      scene.useStatusText.setText(
+        `${partial}物品生效${result.syncMessage ? `，${result.syncMessage}` : ''}，AI 正在补全这一幕…`
+      );
       const story = await root.GameNarrative.generateDetailed('use_item', {
         item: item.name,
         quantity: result.usedQuantity,

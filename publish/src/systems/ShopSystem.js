@@ -11,6 +11,7 @@
   };
   const ATTRIBUTE_CAP = 9999;
   let queue = Promise.resolve();
+  const persistence = root.GamePersistenceStatus;
 
   function normalizeQuantity(value) {
     const quantity = Math.floor(Number(value) || 0);
@@ -62,28 +63,47 @@
       await root.GameInventory.ready();
       const shop = getShop(buildingId);
       const offer = shop?.offers.find((entry) => entry.itemId === itemId);
-      if (!offer) return { changed: false, reason: 'not_sold' };
+      if (!offer) return persistence.result('商店交易', false, true, { reason: 'not_sold' });
       const purchaseQuantity = normalizePurchaseQuantity(quantity);
-      if (!purchaseQuantity) return { changed: false, reason: 'invalid_quantity', offer };
+      if (!purchaseQuantity) {
+        return persistence.result('商店交易', false, true, {
+          reason: 'invalid_quantity', offer
+        });
+      }
       if (root.GameInventory.getQuantity(itemId) + purchaseQuantity > 9999) {
-        return { changed: false, reason: 'inventory_limit', offer };
+        return persistence.result('商店交易', false, true, {
+          reason: 'inventory_limit', offer
+        });
       }
       const totalPrice = offer.price * purchaseQuantity;
       const spent = await root.GameInventory.removeSpiritStones(totalPrice, 'shop');
-      if (!spent.changed) return { changed: false, reason: spent.reason, offer };
+      if (!spent.changed) {
+        return persistence.result('商店交易', false, spent.durable !== false, {
+          reason: spent.reason, offer
+        });
+      }
       const added = await root.GameInventory.add(itemId, purchaseQuantity, 'shop');
       if (!added.changed) {
-        await root.GameInventory.addSpiritStones(totalPrice, 'shop_refund');
-        return { changed: false, reason: 'delivery_failed', offer };
+        const refund = await root.GameInventory.addSpiritStones(totalPrice, 'shop_refund');
+        return persistence.result(
+          '商店交易',
+          false,
+          spent.durable !== false && refund.durable !== false,
+          {
+            reason: 'delivery_failed',
+            offer,
+            reconciliationRequired: refund.durable === false,
+            refund
+          }
+        );
       }
-      return {
-        changed: true,
+      return persistence.combine('商店交易', [spent, added], {
         offer,
         item: added.item,
         quantity: purchaseQuantity,
         totalPrice,
         balance: root.GameInventory.getSpiritStones()
-      };
+      });
     });
   }
 
@@ -96,16 +116,22 @@
       ]);
       const item = root.GameInventory.getItem(itemId);
       const requestedQuantity = normalizeQuantity(quantity);
-      if (!requestedQuantity) return { changed: false, reason: 'invalid_quantity', item };
+      if (!requestedQuantity) {
+        return persistence.result('物品使用', false, true, {
+          reason: 'invalid_quantity', item
+        });
+      }
       if (!item || !['cultivation', 'attribute'].includes(item.type)) {
-        return { changed: false, reason: 'not_usable', item };
+        return persistence.result('物品使用', false, true, { reason: 'not_usable', item });
       }
       if (root.GameInventory.getQuantity(itemId) < requestedQuantity) {
-        return { changed: false, reason: 'insufficient', item };
+        return persistence.result('物品使用', false, true, { reason: 'insufficient', item });
       }
       const cultivation = root.GameCultivation.getSnapshot();
       if (item.type === 'cultivation' && (cultivation.maxRealm || cultivation.canBreakthrough)) {
-        return { changed: false, reason: cultivation.maxRealm ? 'max_realm' : 'bottleneck', item };
+        return persistence.result('物品使用', false, true, {
+          reason: cultivation.maxRealm ? 'max_realm' : 'bottleneck', item
+        });
       }
       const stats = root.GamePlayerStats.getSnapshot();
       const multiplier = 1 + Number(stats.pillGainPercent || 0) / 100;
@@ -123,30 +149,45 @@
         Math.max(0, Math.ceil(remaining / unitGain))
       );
       if (!usefulQuantity) {
-        return { changed: false, reason: item.type === 'cultivation' ? 'bottleneck' : 'max_attribute', item };
+        return persistence.result('物品使用', false, true, {
+          reason: item.type === 'cultivation' ? 'bottleneck' : 'max_attribute', item
+        });
       }
       const removed = await root.GameInventory.remove(itemId, usefulQuantity, 'use_item');
-      if (!removed.changed) return { changed: false, reason: removed.reason, item };
+      if (!removed.changed) {
+        return persistence.result('物品使用', false, removed.durable !== false, {
+          reason: removed.reason, item
+        });
+      }
       const result = item.type === 'cultivation'
         ? await root.GameCultivation.addCultivation(unitGain * usefulQuantity, 'item')
         : await root.GamePlayerGrowth.addBonus(
           item.attribute, unitGain * usefulQuantity, 'item'
         );
       if (!result.changed) {
-        await root.GameInventory.add(itemId, usefulQuantity, 'item_refund');
-        return { changed: false, reason: result.reason || 'effect_failed', item };
+        const refund = await root.GameInventory.add(itemId, usefulQuantity, 'item_refund');
+        return persistence.result(
+          '物品使用',
+          false,
+          removed.durable !== false && refund.durable !== false,
+          {
+            reason: result.reason || 'effect_failed',
+            item,
+            reconciliationRequired: refund.durable === false,
+            refund
+          }
+        );
       }
-      return {
-        changed: true,
+      return persistence.combine('物品使用', [removed, result], {
         item,
-        result,
         requestedQuantity,
         usedQuantity: usefulQuantity,
         partial: usefulQuantity < requestedQuantity,
+        result,
         text: item.type === 'cultivation'
           ? `服用${item.name} ×${usefulQuantity}，修为 +${result.gain}`
           : `使用${item.name} ×${usefulQuantity}，${attributeNames[item.attribute]} +${result.gain}`
-      };
+      });
     });
   }
 

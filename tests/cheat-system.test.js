@@ -86,6 +86,10 @@ const root = {
 
 const context = { window: root, console };
 vm.runInNewContext(
+  fs.readFileSync('publish/src/storage/PersistenceStatus.js', 'utf8'),
+  context
+);
+vm.runInNewContext(
   fs.readFileSync('publish/src/systems/CheatSystem.v021.js', 'utf8'),
   context
 );

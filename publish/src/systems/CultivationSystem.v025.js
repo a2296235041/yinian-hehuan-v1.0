@@ -6,6 +6,7 @@
   let storage = null;
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
+  const persistence = root.GamePersistenceStatus;
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, Math.floor(Number(value) || 0)));
@@ -108,15 +109,15 @@
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       const before = snapshot();
-      if (before.maxRealm) return { changed: false, reason: 'max_realm', snapshot: before };
-      if (before.canBreakthrough) return { changed: false, reason: 'bottleneck', snapshot: before };
+      if (before.maxRealm) return persistence.result('修为变更', false, true, { reason: 'max_realm', snapshot: before });
+      if (before.canBreakthrough) return persistence.result('修为变更', false, true, { reason: 'bottleneck', snapshot: before });
       const gain = clamp(amount, 1, 100000000);
       const next = Math.min(before.required, state.progress + gain);
       const applied = next - state.progress;
       state.progress = next;
       const durable = await persist(false);
       emitChange(applied, source, durable);
-      return { changed: applied > 0, gain: applied, durable, snapshot: snapshot() };
+      return persistence.result('修为变更', applied > 0, durable, { gain: applied, snapshot: snapshot() });
     });
   }
 
@@ -124,11 +125,7 @@
   function addCultivationPercent(percent, source = 'item') {
     const snapshotBefore = snapshot();
     if (snapshotBefore.maxRealm || snapshotBefore.canBreakthrough) {
-      return Promise.resolve({
-        changed: false,
-        reason: snapshotBefore.maxRealm ? 'max_realm' : 'bottleneck',
-        snapshot: snapshotBefore
-      });
+      return Promise.resolve(persistence.result('修为变更', false, true, { reason: snapshotBefore.maxRealm ? 'max_realm' : 'bottleneck', snapshot: snapshotBefore }));
     }
     const safePercent = Math.max(1, Math.min(100, Number(percent) || 0));
     const amount = Math.max(1, Math.ceil(snapshotBefore.required * safePercent / 100));
@@ -148,10 +145,8 @@
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
       const before = snapshot();
-      if (!before.canBreakthrough) return { changed: false, reason: 'not_ready', snapshot: before };
-      if (Number(affinity) < before.requiredAffinity) {
-        return { changed: false, reason: 'affinity_low', snapshot: before };
-      }
+      if (!before.canBreakthrough) return persistence.result('境界突破', false, true, { reason: 'not_ready', snapshot: before });
+      if (Number(affinity) < before.requiredAffinity) return persistence.result('境界突破', false, true, { reason: 'affinity_low', snapshot: before });
       state.realmIndex += 1;
       const hasLotusCovenant = root.Game.player?.origin?.talent?.id === 'lotus_covenant';
       const nextRequired = requiredAt(state.realmIndex);
@@ -163,7 +158,7 @@
       const next = snapshot();
       root.Game.EventBus.emit('realm-breakthrough', { ...next, npcId, durable });
       emitChange(0, 'breakthrough', durable);
-      return { changed: true, durable, snapshot: next };
+      return persistence.result('境界突破', true, durable, { snapshot: next });
     });
   }
 
@@ -178,7 +173,7 @@
       syncPlayerDailyLimit();
       const durable = await persist(true);
       emitChange(0, 'load', durable);
-      return { durable, snapshot: snapshot() };
+      return persistence.result('修为恢复', true, durable, { snapshot: snapshot() });
     });
   }
 

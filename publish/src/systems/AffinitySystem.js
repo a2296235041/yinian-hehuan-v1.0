@@ -6,6 +6,7 @@
   let state = { day: 1, records: {} };
   let readyPromise = null;
   let mutationQueue = Promise.resolve();
+  const persistence = root.GamePersistenceStatus;
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, Number(value) || 0));
   }
@@ -105,16 +106,14 @@
         record.dialogueDay = state.day;
         record.dialogueGain = 0;
       }
-      if (record.dialogueGain >= DIALOGUE_LIMIT) {
-        return { changed: false, reason: 'daily_limit', snapshot: getSnapshot(id) };
-      }
+      if (record.dialogueGain >= DIALOGUE_LIMIT) return persistence.result('好感度变更', false, true, { reason: 'daily_limit', snapshot: getSnapshot(id) });
       const talentBonus = root.Game.player?.origin?.talent?.id === 'hehuan_descendant' ? 1 : 0;
       const appliedGain = Math.min(1 + talentBonus, DIALOGUE_LIMIT - record.dialogueGain);
       record.dialogueGain += appliedGain;
       record.affinity = clamp(record.affinity + appliedGain, -100, MAX_AFFINITY);
       const durable = await persist(false);
       emitChange(id, appliedGain, 'dialogue', durable);
-      return { changed: true, gain: appliedGain, durable, snapshot: getSnapshot(id) };
+      return persistence.result('好感度变更', true, durable, { gain: appliedGain, snapshot: getSnapshot(id) });
     });
   }
   function giveGift(id, gain = DEFAULT_GIFT_GAIN) {
@@ -127,15 +126,13 @@
         record.giftDay = state.day;
         record.gifts = 0;
       }
-      if (record.gifts >= GIFT_LIMIT) {
-        return { changed: false, reason: 'daily_limit', snapshot: getSnapshot(id) };
-      }
+      if (record.gifts >= GIFT_LIMIT) return persistence.result('好感度变更', false, true, { reason: 'daily_limit', snapshot: getSnapshot(id) });
       record.giftDay = state.day;
       record.gifts = 1;
       record.affinity = clamp(record.affinity + affinityGain, -100, MAX_AFFINITY);
       const durable = await persist(true);
       emitChange(id, affinityGain, 'gift', durable);
-      return { changed: true, gain: affinityGain, durable, snapshot: getSnapshot(id) };
+      return persistence.result('好感度变更', true, durable, { gain: affinityGain, snapshot: getSnapshot(id) });
     });
   }
   function adjust(id, delta, source = 'event') {
@@ -146,10 +143,10 @@
       const before = record.affinity;
       record.affinity = clamp(before + requested, -100, MAX_AFFINITY);
       const applied = record.affinity - before;
-      if (!applied) return { changed: false, delta: 0, snapshot: getSnapshot(id) };
+      if (!applied) return persistence.result('好感度变更', false, true, { delta: 0, snapshot: getSnapshot(id) });
       const durable = await persist(false);
       emitChange(id, applied, source, durable);
-      return { changed: true, gain: applied, delta: applied, durable, snapshot: getSnapshot(id) };
+      return persistence.result('好感度变更', true, durable, { gain: applied, delta: applied, snapshot: getSnapshot(id) });
     });
   }
   function addBonus(id, gain, source = 'exploration') {
@@ -160,7 +157,7 @@
       state.day += 1;
       const durable = await persist(true);
       root.Game.EventBus.emit('game-day-changed', { day: state.day, durable });
-      return { day: state.day, durable };
+      return persistence.result('日期推进', true, durable, { day: state.day });
     });
   }
   function exportState() {
@@ -174,7 +171,7 @@
       const durable = await persist(true);
       root.Game.EventBus.emit('game-day-changed', { day: state.day, durable });
       initialAffinity.forEach((_, id) => emitChange(id, 0, 'load', durable));
-      return { durable, state: exportState() };
+      return persistence.result('好感度恢复', true, durable, { state: exportState() });
     });
   }
   root.GameAffinity = {

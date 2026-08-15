@@ -64,6 +64,10 @@ const window = {
     getSnapshot: () => ({ pillGainPercent: 0, strength: baseStrength + bonus })
   }
 };
+vm.runInNewContext(
+  fs.readFileSync(path.join(__dirname, '../publish/src/storage/PersistenceStatus.js'), 'utf8'),
+  { window, Date }
+);
 vm.runInNewContext(source, { window, Promise, Math, Number, Object });
 
 (async () => {

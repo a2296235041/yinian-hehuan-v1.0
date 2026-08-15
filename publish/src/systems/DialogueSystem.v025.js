@@ -46,10 +46,11 @@ Game.Systems.DialogueSystem = class DialogueSystem {
         const result = await this.npcSystem.recordDialogue(npcId);
         Game.EventBus.emit('npc-dialogue-completed', { npcId });
         if (npcId !== this.currentNpcId) return;
+        window.GamePersistenceStatus?.report?.('好感度变更', result);
         Game.EventBus.emit('affinity-notice', {
             snapshot: result.snapshot,
             message: result.changed
-                ? `交谈好感 +${result.gain || 1}${result.durable ? '' : '，本次进度暂未同步'}`
+                ? `交谈好感 +${result.gain || 1}${result.syncMessage ? `，${result.syncMessage}` : ''}`
                 : '今日交谈提升已达 5/5'
         });
     }

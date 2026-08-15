@@ -92,11 +92,14 @@ Game.Scenes.UIScene = class UIScene extends Phaser.Scene {
         const gain = Math.max(1, Math.floor(baseGain * (1 + stats.cultivationGainPercent / 100)));
         try {
             const result = await window.GameCultivation.addCultivation(gain, 'cultivate');
+            window.GamePersistenceStatus?.report?.('修为变更', result);
             window.GameAudio.sfx('score');
             const fallback = result.snapshot.canBreakthrough
                 ? `修为 +${result.gain}，已达${result.snapshot.realmName}圆满`
                 : `静心吐纳，修为 +${result.gain}`;
-            this.showLog('灵气正在汇聚，AI 正在补全修炼片段…');
+            this.showLog(
+                `灵气正在汇聚${result.syncMessage ? `，${result.syncMessage}` : ''}，AI 正在补全修炼片段…`
+            );
             this.showLog(await window.GameNarrative.generateDetailed('cultivation', {
                 identity: stats.originName,
                 realm: result.snapshot.label,

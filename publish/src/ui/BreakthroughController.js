@@ -47,8 +47,10 @@
         );
         return;
       }
+      root.GamePersistenceStatus?.report?.('境界突破', result);
       root.GameAudio.sfx('success');
-      const message = `双修圆满，成功突破至${result.snapshot.realmName}。`;
+      const message = `双修圆满，成功突破至${result.snapshot.realmName}` +
+        `${result.syncMessage ? `。${result.syncMessage}` : '。'}`;
       await root.GameAI.respondToInteraction(
         `情境：你刚与玩家完成双修，已确定帮助玩家突破至${result.snapshot.realmName}。` +
         `你们当前关系为${currentAffinity.relationship}，好感${currentAffinity.affinity}/100。` +

@@ -1,9 +1,9 @@
 (function installExplorationSystem(root) {
   'use strict';
-
   const regions = new Map(), enemies = new Map();
   let npcSystem = null;
   let busy = false;
+  const persistence = root.GamePersistenceStatus;
 
   function randomInt(min, max) {
     return Math.floor(Number(min) + Math.random() * (Number(max) - Number(min) + 1));
@@ -59,13 +59,10 @@
     if (!npc) return { type: 'nothing', text: '山路寂静，你只听见风穿过林梢。' };
     const gain = randomInt(2, 4);
     const result = await root.GameAffinity.addBonus(npc.id, gain, 'exploration');
-    return {
-      type: 'npc',
-      npc,
-      gain,
-      text: `你在${region.name}偶遇${npc.name}，结伴同行片刻，好感 +${gain}。`,
-      durable: result.durable
-    };
+    return persistence.result('探索遭遇', result.changed, result.durable, {
+      type: 'npc', npc, gain, affinity: result,
+      text: `你在${region.name}偶遇${npc.name}，结伴同行片刻，好感 +${gain}。`
+    });
   }
 
   async function curioEncounter(region) {
@@ -75,18 +72,21 @@
     const cultivation = randomInt(region.cultivation_min, region.cultivation_max);
     const stones = randomInt(region.stone_min, region.stone_max);
     const itemResult = await root.GameInventory.add(itemId, quantity, 'exploration');
-    await root.GameInventory.addSpiritStones(stones, 'exploration');
+    const stoneResult = await root.GameInventory.addSpiritStones(stones, 'exploration');
     const cultivationResult = await root.GameCultivation.addCultivation(cultivation, 'exploration');
     const itemName = itemResult.item?.name || '未知物品';
     const gainText = cultivationResult.changed ? `，修为 +${cultivationResult.gain}` : '，修为已达瓶颈';
-    return {
+    return persistence.combine('探索奖励', [itemResult, stoneResult, cultivationResult], {
       type: 'curio',
       item: itemResult.item,
       quantity,
       spiritStones: stones,
       cultivation: cultivationResult.gain || 0,
+      itemResult,
+      stoneResult,
+      cultivationResult,
       text: `你发现一处隐秘机缘，获得${itemName} ×${quantity}、灵石 ${stones}${gainText}。`
-    };
+    });
   }
 
   // 神级丹 5%，圣品丹 15%，二者互斥，剩余概率继续走普通遭遇。
@@ -94,12 +94,10 @@
     const added = await root.GameInventory.add(itemId, 1, 'exploration');
     const itemName = added.item?.name || '稀有修为丹';
     const percent = added.item?.cultivation_percent || 0;
-    return {
-      type: 'pill',
-      item: added.item,
-      quantity: 1,
+    return persistence.result('探索奖励', added.changed, added.durable, {
+      type: 'pill', item: added.item, quantity: 1, itemResult: added,
       text: `探险途中发现${itemName} ×1，使用后可直接增加当前境界 ${percent}% 修为。`
-    };
+    });
   }
 
   function battleEncounter(region) {
@@ -120,7 +118,6 @@
     };
   }
 
-  // 每次点击只结算一次探索，避免重复扣除精力。
   async function explore(regionId, intent = '') {
     if (busy) return { type: 'error', text: '上一次探索仍在结算。' };
     busy = true;
@@ -179,15 +176,18 @@
     const extraLoot = hasTalent('battle_hunter') && Math.random() < 0.35 ? 1 : 0;
     const loot = await root.GameInventory.add(enemy.loot_id, 1 + extraLoot, 'battle');
     const stones = Math.max(0, Math.floor(Number(enemy.stone_reward) || 0));
-    if (stones > 0) await root.GameInventory.addSpiritStones(stones, 'battle');
+    const stoneResult = stones > 0
+      ? await root.GameInventory.addSpiritStones(stones, 'battle')
+      : persistence.result('灵石奖励', false, true, { balance: root.GameInventory.getSpiritStones() });
     const itemName = loot.item?.name || '战利品';
     const gainText = cultivation.changed ? `修为 +${cultivation.gain}` : '修为已达瓶颈';
-    return {
+    return persistence.combine('战斗奖励', [cultivation, loot, stoneResult], {
       text: `战斗胜利！${gainText}，获得${itemName} ×${1 + extraLoot}、灵石 ${stones}。`,
       cultivation,
       loot,
+      stoneResult,
       spiritStones: stones
-    };
+    });
   }
 
   root.GameExploration = {

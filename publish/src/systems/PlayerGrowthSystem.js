@@ -9,6 +9,7 @@
   let readyPromise = null;
   let storage = null;
   let mutationQueue = Promise.resolve();
+  const persistence = root.GamePersistenceStatus;
 
   function clamp(value) {
     return Math.max(0, Math.min(ATTRIBUTE_CAP, Math.floor(Number(value) || 0)));
@@ -80,13 +81,25 @@
   function addBonus(attribute, amount, source = 'item') {
     return queueMutation(async () => {
       await (readyPromise || Promise.resolve());
-      if (!allowed.includes(attribute)) return { changed: false, reason: 'invalid_attribute' };
+      if (!allowed.includes(attribute)) {
+        return persistence.result('永久属性变更', false, true, {
+          reason: 'invalid_attribute'
+        });
+      }
       const gain = clamp(amount);
-      if (gain <= 0) return { changed: false, reason: 'invalid_amount' };
+      if (gain <= 0) {
+        return persistence.result('永久属性变更', false, true, {
+          reason: 'invalid_amount'
+        });
+      }
       const before = state.bonuses[attribute] || 0;
       const next = Math.min(clamp(before + gain), maxBonus(attribute));
       const applied = next - before;
-      if (applied <= 0) return { changed: false, reason: 'max_attribute' };
+      if (applied <= 0) {
+        return persistence.result('永久属性变更', false, true, {
+          reason: 'max_attribute'
+        });
+      }
       state.bonuses[attribute] = next;
       const durable = await persist(true);
       root.Game.EventBus.emit('player-state-changed', {
@@ -96,7 +109,9 @@
         source,
         durable
       });
-      return { changed: true, attribute, gain: applied, durable, snapshot: snapshot() };
+      return persistence.result('永久属性变更', true, durable, {
+        attribute, gain: applied, snapshot: snapshot()
+      });
     });
   }
 
@@ -106,7 +121,7 @@
       state = sanitize(nextState, origin);
       const durable = await persist(true);
       root.Game.EventBus.emit('player-state-changed', { player: root.Game.player, source: 'load' });
-      return { durable, snapshot: snapshot() };
+      return persistence.result('永久属性恢复', true, durable, { snapshot: snapshot() });
     });
   }
 
