@@ -88,9 +88,10 @@ Game.Scenes.InventoryScene = class InventoryScene extends Phaser.Scene {
         this.quantityDialog = null;
         window.GameNarrative.cancel();
         window.GameAudio.sfx('click');
-        Game.EventBus.emit('tutorial-inventory-closed');
         Game.SceneTransition.fadeOut(this, () => {
             this.restoreBaseScenes();
+            // 只有底层场景恢复后才通知引导，避免第八步显示在建筑内部。
+            Game.EventBus.emit('tutorial-inventory-closed');
             this.scene.stop();
         });
     }

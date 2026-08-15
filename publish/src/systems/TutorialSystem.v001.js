@@ -38,8 +38,8 @@
       target: { x: 245, y: 120, width: 790, height: 480 }
     },
     {
-      title: '第八步 · 回到迎仙阁',
-      body: '再次前往迎仙阁，找到苏媚儿。熟悉一位 NPC，是修行路上很重要的开始。',
+      title: '第八步 · 回到山门总览',
+      body: '储物袋关闭后会回到山门总览。点击迎仙阁的标记，继续去见苏媚儿。',
       target: { x: 70, y: 100, width: 310, height: 250 }
     },
     {
@@ -142,7 +142,9 @@
       if (stepIndex === 5) move(6);
     });
     root.Game.EventBus.on('tutorial-inventory-closed', () => {
-      if (stepIndex === 6) move(7);
+      if (stepIndex !== 6) return;
+      root.Game.EventBus.emit('tutorial-return-to-sect-map');
+      move(7);
     });
     root.Game.EventBus.on('affinity-changed', (data) => {
       if (data?.npcId === 'su_meier' && data?.source === 'gift' && stepIndex === 9) {

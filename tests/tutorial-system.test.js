@@ -11,11 +11,15 @@ const source = fs.readFileSync(
 );
 const listeners = new Map();
 const shown = [];
+let returnedToSectMap = false;
 const window = {
   Game: {
     EventBus: {
       on(name, listener) {
         listeners.set(name, listener);
+      },
+      emit(name, value) {
+        listeners.get(name)?.(value);
       }
     }
   },
@@ -34,6 +38,10 @@ const window = {
   },
   GameAudio: { sfx() {} }
 };
+
+listeners.set('tutorial-return-to-sect-map', () => {
+  returnedToSectMap = true;
+});
 
 function emit(name, value) {
   listeners.get(name)?.(value);
@@ -63,6 +71,7 @@ function flush() {
   emit('tutorial-inventory-opened');
   assert.equal(shown.at(-1).progress, '7 / 10');
   emit('tutorial-inventory-closed');
+  assert.equal(returnedToSectMap, true);
   assert.equal(shown.at(-1).progress, '8 / 10');
   emit('tutorial-building-opened', { id: 'welcome-pavilion' });
   assert.equal(shown.at(-1).progress, '9 / 10');

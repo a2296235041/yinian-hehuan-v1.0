@@ -33,6 +33,7 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
         );
         this.dialogueSystem = new Game.DialogueSystem(this, this.npcSystem);
         Game.EventBus.on('time-period-changed', this.refreshLighting, this);
+        Game.EventBus.on('tutorial-return-to-sect-map', this.handleTutorialReturnToSectMap, this);
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
         Game.systemsReady.then(() => {
             if (!this.scene.isActive()) return;
@@ -64,6 +65,12 @@ Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
 
     cleanup() {
         Game.EventBus.off('time-period-changed', this.refreshLighting, this);
+        Game.EventBus.off('tutorial-return-to-sect-map', this.handleTutorialReturnToSectMap, this);
+    }
+
+    handleTutorialReturnToSectMap() {
+        if (!this.scene.isActive()) return;
+        this.showSectMap();
     }
 
     showSectMap() {
