@@ -139,25 +139,56 @@
     const profile = await root.PlatformBridge.getPlayerProfile();
     view.playerName = profile.name || root.Game.player?.origin?.name || '无名修士';
     update(view);
-    if (!profile.avatarUrl || !view.header.avatarImage?.active) return;
-    const key = 'player-avatar';
-    if (scene.textures.exists(key)) {
-      return root.Game.PlayerStatusHeader.setAvatar(view.header, key);
-    }
-    try {
-      scene.load.once('loaderror', (file) => {
-        if (file.key === key) console.warn('玩家头像加载失败，继续使用默认头像');
-      });
-      scene.load.once('complete', () => {
-        if (view.header.avatarImage?.active && scene.textures.exists(key)) {
-          root.Game.PlayerStatusHeader.setAvatar(view.header, key);
+
+    async function useOriginPortrait() {
+      const origin = root.Game.player?.origin;
+      if (!origin || !view.header.avatarImage?.active) return;
+      try {
+        const key = await root.Game.PlayerPortraitAssets.ensureLoaded(scene, origin);
+        if (view.header.avatarImage?.active) {
+          root.Game.PlayerStatusHeader.setAvatar(view.header, key, { headOnly: true });
         }
-      });
-      scene.load.image(key, profile.avatarUrl);
-      scene.load.start();
-    } catch (error) {
-      console.error('玩家头像加载失败:', error.code || '', error.message, error.stack);
+      } catch (error) {
+        console.error('玩家身份头像加载失败:', error.code || '', error.message, error.stack);
+      }
     }
+
+    if (!profile.avatarUrl || !view.header.avatarImage?.active) {
+      return useOriginPortrait();
+    }
+
+    const key = 'player-avatar';
+    try {
+      if (!scene.textures.exists(key)) {
+        await new Promise((resolve, reject) => {
+          const completeEvent = `filecomplete-image-${key}`;
+          const cleanup = () => {
+            scene.load.off(completeEvent, onComplete);
+            scene.load.off('loaderror', onError);
+          };
+          const onComplete = () => {
+            cleanup();
+            resolve();
+          };
+          const onError = (file) => {
+            if (file?.key !== key) return;
+            cleanup();
+            reject(new Error('平台头像文件加载失败'));
+          };
+          scene.load.once(completeEvent, onComplete);
+          scene.load.on('loaderror', onError);
+          scene.load.image(key, profile.avatarUrl);
+          if (!scene.load.isLoading()) scene.load.start();
+        });
+      }
+      if (view.header.avatarImage?.active && scene.textures.exists(key)) {
+        root.Game.PlayerStatusHeader.setAvatar(view.header, key);
+        return;
+      }
+    } catch (error) {
+      console.warn('平台头像加载失败，切换身份立绘:', error.code || '', error.message);
+    }
+    await useOriginPortrait();
   }
 
   root.Game.PlayerStatusView = Object.freeze({ create, update, toggle, loadProfile });

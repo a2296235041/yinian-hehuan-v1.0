@@ -28,7 +28,7 @@
     {
       title: '第四步 · 收起对话',
       body: '读完她的回应后，点击右上角关闭对话，回到山门继续修行。',
-      target: { type: 'dom', selector: '#dialogue-close' }
+      target: null
     },
     {
       title: '第五步 · 先让自己变强',

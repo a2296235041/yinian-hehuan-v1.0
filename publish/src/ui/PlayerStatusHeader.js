@@ -8,14 +8,18 @@
       .setOrigin(originX, 0.5);
   }
 
-  function fitAvatar(image) {
+  function fitAvatar(image, headOnly = false) {
     if (!image?.active) return;
     const size = 52;
-    const scale = Math.max(
-      size / (Number(image.width) || size),
-      size / (Number(image.height) || size)
-    );
-    image.setScale(scale);
+    const source = image.texture?.getSourceImage?.();
+    const width = Number(source?.width || image.width) || size;
+    const height = Number(source?.height || image.height) || size;
+    if (headOnly) {
+      image.setCrop(0, 0, width, Math.max(1, Math.floor(height * 0.38)));
+    } else {
+      image.setCrop();
+    }
+    image.setDisplaySize(size, size);
   }
 
   function createPanel(scene) {
@@ -81,9 +85,9 @@
     header.toggleText.setText(expanded ? '⌃' : '⌄');
   }
 
-  function setAvatar(header, textureKey) {
+  function setAvatar(header, textureKey, options = {}) {
     header.avatarImage.setTexture(textureKey);
-    fitAvatar(header.avatarImage);
+    fitAvatar(header.avatarImage, options.headOnly === true);
   }
 
   root.Game.PlayerStatusHeader = Object.freeze({ create, update, setExpanded, setAvatar });

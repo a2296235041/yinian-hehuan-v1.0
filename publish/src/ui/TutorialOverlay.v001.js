@@ -114,7 +114,11 @@
   }
 
   function position() {
-    if (!spotlight || !target) return;
+    if (!spotlight) return;
+    if (!target) {
+      spotlight.hidden = true;
+      return;
+    }
     const rect = target.type === 'dom'
       ? domRect(target.selector)
       : (target.type === 'anchor' ? anchorRect(target) : canvasRect(target));
