@@ -1,6 +1,50 @@
 var Game = window.Game || {};
 Game.Scenes = Game.Scenes || {};
 
+const privateBackgroundLoads = new Map();
+
+function queuePrivateBackground(scene, location) {
+    if (scene.textures.exists(location.key)) {
+        return { promise: Promise.resolve(location.key), added: false };
+    }
+    const existing = privateBackgroundLoads.get(location.key);
+    if (existing) return { promise: existing.promise, added: false };
+
+    let entry;
+    const promise = new Promise((resolve, reject) => {
+        const completeEvent = `filecomplete-image-${location.key}`;
+        const cleanup = () => {
+            scene.load.off(completeEvent, onComplete);
+            scene.load.off('loaderror', onError);
+            scene.events.off(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
+        };
+        const finish = (error) => {
+            if (privateBackgroundLoads.get(location.key) !== entry) return;
+            privateBackgroundLoads.delete(location.key);
+            cleanup();
+            if (error) reject(error);
+            else resolve(location.key);
+        };
+        const onComplete = () => finish();
+        const onError = (file) => {
+            if (file?.key !== location.key) return;
+            finish(new Error(`私人场景背景加载失败: ${location.key} ${location.path}`));
+        };
+        const onShutdown = () => finish(new Error('私人场景背景加载已取消'));
+        scene.load.once(completeEvent, onComplete);
+        scene.load.on('loaderror', onError);
+        scene.events.once(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
+        try {
+            scene.load.image(location.key, location.path);
+        } catch (error) {
+            finish(error);
+        }
+    });
+    entry = { promise };
+    privateBackgroundLoads.set(location.key, entry);
+    return { promise, added: true };
+}
+
 Game.Scenes.GameScene = class GameScene extends Phaser.Scene {
     constructor() {
         super('GameScene');
@@ -456,16 +500,24 @@ Game.Scenes.PrivateScene = class PrivateScene extends Phaser.Scene {
         const missing = this.locations.filter((location) => !this.textures.exists(location.key));
         if (!missing.length) return;
         this.statusText.setText('正在布置私人场景…').setVisible(true);
-        missing.forEach((location) => this.load.image(location.key, location.path));
-        this.load.once('complete', () => {
+        let added = 0;
+        const tasks = missing.map((location) => {
+            const result = queuePrivateBackground(this, location);
+            if (result.added) added += 1;
+            return result.promise;
+        });
+        if (added && !this.load.isLoading()) this.load.start();
+        Promise.allSettled(tasks).then((results) => {
             if (!this.statusText?.active) return;
-            this.statusText.setVisible(false);
+            const failed = results.filter((result) => result.status === 'rejected');
+            failed.forEach((result) => {
+                console.error('私人场景背景加载失败:', result.reason?.message || result.reason);
+            });
+            this.statusText.setText(
+                failed.length ? '部分私人场景背景暂不可用，请稍后切换重试。' : ''
+            ).setVisible(failed.length > 0);
             this.renderLocation();
         });
-        this.load.on('loaderror', (file) => {
-            console.error('私人场景背景加载失败:', file.key, file.src);
-        });
-        this.load.start();
     }
 
     renderInvites() {
