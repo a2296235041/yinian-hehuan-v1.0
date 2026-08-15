@@ -75,8 +75,36 @@ const profiles = [{
   signature_move: '一线霜天',
   portrait_key: ''
 }];
+const playerProfile = {
+  id: 'player',
+  name: '你',
+  faction: '合欢宗',
+  title: '灵界初行者',
+  physique: '由初始身份决定',
+  appearance: '由玩家初始身份立绘决定。',
+  personality: '由玩家在比试中的言行决定。',
+  combat_style: '不拘一格。',
+  signature_move: '由玩家自创',
+  power: 50,
+  maxHp: 100,
+  attack: 20,
+  defense: 20,
+  speed: 20,
+  portrait_key: ''
+};
 const window = {
   Game: {
+    player: { origin: { id: 'demon_prince' } },
+    PlayerPortraitAssets: {
+      entry(origin) {
+        return origin?.id === 'demon_prince'
+          ? {
+              textureKey: 'player-spirit-resonance',
+              path: './assets/characters/player-spirit-resonance.382390b0.png'
+            }
+          : null;
+      }
+    },
     NpcCardRenderer: {
       portraitPath() {
         return './assets/generated/npc-standee-gu-qingluo.png';
@@ -89,7 +117,9 @@ const window = {
     }
   },
   GameTournamentRoster: {
-    getProfile(id) { return profiles.find((profile) => profile.id === id); }
+    getProfile(id) {
+      return [...profiles, playerProfile].find((profile) => profile.id === id);
+    }
   },
   GameTournamentRelations: {
     display() {
@@ -141,7 +171,7 @@ assert.equal(container.children[0].children[1].hidden, true);
 
 const roster = new FakeElement('div');
 window.GameTournamentParticipantView.renderRoster(
-  roster, profiles, 'spirit', { corruption: { rival: 12 } }
+  roster, [...profiles, playerProfile], 'spirit', { corruption: { rival: 12 } }
 );
 assert.equal(roster.children[0].children[1].hidden, true);
 roster.children[0].children[0].click();
@@ -150,4 +180,9 @@ assert.equal(roster.children[0].children[1].hidden, false);
 assert.equal(textOf(roster.children[0]).includes('一线霜天'), true);
 roster.children[0].children[0].click();
 assert.equal(roster.children[0].children[1].hidden, true);
+assert.equal(roster.children[1].children[0].children[0].children[0].tag, 'img');
+assert.equal(
+  roster.children[1].children[0].children[0].children[0].src,
+  './assets/characters/player-spirit-resonance.382390b0.png?v=test'
+);
 console.log('tournament participant view test passed');

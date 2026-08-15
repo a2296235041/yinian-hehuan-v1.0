@@ -14,6 +14,11 @@
   }
 
   function portraitPath(profile) {
+    if (profile?.id === 'player') {
+      return root.Game?.PlayerPortraitAssets?.entry?.(
+        root.Game?.player?.origin
+      )?.path || '';
+    }
     return root.Game?.NpcCardRenderer?.portraitPath?.(profile?.id) || '';
   }
 
